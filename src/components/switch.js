@@ -17,14 +17,14 @@ const Switch = (props) => {
           color: !switchValue ? '#3B4B58' : '#99A0A5',
           fontSize: wp(3.8),
         }}>
-        No
+        {props.left ? props.left : 'No'}
       </Text>
       <Pressable
         onPress={() => clicked()}
         style={{
           height: 25,
           width: 50,
-          backgroundColor: Colors.grey,
+          backgroundColor: !switchValue ? '#9D9CC5' : Colors.darkBlue,
           marginHorizontal: 5,
           borderRadius: 5,
           justifyContent: 'center',
@@ -50,7 +50,7 @@ const Switch = (props) => {
           color: switchValue ? '#3B4B58' : '#99A0A5',
           fontSize: wp(3.8),
         }}>
-        Yes
+        {props.right ? props.right : 'Yes'}
       </Text>
     </View>
   );

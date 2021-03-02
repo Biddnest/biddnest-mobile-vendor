@@ -13,7 +13,7 @@ const Orders = (props) => {
   const renderItem = ({item, index}) => {
     return (
       <Pressable
-        style={styles.inputForm}
+        style={STYLES.inputForm}
         key={index}
         onPress={() => selectedTab === 0 && handleOrderClicked(item)}>
         <View
@@ -23,15 +23,15 @@ const Orders = (props) => {
             alignItems: 'center',
           }}>
           {selectedTab === 0 ? (
-            <Text style={styles.leftText}>ORDER ID</Text>
+            <Text style={STYLES.leftText}>ORDER ID</Text>
           ) : (
-            <Text style={styles.statusView}>Completed</Text>
+            <Text style={STYLES.statusView}>Completed</Text>
           )}
-          <Text style={styles.rightText}>#342345</Text>
+          <Text style={STYLES.rightText}>#342345</Text>
         </View>
         <View
           style={[
-            styles.separatorView,
+            STYLES.separatorView,
             {width: wp(90), alignSelf: 'center', marginBottom: hp(2)},
           ]}
         />
@@ -41,20 +41,20 @@ const Orders = (props) => {
               style={{
                 flex: 1,
               }}>
-              <View style={styles.flexBoxOrders}>
-                <View style={styles.priceView}>
-                  <Text style={styles.participatedText}>Rs. 4000</Text>
+              <View style={STYLES.flexBoxOrders}>
+                <View style={STYLES.priceView}>
+                  <Text style={STYLES.participatedText}>Rs. 4000</Text>
                 </View>
-                <View style={styles.priceView}>
-                  <Text style={styles.participatedText}>Rs. 4000</Text>
+                <View style={STYLES.priceView}>
+                  <Text style={STYLES.participatedText}>Rs. 4000</Text>
                 </View>
               </View>
-              <View style={styles.flexBoxOrders}>
-                <Text style={styles.labelText}>Expected Rate</Text>
-                <Text style={styles.labelText}>Time Left</Text>
+              <View style={STYLES.flexBoxOrders}>
+                <Text style={STYLES.labelText}>Expected Rate</Text>
+                <Text style={STYLES.labelText}>Time Left</Text>
               </View>
             </View>
-            <View style={[styles.separatorView, {marginBottom: hp(2)}]} />
+            <View style={[STYLES.separatorView, {marginBottom: hp(2)}]} />
           </View>
         )}
 
@@ -76,13 +76,13 @@ const Orders = (props) => {
               alignItems: 'center',
             }}>
             <View>
-              <Text style={{...styles.locationText, marginTop: 0}}>
+              <Text style={{...STYLES.locationText, marginTop: 0}}>
                 CHENNAI
               </Text>
-              <Text style={styles.locationText}>BENGALURU</Text>
+              <Text style={STYLES.locationText}>BENGALURU</Text>
             </View>
             <View style={{alignItems: 'flex-end'}}>
-              <Text style={{...styles.locationText, marginTop: 0}}>
+              <Text style={{...STYLES.locationText, marginTop: 0}}>
                 DISTANCE
               </Text>
               <View
@@ -91,45 +91,45 @@ const Orders = (props) => {
                   alignItems: 'center',
                   marginTop: hp(1),
                 }}>
-                <Text style={styles.rightText}>314KM</Text>
+                <Text style={STYLES.rightText}>314KM</Text>
               </View>
             </View>
           </View>
         </View>
-        <View style={styles.separatorView} />
+        <View style={STYLES.separatorView} />
         {selectedTab === 1 && (
           <View>
-            <View style={styles.flexBox}>
-              <Text style={styles.leftText}>bid price</Text>
-              <Text style={styles.rightText}>Rs. 5000</Text>
+            <View style={STYLES.flexBox}>
+              <Text style={STYLES.leftText}>bid price</Text>
+              <Text style={STYLES.rightText}>Rs. 5000</Text>
             </View>
-            <View style={styles.flexBox}>
-              <Text style={styles.leftText}>accepted on</Text>
-              <Text style={styles.rightText}>25 Jan 2021</Text>
+            <View style={STYLES.flexBox}>
+              <Text style={STYLES.leftText}>accepted on</Text>
+              <Text style={STYLES.rightText}>25 Jan 2021</Text>
             </View>
-            <View style={styles.flexBox}>
-              <Text style={styles.leftText}>completed date</Text>
-              <Text style={styles.rightText}>25 Jan 2021</Text>
+            <View style={STYLES.flexBox}>
+              <Text style={STYLES.leftText}>completed date</Text>
+              <Text style={STYLES.rightText}>25 Jan 2021</Text>
             </View>
-            <View style={styles.flexBox}>
-              <Text style={styles.leftText}>bid submitted by</Text>
-              <Text style={styles.rightText}>Mayank Shah</Text>
+            <View style={STYLES.flexBox}>
+              <Text style={STYLES.leftText}>bid submitted by</Text>
+              <Text style={STYLES.rightText}>Mayank Shah</Text>
             </View>
           </View>
         )}
         {selectedTab === 0 && (
           <View>
-            <View style={styles.flexBox}>
-              <Text style={styles.leftText}>Moving Date</Text>
-              <Text style={styles.rightText}>25 Jan 2021</Text>
+            <View style={STYLES.flexBox}>
+              <Text style={STYLES.leftText}>Moving Date</Text>
+              <Text style={STYLES.rightText}>25 Jan 2021</Text>
             </View>
-            <View style={styles.flexBox}>
-              <Text style={styles.leftText}>category</Text>
-              <Text style={styles.rightText}>1 BHK</Text>
+            <View style={STYLES.flexBox}>
+              <Text style={STYLES.leftText}>category</Text>
+              <Text style={STYLES.rightText}>1 BHK</Text>
             </View>
-            <View style={styles.flexBox}>
-              <Text style={styles.leftText}>bid submitted by</Text>
-              <Text style={styles.rightText}>Mayank Shah</Text>
+            <View style={STYLES.flexBox}>
+              <Text style={STYLES.leftText}>bid submitted by</Text>
+              <Text style={STYLES.rightText}>Mayank Shah</Text>
             </View>
           </View>
         )}
@@ -139,29 +139,28 @@ const Orders = (props) => {
   return (
     <LinearGradient
       colors={[Colors.pageBG, Colors.white]}
-      style={styles.container}>
+      style={STYLES.container}>
       <HomeHeader
         navigation={props.navigation}
         title={'History'}
         right={true}
         onRightPress={() => {}}
       />
-      <View style={{height: hp(7), flexDirection: 'row'}}>
+      <View style={STYLES.tabView}>
         {['Participated Orders', 'Past Orders'].map((item, index) => {
           return (
             <Pressable
               key={index}
               style={{
-                ...styles.tabViews,
                 ...STYLES.common,
                 borderColor:
                   selectedTab === index ? Colors.darkBlue : '#ACABCD',
-                borderBottomWidth: selectedTab === index ? 2 : 0.8,
+                borderBottomWidth: selectedTab === index ? 2 : 0,
               }}
               onPress={() => setSelectedTab(index)}>
               <Text
                 style={{
-                  ...styles.tabText,
+                  ...STYLES.tabText,
                   color: selectedTab === index ? Colors.darkBlue : '#ACABCD',
                 }}>
                 {item}
@@ -196,92 +195,3 @@ const Orders = (props) => {
 };
 
 export default Orders;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.pageBG,
-  },
-  tabViews: {
-    flex: 1,
-  },
-  tabText: {
-    fontSize: wp(4),
-    fontFamily: 'Roboto-Medium',
-  },
-  inputForm: {
-    marginHorizontal: wp(5),
-    paddingVertical: wp(5),
-    paddingHorizontal: wp(5),
-    borderWidth: 1,
-    borderRadius: 15,
-    backgroundColor: Colors.white,
-    borderColor: '#DEE6ED',
-    marginTop: hp(2),
-  },
-  locationText: {
-    fontFamily: 'Roboto-Regular',
-    color: Colors.inputTextColor,
-    fontSize: wp(4.5),
-    marginTop: hp(1),
-  },
-  separatorView: {
-    borderWidth: 0.8,
-    borderColor: Colors.silver,
-    width: '100%',
-    marginTop: hp(2),
-  },
-  flexBox: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: hp(2),
-  },
-  leftText: {
-    fontFamily: 'Roboto-Regular',
-    fontSize: wp(4.3),
-    color: Colors.inputTextColor,
-    textTransform: 'uppercase',
-  },
-  rightText: {
-    fontFamily: 'Roboto-Bold',
-    fontSize: wp(4.5),
-    color: Colors.inputTextColor,
-    width: '50%',
-    textAlign: 'right',
-  },
-  statusView: {
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    backgroundColor: Colors.lightGreen,
-    color: Colors.white,
-    borderRadius: 5,
-    textTransform: 'uppercase',
-    fontFamily: 'Gilroy-Semibold',
-    fontSize: wp(4),
-  },
-  priceView: {
-    backgroundColor: Colors.silver,
-    width: '45%',
-    height: hp(5),
-    borderRadius: 5,
-    ...STYLES.common,
-  },
-  participatedText: {
-    color: Colors.darkBlue,
-    fontSize: wp(5),
-    fontFamily: 'Roboto-Bold',
-  },
-  flexBoxOrders: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  labelText: {
-    width: '45%',
-    color: Colors.inputTextColor,
-    fontSize: wp(3.6),
-    fontFamily: 'Roboto-Light',
-    textAlign: 'center',
-    marginTop: 3,
-  },
-});

@@ -145,7 +145,7 @@ export const SIDE_DRAWER = [
     icon: 'users',
     topText: 'User Roles',
     bottomText: 'Search Orders',
-    navigate: 'MyBooking',
+    navigate: 'UserRole',
   },
   {
     iconFamily: 'MaterialCommunityIcons',

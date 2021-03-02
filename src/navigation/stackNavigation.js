@@ -3,8 +3,10 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import Home from '../screens/dashboard/home';
+import OrderDetails from '../screens/dashboard/home/orderDetails';
 import Orders from '../screens/dashboard/orders';
 import Profile from '../screens/dashboard/profile';
+import UserRole from '../screens/dashboard/drawer/userRole';
 // import BookingStepper from '../screens/dashboard/home/bookingStepper';
 // import OrderTracking from '../screens/dashboard/myBooking/orderTracking';
 // import Payment from '../screens/dashboard/myBooking/payment';
@@ -30,13 +32,8 @@ const MainStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={screenOptionStyle} headerMode={false}>
       <Stack.Screen name="Home" component={Home} />
-      {/*<Stack.Screen name="BookingStepper" component={BookingStepper} />*/}
-      {/*<Stack.Screen name="AboutUs" component={AboutUs} />*/}
-      {/*<Stack.Screen name="TermsAndConditions" component={TermsAndConditions} />*/}
-      {/*<Stack.Screen name="ReferFriend" component={ReferFriend} />*/}
-      {/*<Stack.Screen name="ContactUs" component={ContactUs} />*/}
-      {/*<Stack.Screen name="FAQs" component={FAQs} />*/}
-      {/*<Stack.Screen name="FAQDetails" component={FAQDetails} />*/}
+      <Stack.Screen name="OrderDetails" component={OrderDetails} />
+      <Stack.Screen name="UserRole" component={UserRole} />
     </Stack.Navigator>
   );
 };

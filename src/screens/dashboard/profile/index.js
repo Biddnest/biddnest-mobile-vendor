@@ -22,9 +22,13 @@ import {HomeHeader} from '../home';
 import {STYLES} from '../../../constant/commonStyle';
 import LinearGradient from 'react-native-linear-gradient';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import VendorInformation from './vendorInformation';
+import LocationDetails from './locationDetails';
+import OtherDetails from './otherDetails';
 
 const Profile = (props) => {
   const [openArray, setOpenArray] = useState([]);
+  const [openIndex, setOpenIndex] = useState();
   const onPress = (index) => {
     let temp = [...openArray];
     if (openArray.includes(index)) {
@@ -62,13 +66,15 @@ const Profile = (props) => {
               {header}
             </Text>
             {openArray.includes(index) && (
-              <View style={styles.singleEdit}>
+              <Pressable
+                style={styles.singleEdit}
+                onPress={() => setOpenIndex(index)}>
                 <MaterialIcons
                   name={'edit'}
                   color={Colors.white}
                   size={wp(5)}
                 />
-              </View>
+              </Pressable>
             )}
           </View>
           <Pressable onPress={() => onPress(index)}>
@@ -135,10 +141,7 @@ const Profile = (props) => {
             </View>
           </View>
         </ImageBackground>
-        <ScrollView
-          bounces={false}
-          showsVerticalScrollIndicator={false}
-          style={{flex: 1}}>
+        <View style={{flex: 1}}>
           {renderIcon(0, 'Vendor Information')}
           {openArray.includes(0) && (
             <View
@@ -241,8 +244,20 @@ const Profile = (props) => {
               />
             </View>
           )}
-        </ScrollView>
+        </View>
       </ScrollView>
+      <VendorInformation
+        onCloseIcon={() => setOpenIndex(-1)}
+        visible={openIndex === 0}
+      />
+      <LocationDetails
+        onCloseIcon={() => setOpenIndex(-1)}
+        visible={openIndex === 1}
+      />
+      <OtherDetails
+        onCloseIcon={() => setOpenIndex(-1)}
+        visible={openIndex === 2}
+      />
     </LinearGradient>
   );
 };
