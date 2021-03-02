@@ -246,7 +246,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto-Bold',
     fontSize: wp(4.5),
     color: Colors.inputTextColor,
-    fontWeight: 'bold',
     width: '50%',
     textAlign: 'right',
   },

@@ -56,49 +56,79 @@ const renderImage = (uri, size = 50) => {
   );
 };
 
-export const PAYMENT_OPTION = [
+export const VENDOR_INFORMATION = [
   {
-    image: renderImage(require('../assets/images/credit_card.png'), 40),
-    name: 'Credit Card',
+    title: 'Email ID',
+    body: 'davidjerome@gmail.com',
   },
   {
-    image: renderImage(require('../assets/images/debit_card.png'), 40),
-    name: 'Debit Card',
+    title: 'Vendor Type',
+    body: 'Owner',
   },
   {
-    image: renderImage(require('../assets/images/netbanking.png'), 40),
-    name: 'Net Banking',
+    title: 'Organization Description',
+    body:
+      'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.',
   },
   {
-    image: renderImage(require('../assets/images/upipayment.png')),
-    name: 'UPI Payment',
+    title: 'Password',
+    body: '*********',
+  },
+  {
+    title: 'GSTIN Number',
+    body: 'XXXXXXXXXXXX',
   },
 ];
-
-export const FAQS_OPTION = [
+export const LOCATION_INFORMATION = [
   {
-    image: renderImage(require('../assets/images/delivery.png')),
-    name: 'Delivery',
+    title: 'Address Line 1',
+    body: 'Lorem ipsum dolor sit amet',
   },
   {
-    image: renderImage(require('../assets/images/packaging.png')),
-    name: 'Packaging',
+    title: 'Address Line 2',
+    body: 'Consetetur sadipscing elitr',
   },
   {
-    image: renderImage(require('../assets/images/vendor.png')),
-    name: 'Vendor',
+    title: 'Landmark',
+    body: 'Sed diam nonumy',
   },
   {
-    image: renderImage(require('../assets/images/bidding.png')),
-    name: 'Bidding',
+    title: 'City',
+    body: 'Bengaluru',
   },
   {
-    image: renderImage(require('../assets/images/safety.png')),
-    name: 'Safety',
+    title: 'District',
+    body: 'Bengaluru',
   },
   {
-    image: renderImage(require('../assets/images/pricing.png')),
-    name: 'Pricing',
+    title: 'Pincode',
+    body: '560097',
+  },
+  {
+    title: 'State',
+    body: 'Karnataka',
+  },
+];
+export const OTHER_INFORMATION = [
+  {
+    title: 'Categories Covered',
+    body: '',
+  },
+  {
+    title: 'Commission Rate',
+    body: '10%',
+  },
+  {
+    title: 'Status',
+    body: 'Active',
+  },
+  {
+    title: 'Service Type',
+    body: 'Economic',
+  },
+  {
+    title: 'Vendor Status',
+    body: 'Verified',
   },
 ];
 

@@ -10,7 +10,14 @@ import {
   ScrollView,
   Platform,
 } from 'react-native';
-import {Colors, hp, wp} from '../../../constant/colors';
+import {
+  Colors,
+  hp,
+  LOCATION_INFORMATION,
+  OTHER_INFORMATION,
+  VENDOR_INFORMATION,
+  wp,
+} from '../../../constant/colors';
 import {HomeHeader} from '../home';
 import {STYLES} from '../../../constant/commonStyle';
 import LinearGradient from 'react-native-linear-gradient';
@@ -18,41 +25,64 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const Profile = (props) => {
   const [openArray, setOpenArray] = useState([]);
-  const renderItem = ({item, index}) => {
+  const onPress = (index) => {
+    let temp = [...openArray];
+    if (openArray.includes(index)) {
+      const indexT = temp.indexOf(index);
+      if (indexT > -1) {
+        temp.splice(indexT, 1);
+      }
+    } else {
+      temp.push(index);
+    }
+    setOpenArray(temp);
+  };
+  const renderIcon = (index, header) => {
     return (
-      <View style={styles.inputForm} key={index}>
+      <View
+        style={[
+          styles.inputForm,
+          {
+            backgroundColor: openArray.includes(index)
+              ? Colors.darkBlue
+              : Colors.white,
+          },
+        ]}>
         <View style={styles.flexBox}>
-          <Text style={styles.topText}>{index + 1}. Test and save</Text>
-          <Pressable
-            onPress={() => {
-              let temp = [...openArray];
-              if (openArray.includes(index)) {
-                const indexT = temp.indexOf(index);
-                if (indexT > -1) {
-                  temp.splice(indexT, 1);
-                }
-              } else {
-                temp.push(index);
-              }
-              setOpenArray(temp);
-            }}>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Text
+              style={[
+                styles.topText,
+                {
+                  color: openArray.includes(index)
+                    ? Colors.white
+                    : Colors.darkBlue,
+                },
+              ]}>
+              {header}
+            </Text>
+            {openArray.includes(index) && (
+              <View style={styles.singleEdit}>
+                <MaterialIcons
+                  name={'edit'}
+                  color={Colors.white}
+                  size={wp(5)}
+                />
+              </View>
+            )}
+          </View>
+          <Pressable onPress={() => onPress(index)}>
             <MaterialIcons
-              name={openArray.includes(index) ? 'minus' : 'plus'}
+              name={
+                openArray.includes(index)
+                  ? 'keyboard-arrow-up'
+                  : 'keyboard-arrow-down'
+              }
               size={26}
-              color={'#9A9FA4'}
+              color={openArray.includes(index) ? Colors.white : Colors.darkBlue}
             />
           </Pressable>
         </View>
-        {openArray.includes(index) && (
-          <View>
-            <View style={styles.separatorView} />
-            <Text style={styles.bottomText}>
-              Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-              nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-              erat, sed diam voluptua. Lorem ipsum dolor sit amet.
-            </Text>
-          </View>
-        )}
       </View>
     );
   };
@@ -100,26 +130,118 @@ const Profile = (props) => {
             <Text style={styles.profileDetailText}>diginnobvators.com</Text>
           </View>
           <View style={{width: wp(12)}}>
-            <View
-              style={{
-                height: wp(12),
-                width: wp(12),
-                borderRadius: wp(6),
-                backgroundColor: '#5643A8',
-                ...STYLES.common,
-              }}>
+            <View style={styles.profileEdit}>
               <MaterialIcons name={'edit'} color={Colors.white} size={30} />
             </View>
           </View>
         </ImageBackground>
-        <View style={{flex: 1}}>
-          <FlatList
-            bounces={false}
-            showsVerticalScrollIndicator={false}
-            data={[1, 2, 3, 4, 5, 6]}
-            renderItem={renderItem}
-          />
-        </View>
+        <ScrollView
+          bounces={false}
+          showsVerticalScrollIndicator={false}
+          style={{flex: 1}}>
+          {renderIcon(0, 'Vendor Information')}
+          {openArray.includes(0) && (
+            <View
+              style={{
+                width: wp(90),
+                alignSelf: 'center',
+              }}>
+              <FlatList
+                bounces={false}
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{marginTop: hp(2)}}
+                data={VENDOR_INFORMATION}
+                renderItem={({item, index}) => {
+                  return (
+                    <View style={styles.textWrapper} key={index}>
+                      <Text style={styles.headerText}>{item.title}</Text>
+                      <Text style={styles.bodyText}>{item.body}</Text>
+                    </View>
+                  );
+                }}
+                ItemSeparatorComponent={() => (
+                  <View style={styles.separatorView} />
+                )}
+              />
+            </View>
+          )}
+          {renderIcon(1, 'Location Details')}
+          {openArray.includes(1) && (
+            <View
+              style={{
+                width: wp(90),
+                alignSelf: 'center',
+              }}>
+              <FlatList
+                bounces={false}
+                showsVerticalScrollIndicator={false}
+                data={LOCATION_INFORMATION}
+                contentContainerStyle={{marginTop: hp(2)}}
+                renderItem={({item, index}) => {
+                  return (
+                    <View style={styles.textWrapper} key={index}>
+                      <Text style={styles.headerText}>{item.title}</Text>
+                      <Text style={styles.bodyText}>{item.body}</Text>
+                    </View>
+                  );
+                }}
+                ItemSeparatorComponent={() => (
+                  <View style={styles.separatorView} />
+                )}
+              />
+            </View>
+          )}
+          {renderIcon(2, 'Other Details')}
+          {openArray.includes(2) && (
+            <View
+              style={{
+                width: wp(90),
+                alignSelf: 'center',
+              }}>
+              <FlatList
+                bounces={false}
+                showsVerticalScrollIndicator={false}
+                data={OTHER_INFORMATION}
+                contentContainerStyle={{marginTop: hp(2)}}
+                renderItem={({item, index}) => {
+                  return (
+                    <View style={styles.textWrapper} key={index}>
+                      <Text style={styles.headerText}>{item.title}</Text>
+                      {(item.body !== '' && (
+                        <Text style={styles.bodyText}>{item.body}</Text>
+                      )) || (
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            marginBottom: 7,
+                            flexWrap: 'wrap',
+                          }}>
+                          {['Household', 'Office'].map((aryData, aryIndex) => {
+                            return (
+                              <View style={styles.categoryView} key={aryIndex}>
+                                <Text
+                                  style={{
+                                    color: Colors.inputTextColor,
+                                    fontSize: wp(3.8),
+                                    fontFamily: 'Roboto-Bold',
+                                  }}>
+                                  {aryData}
+                                </Text>
+                              </View>
+                            );
+                          })}
+                        </View>
+                      )}
+                    </View>
+                  );
+                }}
+                ItemSeparatorComponent={() => (
+                  <View style={styles.separatorView} />
+                )}
+              />
+            </View>
+          )}
+        </ScrollView>
       </ScrollView>
     </LinearGradient>
   );
@@ -168,7 +290,7 @@ const styles = StyleSheet.create({
   topText: {
     fontFamily: 'Roboto-Bold',
     fontSize: wp(4),
-    color: Colors.inputTextColor,
+    color: Colors.darkBlue,
   },
   bottomText: {
     fontFamily: 'Roboto-Regular',
@@ -179,5 +301,46 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  headerText: {
+    fontFamily: 'Roboto-Regular',
+    fontSize: wp(3.8),
+    color: Colors.inputTextColor,
+    marginBottom: 10,
+    marginTop: 5,
+  },
+  bodyText: {
+    fontFamily: 'Roboto-Bold',
+    fontSize: wp(4.5),
+    color: Colors.inputTextColor,
+    marginBottom: 10,
+  },
+  textWrapper: {
+    paddingHorizontal: hp(1),
+  },
+  singleEdit: {
+    height: wp(8),
+    width: wp(8),
+    borderRadius: wp(4),
+    backgroundColor: '#5643A8',
+    marginLeft: 10,
+    ...STYLES.common,
+  },
+  profileEdit: {
+    height: wp(12),
+    width: wp(12),
+    borderRadius: wp(6),
+    backgroundColor: '#5643A8',
+    ...STYLES.common,
+  },
+  categoryView: {
+    marginBottom: 3,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderColor: Colors.darkBlue,
+    borderWidth: 2,
+    borderRadius: 8,
+    backgroundColor: Colors.white,
+    marginRight: 10,
   },
 });
