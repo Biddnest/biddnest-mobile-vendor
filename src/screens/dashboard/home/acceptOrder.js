@@ -230,19 +230,19 @@ const AcceptOrder = (props) => {
                 max={4}
                 step={1}
                 floatingLabel
-                renderThumb={() => <View style={styles.sliderThumb} />}
+                renderThumb={() => <View style={STYLES.sliderThumb} />}
                 renderRail={() => (
                   <View
                     style={{
-                      ...styles.sliderRail,
+                      ...STYLES.sliderRail,
                       width: '100%',
                       borderColor: '#EEE5FC',
                     }}
                   />
                 )}
-                renderRailSelected={() => <View style={styles.sliderRail} />}
+                renderRailSelected={() => <View style={STYLES.sliderRail} />}
                 renderLabel={(value) => (
-                  <Text style={styles.sliderLabel}>{value}</Text>
+                  <Text style={STYLES.sliderLabel}>{value}</Text>
                 )}
                 onValueChanged={handleValueChange}
               />
@@ -402,32 +402,6 @@ const styles = StyleSheet.create({
     color: '#99A0A5',
     marginLeft: wp(5),
     marginTop: -hp(2),
-  },
-  sliderRail: {
-    borderWidth: 2,
-    borderColor: Colors.darkBlue,
-    height: 2,
-  },
-  sliderThumb: {
-    height: 20,
-    width: 20,
-    borderRadius: 10,
-    backgroundColor: Colors.white,
-    borderWidth: 1,
-    borderColor: '#C6DFFA',
-  },
-  sliderText: {
-    fontFamily: 'Roboto-Light',
-    fontSize: wp(3.5),
-    color: Colors.inputTextColor,
-  },
-  sliderLabel: {
-    backgroundColor: Colors.darkBlue,
-    paddingVertical: 4,
-    paddingHorizontal: 10,
-    color: Colors.white,
-    borderRadius: 3,
-    overflow: 'hidden',
   },
   sliderStyle: {
     width: wp(52),

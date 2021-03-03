@@ -5,6 +5,12 @@ import {Colors, wp, boxShadow, hp} from '../../../constant/colors';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {STYLES} from '../../../constant/commonStyle';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import CustomModalAndroid from '../../../components/customModal';
+import CloseIcon from '../../../components/closeIcon';
+import DropDown from '../../../components/dropDown';
+import Slider from 'rn-range-slider';
+import FlatButton from '../../../components/flatButton';
 
 export const HomeHeader = (props) => {
   return (
@@ -75,6 +81,7 @@ export const HomeHeader = (props) => {
 
 const Home = (props) => {
   const [selectedTab, setSelectedTab] = useState(0);
+  const [filterVisible, setFilterVisible] = useState(false);
   const renderItem = ({item, index}) => {
     return (
       <Pressable
@@ -246,8 +253,136 @@ const Home = (props) => {
           )}
         />
       </View>
+      {selectedTab === 1 && (
+        <Pressable
+          onPress={() => setFilterVisible(true)}
+          style={{
+            position: 'absolute',
+            height: 50,
+            width: 50,
+            borderRadius: 25,
+            backgroundColor: Colors.darkBlue,
+            bottom: hp(2),
+            right: hp(2),
+            ...STYLES.common,
+          }}>
+          <AntDesign name={'filter'} color={Colors.white} size={30} />
+        </Pressable>
+      )}
+      <CustomModalAndroid visible={filterVisible}>
+        <View style={STYLES.modalHeaderView}>
+          <Text style={STYLES.modalHeaderText}>FILTERS</Text>
+          <CloseIcon
+            style={{
+              position: 'absolute',
+              right: 10,
+            }}
+            onPress={() => setFilterVisible(false)}
+          />
+        </View>
+        <View style={{...STYLES.separatorView, width: '85%'}} />
+        <View style={{marginTop: hp(2)}}>
+          <Text style={STYLES.inputTextLabel}>Date</Text>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <View style={styles.manPowerView}>
+              <Text style={STYLES.inputTextStyle}>{'02 Jan'}</Text>
+            </View>
+            <Slider
+              style={styles.sliderStyle}
+              min={2}
+              max={4}
+              step={1}
+              floatingLabel
+              renderThumb={() => <View style={STYLES.sliderThumb} />}
+              renderRail={() => (
+                <View
+                  style={{
+                    ...STYLES.sliderRail,
+                    width: '100%',
+                    borderColor: '#EEE5FC',
+                  }}
+                />
+              )}
+              renderRailSelected={() => <View style={STYLES.sliderRail} />}
+              renderLabel={(value) => (
+                <Text style={STYLES.sliderLabel}>{value}</Text>
+              )}
+              onValueChanged={() => {}}
+            />
+            <View style={styles.manPowerView}>
+              <Text style={STYLES.inputTextStyle}>{'04 Feb'}</Text>
+            </View>
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginTop: 0,
+            }}>
+            <Text style={styles.dateBottomText}>From</Text>
+            <Text
+              style={[
+                styles.dateBottomText,
+                {
+                  marginLeft: 0,
+                  marginRight: wp(4),
+                },
+              ]}>
+              To
+            </Text>
+          </View>
+        </View>
+        <View style={{marginVertical: hp(2)}}>
+          <DropDown
+            label={'Status'}
+            width={wp(90)}
+            items={[
+              {label: 'Male', value: 'male'},
+              {label: 'Female', value: 'female'},
+            ]}
+            onChangeItem={(text) => {}}
+          />
+        </View>
+        <View style={{marginBottom: hp(2)}}>
+          <DropDown
+            label={'Category'}
+            width={wp(90)}
+            items={[
+              {label: 'Male', value: 'male'},
+              {label: 'Female', value: 'female'},
+            ]}
+            onChangeItem={(text) => {}}
+          />
+        </View>
+        <FlatButton label={'apply'} onPress={() => setFilterVisible(false)} />
+      </CustomModalAndroid>
     </LinearGradient>
   );
 };
 
 export default Home;
+
+const styles = StyleSheet.create({
+  sliderStyle: {
+    width: wp(52),
+    alignSelf: 'center',
+    marginHorizontal: wp(2),
+  },
+  manPowerView: {
+    borderWidth: 2,
+    borderRadius: 10,
+    height: wp(12),
+    width: wp(14),
+    marginVertical: hp(1),
+    borderColor: Colors.silver,
+    ...STYLES.common,
+  },
+  dateBottomText: {
+    fontFamily: 'Roboto-Regular',
+    marginTop: 0,
+    fontSize: wp(3.5),
+    color: '#99A0A5',
+    marginLeft: wp(4),
+  },
+});

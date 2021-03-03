@@ -146,5 +146,31 @@ export const STYLES = {
     backgroundColor: Colors.pageBG,
     alignItems: 'center',
     justifyContent: 'center'
-  }
+  },
+  sliderRail: {
+    borderWidth: 2,
+    borderColor: Colors.darkBlue,
+    height: 2,
+  },
+  sliderThumb: {
+    height: 20,
+    width: 20,
+    borderRadius: 10,
+    backgroundColor: Colors.white,
+    borderWidth: 1,
+    borderColor: '#C6DFFA',
+  },
+  sliderText: {
+    fontFamily: 'Roboto-Light',
+    fontSize: wp(3.5),
+    color: Colors.inputTextColor,
+  },
+  sliderLabel: {
+    backgroundColor: Colors.darkBlue,
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    color: Colors.white,
+    borderRadius: 3,
+    overflow: 'hidden',
+  },
 };
