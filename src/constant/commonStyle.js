@@ -126,6 +126,25 @@ export const STYLES = {
   staticLabel: {
     fontFamily: 'Roboto-Bold',
     fontSize: wp(4),
-    color: Colors.inputTextColor
+    color: Colors.inputTextColor,
+  },
+  inputTextLabel: {
+    fontFamily: 'Roboto-Bold',
+    color: Colors.inputTextColor,
+    fontSize: wp(4),
+  },
+  inputTextStyle: {
+    fontSize: wp(4),
+    backgroundColor: Colors.textBG,
+    color: Colors.inputTextColor,
+    fontFamily: 'Roboto-Regular',
+  },
+  mapPinCircle: {
+    height: wp(12),
+    width: wp(12),
+    borderRadius: wp(6),
+    backgroundColor: Colors.pageBG,
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 };

@@ -2,6 +2,7 @@ import React from 'react';
 import {Input, Text} from 'react-native-elements';
 import {hp, Colors, wp} from '../constant/colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {STYLES} from '../constant/commonStyle';
 
 const TextInput = (props) => {
   return (
@@ -71,17 +72,8 @@ const TextInput = (props) => {
         borderColor: Colors.silver,
         backgroundColor: Colors.white,
       }}
-      labelStyle={{
-        fontFamily: 'Roboto-Bold',
-        color: Colors.inputTextColor,
-        fontSize: wp(4),
-      }}
-      inputStyle={{
-        fontSize: wp(4),
-        backgroundColor: Colors.textBG,
-        color: Colors.inputTextColor,
-        fontFamily: 'Roboto-Regular',
-      }}
+      labelStyle={STYLES.inputTextLabel}
+      inputStyle={STYLES.inputTextStyle}
     />
   );
 };

@@ -1,13 +1,35 @@
 import React, {useState} from 'react';
-import {Platform, Pressable, ScrollView, Text, View} from 'react-native';
-import {Colors, hp, wp} from '../../../constant/colors';
+import {
+  Platform,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+  StyleSheet,
+  Linking,
+} from 'react-native';
+import {boxShadow, Colors, hp, wp} from '../../../constant/colors';
 import SimpleHeader from '../../../components/simpleHeader';
 import {STYLES} from '../../../constant/commonStyle';
 import Feather from 'react-native-vector-icons/Feather';
 import TwoButton from '../../../components/twoButton';
+import CustomModalAndroid from '../../../components/customModal';
+import CloseIcon from '../../../components/closeIcon';
+import AcceptOrder from './acceptOrder';
+import MapModalAndroid from '../../../components/mapModal';
+import MapView, {
+  Marker,
+  PROVIDER_GOOGLE,
+  PROVIDER_DEFAULT,
+} from 'react-native-maps';
+import FlatButton from '../../../components/flatButton';
 
 const OrderDetails = (props) => {
   const [selectedTab, setSelectedTab] = useState(0);
+  const [rejectVisible, setRejectVisible] = useState(false);
+  const [acceptVisible, setAcceptVisible] = useState(false);
+  const [placedSuccessVisible, setPlacedSuccessVisible] = useState(false);
+  const [mapVisible, setMapVisible] = useState(null);
   const renderText = (key, value) => {
     return (
       <View>
@@ -125,16 +147,11 @@ const OrderDetails = (props) => {
             <View>
               {renderText('Pickup Address', 'ABC Studio, ABC Street, Chennai')}
             </View>
-            <View
-              style={{
-                height: wp(12),
-                width: wp(12),
-                borderRadius: wp(6),
-                backgroundColor: Colors.pageBG,
-                ...STYLES.common,
-              }}>
+            <Pressable
+              style={STYLES.mapPinCircle}
+              onPress={() => setMapVisible('pickup')}>
               <Feather name={'map-pin'} color={Colors.darkBlue} size={wp(7)} />
-            </View>
+            </Pressable>
           </View>
           <View
             style={{
@@ -163,18 +180,13 @@ const OrderDetails = (props) => {
               justifyContent: 'space-between',
             }}>
             <View>
-              {renderText('Pickup Address', 'ABC Studio, ABC Street, Chennai')}
+              {renderText('Drop Address', 'ABC Studio, ABC Street, Chennai')}
             </View>
-            <View
-              style={{
-                height: wp(12),
-                width: wp(12),
-                borderRadius: wp(6),
-                backgroundColor: Colors.pageBG,
-                ...STYLES.common,
-              }}>
+            <Pressable
+              style={STYLES.mapPinCircle}
+              onPress={() => setMapVisible('drop')}>
               <Feather name={'map-pin'} color={Colors.darkBlue} size={wp(7)} />
-            </View>
+            </Pressable>
           </View>
           <View
             style={{
@@ -195,13 +207,135 @@ const OrderDetails = (props) => {
           <TwoButton
             leftLabel={'REJECT'}
             rightLabel={'ACCEPT'}
-            leftOnPress={() => {}}
-            rightOnPress={() => {}}
+            leftOnPress={() => setRejectVisible(true)}
+            rightOnPress={() => setAcceptVisible(true)}
           />
         </View>
       </ScrollView>
+      <CustomModalAndroid visible={rejectVisible}>
+        <View style={STYLES.modalHeaderView}>
+          <Text style={STYLES.modalHeaderText}>REJECT ORDER</Text>
+          <CloseIcon
+            style={{
+              position: 'absolute',
+              right: 10,
+            }}
+            onPress={() => setRejectVisible(false)}
+          />
+        </View>
+        <View style={{...STYLES.separatorView, width: '85%'}} />
+        <Text
+          style={{
+            marginVertical: hp(3),
+            fontFamily: 'Roboto-Regular',
+            color: Colors.inputTextColor,
+            fontSize: wp(4),
+            marginHorizontal: wp(5),
+            textAlign: 'center',
+          }}>
+          Are you sure you want to REJECT the order?
+        </Text>
+        <TwoButton
+          leftLabel={'NO'}
+          rightLabel={'YES'}
+          leftOnPress={() => setRejectVisible(false)}
+          rightOnPress={() => setRejectVisible(false)}
+        />
+      </CustomModalAndroid>
+      <AcceptOrder
+        visible={acceptVisible}
+        onCloseIcon={() => setAcceptVisible(false)}
+      />
+      <CustomModalAndroid visible={placedSuccessVisible}>
+        <View style={STYLES.modalHeaderView}>
+          <CloseIcon
+            style={{
+              position: 'absolute',
+              right: 10,
+            }}
+            onPress={() => setPlacedSuccessVisible(false)}
+          />
+        </View>
+        <Feather name={'check-circle'} size={wp(30)} color={Colors.darkBlue} />
+        <Text style={styles.bidText}>
+          You have successfully placed your "BID"
+        </Text>
+      </CustomModalAndroid>
+      <MapModalAndroid visible={mapVisible !== null}>
+        <View style={styles.mapView}>
+          <MapView
+            provider={
+              Platform.OS === 'android' ? PROVIDER_GOOGLE : PROVIDER_DEFAULT
+            }
+            style={{flex: 1}}
+            initialRegion={{
+              latitude: 37.78825,
+              longitude: -122.4324,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            }}>
+            <Marker
+              coordinate={{
+                latitude: 37.78825,
+                longitude: -122.4324,
+              }}
+            />
+          </MapView>
+        </View>
+        <CloseIcon
+          onPress={() => setMapVisible(null)}
+          style={[
+            boxShadow,
+            {
+              position: 'absolute',
+              right: 15,
+              top: 15,
+              height: 40,
+              width: 40,
+              borderRadius: 20,
+              backgroundColor: Colors.white,
+              ...STYLES.common,
+            },
+          ]}
+        />
+        <View style={{marginVertical: hp(3), width: wp(90)}}>
+          {renderText(
+            mapVisible === 'pickup' ? 'Pickup Address' : 'Drop Address',
+            'ABC Studio, ABC Street, Chennai',
+          )}
+        </View>
+        <View style={{marginTop: hp(1)}}>
+          <FlatButton
+            label={'open in maps app'}
+            onPress={() => {
+              // Linking.openURL(
+              //     'http://maps.google.com/maps/@21.2378888,72.863352',
+              // )
+            }}
+          />
+        </View>
+      </MapModalAndroid>
     </View>
   );
 };
 
 export default OrderDetails;
+
+const styles = StyleSheet.create({
+  bidText: {
+    marginTop: hp(3),
+    marginBottom: hp(5),
+    color: Colors.darkBlue,
+    fontFamily: 'Roboto-Regular',
+    fontSize: wp(5),
+    marginHorizontal: wp(20),
+    textAlign: 'center',
+  },
+  mapView: {
+    height: hp(67),
+    width: wp(100),
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    overflow: 'hidden',
+  },
+});

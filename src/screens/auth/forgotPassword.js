@@ -6,7 +6,6 @@ import TextInput from '../../components/textInput';
 import Button from '../../components/button';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import Header from './header';
-import CheckBox from '../../components/checkBox';
 import LinearGradient from 'react-native-linear-gradient';
 import {STYLES} from '../../constant/commonStyle';
 
