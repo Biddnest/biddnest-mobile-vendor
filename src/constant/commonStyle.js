@@ -173,4 +173,18 @@ export const STYLES = {
     borderRadius: 3,
     overflow: 'hidden',
   },
+  circleBtnView: {
+    height: wp(15),
+    width: wp(15),
+    borderRadius: wp(7.5),
+    backgroundColor: Colors.pageBG,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  circleBottomText: {
+    fontFamily: 'Roboto-Light',
+    fontSize: wp(3.8),
+    color: Colors.inputTextColor,
+    marginTop: 3,
+  }
 };

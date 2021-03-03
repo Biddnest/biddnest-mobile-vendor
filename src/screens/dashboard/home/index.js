@@ -85,9 +85,23 @@ const Home = (props) => {
   const renderItem = ({item, index}) => {
     return (
       <Pressable
-        style={STYLES.inputForm}
+        style={[
+          STYLES.inputForm,
+          {backgroundColor: selectedTab === 2 ? '#F8F8FA' : Colors.white},
+        ]}
         key={index}
         onPress={() => props.navigation.navigate('OrderDetails')}>
+        {selectedTab === 2 && (
+          <Image
+            source={require('../../../assets/images/expired.png')}
+            style={{
+              position: 'absolute',
+              width: wp(90),
+              zIndex: 11,
+            }}
+            resizeMode={'contain'}
+          />
+        )}
         <View
           style={{
             flexDirection: 'row',

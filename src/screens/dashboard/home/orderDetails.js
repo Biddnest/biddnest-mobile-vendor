@@ -23,6 +23,10 @@ import MapView, {
   PROVIDER_DEFAULT,
 } from 'react-native-maps';
 import FlatButton from '../../../components/flatButton';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import OrderStatusWin from './orderStatusWin';
+import OrderStatusPending from './orderStatusPending';
+import OrderStatusLost from './orderStatusLost';
 
 const OrderDetails = (props) => {
   const [selectedTab, setSelectedTab] = useState(0);
@@ -114,102 +118,130 @@ const OrderDetails = (props) => {
             </View>
           </View>
           <View style={STYLES.tabView}>
-            {['Order Details', 'Requirements'].map((item, index) => {
-              return (
-                <Pressable
-                  key={index}
-                  style={{
-                    ...STYLES.common,
-                    borderColor:
-                      selectedTab === index ? Colors.darkBlue : '#ACABCD',
-                    borderBottomWidth: selectedTab === index ? 2 : 0,
-                  }}
-                  onPress={() => setSelectedTab(index)}>
-                  <Text
+            {['Order Details', 'Requirements', 'Order Status'].map(
+              (item, index) => {
+                return (
+                  <Pressable
+                    key={index}
                     style={{
-                      ...STYLES.tabText,
-                      color:
+                      ...STYLES.common,
+                      borderColor:
                         selectedTab === index ? Colors.darkBlue : '#ACABCD',
-                    }}>
-                    {item}
-                  </Text>
+                      borderBottomWidth: selectedTab === index ? 2 : 0,
+                    }}
+                    onPress={() => setSelectedTab(index)}>
+                    <Text
+                      style={{
+                        ...STYLES.tabText,
+                        color:
+                          selectedTab === index ? Colors.darkBlue : '#ACABCD',
+                      }}>
+                      {item}
+                    </Text>
+                  </Pressable>
+                );
+              },
+            )}
+          </View>
+          {selectedTab === 0 && (
+            <View>
+              <View
+                style={{
+                  marginHorizontal: wp(5),
+                  marginTop: hp(2),
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                }}>
+                <View>
+                  {renderText(
+                    'Pickup Address',
+                    'ABC Studio, ABC Street, Chennai',
+                  )}
+                </View>
+                <Pressable
+                  style={STYLES.mapPinCircle}
+                  onPress={() => setMapVisible('pickup')}>
+                  <Feather
+                    name={'map-pin'}
+                    color={Colors.darkBlue}
+                    size={wp(7)}
+                  />
                 </Pressable>
-              );
-            })}
-          </View>
-          <View
-            style={{
-              marginHorizontal: wp(5),
-              marginTop: hp(2),
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-            }}>
-            <View>
-              {renderText('Pickup Address', 'ABC Studio, ABC Street, Chennai')}
+              </View>
+              <View
+                style={{
+                  marginHorizontal: wp(5),
+                  marginTop: hp(2),
+                }}>
+                {renderText('Pincode', '560097')}
+              </View>
+              <View
+                style={{
+                  marginHorizontal: wp(5),
+                  marginTop: hp(2),
+                  flexDirection: 'row',
+                }}>
+                <View style={{flex: 1}}>{renderText('Floor', '01')}</View>
+                <View style={{flex: 1}}>{renderText('Lift', 'Yes')}</View>
+              </View>
+              <View
+                style={[
+                  STYLES.separatorView,
+                  {width: '90%', alignSelf: 'center'},
+                ]}
+              />
+              <View
+                style={{
+                  marginHorizontal: wp(5),
+                  marginTop: hp(2),
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                }}>
+                <View>
+                  {renderText(
+                    'Drop Address',
+                    'ABC Studio, ABC Street, Chennai',
+                  )}
+                </View>
+                <Pressable
+                  style={STYLES.mapPinCircle}
+                  onPress={() => setMapVisible('drop')}>
+                  <Feather
+                    name={'map-pin'}
+                    color={Colors.darkBlue}
+                    size={wp(7)}
+                  />
+                </Pressable>
+              </View>
+              <View
+                style={{
+                  marginHorizontal: wp(5),
+                  marginTop: hp(2),
+                }}>
+                {renderText('Pincode', '560097')}
+              </View>
+              <View
+                style={{
+                  marginHorizontal: wp(5),
+                  marginTop: hp(2),
+                  flexDirection: 'row',
+                }}>
+                <View style={{flex: 1}}>{renderText('Floor', '01')}</View>
+                <View style={{flex: 1}}>{renderText('Lift', 'Yes')}</View>
+              </View>
+              <TwoButton
+                leftLabel={'REJECT'}
+                rightLabel={'ACCEPT'}
+                leftOnPress={() => setRejectVisible(true)}
+                rightOnPress={() => setAcceptVisible(true)}
+              />
             </View>
-            <Pressable
-              style={STYLES.mapPinCircle}
-              onPress={() => setMapVisible('pickup')}>
-              <Feather name={'map-pin'} color={Colors.darkBlue} size={wp(7)} />
-            </Pressable>
-          </View>
-          <View
-            style={{
-              marginHorizontal: wp(5),
-              marginTop: hp(2),
-            }}>
-            {renderText('Pincode', '560097')}
-          </View>
-          <View
-            style={{
-              marginHorizontal: wp(5),
-              marginTop: hp(2),
-              flexDirection: 'row',
-            }}>
-            <View style={{flex: 1}}>{renderText('Floor', '01')}</View>
-            <View style={{flex: 1}}>{renderText('Lift', 'Yes')}</View>
-          </View>
-          <View
-            style={[STYLES.separatorView, {width: '90%', alignSelf: 'center'}]}
-          />
-          <View
-            style={{
-              marginHorizontal: wp(5),
-              marginTop: hp(2),
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-            }}>
-            <View>
-              {renderText('Drop Address', 'ABC Studio, ABC Street, Chennai')}
-            </View>
-            <Pressable
-              style={STYLES.mapPinCircle}
-              onPress={() => setMapVisible('drop')}>
-              <Feather name={'map-pin'} color={Colors.darkBlue} size={wp(7)} />
-            </Pressable>
-          </View>
-          <View
-            style={{
-              marginHorizontal: wp(5),
-              marginTop: hp(2),
-            }}>
-            {renderText('Pincode', '560097')}
-          </View>
-          <View
-            style={{
-              marginHorizontal: wp(5),
-              marginTop: hp(2),
-              flexDirection: 'row',
-            }}>
-            <View style={{flex: 1}}>{renderText('Floor', '01')}</View>
-            <View style={{flex: 1}}>{renderText('Lift', 'Yes')}</View>
-          </View>
-          <TwoButton
-            leftLabel={'REJECT'}
-            rightLabel={'ACCEPT'}
-            leftOnPress={() => setRejectVisible(true)}
-            rightOnPress={() => setAcceptVisible(true)}
-          />
+          )}
+          {selectedTab === 2 && (
+            // <OrderStatusWin />
+            // <OrderStatusPending />
+            <OrderStatusLost />
+          )}
         </View>
       </ScrollView>
       <CustomModalAndroid visible={rejectVisible}>
