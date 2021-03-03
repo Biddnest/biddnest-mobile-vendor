@@ -27,6 +27,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import OrderStatusWin from './orderStatusWin';
 import OrderStatusPending from './orderStatusPending';
 import OrderStatusLost from './orderStatusLost';
+import Requirements from './requirements';
 
 const OrderDetails = (props) => {
   const [selectedTab, setSelectedTab] = useState(0);
@@ -54,7 +55,7 @@ const OrderDetails = (props) => {
   return (
     <View style={{flex: 1, backgroundColor: Colors.white}}>
       <SimpleHeader
-          heart={true}
+        heart={true}
         headerText={'Order Details'}
         right={true}
         navigation={props.navigation}
@@ -238,6 +239,7 @@ const OrderDetails = (props) => {
               />
             </View>
           )}
+          {selectedTab === 1 && <Requirements />}
           {selectedTab === 2 && (
             // <OrderStatusWin />
             // <OrderStatusPending />
@@ -257,15 +259,7 @@ const OrderDetails = (props) => {
           />
         </View>
         <View style={{...STYLES.separatorView, width: '85%'}} />
-        <Text
-          style={{
-            marginVertical: hp(3),
-            fontFamily: 'Roboto-Regular',
-            color: Colors.inputTextColor,
-            fontSize: wp(4),
-            marginHorizontal: wp(5),
-            textAlign: 'center',
-          }}>
+        <Text style={STYLES.rejectText}>
           Are you sure you want to REJECT the order?
         </Text>
         <TwoButton

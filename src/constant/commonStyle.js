@@ -186,5 +186,13 @@ export const STYLES = {
     fontSize: wp(3.8),
     color: Colors.inputTextColor,
     marginTop: 3,
+  },
+  rejectText: {
+    marginVertical: hp(3),
+    fontFamily: 'Roboto-Regular',
+    color: Colors.inputTextColor,
+    fontSize: wp(4),
+    marginHorizontal: wp(5),
+    textAlign: 'center',
   }
 };
