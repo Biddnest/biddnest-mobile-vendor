@@ -54,6 +54,7 @@ const OrderDetails = (props) => {
   return (
     <View style={{flex: 1, backgroundColor: Colors.white}}>
       <SimpleHeader
+          heart={true}
         headerText={'Order Details'}
         right={true}
         navigation={props.navigation}

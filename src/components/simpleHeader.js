@@ -4,6 +4,8 @@ import {boxShadow, Colors, wp} from '../constant/colors';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import {STYLES} from '../constant/commonStyle';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import Switch from './switch';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
 const SimpleHeader = (props) => {
   return (
@@ -36,7 +38,7 @@ const SimpleHeader = (props) => {
       </Pressable>
       <View
         style={{
-          width: props.right ? wp(74) : wp(87),
+          width: props.right ? (props.heart ? wp(66) : wp(74)) : wp(87),
           height: '100%',
           ...styles.common,
         }}>
@@ -52,15 +54,25 @@ const SimpleHeader = (props) => {
         </Text>
       </View>
       {props.right ? (
-        <Pressable
-          style={{...STYLES.common, width: wp(13)}}
-          onPress={props.onRightPress}>
-          <SimpleLineIcons
-            name={'earphones-alt'}
-            color={Colors.darkBlue}
-            size={20}
-          />
-        </Pressable>
+        <View
+          style={[STYLES.common, {alignItems: 'center', flexDirection: 'row'}]}>
+          {props.heart && (
+            <Pressable
+              style={{...STYLES.common, width: wp(8)}}
+              onPress={props.onRightPress}>
+              <EvilIcons name={'heart'} color={Colors.darkBlue} size={30} />
+            </Pressable>
+          )}
+          <Pressable
+            style={{...STYLES.common, width: wp(13)}}
+            onPress={props.onRightPress}>
+            <SimpleLineIcons
+              name={'earphones-alt'}
+              color={Colors.darkBlue}
+              size={20}
+            />
+          </Pressable>
+        </View>
       ) : null}
     </View>
   );

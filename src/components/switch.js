@@ -17,7 +17,7 @@ const Switch = (props) => {
           color: !switchValue ? '#3B4B58' : '#99A0A5',
           fontSize: wp(3.8),
         }}>
-        {props.left ? props.left : 'No'}
+        {props.left}
       </Text>
       <Pressable
         onPress={() => clicked()}
@@ -50,7 +50,7 @@ const Switch = (props) => {
           color: switchValue ? '#3B4B58' : '#99A0A5',
           fontSize: wp(3.8),
         }}>
-        {props.right ? props.right : 'Yes'}
+        {props.right}
       </Text>
     </View>
   );

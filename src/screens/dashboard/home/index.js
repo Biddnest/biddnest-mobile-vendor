@@ -11,6 +11,8 @@ import CloseIcon from '../../../components/closeIcon';
 import DropDown from '../../../components/dropDown';
 import Slider from 'rn-range-slider';
 import FlatButton from '../../../components/flatButton';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import Switch from '../../../components/switch';
 
 export const HomeHeader = (props) => {
   return (
@@ -37,7 +39,7 @@ export const HomeHeader = (props) => {
       </Pressable>
       <View
         style={{
-          width: props.right ? wp(74) : wp(87),
+          width: props.right ? (props.title ? wp(74) : wp(62)) : wp(87),
           height: '100%',
           ...STYLES.common,
         }}>
@@ -59,21 +61,31 @@ export const HomeHeader = (props) => {
             style={{
               height: '65%',
               width: '70%',
-              marginRight: wp(13),
+              marginRight: props.right ? wp(0) : wp(13),
             }}
           />
         )}
       </View>
       {props.right ? (
-        <Pressable
-          style={{...STYLES.common, width: wp(13)}}
-          onPress={props.onRightPress}>
-          <SimpleLineIcons
-            name={'earphones-alt'}
-            color={Colors.darkBlue}
-            size={20}
-          />
-        </Pressable>
+        <View
+          style={[STYLES.common, {alignItems: 'center', flexDirection: 'row'}]}>
+          {!props.title && (
+            <Pressable
+              style={{...STYLES.common, width: wp(12)}}
+              onPress={props.onRightPress}>
+              <Switch />
+            </Pressable>
+          )}
+          <Pressable
+            style={{...STYLES.common, width: wp(13)}}
+            onPress={props.onRightPress}>
+            <SimpleLineIcons
+              name={'earphones-alt'}
+              color={Colors.darkBlue}
+              size={20}
+            />
+          </Pressable>
+        </View>
       ) : null}
     </View>
   );
@@ -220,7 +232,7 @@ const Home = (props) => {
   };
   return (
     <LinearGradient colors={[Colors.pageBG, Colors.white]} style={{flex: 1}}>
-      <HomeHeader />
+      <HomeHeader right={true} onRightPress={() => {}} />
       <View style={STYLES.tabView}>
         {['Live Orders', 'Scheduled Orders', 'Save Later'].map(
           (item, index) => {
