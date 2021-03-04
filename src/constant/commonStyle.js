@@ -11,6 +11,11 @@ export const STYLES = {
     alignItems: 'center',
     justifyContent: 'center',
   },
+  emptyText: {
+    fontFamily: 'Roboto-Italic',
+    fontSize: wp(3.6),
+    color: Colors.darkBlue
+  },
   authScreenHeader: {
     fontFamily: 'Gilroy-Semibold',
     color: Colors.inputTextColor,

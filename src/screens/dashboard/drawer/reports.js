@@ -1,5 +1,5 @@
 import React from 'react';
-import {FlatList, Platform, ScrollView, Text, View} from 'react-native';
+import {FlatList, Image, Platform, ScrollView, Text, View} from 'react-native';
 import {Colors, hp, VENDOR_INFORMATION, wp} from '../../../constant/colors';
 import LinearGradient from 'react-native-linear-gradient';
 import SimpleHeader from '../../../components/simpleHeader';
@@ -65,6 +65,18 @@ const Reports = (props) => {
               </LinearGradient>
             );
           }}
+          ListEmptyComponent={() => (
+            <View style={{marginTop: hp(20), ...STYLES.common}}>
+              <Image
+                source={require('../../../assets/images/empty_report.png')}
+                style={{height: wp(30), width: wp(30)}}
+                resizeMode={'contain'}
+              />
+              <Text style={STYLES.emptyText}>
+                There are no reports generated.
+              </Text>
+            </View>
+          )}
         />
       </ScrollView>
     </LinearGradient>

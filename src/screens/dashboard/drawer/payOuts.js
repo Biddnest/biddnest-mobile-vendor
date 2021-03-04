@@ -7,6 +7,7 @@ import {
   Text,
   View,
   StyleSheet,
+  Image,
 } from 'react-native';
 import {Colors, hp, wp} from '../../../constant/colors';
 import LinearGradient from 'react-native-linear-gradient';
@@ -31,6 +32,7 @@ const PayOuts = (props) => {
           paddingHorizontal: hp(2),
           paddingVertical: hp(2),
           alignItems: 'center',
+          backgroundColor: Colors.white,
         }}>
         <View style={styles.flexBox}>
           <Text style={styles.topText}>3rd Feb 2021</Text>
@@ -71,11 +73,22 @@ const PayOuts = (props) => {
           <FlatList
             bounces={false}
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={{backgroundColor: Colors.white}}
             data={[1, 2, 3, 4, 5, 6]}
             renderItem={renderItem}
             ItemSeparatorComponent={() => (
               <View style={[STYLES.separatorView, {marginTop: 0}]} />
+            )}
+            ListEmptyComponent={() => (
+              <View style={{marginTop: hp(20), ...STYLES.common}}>
+                <Image
+                  source={require('../../../assets/images/empty_payouts.png')}
+                  style={{height: wp(30), width: wp(30)}}
+                  resizeMode={'contain'}
+                />
+                <Text style={STYLES.emptyText}>
+                  There are no reports generated.
+                </Text>
+              </View>
             )}
           />
         </View>
