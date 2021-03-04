@@ -58,6 +58,7 @@ const OrderDetails = (props) => {
         heart={true}
         headerText={'Order Details'}
         right={true}
+        onRightPress={() => {}}
         navigation={props.navigation}
         onBack={() => props.navigation.goBack()}
       />

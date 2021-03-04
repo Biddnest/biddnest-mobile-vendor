@@ -232,7 +232,11 @@ const Home = (props) => {
   };
   return (
     <LinearGradient colors={[Colors.pageBG, Colors.white]} style={{flex: 1}}>
-      <HomeHeader right={true} onRightPress={() => {}} />
+      <HomeHeader
+        right={true}
+        onRightPress={() => {}}
+        navigation={props.navigation}
+      />
       <View style={STYLES.tabView}>
         {['Live Orders', 'Scheduled Orders', 'Save Later'].map(
           (item, index) => {

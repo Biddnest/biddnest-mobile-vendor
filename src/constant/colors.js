@@ -159,14 +159,14 @@ export const SIDE_DRAWER = [
     icon: 'filetext1',
     topText: 'Reports',
     bottomText: 'Search Orders',
-    navigate: 'AboutUs',
+    navigate: 'Reports',
   },
   {
     iconFamily: 'Feather',
     icon: 'info',
     topText: 'Legal Policies',
     bottomText: 'Search Orders',
-    navigate: 'AboutUs',
+    navigate: 'LegalPolicies',
   },
   {
     iconFamily: 'AntDesign',
@@ -180,13 +180,13 @@ export const SIDE_DRAWER = [
     icon: 'comment-question-outline',
     topText: 'Privacy Policy',
     bottomText: 'Search Orders',
-    navigate: 'FAQs',
+    navigate: 'PrivacyPolicy',
   },
   {
     iconFamily: 'Ionicons',
     icon: 'call-outline',
     topText: 'Support',
     bottomText: 'Raise a request to change price',
-    navigate: 'ContactUs',
+    navigate: 'Support',
   },
 ];

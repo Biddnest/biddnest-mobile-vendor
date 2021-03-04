@@ -43,7 +43,8 @@ const Profile = (props) => {
   };
   const renderIcon = (index, header) => {
     return (
-      <View
+      <Pressable
+        onPress={() => onPress(index)}
         style={[
           styles.inputForm,
           {
@@ -77,7 +78,7 @@ const Profile = (props) => {
               </Pressable>
             )}
           </View>
-          <Pressable onPress={() => onPress(index)}>
+          <View>
             <MaterialIcons
               name={
                 openArray.includes(index)
@@ -87,9 +88,9 @@ const Profile = (props) => {
               size={26}
               color={openArray.includes(index) ? Colors.white : Colors.darkBlue}
             />
-          </Pressable>
+          </View>
         </View>
-      </View>
+      </Pressable>
     );
   };
   return (

@@ -67,7 +67,11 @@ const TextInput = (props) => {
         borderWidth: 2,
         paddingHorizontal: 15,
         borderRadius: 10,
-        height: props.numberOfLines ? hp(12) : hp(6.5),
+        height: props.numberOfLines
+          ? props.height
+            ? props.height
+            : hp(12)
+          : hp(6.5),
         marginTop: hp(1),
         borderColor: Colors.silver,
         backgroundColor: Colors.white,
