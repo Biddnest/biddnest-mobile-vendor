@@ -13,6 +13,7 @@ import Slider from 'rn-range-slider';
 import FlatButton from '../../../components/flatButton';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Switch from '../../../components/switch';
+import FilterButton from '../../../components/filterButton';
 
 export const HomeHeader = (props) => {
   return (
@@ -284,20 +285,7 @@ const Home = (props) => {
         />
       </View>
       {selectedTab === 1 && (
-        <Pressable
-          onPress={() => setFilterVisible(true)}
-          style={{
-            position: 'absolute',
-            height: 50,
-            width: 50,
-            borderRadius: 25,
-            backgroundColor: Colors.darkBlue,
-            bottom: hp(2),
-            right: hp(2),
-            ...STYLES.common,
-          }}>
-          <AntDesign name={'filter'} color={Colors.white} size={30} />
-        </Pressable>
+        <FilterButton onPress={() => setFilterVisible(true)} />
       )}
       <CustomModalAndroid visible={filterVisible}>
         <View style={STYLES.modalHeaderView}>
