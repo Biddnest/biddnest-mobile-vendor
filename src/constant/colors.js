@@ -152,7 +152,7 @@ export const SIDE_DRAWER = [
     icon: 'credit-card-outline',
     topText: 'Payouts',
     bottomText: 'Search Orders',
-    navigate: 'AboutUs',
+    navigate: 'PayOuts',
   },
   {
     iconFamily: 'AntDesign',
