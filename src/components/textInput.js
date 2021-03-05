@@ -73,8 +73,10 @@ const TextInput = (props) => {
             : hp(12)
           : hp(6.5),
         marginTop: hp(1),
-        borderColor: Colors.silver,
+        borderColor: props.isRight === false ? Colors.red : Colors.silver,
         backgroundColor: Colors.white,
+        borderBottomWidth: 2,
+        alignItems: 'center',
       }}
       labelStyle={STYLES.inputTextLabel}
       inputStyle={STYLES.inputTextStyle}

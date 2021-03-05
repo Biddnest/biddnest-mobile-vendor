@@ -143,6 +143,7 @@ export const STYLES = {
     backgroundColor: Colors.textBG,
     color: Colors.inputTextColor,
     fontFamily: 'Roboto-Regular',
+    height: '99%',
   },
   mapPinCircle: {
     height: wp(12),
