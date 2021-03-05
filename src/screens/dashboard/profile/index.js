@@ -104,7 +104,7 @@ const Profile = (props) => {
         onRightPress={() => {}}
       />
       <ScrollView
-        style={{marginBottom: Platform.OS === 'android' ? 0 : hp(7)}}
+        style={{flex: 1}}
         showsVerticalScrollIndicator={false}
         bounces={false}>
         <ImageBackground

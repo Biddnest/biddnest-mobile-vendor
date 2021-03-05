@@ -99,7 +99,6 @@ const UserRole = (props) => {
       </View>
       <ScrollView
         contentContainerStyle={{
-          marginBottom: Platform.OS === 'android' ? 0 : hp(7),
           flex: 1,
           padding: hp(2),
         }}

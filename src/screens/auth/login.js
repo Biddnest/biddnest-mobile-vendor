@@ -29,6 +29,7 @@ const Login = (props) => {
           width: wp(100),
         }}>
         <KeyboardAwareScrollView
+          bounces={false}
           enableOnAndroid={false}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}

@@ -64,7 +64,6 @@ const PayOuts = (props) => {
       />
       <ScrollView
         contentContainerStyle={{
-          marginBottom: Platform.OS === 'android' ? 0 : hp(7),
           flex: 1,
         }}
         showsVerticalScrollIndicator={false}

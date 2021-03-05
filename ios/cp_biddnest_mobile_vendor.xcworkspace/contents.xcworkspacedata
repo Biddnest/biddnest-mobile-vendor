@@ -2,9 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:cp_biddnest_mobile_vendor.xcodeproj">
+      location = "group:Pods/Pods.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:Pods/Pods.xcodeproj">
+      location = "group:cp_biddnest_mobile_vendor.xcodeproj">
    </FileRef>
 </Workspace>

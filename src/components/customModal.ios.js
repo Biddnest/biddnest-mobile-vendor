@@ -45,7 +45,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
-    paddingTop: 35,
     position: 'absolute',
     bottom: 0,
     width: wp(100),

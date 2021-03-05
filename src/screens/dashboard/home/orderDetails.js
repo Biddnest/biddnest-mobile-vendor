@@ -7,6 +7,7 @@ import {
   View,
   StyleSheet,
   Linking,
+  Image,
 } from 'react-native';
 import {boxShadow, Colors, hp, wp} from '../../../constant/colors';
 import SimpleHeader from '../../../components/simpleHeader';
@@ -63,7 +64,7 @@ const OrderDetails = (props) => {
         onBack={() => props.navigation.goBack()}
       />
       <ScrollView
-        style={{marginBottom: Platform.OS === 'android' ? 0 : hp(7)}}
+        style={{flex: 1}}
         showsVerticalScrollIndicator={false}
         bounces={false}>
         <View>
@@ -284,7 +285,14 @@ const OrderDetails = (props) => {
             onPress={() => setPlacedSuccessVisible(false)}
           />
         </View>
-        <Feather name={'check-circle'} size={wp(30)} color={Colors.darkBlue} />
+        <Image
+          source={require('../../../assets/images/bid_success.png')}
+          style={{
+            width: wp(30),
+            height: wp(30),
+          }}
+          resizeMode={'contain'}
+        />
         <Text style={styles.bidText}>
           You have successfully placed your "BID"
         </Text>
