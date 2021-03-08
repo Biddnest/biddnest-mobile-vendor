@@ -2,6 +2,7 @@ import React from 'react';
 import {Text, View, StyleSheet, Image} from 'react-native';
 import {Colors, hp, wp} from '../../../constant/colors';
 import {STYLES} from '../../../constant/commonStyle';
+import TimerClock from '../../../assets/svg/timer_clock.svg';
 
 const OrderStatusPending = (props) => {
   return (
@@ -23,17 +24,16 @@ const OrderStatusPending = (props) => {
         </Text>
       </View>
       <View style={[STYLES.inputForm, {borderRadius: hp(1), marginTop: 0}]}>
-        <Image
-          source={require('../../../assets/images/timer_clock.png')}
+        <View
           style={{
             width: wp(30),
             height: wp(30),
             alignSelf: 'center',
             marginTop: hp(2),
             marginBottom: hp(1.5),
-          }}
-          resizeMode={'contain'}
-        />
+          }}>
+          <TimerClock width={wp(30)} height={wp(30)} />
+        </View>
         <Text
           style={{
             color: Colors.darkBlue,

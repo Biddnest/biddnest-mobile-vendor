@@ -7,6 +7,12 @@ import {
   ProfileStackNavigator,
 } from './stackNavigation';
 import {wp, hp, Colors} from '../constant/colors';
+import ActiveHome from '../assets/svg/active_home.svg';
+import InActiveHome from '../assets/svg/inactive_home.svg';
+import ActiveBooking from '../assets/svg/active_booking.svg';
+import InactiveBooking from '../assets/svg/inactive_booking.svg';
+import ActiveProfile from '../assets/svg/active_profile.svg';
+import InactiveProfile from '../assets/svg/inactive_profile.svg';
 
 const TabNavigation = (props: any) => {
   const Tab = createBottomTabNavigator();
@@ -40,35 +46,21 @@ const TabNavigation = (props: any) => {
         tabBarIcon: ({focused, color, size}) => {
           if (route.name === 'Home') {
             if (focused) {
-              return renderImage(require('../assets/images/active_home.png'));
+              return <ActiveHome width={hp(3)} height={hp(3)} />;
             }
-            return renderImage(require('../assets/images/inactive_home.png'));
+            return <InActiveHome width={hp(12)} height={hp(12)} />;
           } else if (route.name === 'Orders') {
             if (focused) {
-              return renderImage(
-                require('../assets/images/active_booking.png'),
-              );
+              return <ActiveBooking width={hp(12)} height={hp(12)} />;
             }
-            return renderImage(
-              require('../assets/images/inactive_booking.png'),
-            );
+            return <InactiveBooking width={hp(3)} height={hp(3)} />;
           } else if (route.name === 'Profile') {
             if (focused) {
-              return renderImage(
-                require('../assets/images/active_profile.png'),
-              );
+              return <ActiveProfile width={hp(12)} height={hp(12)} />;
             }
-            return renderImage(
-              require('../assets/images/inactive_profile.png'),
-            );
+            return <InactiveProfile width={hp(3)} height={hp(3)} />;
           }
-          return (
-            <Image
-              source={require('../assets/images/active_home.png')}
-              style={{height: hp(3), width: hp(3)}}
-              resizeMode={'contain'}
-            />
-          );
+          return <ActiveHome width={hp(3)} height={hp(3)} />;
         },
         tabBarLabel: ({focused, color, size}) => {
           let tabLabel = 'Home';

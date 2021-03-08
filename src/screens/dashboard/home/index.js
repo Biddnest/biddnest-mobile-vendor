@@ -2,18 +2,16 @@ import React, {useState} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import {FlatList, Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import {Colors, wp, boxShadow, hp} from '../../../constant/colors';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {STYLES} from '../../../constant/commonStyle';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import CustomModalAndroid from '../../../components/customModal';
 import CloseIcon from '../../../components/closeIcon';
 import DropDown from '../../../components/dropDown';
 import Slider from 'rn-range-slider';
 import FlatButton from '../../../components/flatButton';
-import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Switch from '../../../components/switch';
 import FilterButton from '../../../components/filterButton';
+import MenuIcon from '../../../assets/svg/menu_icon.svg';
 
 export const HomeHeader = (props) => {
   return (
@@ -29,14 +27,7 @@ export const HomeHeader = (props) => {
       <Pressable
         style={{width: wp(13), height: '100%', ...STYLES.common}}
         onPress={() => props.navigation.toggleDrawer()}>
-        <Image
-          source={require('../../../assets/images/menu_icon.png')}
-          resizeMode={'contain'}
-          style={{
-            height: 20,
-            width: 20,
-          }}
-        />
+        <MenuIcon width={20} height={20} />
       </Pressable>
       <View
         style={{

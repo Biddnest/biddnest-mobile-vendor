@@ -1,6 +1,7 @@
 import React from 'react';
 import {Image, Pressable} from 'react-native';
 import {hp} from '../constant/colors';
+import Filter from '../assets/svg/filter.svg';
 
 const FilterButton = (props) => {
   return (
@@ -13,11 +14,7 @@ const FilterButton = (props) => {
         bottom: hp(1),
         right: hp(1),
       }}>
-      <Image
-        source={require('../assets/images/filter.png')}
-        style={{height: 70, width: 70}}
-        resizeMode={'contain'}
-      />
+      <Filter width={70} height={70} />
     </Pressable>
   );
 };

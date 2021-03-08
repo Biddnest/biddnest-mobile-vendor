@@ -5,6 +5,8 @@ import SimpleHeader from '../../../components/simpleHeader';
 import LinearGradient from 'react-native-linear-gradient';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Button from '../../../components/button';
+import FinishMapPin from '../../../assets/svg/finish_map_pin.svg';
+import Email from '../../../assets/svg/email.svg';
 
 const Support = (props) => {
   return (
@@ -20,11 +22,7 @@ const Support = (props) => {
         <View style={styles.inputForm}>
           <View style={styles.flexBox}>
             <View style={{height: wp(10), width: wp(10)}}>
-              <Image
-                source={require('../../../assets/images/finish_map_pin.png')}
-                style={{height: '60%', width: '60%'}}
-                resizeMode={'contain'}
-              />
+              <FinishMapPin width={'60%'} height={'60%'} />
             </View>
             <Text style={styles.bottomText}>
               ABC Studio, ABC Street, KBC, Chennai 4904390
@@ -32,11 +30,7 @@ const Support = (props) => {
           </View>
           <View style={[styles.flexBox, {marginTop: hp(2)}]}>
             <View style={{height: wp(10), width: wp(10)}}>
-              <Image
-                source={require('../../../assets/images/email.png')}
-                style={{height: '60%', width: '60%'}}
-                resizeMode={'contain'}
-              />
+              <Email width={'60%'} height={'60%'} />
             </View>
             <Text style={styles.bottomText}>hello@gmail.com</Text>
           </View>

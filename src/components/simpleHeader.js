@@ -6,6 +6,7 @@ import {STYLES} from '../constant/commonStyle';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Switch from './switch';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import BackArrow from '../assets/svg/back_arrow.svg';
 
 const SimpleHeader = (props) => {
   return (
@@ -27,14 +28,7 @@ const SimpleHeader = (props) => {
         onPress={() => {
           props.onBack();
         }}>
-        <Image
-          source={require('../assets/images/back_arrow.png')}
-          style={{
-            height: wp(10),
-            width: wp(10),
-          }}
-          resizeMode={'contain'}
-        />
+        <BackArrow width={100} height={100} />
       </Pressable>
       <View
         style={{
