@@ -8,7 +8,7 @@ const TwoButton = (props) => {
     <View
       style={{
         flex: 1,
-        height: hp(6),
+        height: hp(7),
         flexDirection: 'row',
         width: wp(100),
         marginTop: hp(4),

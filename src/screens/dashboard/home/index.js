@@ -12,6 +12,7 @@ import FlatButton from '../../../components/flatButton';
 import Switch from '../../../components/switch';
 import FilterButton from '../../../components/filterButton';
 import MenuIcon from '../../../assets/svg/menu_icon.svg';
+import TwoButton from '../../../components/twoButton';
 
 export const HomeHeader = (props) => {
   return (
@@ -65,7 +66,10 @@ export const HomeHeader = (props) => {
             <Pressable
               style={{...STYLES.common, width: wp(12)}}
               onPress={props.onRightPress}>
-              <Switch />
+              <Switch
+                switchValue={props.notificationToggle}
+                onChange={props.onChange}
+              />
             </Pressable>
           )}
           <Pressable
@@ -86,6 +90,8 @@ export const HomeHeader = (props) => {
 const Home = (props) => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [filterVisible, setFilterVisible] = useState(false);
+  const [notificationToggle, setNotificationToggle] = useState(false);
+  const [offNotification, setOffNotification] = useState(false);
   const renderItem = ({item, index}) => {
     return (
       <Pressable
@@ -94,13 +100,18 @@ const Home = (props) => {
           {backgroundColor: selectedTab === 2 ? '#F8F8FA' : Colors.white},
         ]}
         key={index}
-        onPress={() => props.navigation.navigate('OrderDetails')}>
+        onPress={() => {
+          if (selectedTab !== 2) {
+            props.navigation.navigate('OrderDetails');
+          }
+        }}>
         {selectedTab === 2 && (
           <Image
             source={require('../../../assets/images/expired.png')}
             style={{
               position: 'absolute',
-              width: wp(90),
+              width: wp(60),
+              alignSelf: 'center',
               zIndex: 11,
             }}
             resizeMode={'contain'}
@@ -132,7 +143,7 @@ const Home = (props) => {
                   <Text style={STYLES.participatedText}>Rs. 4000</Text>
                 </View>
                 <View style={STYLES.priceView}>
-                  <Text style={STYLES.participatedText}>Rs. 4000</Text>
+                  <Text style={STYLES.participatedText}>00 : 40 : 00</Text>
                 </View>
               </View>
               <View style={STYLES.flexBoxOrders}>
@@ -225,6 +236,14 @@ const Home = (props) => {
   return (
     <LinearGradient colors={[Colors.pageBG, Colors.white]} style={{flex: 1}}>
       <HomeHeader
+        notificationToggle={notificationToggle}
+        onChange={() => {
+          if (!notificationToggle === false) {
+            setOffNotification(true);
+          } else {
+            setNotificationToggle(!notificationToggle);
+          }
+        }}
         right={true}
         onRightPress={() => {}}
         navigation={props.navigation}
@@ -294,7 +313,9 @@ const Home = (props) => {
           <Text style={STYLES.inputTextLabel}>Date</Text>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <View style={styles.manPowerView}>
-              <Text style={STYLES.inputTextStyle}>{'02 Jan'}</Text>
+              <Text style={[STYLES.inputTextStyle, {height: 'auto'}]}>
+                {'02 Jan'}
+              </Text>
             </View>
             <Slider
               style={styles.sliderStyle}
@@ -319,7 +340,9 @@ const Home = (props) => {
               onValueChanged={() => {}}
             />
             <View style={styles.manPowerView}>
-              <Text style={STYLES.inputTextStyle}>{'04 Feb'}</Text>
+              <Text style={[STYLES.inputTextStyle, {height: 'auto'}]}>
+                {'04 Feb'}
+              </Text>
             </View>
           </View>
           <View
@@ -366,6 +389,31 @@ const Home = (props) => {
         </View>
         <FlatButton label={'apply'} onPress={() => setFilterVisible(false)} />
       </CustomModalAndroid>
+      <CustomModalAndroid visible={offNotification}>
+        <View style={STYLES.modalHeaderView}>
+          <Text style={STYLES.modalHeaderText}>TURN OF NOTIFICATIONS</Text>
+          <CloseIcon
+            style={{
+              position: 'absolute',
+              right: 10,
+            }}
+            onPress={() => setOffNotification(false)}
+          />
+        </View>
+        <View style={{...STYLES.separatorView, width: '85%'}} />
+        <Text style={[STYLES.rejectText, {marginTop: hp(5)}]}>
+          Are you sure you want to turn off notifications?
+        </Text>
+        <TwoButton
+          leftLabel={'NO'}
+          rightLabel={'Yes'}
+          leftOnPress={() => setOffNotification(false)}
+          rightOnPress={() => {
+            setNotificationToggle(false);
+            setOffNotification(false);
+          }}
+        />
+      </CustomModalAndroid>
     </LinearGradient>
   );
 };
@@ -374,7 +422,7 @@ export default Home;
 
 const styles = StyleSheet.create({
   sliderStyle: {
-    width: wp(52),
+    width: wp(48),
     alignSelf: 'center',
     marginHorizontal: wp(2),
   },
@@ -382,7 +430,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 10,
     height: wp(12),
-    width: wp(14),
+    width: wp(16),
     marginVertical: hp(1),
     borderColor: Colors.silver,
     ...STYLES.common,

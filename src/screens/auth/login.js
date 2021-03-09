@@ -67,10 +67,10 @@ const Login = (props) => {
                 } else {
                   tempError.email = true;
                 }
-                if (!data.referralCode || data.referralCode.length === 0) {
-                  tempError.referralCode = false;
+                if (!data.password) {
+                  tempError.password = false;
                 } else {
-                  tempError.referralCode = true;
+                  tempError.password = true;
                 }
                 setError(tempError);
                 if (

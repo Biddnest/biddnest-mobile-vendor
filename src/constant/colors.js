@@ -2,8 +2,9 @@ import {
   widthPercentageToDP,
   heightPercentageToDP,
 } from 'react-native-responsive-screen';
-import {Image} from 'react-native';
 import React from 'react';
+import LegalPolicies from '../assets/svg/legal_policies.svg';
+import PrivacyPolicy from '../assets/svg/privacy_policy.svg';
 
 export const Colors = {
   white: '#FFFFFF',
@@ -46,20 +47,10 @@ export const IMAGE_OPTIONS = {
 export const wp = widthPercentageToDP;
 export const hp = heightPercentageToDP;
 
-const renderImage = (uri, size = 50) => {
-  return (
-    <Image
-      source={uri}
-      resizeMode={'contain'}
-      style={{height: size, width: size}}
-    />
-  );
-};
-
 export const VENDOR_INFORMATION = [
   {
-    title: 'Email ID',
-    body: 'davidjerome@gmail.com',
+    title: 'Organization Name',
+    body: 'Abc',
   },
   {
     title: 'Vendor Type',
@@ -69,6 +60,10 @@ export const VENDOR_INFORMATION = [
     title: 'Organization Description',
     body:
       'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.',
+  },
+  {
+    title: 'Secondary Contact Number',
+    body: '9734523422',
   },
   {
     title: 'Password',
@@ -162,8 +157,7 @@ export const SIDE_DRAWER = [
     navigate: 'Reports',
   },
   {
-    iconFamily: 'Feather',
-    icon: 'info',
+    image: <LegalPolicies width={wp(7.5)} height={wp(7.5)} />,
     topText: 'Legal Policies',
     bottomText: 'Search Orders',
     navigate: 'LegalPolicies',
@@ -176,8 +170,7 @@ export const SIDE_DRAWER = [
     navigate: 'TermsAndConditions',
   },
   {
-    iconFamily: 'MaterialCommunityIcons',
-    icon: 'comment-question-outline',
+    image: <PrivacyPolicy width={wp(7.5)} height={wp(7.5)} />,
     topText: 'Privacy Policy',
     bottomText: 'Search Orders',
     navigate: 'PrivacyPolicy',

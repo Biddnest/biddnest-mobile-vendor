@@ -7,6 +7,7 @@ import TextInput from '../../components/textInput';
 import Button from '../../components/button';
 import LinearGradient from 'react-native-linear-gradient';
 import {STYLES} from '../../constant/commonStyle';
+import {resetNavigator} from '../../constant/commonFun';
 
 const ChangePassword = (props) => {
   const [data, setData] = React.useState({});
@@ -61,8 +62,7 @@ const ChangePassword = (props) => {
                     (item) => item === false,
                   ) === -1
                 ) {
-                  // resetNavigator(props, 'Dashboard');
-                  props.navigation.navigate('Dashboard');
+                  resetNavigator(props, 'Login');
                 }
               }}
             />

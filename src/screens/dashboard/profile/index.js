@@ -326,7 +326,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   bodyText: {
-    fontFamily: 'Roboto-Bold',
+    fontFamily: 'Roboto-Regular',
     fontSize: wp(4.5),
     color: Colors.inputTextColor,
     marginBottom: 10,

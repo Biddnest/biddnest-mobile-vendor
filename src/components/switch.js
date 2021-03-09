@@ -3,42 +3,36 @@ import {Animated, Pressable, Text, View} from 'react-native';
 import {Colors, wp} from '../constant/colors';
 
 const Switch = (props) => {
-  const [switchValue, setSwitchValue] = useState(false);
-
-  const clicked = () => {
-    setSwitchValue(!switchValue);
-  };
-
   return (
     <View style={{flexDirection: 'row', alignItems: 'center'}}>
       <Text
         style={{
           fontFamily: 'Roboto-Regular',
-          color: !switchValue ? '#3B4B58' : '#99A0A5',
+          color: !props.switchValue ? '#3B4B58' : '#99A0A5',
           fontSize: wp(3.8),
         }}>
         {props.left}
       </Text>
       <Pressable
-        onPress={() => clicked()}
+        onPress={props.onChange}
         style={{
-          height: 25,
-          width: 50,
-          backgroundColor: !switchValue ? '#9D9CC5' : Colors.darkBlue,
+          height: 20,
+          width: 45,
+          backgroundColor: props.switchValue ? Colors.darkBlue : '#98A0A6',
           marginHorizontal: 5,
           borderRadius: 5,
           justifyContent: 'center',
         }}>
         <Animated.View
           style={{
-            height: 18,
-            width: 20,
+            height: 13,
+            width: 17,
             backgroundColor: Colors.white,
             marginHorizontal: 3,
             borderRadius: 5,
             transform: [
               {
-                translateX: switchValue ? 24 : 0,
+                translateX: props.switchValue ? 21 : 0,
               },
             ],
           }}
@@ -47,7 +41,7 @@ const Switch = (props) => {
       <Text
         style={{
           fontFamily: 'Roboto-Regular',
-          color: switchValue ? '#3B4B58' : '#99A0A5',
+          color: props.switchValue ? '#3B4B58' : '#99A0A5',
           fontSize: wp(3.8),
         }}>
         {props.right}

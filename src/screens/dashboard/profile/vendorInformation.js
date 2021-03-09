@@ -55,14 +55,22 @@ const VendorInformation = (props) => {
           onChange={(text) => {}}
         />
         <TextInput
-          label={'Secondary Contact Number'}
+          // label={'Secondary Contact Number'}
           placeHolder={'7567144324'}
-          onChange={(text) => {}}
-        />
+          onChange={(text) => {}}>
+          <View style={{width: wp(15)}}>
+            <DropDown
+              label={'Secondary Contact Number'}
+              width={wp(90)}
+              items={[{label: '+91', value: '+91'}]}
+              onChangeItem={(text) => {}}
+            />
+          </View>
+        </TextInput>
         <TextInput
           label={'Password'}
           secureTextEntry={true}
-          placeHolder={'7567144324'}
+          placeHolder={'********'}
           onChange={(text) => {}}
         />
         <TextInput

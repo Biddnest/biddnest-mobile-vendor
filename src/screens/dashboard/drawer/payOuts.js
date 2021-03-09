@@ -109,7 +109,9 @@ const PayOuts = (props) => {
           <Text style={STYLES.inputTextLabel}>Date</Text>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <View style={styles.manPowerView}>
-              <Text style={STYLES.inputTextStyle}>{'02 Jan'}</Text>
+              <Text style={[STYLES.inputTextStyle, {height: 'auto'}]}>
+                {'02 Jan'}
+              </Text>
             </View>
             <Slider
               style={styles.sliderStyle}
@@ -134,7 +136,9 @@ const PayOuts = (props) => {
               onValueChanged={() => {}}
             />
             <View style={styles.manPowerView}>
-              <Text style={STYLES.inputTextStyle}>{'04 Feb'}</Text>
+              <Text style={[STYLES.inputTextStyle, {height: 'auto'}]}>
+                {'04 Feb'}
+              </Text>
             </View>
           </View>
           <View
@@ -162,8 +166,7 @@ const PayOuts = (props) => {
             label={'Status'}
             width={wp(90)}
             items={[
-              {label: 'Active', value: 'active'},
-              {label: 'Inactive', value: 'inactive'},
+              {label: 'Driver Unassigned', value: 'driverunassigned'},
             ]}
             onChangeItem={(text) => {}}
           />
@@ -208,7 +211,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   sliderStyle: {
-    width: wp(52),
+    width: wp(48),
     alignSelf: 'center',
     marginHorizontal: wp(2),
   },
@@ -216,7 +219,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 10,
     height: wp(12),
-    width: wp(14),
+    width: wp(16),
     marginVertical: hp(1),
     borderColor: Colors.silver,
     ...STYLES.common,

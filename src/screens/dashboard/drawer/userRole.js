@@ -18,13 +18,15 @@ import CloseIcon from '../../../components/closeIcon';
 import CustomModalAndroid from '../../../components/customModal';
 import TwoButton from '../../../components/twoButton';
 import FlatButton from '../../../components/flatButton';
-import Slider from 'rn-range-slider';
 import DropDown from '../../../components/dropDown';
 
 const UserRole = (props) => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [detailsVisible, setDetailsVisible] = useState(false);
   const [filterVisible, setFilterVisible] = useState(false);
+  const [switchValue, setSwitchValue] = useState(false);
+  const [deActivateUser, setDeActivateUser] = useState(false);
+
   const renderItem = ({item, index}) => {
     return (
       <Pressable
@@ -60,7 +62,16 @@ const UserRole = (props) => {
           Branch {index}
         </Text>
         <View style={{width: '20%', alignItems: 'center'}}>
-          <Switch />
+          <Switch
+            switchValue={switchValue}
+            onChange={() => {
+              if (!switchValue === false) {
+                setDeActivateUser(true);
+              } else {
+                setSwitchValue(true);
+              }
+            }}
+          />
         </View>
       </Pressable>
     );
@@ -230,10 +241,7 @@ const UserRole = (props) => {
           <DropDown
             label={'Branch'}
             width={wp(90)}
-            items={[
-              {label: 'Male', value: 'male'},
-              {label: 'Female', value: 'female'},
-            ]}
+            items={[{label: 'Commercial', value: 'Commercial'}]}
             onChangeItem={(text) => {}}
           />
         </View>
@@ -249,6 +257,31 @@ const UserRole = (props) => {
           />
         </View>
         <FlatButton label={'apply'} onPress={() => setFilterVisible(false)} />
+      </CustomModalAndroid>
+      <CustomModalAndroid visible={deActivateUser}>
+        <View style={STYLES.modalHeaderView}>
+          <Text style={STYLES.modalHeaderText}>TURN OF NOTIFICATIONS</Text>
+          <CloseIcon
+            style={{
+              position: 'absolute',
+              right: 10,
+            }}
+            onPress={() => setDeActivateUser(false)}
+          />
+        </View>
+        <View style={{...STYLES.separatorView, width: '85%'}} />
+        <Text style={[STYLES.rejectText, {marginTop: hp(5)}]}>
+          Do you want to deactivate this user?
+        </Text>
+        <TwoButton
+          leftLabel={'NO'}
+          rightLabel={'Yes'}
+          leftOnPress={() => setDeActivateUser(false)}
+          rightOnPress={() => {
+            setDeActivateUser(false);
+            setSwitchValue(false);
+          }}
+        />
       </CustomModalAndroid>
     </LinearGradient>
   );

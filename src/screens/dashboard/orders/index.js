@@ -8,7 +8,7 @@ import LinearGradient from 'react-native-linear-gradient';
 const Orders = (props) => {
   const [selectedTab, setSelectedTab] = useState(0);
   const handleOrderClicked = (item) => {
-    // props.navigation.navigate('OrderTracking', {orderData: item});
+    props.navigation.navigate('OrderDetails');
   };
   const renderItem = ({item, index}) => {
     return (
@@ -46,7 +46,7 @@ const Orders = (props) => {
                   <Text style={STYLES.participatedText}>Rs. 4000</Text>
                 </View>
                 <View style={STYLES.priceView}>
-                  <Text style={STYLES.participatedText}>Rs. 4000</Text>
+                  <Text style={STYLES.participatedText}>00 : 50 : 00</Text>
                 </View>
               </View>
               <View style={STYLES.flexBoxOrders}>
@@ -108,7 +108,7 @@ const Orders = (props) => {
               <Text style={STYLES.rightText}>25 Jan 2021</Text>
             </View>
             <View style={STYLES.flexBox}>
-              <Text style={STYLES.leftText}>completed date</Text>
+              <Text style={STYLES.leftText}>completed on</Text>
               <Text style={STYLES.rightText}>25 Jan 2021</Text>
             </View>
             <View style={STYLES.flexBox}>

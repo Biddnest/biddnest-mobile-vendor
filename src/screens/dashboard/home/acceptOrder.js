@@ -3,15 +3,15 @@ import {FlatList, Text, View, StyleSheet} from 'react-native';
 import {STYLES} from '../../../constant/commonStyle';
 import CloseIcon from '../../../components/closeIcon';
 import {Colors, hp, wp} from '../../../constant/colors';
-import {Input} from 'react-native-elements';
 import CustomModalAndroid from '../../../components/customModal';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import TextInput from '../../../components/textInput';
 import FlatButton from '../../../components/flatButton';
 import DropDown from '../../../components/dropDown';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Slider from 'rn-range-slider';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
+import Entypo from 'react-native-vector-icons/Entypo';
+import DatePicker from 'react-native-datepicker';
 
 const AcceptOrder = (props) => {
   const [step, setStep] = useState(0);
@@ -95,6 +95,7 @@ const AcceptOrder = (props) => {
                     <View style={{width: '40%'}}>
                       <TextInput
                         label={''}
+                        inputStyle={{textAlign: 'center'}}
                         placeHolder={'4200'}
                         keyboard={'decimal-pad'}
                         onChange={(text) => {}}
@@ -123,6 +124,7 @@ const AcceptOrder = (props) => {
             </Text>
             <View style={{width: '40%'}}>
               <TextInput
+                inputStyle={{textAlign: 'center'}}
                 label={''}
                 placeHolder={'4200'}
                 keyboard={'decimal-pad'}
@@ -153,12 +155,9 @@ const AcceptOrder = (props) => {
         <View style={{width: '100%', alignItems: 'center'}}>
           <View style={{marginBottom: hp(2), marginTop: hp(2)}}>
             <DropDown
-              label={'Vendor Type'}
+              label={'Type Of Movement'}
               width={wp(90)}
-              items={[
-                {label: 'Male', value: 'male'},
-                {label: 'Female', value: 'female'},
-              ]}
+              items={[{label: 'Shared', value: 'shared'}]}
               onChangeItem={(text) => {}}
             />
           </View>
@@ -167,40 +166,74 @@ const AcceptOrder = (props) => {
               width: '90%',
               alignSelf: 'center',
             }}>
-            <Input
-              placeholder={'Moving Date'}
-              label={'Moving Date'}
-              rightIcon={() => {
-                return (
-                  <MaterialIcons
-                    name="calendar-today"
-                    size={25}
-                    color={Colors.grey}
-                  />
-                );
-              }}
-              containerStyle={{}}
-              onChangeText={() => {}}
-              inputContainerStyle={{
-                borderWidth: 2,
-                paddingHorizontal: 15,
-                borderRadius: 10,
-                height: hp(6.5),
-                marginTop: hp(1),
-                borderColor: Colors.silver,
-              }}
-              labelStyle={{
-                fontFamily: 'Roboto-Bold',
-                color: Colors.textLabelColor,
-                fontSize: wp(4),
-              }}
-              inputStyle={{
-                fontSize: wp(4),
-                backgroundColor: Colors.textBG,
-                color: Colors.inputTextColor,
-              }}
-              onFocus={() => {}}
-            />
+            <View style={{width: '92%', marginHorizontal: wp(3)}}>
+              <Text
+                style={{
+                  fontFamily: 'Roboto-Bold',
+                  color: Colors.textLabelColor,
+                  fontSize: wp(4),
+                }}>
+                Date Of Birth
+              </Text>
+              <View
+                style={{
+                  marginTop: hp(1),
+                  marginBottom: hp(3),
+                  borderWidth: 2,
+                  // paddingHorizontal: 15,
+                  borderRadius: 10,
+                  height: hp(6.5),
+                  borderColor: Colors.silver,
+                  backgroundColor: Colors.white,
+                }}>
+                <DatePicker
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    justifyContent: 'center',
+                  }}
+                  date={new Date()}
+                  mode="date"
+                  placeholder="select date"
+                  format="D MMM yyyy"
+                  minDate="2016-05-01"
+                  maxDate={new Date()}
+                  confirmBtnText="Confirm"
+                  cancelBtnText="Cancel"
+                  iconComponent={
+                    <Entypo
+                      name={'calendar'}
+                      size={25}
+                      color={Colors.inputTextColor}
+                      style={{
+                        position: 'absolute',
+                        right: 8,
+                        top: 7,
+                        marginLeft: 0,
+                      }}
+                    />
+                  }
+                  customStyles={{
+                    dateInput: {
+                      borderWidth: 0,
+                      height: hp(6.5),
+                      marginTop: 1,
+                      width: '100%',
+                      alignItems: 'flex-start',
+                      justifyContent: 'center',
+                      paddingHorizontal: 15,
+                    },
+                    dateText: {
+                      fontSize: wp(4),
+                      backgroundColor: Colors.textBG,
+                      color: Colors.inputTextColor,
+                      justifyContent: 'flex-start',
+                    },
+                  }}
+                  onDateChange={(date) => {}}
+                />
+              </View>
+            </View>
             <Text style={styles.dateBottomText}>
               Select preferred moving date.
             </Text>
@@ -209,10 +242,7 @@ const AcceptOrder = (props) => {
             <DropDown
               label={'Vendor Type'}
               width={wp(90)}
-              items={[
-                {label: 'Male', value: 'male'},
-                {label: 'Female', value: 'female'},
-              ]}
+              items={[{label: 'Tempo', value: 'tempo'}]}
               onChangeItem={(text) => {}}
             />
           </View>
@@ -222,7 +252,9 @@ const AcceptOrder = (props) => {
             </Text>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <View style={styles.manPowerView}>
-                <Text style={STYLES.inputTextStyle}>{low}</Text>
+                <Text style={[STYLES.inputTextStyle, {height: 'auto'}]}>
+                  {low}
+                </Text>
               </View>
               <Slider
                 style={styles.sliderStyle}
@@ -247,7 +279,9 @@ const AcceptOrder = (props) => {
                 onValueChanged={handleValueChange}
               />
               <View style={styles.manPowerView}>
-                <Text style={STYLES.inputTextStyle}>{high}</Text>
+                <Text style={[STYLES.inputTextStyle, {height: 'auto'}]}>
+                  {high}
+                </Text>
               </View>
             </View>
             <View
@@ -293,7 +327,7 @@ const AcceptOrder = (props) => {
               <TextInput
                 label={'Password'}
                 secureTextEntry={true}
-                placeHolder={'7567144324'}
+                placeHolder={'**********'}
                 onChange={(text) => {}}
               />
               <View style={{marginLeft: wp(2)}}>
