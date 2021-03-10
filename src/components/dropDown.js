@@ -36,6 +36,7 @@ const DropDown = (props) => {
           customArrowDown={() => (
             <MaterialIcons name="arrow-drop-down" size={25} color={'#3B4B58'} />
           )}
+          selectedLabelLength={10}
           containerStyle={{
             height: hp(6.5),
             // borderWidth: 1,

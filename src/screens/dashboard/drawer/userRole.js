@@ -168,7 +168,7 @@ const UserRole = (props) => {
         </View>
       </ScrollView>
       <FilterButton onPress={() => setFilterVisible(true)} />
-      <CustomModalAndroid visible={false}>
+      <CustomModalAndroid visible={false} onPress={() => {}}>
         <View style={STYLES.modalHeaderView}>
           <Text style={STYLES.modalHeaderText}>DEACTIVATE USER</Text>
           <CloseIcon
@@ -190,7 +190,9 @@ const UserRole = (props) => {
           rightOnPress={() => {}}
         />
       </CustomModalAndroid>
-      <CustomModalAndroid visible={detailsVisible}>
+      <CustomModalAndroid
+        visible={detailsVisible}
+        onPress={() => setDetailsVisible(false)}>
         <View style={STYLES.modalHeaderView}>
           <Text style={STYLES.modalHeaderText}>USER DETAILS</Text>
           <CloseIcon
@@ -225,7 +227,9 @@ const UserRole = (props) => {
           <FlatButton label={'call'} onPress={() => {}} />
         </View>
       </CustomModalAndroid>
-      <CustomModalAndroid visible={filterVisible}>
+      <CustomModalAndroid
+        visible={filterVisible}
+        onPress={() => setFilterVisible(false)}>
         <View style={STYLES.modalHeaderView}>
           <Text style={STYLES.modalHeaderText}>FILTERS</Text>
           <CloseIcon
@@ -258,7 +262,9 @@ const UserRole = (props) => {
         </View>
         <FlatButton label={'apply'} onPress={() => setFilterVisible(false)} />
       </CustomModalAndroid>
-      <CustomModalAndroid visible={deActivateUser}>
+      <CustomModalAndroid
+        visible={deActivateUser}
+        onPress={() => setDeActivateUser(false)}>
         <View style={STYLES.modalHeaderView}>
           <Text style={STYLES.modalHeaderText}>TURN OF NOTIFICATIONS</Text>
           <CloseIcon

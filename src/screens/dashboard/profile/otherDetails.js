@@ -11,7 +11,11 @@ import Switch from '../../../components/switch';
 
 const OtherDetails = (props) => {
   return (
-    <CustomModalAndroid visible={props.visible}>
+    <CustomModalAndroid
+      visible={props.visible}
+      onPress={() => {
+        props.onCloseIcon();
+      }}>
       <View style={STYLES.modalHeaderView}>
         <Text style={STYLES.modalHeaderText}>EDIT OTHER DETAILS</Text>
         <CloseIcon

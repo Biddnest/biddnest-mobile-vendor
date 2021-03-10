@@ -132,7 +132,9 @@ const OrderStatusWin = (props) => {
           <Text style={styles.subHeaderText}>Pending</Text>
         </View>
       </View>
-      <CustomModalAndroid visible={driverAssignVisible}>
+      <CustomModalAndroid
+        visible={driverAssignVisible}
+        onPress={() => setDriverAssignVisible(false)}>
         <View style={STYLES.modalHeaderView}>
           <Text style={STYLES.modalHeaderText}>ASSIGN DRIVER</Text>
           <CloseIcon
@@ -167,7 +169,9 @@ const OrderStatusWin = (props) => {
           onPress={() => setDriverAssignVisible(false)}
         />
       </CustomModalAndroid>
-      <CustomModalAndroid visible={false}>
+      <CustomModalAndroid
+        visible={false}
+        onPress={() => setDriverAssignVisible(false)}>
         <View style={STYLES.modalHeaderView}>
           <Text style={STYLES.modalHeaderText}>PIN VERIFICATION</Text>
           <CloseIcon

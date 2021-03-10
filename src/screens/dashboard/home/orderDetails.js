@@ -237,7 +237,7 @@ const OrderDetails = (props) => {
                 leftLabel={'REJECT'}
                 rightLabel={'ACCEPT'}
                 leftOnPress={() => setRejectVisible(true)}
-                rightOnPress={() => setAcceptVisible(true)}
+                rightOnPress={() => props.navigation.navigate('AcceptOrder')}
               />
             </View>
           )}
@@ -249,7 +249,9 @@ const OrderDetails = (props) => {
           )}
         </View>
       </ScrollView>
-      <CustomModalAndroid visible={rejectVisible}>
+      <CustomModalAndroid
+        visible={rejectVisible}
+        onPress={() => setRejectVisible(false)}>
         <View style={STYLES.modalHeaderView}>
           <Text style={STYLES.modalHeaderText}>REJECT ORDER</Text>
           <CloseIcon
@@ -271,11 +273,9 @@ const OrderDetails = (props) => {
           rightOnPress={() => setRejectVisible(false)}
         />
       </CustomModalAndroid>
-      <AcceptOrder
-        visible={acceptVisible}
-        onCloseIcon={() => setAcceptVisible(false)}
-      />
-      <CustomModalAndroid visible={placedSuccessVisible}>
+      <CustomModalAndroid
+        visible={placedSuccessVisible}
+        onPress={() => setPlacedSuccessVisible(false)}>
         <View style={STYLES.modalHeaderView}>
           <CloseIcon
             style={{
@@ -297,7 +297,9 @@ const OrderDetails = (props) => {
           You have successfully placed your "BID"
         </Text>
       </CustomModalAndroid>
-      <MapModalAndroid visible={mapVisible !== null}>
+      <MapModalAndroid
+        visible={mapVisible !== null}
+        onPress={() => setMapVisible(null)}>
         <View style={styles.mapView}>
           <MapView
             provider={

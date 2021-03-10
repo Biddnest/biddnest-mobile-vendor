@@ -297,7 +297,9 @@ const Home = (props) => {
       {selectedTab === 1 && (
         <FilterButton onPress={() => setFilterVisible(true)} />
       )}
-      <CustomModalAndroid visible={filterVisible}>
+      <CustomModalAndroid
+        visible={filterVisible}
+        onPress={() => setFilterVisible(false)}>
         <View style={STYLES.modalHeaderView}>
           <Text style={STYLES.modalHeaderText}>FILTERS</Text>
           <CloseIcon
@@ -389,7 +391,9 @@ const Home = (props) => {
         </View>
         <FlatButton label={'apply'} onPress={() => setFilterVisible(false)} />
       </CustomModalAndroid>
-      <CustomModalAndroid visible={offNotification}>
+      <CustomModalAndroid
+        visible={offNotification}
+        onPress={() => setOffNotification(false)}>
         <View style={STYLES.modalHeaderView}>
           <Text style={STYLES.modalHeaderText}>TURN OF NOTIFICATIONS</Text>
           <CloseIcon

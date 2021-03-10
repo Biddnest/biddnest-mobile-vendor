@@ -93,7 +93,9 @@ const PayOuts = (props) => {
         </View>
       </ScrollView>
       <FilterButton onPress={() => setFilterVisible(true)} />
-      <CustomModalAndroid visible={filterVisible}>
+      <CustomModalAndroid
+        visible={filterVisible}
+        onPress={() => setFilterVisible(false)}>
         <View style={STYLES.modalHeaderView}>
           <Text style={STYLES.modalHeaderText}>FILTERS</Text>
           <CloseIcon
@@ -165,9 +167,7 @@ const PayOuts = (props) => {
           <DropDown
             label={'Status'}
             width={wp(90)}
-            items={[
-              {label: 'Driver Unassigned', value: 'driverunassigned'},
-            ]}
+            items={[{label: 'Driver Unassigned', value: 'driverunassigned'}]}
             onChangeItem={(text) => {}}
           />
         </View>

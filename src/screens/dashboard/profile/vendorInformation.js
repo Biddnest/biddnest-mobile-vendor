@@ -10,7 +10,11 @@ import {STYLES} from '../../../constant/commonStyle';
 
 const VendorInformation = (props) => {
   return (
-    <CustomModalAndroid visible={props.visible}>
+    <CustomModalAndroid
+      visible={props.visible}
+      onPress={() => {
+        props.onCloseIcon();
+      }}>
       <View style={STYLES.modalHeaderView}>
         <Text style={STYLES.modalHeaderText}>EDIT VENDOR INFORMATION</Text>
         <CloseIcon

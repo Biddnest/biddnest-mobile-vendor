@@ -10,7 +10,11 @@ import {STYLES} from '../../../constant/commonStyle';
 
 const LocationDetails = (props) => {
   return (
-    <CustomModalAndroid visible={props.visible}>
+    <CustomModalAndroid
+      visible={props.visible}
+      onPress={() => {
+        props.onCloseIcon();
+      }}>
       <View style={STYLES.modalHeaderView}>
         <Text style={STYLES.modalHeaderText}>EDIT LOCATION DETAILS</Text>
         <CloseIcon

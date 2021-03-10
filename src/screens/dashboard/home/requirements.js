@@ -165,7 +165,9 @@ const Requirements = (props) => {
           />
         </View>
       </ScrollView>
-      <CustomModalAndroid visible={rejectVisible}>
+      <CustomModalAndroid
+        visible={rejectVisible}
+        onPress={() => setRejectVisible(false)}>
         <View style={STYLES.modalHeaderView}>
           <Text style={STYLES.modalHeaderText}>REJECT ORDER</Text>
           <CloseIcon
