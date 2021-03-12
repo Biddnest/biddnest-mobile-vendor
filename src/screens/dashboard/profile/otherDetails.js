@@ -4,7 +4,7 @@ import CustomModalAndroid from '../../../components/customModal';
 import CloseIcon from '../../../components/closeIcon';
 import {Colors, wp, hp} from '../../../constant/colors';
 import TextInput from '../../../components/textInput';
-import DropDown from '../../../components/dropDown';
+import DropDownAndroid from '../../../components/dropDown';
 import FlatButton from '../../../components/flatButton';
 import {STYLES} from '../../../constant/commonStyle';
 import Switch from '../../../components/switch';
@@ -48,7 +48,7 @@ const OtherDetails = (props) => {
           <Switch left={'Inactive'} right={'Active'} />
         </View>
         <View style={{marginBottom: hp(3)}}>
-          <DropDown
+          <DropDownAndroid
             label={'Service Type'}
             width={wp(90)}
             items={[
@@ -59,7 +59,7 @@ const OtherDetails = (props) => {
           />
         </View>
         <View style={{marginBottom: hp(3)}}>
-          <DropDown
+          <DropDownAndroid
             label={'Vendor Status'}
             width={wp(90)}
             items={[

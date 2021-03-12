@@ -7,7 +7,7 @@ import Button from '../../../components/button';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import CustomModalAndroid from '../../../components/customModal';
 import CloseIcon from '../../../components/closeIcon';
-import DropDown from '../../../components/dropDown';
+import DropDownAndroid from '../../../components/dropDown';
 import TextInput from '../../../components/textInput';
 import FlatButton from '../../../components/flatButton';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
@@ -147,7 +147,7 @@ const OrderStatusWin = (props) => {
         </View>
         <View style={{...STYLES.separatorView, width: '85%'}} />
         <View style={{marginVertical: hp(2)}}>
-          <DropDown
+          <DropDownAndroid
             label={'Service Type'}
             width={wp(90)}
             items={[

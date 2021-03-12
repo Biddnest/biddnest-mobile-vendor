@@ -4,7 +4,7 @@ import CustomModalAndroid from '../../../components/customModal';
 import CloseIcon from '../../../components/closeIcon';
 import {Colors, wp, hp} from '../../../constant/colors';
 import TextInput from '../../../components/textInput';
-import DropDown from '../../../components/dropDown';
+import DropDownAndroid from '../../../components/dropDown';
 import FlatButton from '../../../components/flatButton';
 import {STYLES} from '../../../constant/commonStyle';
 

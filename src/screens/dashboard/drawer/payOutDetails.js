@@ -19,7 +19,7 @@ import CustomModalAndroid from '../../../components/customModal';
 import TwoButton from '../../../components/twoButton';
 import FlatButton from '../../../components/flatButton';
 import Slider from 'rn-range-slider';
-import DropDown from '../../../components/dropDown';
+import DropDownAndroid from '../../../components/dropDown';
 
 const PayOutDetails = (props) => {
   return (

@@ -17,7 +17,7 @@ import FilterButton from '../../../components/filterButton';
 import CloseIcon from '../../../components/closeIcon';
 import CustomModalAndroid from '../../../components/customModal';
 import FlatButton from '../../../components/flatButton';
-import DropDown from '../../../components/dropDown';
+import DropDownAndroid from '../../../components/dropDown';
 import Slider from 'rn-range-slider';
 
 const PayOuts = (props) => {
@@ -163,8 +163,12 @@ const PayOuts = (props) => {
             </Text>
           </View>
         </View>
-        <View style={{marginVertical: hp(2)}}>
-          <DropDown
+        <View
+          style={[
+            {marginVertical: hp(2)},
+            Platform.OS !== 'android' && {zIndex: 5001},
+          ]}>
+          <DropDownAndroid
             label={'Status'}
             width={wp(90)}
             items={[{label: 'Driver Unassigned', value: 'driverunassigned'}]}

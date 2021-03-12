@@ -53,7 +53,8 @@ const OrderStatusLost = (props) => {
           }}
         />
         <Text style={styles.rankText}>
-          YOUR POSITION <Text style={{fontFamily: 'Roboto-Bold'}}>4th</Text>
+          YOUR POSITION {'   '}
+          <Text style={{fontFamily: 'Roboto-Bold'}}>4th</Text>
         </Text>
       </View>
     </View>
@@ -73,6 +74,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto-Regular',
     fontSize: wp(4),
     borderRadius: 10,
+    overflow: 'hidden',
   },
   errorImage: {
     width: wp(10),

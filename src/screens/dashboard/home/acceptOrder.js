@@ -1,5 +1,12 @@
 import React, {useCallback, useState} from 'react';
-import {FlatList, Text, View, StyleSheet, ScrollView} from 'react-native';
+import {
+  FlatList,
+  Text,
+  View,
+  StyleSheet,
+  ScrollView,
+  Platform,
+} from 'react-native';
 import {STYLES} from '../../../constant/commonStyle';
 import CloseIcon from '../../../components/closeIcon';
 import {Colors, hp, wp} from '../../../constant/colors';
@@ -7,7 +14,7 @@ import CustomModalAndroid from '../../../components/customModal';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import TextInput from '../../../components/textInput';
 import FlatButton from '../../../components/flatButton';
-import DropDown from '../../../components/dropDown';
+import DropDownAndroid from '../../../components/dropDown';
 import Slider from 'rn-range-slider';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -173,8 +180,12 @@ const AcceptOrder = (props) => {
           <View style={{...STYLES.separatorView, width: '85%'}} />
           {step === 1 ? (
             <View style={{width: '100%', alignItems: 'center'}}>
-              <View style={{marginBottom: hp(2), marginTop: hp(2)}}>
-                <DropDown
+              <View
+                style={[
+                  {marginBottom: hp(2), marginTop: hp(2)},
+                  Platform.OS !== 'android' && {zIndex: 5001},
+                ]}>
+                <DropDownAndroid
                   label={'Type Of Movement'}
                   width={wp(90)}
                   items={[{label: 'Shared', value: 'shared'}]}
@@ -258,8 +269,12 @@ const AcceptOrder = (props) => {
                   Select preferred moving date.
                 </Text>
               </View>
-              <View style={{marginBottom: hp(2), marginTop: hp(2)}}>
-                <DropDown
+              <View
+                style={[
+                  {marginBottom: hp(2), marginTop: hp(2)},
+                  Platform.OS !== 'android' && {zIndex: 5001},
+                ]}>
+                <DropDownAndroid
                   label={'Vendor Type'}
                   width={wp(90)}
                   items={[{label: 'Tempo', value: 'tempo'}]}

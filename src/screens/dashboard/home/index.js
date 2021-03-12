@@ -6,7 +6,7 @@ import {STYLES} from '../../../constant/commonStyle';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import CustomModalAndroid from '../../../components/customModal';
 import CloseIcon from '../../../components/closeIcon';
-import DropDown from '../../../components/dropDown';
+import DropDownAndroid from '../../../components/dropDown';
 import Slider from 'rn-range-slider';
 import FlatButton from '../../../components/flatButton';
 import Switch from '../../../components/switch';
@@ -368,7 +368,7 @@ const Home = (props) => {
           </View>
         </View>
         <View style={{marginVertical: hp(2)}}>
-          <DropDown
+          <DropDownAndroid
             label={'Status'}
             width={wp(90)}
             items={[
@@ -379,7 +379,7 @@ const Home = (props) => {
           />
         </View>
         <View style={{marginBottom: hp(2)}}>
-          <DropDown
+          <DropDownAndroid
             label={'Category'}
             width={wp(90)}
             items={[

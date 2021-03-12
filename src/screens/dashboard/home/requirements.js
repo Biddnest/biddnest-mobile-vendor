@@ -161,7 +161,7 @@ const Requirements = (props) => {
             leftLabel={'REJECT'}
             rightLabel={'ACCEPT'}
             leftOnPress={() => setRejectVisible(true)}
-            rightOnPress={() => setAcceptVisible(true)}
+            rightOnPress={() => props.navigation.navigate('AcceptOrder')}
           />
         </View>
       </ScrollView>
@@ -189,10 +189,6 @@ const Requirements = (props) => {
           rightOnPress={() => setRejectVisible(false)}
         />
       </CustomModalAndroid>
-      <AcceptOrder
-        visible={acceptVisible}
-        onCloseIcon={() => setAcceptVisible(false)}
-      />
     </View>
   );
 };

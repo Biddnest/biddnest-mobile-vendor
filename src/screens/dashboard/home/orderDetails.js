@@ -241,7 +241,7 @@ const OrderDetails = (props) => {
               />
             </View>
           )}
-          {selectedTab === 1 && <Requirements />}
+          {selectedTab === 1 && <Requirements navigation={props.navigation} />}
           {selectedTab === 2 && (
             // <OrderStatusWin />
             // <OrderStatusPending />

@@ -18,7 +18,7 @@ import CloseIcon from '../../../components/closeIcon';
 import CustomModalAndroid from '../../../components/customModal';
 import TwoButton from '../../../components/twoButton';
 import FlatButton from '../../../components/flatButton';
-import DropDown from '../../../components/dropDown';
+import DropDownAndroid from '../../../components/dropDown';
 
 const UserRole = (props) => {
   const [selectedTab, setSelectedTab] = useState(0);
@@ -241,16 +241,16 @@ const UserRole = (props) => {
           />
         </View>
         <View style={{...STYLES.separatorView, width: '85%'}} />
-        <View style={{marginVertical: hp(2)}}>
-          <DropDown
+        <View style={[{marginVertical: hp(2)}, Platform.OS !== 'android' && {zIndex: 5001},]}>
+          <DropDownAndroid
             label={'Branch'}
             width={wp(90)}
             items={[{label: 'Commercial', value: 'Commercial'}]}
             onChangeItem={(text) => {}}
           />
         </View>
-        <View style={{marginBottom: hp(2)}}>
-          <DropDown
+        <View style={[{marginBottom: hp(2)}, Platform.OS !== 'android' && {zIndex: 5001},]}>
+          <DropDownAndroid
             label={'Status'}
             width={wp(90)}
             items={[

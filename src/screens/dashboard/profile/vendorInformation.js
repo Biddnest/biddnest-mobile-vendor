@@ -1,10 +1,10 @@
 import React from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import {Text, View, StyleSheet, Platform} from 'react-native';
 import CustomModalAndroid from '../../../components/customModal';
 import CloseIcon from '../../../components/closeIcon';
 import {Colors, wp, hp} from '../../../constant/colors';
 import TextInput from '../../../components/textInput';
-import DropDown from '../../../components/dropDown';
+import DropDownAndroid from '../../../components/dropDown';
 import FlatButton from '../../../components/flatButton';
 import {STYLES} from '../../../constant/commonStyle';
 
@@ -34,8 +34,12 @@ const VendorInformation = (props) => {
           placeHolder={'Abc'}
           onChange={(text) => {}}
         />
-        <View style={{marginBottom: hp(3)}}>
-          <DropDown
+        <View
+          style={[
+            {marginBottom: hp(3)},
+            Platform.OS !== 'android' && {zIndex: 5001},
+          ]}>
+          <DropDownAndroid
             label={'Vendor Type'}
             width={wp(90)}
             items={[
@@ -63,7 +67,7 @@ const VendorInformation = (props) => {
           placeHolder={'7567144324'}
           onChange={(text) => {}}>
           <View style={{width: wp(15)}}>
-            <DropDown
+            <DropDownAndroid
               label={'Secondary Contact Number'}
               width={wp(90)}
               items={[{label: '+91', value: '+91'}]}
