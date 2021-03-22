@@ -1,5 +1,12 @@
 import instance from '../../constant/baseService';
-import {LOGIN_USER_DATA, RESET_STORE} from '../types';
+import {
+  GET_BOOKMARK,
+  LIVE_ORDERS,
+  LOGIN_USER_DATA,
+  CONFIG_DATA, ORDERS,
+} from '../types';
+import {CustomAlert} from '../../constant/commonFun';
+import {STORE} from '../index';
 
 export const APICall = (obj) => {
   return new Promise((resolve, reject) => {
@@ -8,39 +15,52 @@ export const APICall = (obj) => {
         resolve(res);
       })
       .catch((err) => {
-        if (err.response) {
+        if (err?.response) {
           reject(err.response);
         } else {
-          reject('Something went wrong!');
+          CustomAlert('Server Down');
+          reject(false);
         }
       });
   });
 };
 
-export const signIn = (data, type, collectorType) => {
-  let url;
-  if (type === 'vendor') {
-    url = 'login_vendor';
-  } else if (type === '' && collectorType === 'vendor') {
-    url = 'login_driver';
-  } else if (type === '' && collectorType === 'buyers') {
-    url = 'login_buyersdriver';
-  } else if (type === 'buyers') {
-    url = 'login_buyers';
-  }
+export const initialConfig = () => {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
       let obj = {
-        url: url,
+        url: 'v1/configuration',
+        method: 'get',
+      };
+      APICall(obj)
+        .then((res) => {
+          dispatch({
+            type: CONFIG_DATA,
+            payload: res?.data?.data || {},
+          });
+          resolve(res.data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  };
+};
+
+export const signIn = (data) => {
+  return (dispatch) => {
+    return new Promise((resolve, reject) => {
+      let obj = {
+        url: 'v1/vendor/auth/login',
         method: 'post',
         data: data,
       };
       APICall(obj)
         .then((res) => {
-          if (res && res.data && res.data.status === 'success') {
+          if (res?.data?.status === 'success') {
             dispatch({
               type: LOGIN_USER_DATA,
-              payload: res.data,
+              payload: res?.data?.data,
             });
           }
           resolve(res.data);
@@ -52,19 +72,35 @@ export const signIn = (data, type, collectorType) => {
   };
 };
 
-export const signOut = (data) => {
+export const getOrders = (url) => {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
-      APICall(data)
+      let obj = {
+        url: `vendors/bookings/${url}?page=1`,
+        method: 'get',
+        headers: {
+          Authorization: 'Bearer ' + STORE.getState().Login?.loginData?.token,
+        },
+      };
+      APICall(obj)
         .then((res) => {
-          if (res && res.data && res.data.status === 'success') {
-            dispatch({
-              type: RESET_STORE,
-            });
-          }
+          dispatch({
+            type: ORDERS,
+            payload: res?.data?.data || {},
+          });
           resolve(res.data);
         })
         .catch((err) => {
+          if (err?.status === 401) {
+            // dispatch({
+            //   type: RESET_STORE,
+            // });
+            // CommonActions.reset({
+            //   index: 0,
+            //   routes: [{name: 'Login'}],
+            // });
+          }
+          CustomAlert(err?.data?.message);
           reject(err);
         });
     });

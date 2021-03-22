@@ -13,7 +13,6 @@ import {
   boxShadow,
   Colors,
   hp,
-  VENDOR_INFORMATION,
   wp,
 } from '../../../constant/colors';
 import {STYLES} from '../../../constant/commonStyle';

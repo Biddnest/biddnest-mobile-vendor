@@ -1,9 +1,12 @@
-import {Pressable, Text, View} from 'react-native';
+import {ActivityIndicator, Pressable, Text, View} from 'react-native';
 import {Colors, hp, wp} from '../constant/colors';
 import {STYLES} from '../constant/commonStyle';
 import React from 'react';
 
 const TwoButton = (props) => {
+  if (props.isLoading) {
+    return <ActivityIndicator size="large" color={Colors.darkBlue} />;
+  }
   return (
     <View
       style={{

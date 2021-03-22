@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Platform,
   Pressable,
@@ -29,13 +29,47 @@ import OrderStatusWin from './orderStatusWin';
 import OrderStatusPending from './orderStatusPending';
 import OrderStatusLost from './orderStatusLost';
 import Requirements from './requirements';
+import {STORE} from '../../../redux';
+import {
+  CustomAlert,
+  DiffMin,
+  resetNavigator,
+} from '../../../constant/commonFun';
+import {APICall} from '../../../redux/actions/user';
+import {getDistance} from 'geolib';
+import moment from 'moment';
 
 const OrderDetails = (props) => {
+  const [orderDetails, setOrderDetails] = useState(
+    props?.route?.params?.orderData || {},
+  );
   const [selectedTab, setSelectedTab] = useState(0);
   const [rejectVisible, setRejectVisible] = useState(false);
-  const [acceptVisible, setAcceptVisible] = useState(false);
   const [placedSuccessVisible, setPlacedSuccessVisible] = useState(false);
   const [mapVisible, setMapVisible] = useState(null);
+  const [isLoading, setLoading] = useState(false);
+
+  useEffect(() => {
+    let obj = {
+      url: `v1/bookings?id=${orderDetails?.public_booking_id}`,
+      method: 'get',
+      headers: {
+        Authorization: 'Bearer ' + STORE.getState().Login?.loginData?.token,
+      },
+    };
+    APICall(obj)
+      .then((res) => {
+        if (res?.data?.status === 'success') {
+          setOrderDetails(res?.data?.data?.booking);
+        } else {
+          CustomAlert(res?.data?.message);
+        }
+      })
+      .catch((err) => {
+        CustomAlert(err?.message);
+      });
+  }, []);
+
   const renderText = (key, value) => {
     return (
       <View>
@@ -53,6 +87,26 @@ const OrderDetails = (props) => {
       </View>
     );
   };
+  console.log(orderDetails);
+  let dateArray = [];
+  let source_meta = JSON.parse(orderDetails?.source_meta?.toString()) || {};
+  let destination_meta =
+    JSON.parse(orderDetails?.destination_meta?.toString()) || {};
+  let meta = JSON.parse(orderDetails?.meta?.toString()) || {};
+  orderDetails?.movement_dates?.forEach((i) => {
+    dateArray.push(moment(i.date).format('D MMM yyyy'));
+  });
+  let coordinates =
+    mapVisible === 'pickup'
+      ? {
+          latitude: parseFloat(orderDetails?.source_lat),
+
+          longitude: parseFloat(orderDetails?.source_lng),
+        }
+      : {
+          latitude: parseFloat(orderDetails?.destination_lat),
+          longitude: parseFloat(orderDetails?.destination_lng),
+        };
   return (
     <View style={{flex: 1, backgroundColor: Colors.white}}>
       <SimpleHeader
@@ -79,7 +133,16 @@ const OrderDetails = (props) => {
                 <Text style={STYLES.participatedText}>Rs. 4000</Text>
               </View>
               <View style={[STYLES.priceView, {width: '40%'}]}>
-                <Text style={STYLES.participatedText}>5:24:50</Text>
+                <Text style={STYLES.participatedText}>
+                  {DiffMin(
+                    new Date(),
+                    new Date(
+                      JSON.parse(
+                        orderDetails.meta?.toString(),
+                      ).timings?.bid_result,
+                    ),
+                  )}
+                </Text>
               </View>
             </View>
             <View style={STYLES.flexBoxOrders}>
@@ -95,7 +158,7 @@ const OrderDetails = (props) => {
             <View style={[STYLES.flexBox, {marginTop: 0}]}>
               <Text style={STYLES.leftText}>order id</Text>
               <Text style={[STYLES.rightText, {marginBottom: hp(2)}]}>
-                #123456
+                #{orderDetails?.public_booking_id}
               </Text>
             </View>
           </View>
@@ -106,15 +169,31 @@ const OrderDetails = (props) => {
             }}>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>DISTANCE</Text>
-              <Text style={STYLES.rightText}>563 KM</Text>
+              <Text style={STYLES.rightText}>
+                {parseInt(
+                  getDistance(
+                    {
+                      latitude: orderDetails?.source_lat,
+                      longitude: orderDetails?.source_lng,
+                    },
+                    {
+                      latitude: orderDetails?.destination_lat,
+                      longitude: orderDetails?.destination_lng,
+                    },
+                  ) / 1000,
+                )}{' '}
+                KM
+              </Text>
             </View>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>MOVING DATE</Text>
-              <Text style={STYLES.rightText}>25 Jan 2021</Text>
+              <Text style={STYLES.rightText}>{dateArray.join(', ')}</Text>
             </View>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>Category</Text>
-              <Text style={STYLES.rightText}>1 BHK</Text>
+              <Text style={STYLES.rightText}>
+                {meta?.subcategory || 'null'}
+              </Text>
             </View>
             <View style={[STYLES.flexBox, {marginBottom: hp(2)}]}>
               <Text style={STYLES.leftText}>TYPE OF MOVEMENT</Text>
@@ -157,10 +236,7 @@ const OrderDetails = (props) => {
                   justifyContent: 'space-between',
                 }}>
                 <View>
-                  {renderText(
-                    'Pickup Address',
-                    'ABC Studio, ABC Street, Chennai',
-                  )}
+                  {renderText('Pickup Address', source_meta?.address)}
                 </View>
                 <Pressable
                   style={STYLES.mapPinCircle}
@@ -177,7 +253,7 @@ const OrderDetails = (props) => {
                   marginHorizontal: wp(5),
                   marginTop: hp(2),
                 }}>
-                {renderText('Pincode', '560097')}
+                {renderText('Pincode', source_meta?.pincode)}
               </View>
               <View
                 style={{
@@ -185,8 +261,12 @@ const OrderDetails = (props) => {
                   marginTop: hp(2),
                   flexDirection: 'row',
                 }}>
-                <View style={{flex: 1}}>{renderText('Floor', '01')}</View>
-                <View style={{flex: 1}}>{renderText('Lift', 'Yes')}</View>
+                <View style={{flex: 1}}>
+                  {renderText('Floor', source_meta?.floor)}
+                </View>
+                <View style={{flex: 1}}>
+                  {renderText('Lift', source_meta?.lift == 1 ? 'Yes' : 'No')}
+                </View>
               </View>
               <View
                 style={[
@@ -202,10 +282,7 @@ const OrderDetails = (props) => {
                   justifyContent: 'space-between',
                 }}>
                 <View>
-                  {renderText(
-                    'Drop Address',
-                    'ABC Studio, ABC Street, Chennai',
-                  )}
+                  {renderText('Drop Address', destination_meta?.address)}
                 </View>
                 <Pressable
                   style={STYLES.mapPinCircle}
@@ -222,7 +299,7 @@ const OrderDetails = (props) => {
                   marginHorizontal: wp(5),
                   marginTop: hp(2),
                 }}>
-                {renderText('Pincode', '560097')}
+                {renderText('Pincode', destination_meta?.pincode)}
               </View>
               <View
                 style={{
@@ -230,8 +307,15 @@ const OrderDetails = (props) => {
                   marginTop: hp(2),
                   flexDirection: 'row',
                 }}>
-                <View style={{flex: 1}}>{renderText('Floor', '01')}</View>
-                <View style={{flex: 1}}>{renderText('Lift', 'Yes')}</View>
+                <View style={{flex: 1}}>
+                  {renderText('Floor', destination_meta?.floor)}
+                </View>
+                <View style={{flex: 1}}>
+                  {renderText(
+                    'Lift',
+                    destination_meta?.lift == 1 ? 'Yes' : 'No',
+                  )}
+                </View>
               </View>
               <TwoButton
                 leftLabel={'REJECT'}
@@ -267,10 +351,36 @@ const OrderDetails = (props) => {
           Are you sure you want to REJECT the order?
         </Text>
         <TwoButton
+          isLoading={isLoading}
           leftLabel={'NO'}
           rightLabel={'YES'}
           leftOnPress={() => setRejectVisible(false)}
-          rightOnPress={() => setRejectVisible(false)}
+          rightOnPress={() => {
+            setLoading(true);
+            let obj = {
+              url: 'vendors/reject',
+              method: 'delete',
+              headers: {
+                Authorization:
+                  'Bearer ' + STORE.getState().Login?.loginData?.token,
+              },
+              data: {},
+            };
+            APICall(obj)
+              .then((res) => {
+                setLoading(false);
+                if (res?.data?.status === 'success') {
+                  setRejectVisible(false);
+                  resetNavigator(props.navigation, 'Dashboard');
+                } else {
+                  CustomAlert(res?.data?.message);
+                }
+              })
+              .catch((err) => {
+                setLoading(false);
+                CustomAlert(err?.message);
+              });
+          }}
         />
       </CustomModalAndroid>
       <CustomModalAndroid
@@ -307,17 +417,12 @@ const OrderDetails = (props) => {
             }
             style={{flex: 1}}
             initialRegion={{
-              latitude: 37.78825,
-              longitude: -122.4324,
+              latitude: coordinates.latitude,
+              longitude: coordinates.longitude,
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0421,
             }}>
-            <Marker
-              coordinate={{
-                latitude: 37.78825,
-                longitude: -122.4324,
-              }}
-            />
+            <Marker coordinate={coordinates} />
           </MapView>
         </View>
         <CloseIcon
@@ -339,16 +444,19 @@ const OrderDetails = (props) => {
         <View style={{marginVertical: hp(3), width: wp(90)}}>
           {renderText(
             mapVisible === 'pickup' ? 'Pickup Address' : 'Drop Address',
-            'ABC Studio, ABC Street, Chennai',
+            mapVisible === 'pickup'
+              ? source_meta?.address
+              : destination_meta?.address,
           )}
         </View>
         <View style={{marginTop: hp(1)}}>
           <FlatButton
             label={'open in maps app'}
             onPress={() => {
-              // Linking.openURL(
-              //     'http://maps.google.com/maps/@21.2378888,72.863352',
-              // )
+              let scheme = Platform.OS === 'ios' ? 'maps:' : 'geo:';
+              Linking.openURL(
+                scheme + `${coordinates.latitude},${coordinates.longitude}`,
+              );
             }}
           />
         </View>

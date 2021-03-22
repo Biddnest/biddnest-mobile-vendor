@@ -1,6 +1,6 @@
 import React from 'react';
 import {FlatList, Image, Platform, ScrollView, Text, View} from 'react-native';
-import {Colors, hp, VENDOR_INFORMATION, wp} from '../../../constant/colors';
+import {Colors, hp, wp} from '../../../constant/colors';
 import LinearGradient from 'react-native-linear-gradient';
 import SimpleHeader from '../../../components/simpleHeader';
 import {STYLES} from '../../../constant/commonStyle';

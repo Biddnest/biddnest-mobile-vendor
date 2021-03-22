@@ -13,9 +13,6 @@ import {
 import {
   Colors,
   hp,
-  LOCATION_INFORMATION,
-  OTHER_INFORMATION,
-  VENDOR_INFORMATION,
   wp,
 } from '../../../constant/colors';
 import {HomeHeader} from '../home';
@@ -25,8 +22,10 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import VendorInformation from './vendorInformation';
 import LocationDetails from './locationDetails';
 import OtherDetails from './otherDetails';
+import {useSelector} from 'react-redux';
 
 const Profile = (props) => {
+  const userData = useSelector((state) => state.Login?.loginData) || {};
   const [openArray, setOpenArray] = useState([]);
   const [openIndex, setOpenIndex] = useState();
   const onPress = (index) => {
@@ -41,6 +40,7 @@ const Profile = (props) => {
     }
     setOpenArray(temp);
   };
+  console.log(userData);
   const renderIcon = (index, header) => {
     return (
       <Pressable
@@ -117,7 +117,11 @@ const Profile = (props) => {
           }}
           resizeMode={'cover'}>
           <View style={styles.profilePhoto}>
-            <Text style={styles.profileText}>DJ</Text>
+            <Image
+              source={{uri: userData?.vendor?.image}}
+              style={{height: '100%', width: '100%'}}
+              resizeMode={'contain'}
+            />
           </View>
           <View
             style={{
@@ -130,11 +134,16 @@ const Profile = (props) => {
                 fontFamily: 'Roboto-Bold',
                 fontSize: wp(4.5),
                 lineHeight: 25,
+                textTransform: 'capitalize',
               }}>
-              David Jerome
+              {userData?.vendor?.fname} {userData?.vendor?.lname}
             </Text>
-            <Text style={styles.profileDetailText}>+91 75671443465</Text>
-            <Text style={styles.profileDetailText}>diginnobvators.com</Text>
+            <Text style={styles.profileDetailText}>
+              +91 {userData?.vendor?.phone}
+            </Text>
+            <Text style={styles.profileDetailText}>
+              {userData?.vendor?.email}
+            </Text>
           </View>
           <View style={{width: wp(12)}}>
             <View style={styles.profileEdit}>
@@ -154,7 +163,38 @@ const Profile = (props) => {
                 bounces={false}
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{marginTop: hp(2)}}
-                data={VENDOR_INFORMATION}
+                data={[
+                  {
+                    title: 'Organization Name',
+                    body: userData?.vendor?.organization?.org_name,
+                  },
+                  {
+                    title: 'Vendor Type',
+                    body: userData?.vendor?.organization?.org_type,
+                  },
+                  {
+                    title: 'Organization Description',
+                    body: JSON.parse(
+                      userData?.vendor?.organization?.meta?.toString(),
+                    ).org_description,
+                  },
+                  {
+                    title: 'Secondary Contact Number',
+                    body: JSON.parse(
+                      userData?.vendor?.organization?.meta?.toString(),
+                    ).secondory_phone,
+                  },
+                  {
+                    title: 'Password',
+                    body: '*********',
+                  },
+                  {
+                    title: 'GSTIN Number',
+                    body: JSON.parse(
+                      userData?.vendor?.organization?.meta?.toString(),
+                    ).gstin_no,
+                  },
+                ]}
                 renderItem={({item, index}) => {
                   return (
                     <View style={styles.textWrapper} key={index}>
@@ -179,7 +219,42 @@ const Profile = (props) => {
               <FlatList
                 bounces={false}
                 showsVerticalScrollIndicator={false}
-                data={LOCATION_INFORMATION}
+                data={[
+                  {
+                    title: 'Address Line 1',
+                    body: JSON.parse(
+                      userData?.vendor?.organization?.meta?.toString(),
+                    ).address_line_1,
+                  },
+                  {
+                    title: 'Address Line 2',
+                    body: JSON.parse(
+                      userData?.vendor?.organization?.meta?.toString(),
+                    ).address_line_2,
+                  },
+                  {
+                    title: 'Landmark',
+                    body: JSON.parse(
+                      userData?.vendor?.organization?.meta?.toString(),
+                    ).landmark,
+                  },
+                  {
+                    title: 'City',
+                    body: userData?.vendor?.organization?.city,
+                  },
+                  {
+                    title: 'District',
+                    body: 'Bengaluru',
+                  },
+                  {
+                    title: 'Pincode',
+                    body: userData?.vendor?.organization?.pincode,
+                  },
+                  {
+                    title: 'State',
+                    body: userData?.vendor?.organization?.state,
+                  },
+                ]}
                 contentContainerStyle={{marginTop: hp(2)}}
                 renderItem={({item, index}) => {
                   return (
@@ -205,7 +280,28 @@ const Profile = (props) => {
               <FlatList
                 bounces={false}
                 showsVerticalScrollIndicator={false}
-                data={OTHER_INFORMATION}
+                data={[
+                  {
+                    title: 'Categories Covered',
+                    body: '',
+                  },
+                  {
+                    title: 'Commission Rate',
+                    body: '10%',
+                  },
+                  {
+                    title: 'Status',
+                    body: 'Active',
+                  },
+                  {
+                    title: 'Service Type',
+                    body: userData?.vendor?.organization?.service_type,
+                  },
+                  {
+                    title: 'Vendor Status',
+                    body: 'Verified',
+                  },
+                ]}
                 contentContainerStyle={{marginTop: hp(2)}}
                 renderItem={({item, index}) => {
                   return (
@@ -275,12 +371,8 @@ const styles = StyleSheet.create({
     width: hp(12),
     borderRadius: hp(6),
     backgroundColor: Colors.white,
+    overflow: 'hidden',
     ...STYLES.common,
-  },
-  profileText: {
-    fontFamily: 'Roboto-Regular',
-    color: Colors.darkBlue,
-    fontSize: wp(10),
   },
   profileDetailText: {
     color: Colors.white,

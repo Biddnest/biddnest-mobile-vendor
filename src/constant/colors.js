@@ -74,36 +74,6 @@ export const VENDOR_INFORMATION = [
     body: 'XXXXXXXXXXXX',
   },
 ];
-export const LOCATION_INFORMATION = [
-  {
-    title: 'Address Line 1',
-    body: 'Lorem ipsum dolor sit amet',
-  },
-  {
-    title: 'Address Line 2',
-    body: 'Consetetur sadipscing elitr',
-  },
-  {
-    title: 'Landmark',
-    body: 'Sed diam nonumy',
-  },
-  {
-    title: 'City',
-    body: 'Bengaluru',
-  },
-  {
-    title: 'District',
-    body: 'Bengaluru',
-  },
-  {
-    title: 'Pincode',
-    body: '560097',
-  },
-  {
-    title: 'State',
-    body: 'Karnataka',
-  },
-];
 export const OTHER_INFORMATION = [
   {
     title: 'Categories Covered',

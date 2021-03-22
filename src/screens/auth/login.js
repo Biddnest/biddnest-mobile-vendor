@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, Text, StyleSheet, Platform} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Colors, hp, wp} from '../../constant/colors';
@@ -7,10 +7,18 @@ import TextInput from '../../components/textInput';
 import Button from '../../components/button';
 import LinearGradient from 'react-native-linear-gradient';
 import {STYLES} from '../../constant/commonStyle';
+import {useDispatch} from 'react-redux';
+import {signIn} from '../../redux/actions/user';
+import {CustomAlert, resetNavigator} from '../../constant/commonFun';
 
 const Login = (props) => {
-  const [data, setData] = React.useState({});
-  const [error, setError] = React.useState({});
+  const dispatch = useDispatch();
+  const [isLoading, setLoading] = useState(false);
+  const [data, setData] = useState({
+    username: 'vendor@biddnest.com',
+    password: 'admin123',
+  });
+  const [error, setError] = useState({});
   const handleState = (key, value) => {
     setData({
       ...data,
@@ -41,45 +49,54 @@ const Login = (props) => {
             <TextInput
               label={'Email/Username'}
               placeHolder={'Email'}
-              isRight={error.email}
+              value={data?.username}
+              isRight={error.username}
               keyboard={'email-address'}
-              onChange={(text) => handleState('email', text)}
+              onChange={(text) => handleState('username', text)}
             />
             <TextInput
               label={'Password'}
               placeHolder={'Password'}
-              isRight={error.email}
+              value={data?.password}
+              isRight={error.password}
               secureTextEntry={true}
               onChange={(text) => handleState('password', text)}
             />
             <Button
               label={'login'}
+              isLoading={isLoading}
               onPress={() => {
                 let tempError = {};
-                if (
-                  !data.email ||
-                  data.email.length === 0 ||
+                setLoading(true);
+                tempError.username = !(
+                  !data.username ||
+                  data.username.length === 0 ||
                   !/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
-                    data.email,
+                    data.username,
                   )
-                ) {
-                  tempError.email = false;
-                } else {
-                  tempError.email = true;
-                }
-                if (!data.password) {
-                  tempError.password = false;
-                } else {
-                  tempError.password = true;
-                }
+                );
+                tempError.password = !!data.password;
                 setError(tempError);
                 if (
                   Object.values(tempError).findIndex(
                     (item) => item === false,
                   ) === -1
                 ) {
-                  // resetNavigator(props, 'Dashboard');
-                  props.navigation.navigate('Dashboard');
+                  dispatch(signIn(data))
+                    .then((res) => {
+                      setLoading(false);
+                      if (res.status === 'success') {
+                        resetNavigator(props, 'Dashboard');
+                      } else {
+                        CustomAlert(res.message);
+                      }
+                    })
+                    .catch((err) => {
+                      setLoading(false);
+                      CustomAlert(err.data.message);
+                    });
+                } else {
+                  setLoading(false);
                 }
               }}
             />

@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import {
   FlatList,
+  Image,
   ImageBackground,
   Pressable,
   ScrollView,
@@ -20,8 +21,12 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import DeviceInfo from 'react-native-device-info';
 import LinearGradient from 'react-native-linear-gradient';
 import {resetNavigator} from '../constant/commonFun';
+import {RESET_STORE} from '../redux/types';
+import {useDispatch, useSelector} from 'react-redux';
 
 export function DrawerContent(props) {
+  const dispatch = useDispatch();
+  const userData = useSelector((state) => state.Login?.loginData?.vendor?.organization) || {};
   useEffect(() => {
     // let buildNumber = DeviceInfo.getBuildNumber(); // 1
     let buildNumber = DeviceInfo.getReadableVersion(); // 1.0.1
@@ -102,11 +107,15 @@ export function DrawerContent(props) {
           resizeMode={'cover'}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <View style={styles.profilePhoto}>
-              <Text style={styles.profileText}>DJ</Text>
+              <Image
+                source={{uri: userData?.image}}
+                style={{height: '100%', width: '100%'}}
+                resizeMode={'contain'}
+              />
             </View>
             <View style={{width: wp(45), paddingLeft: wp(2)}}>
               <Text numberOfLines={1} style={styles.userText}>
-                Wayne Pvt Ltd
+                {userData?.org_name} {userData?.org_type}
               </Text>
               <Text
                 numberOfLines={1}
@@ -116,13 +125,18 @@ export function DrawerContent(props) {
                   fontSize: wp(3.6),
                   marginTop: 6,
                 }}>
-                +91 9898989898
+                +91 {userData?.phone}
               </Text>
             </View>
             <View style={{width: wp(10)}}>
               <Pressable
                 style={styles.logoutWrapper}
-                onPress={() => resetNavigator(props, 'Login')}>
+                onPress={() => {
+                  dispatch({
+                    type: RESET_STORE,
+                  });
+                  resetNavigator(props, 'Login');
+                }}>
                 <MaterialIcons
                   name={'logout'}
                   color={Colors.white}
@@ -158,6 +172,7 @@ const styles = StyleSheet.create({
     width: wp(15),
     borderRadius: wp(7.5),
     backgroundColor: Colors.white,
+    overflow: 'hidden',
     ...STYLES.common,
   },
   profileText: {

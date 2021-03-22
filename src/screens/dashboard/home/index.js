@@ -1,6 +1,14 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
-import {FlatList, Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import {Colors, wp, boxShadow, hp} from '../../../constant/colors';
 import {STYLES} from '../../../constant/commonStyle';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -13,6 +21,12 @@ import Switch from '../../../components/switch';
 import FilterButton from '../../../components/filterButton';
 import MenuIcon from '../../../assets/svg/menu_icon.svg';
 import TwoButton from '../../../components/twoButton';
+import {useDispatch, useSelector} from 'react-redux';
+import {useIsFocused} from '@react-navigation/native';
+import {CustomAlert, DiffMin} from '../../../constant/commonFun';
+import {getOrders} from '../../../redux/actions/user';
+import {getDistance} from 'geolib';
+import moment from 'moment';
 
 export const HomeHeader = (props) => {
   return (
@@ -88,11 +102,46 @@ export const HomeHeader = (props) => {
 };
 
 const Home = (props) => {
+  const dispatch = useDispatch();
+  const isFocused = useIsFocused();
+  const configData =
+    useSelector(
+      (state) => state.Login?.configData?.enums?.booking?.fetch_type,
+    ) || [];
+  const userData = useSelector((state) => state.Login?.loginData) || {};
   const [selectedTab, setSelectedTab] = useState(0);
   const [filterVisible, setFilterVisible] = useState(false);
   const [notificationToggle, setNotificationToggle] = useState(false);
   const [offNotification, setOffNotification] = useState(false);
+  const [isLoading, setLoading] = useState(false);
+  const [order, setOrder] = useState({});
+
+  useEffect(() => {
+    if (isFocused && userData?.token) {
+      setLoading(true);
+      dispatch(getOrders(configData[selectedTab]))
+        .then((res) => {
+          setLoading(false);
+          if (res.status === 'success' && res?.data) {
+            setOrder(res?.data);
+          } else {
+            CustomAlert(res.message);
+          }
+        })
+        .catch((err) => {
+          setLoading(false);
+          CustomAlert(err?.data?.message);
+        });
+    }
+  }, [isFocused, selectedTab]);
   const renderItem = ({item, index}) => {
+    let source_meta = JSON.parse(item?.source_meta?.toString()) || {};
+    let destination_meta = JSON.parse(item?.destination_meta?.toString()) || {};
+    let dateArray = [];
+    let meta = JSON.parse(item?.meta?.toString()) || {};
+    item?.movement_dates?.forEach((i) => {
+      dateArray.push(moment(i.date).format('D MMM yyyy'));
+    });
     return (
       <Pressable
         style={[
@@ -102,7 +151,7 @@ const Home = (props) => {
         key={index}
         onPress={() => {
           if (selectedTab !== 2) {
-            props.navigation.navigate('OrderDetails');
+            props.navigation.navigate('OrderDetails', {orderData: item});
           }
         }}>
         {selectedTab === 2 && (
@@ -124,7 +173,9 @@ const Home = (props) => {
             alignItems: 'center',
           }}>
           <Text style={STYLES.leftText}>ORDER ID</Text>
-          <Text style={STYLES.rightText}>#342345</Text>
+          <Text style={[STYLES.rightText, {width: '70%'}]}>
+            #{item?.public_booking_id}
+          </Text>
         </View>
         <View
           style={[
@@ -143,7 +194,9 @@ const Home = (props) => {
                   <Text style={STYLES.participatedText}>Rs. 4000</Text>
                 </View>
                 <View style={STYLES.priceView}>
-                  <Text style={STYLES.participatedText}>00 : 40 : 00</Text>
+                  <Text style={STYLES.participatedText}>
+                    {DiffMin(new Date(), new Date(meta?.timings?.bid_result))}
+                  </Text>
                 </View>
               </View>
               <View style={STYLES.flexBoxOrders}>
@@ -173,10 +226,17 @@ const Home = (props) => {
               alignItems: 'center',
             }}>
             <View>
-              <Text style={{...STYLES.locationText, marginTop: 0}}>
-                CHENNAI
+              <Text
+                style={{
+                  ...STYLES.locationText,
+                  marginTop: 0,
+                  textTransform: 'uppercase',
+                }}>
+                {source_meta?.city}
               </Text>
-              <Text style={STYLES.locationText}>BENGALURU</Text>
+              <Text style={[STYLES.locationText, {textTransform: 'uppercase'}]}>
+                {destination_meta?.city}
+              </Text>
             </View>
             <View style={{alignItems: 'flex-end'}}>
               <Text style={{...STYLES.locationText, marginTop: 0}}>
@@ -188,7 +248,18 @@ const Home = (props) => {
                   alignItems: 'center',
                   marginTop: hp(1),
                 }}>
-                <Text style={STYLES.rightText}>314KM</Text>
+                <Text style={STYLES.rightText}>
+                  {parseInt(
+                    getDistance(
+                      {latitude: item?.source_lat, longitude: item?.source_lng},
+                      {
+                        latitude: item?.destination_lat,
+                        longitude: item?.destination_lng,
+                      },
+                    ) / 1000,
+                  )}{' '}
+                  KM
+                </Text>
               </View>
             </View>
           </View>
@@ -202,7 +273,7 @@ const Home = (props) => {
             </View>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>Moving Date</Text>
-              <Text style={STYLES.rightText}>25 Jan 2021</Text>
+              <Text style={STYLES.rightText}>{dateArray.join(', ')}</Text>
             </View>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>category</Text>
@@ -222,11 +293,13 @@ const Home = (props) => {
           <View>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>Moving Date</Text>
-              <Text style={STYLES.rightText}>25 Jan 2021</Text>
+              <Text style={STYLES.rightText}>{dateArray.join(', ')}</Text>
             </View>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>category</Text>
-              <Text style={STYLES.rightText}>1 BHK</Text>
+              <Text style={STYLES.rightText}>
+                {meta?.subcategory || 'null'}
+              </Text>
             </View>
           </View>
         )}
@@ -249,50 +322,59 @@ const Home = (props) => {
         navigation={props.navigation}
       />
       <View style={STYLES.tabView}>
-        {['Live Orders', 'Scheduled Orders', 'Save Later'].map(
-          (item, index) => {
-            return (
-              <Pressable
-                key={index}
+        {[
+          {title: 'Live Orders', value: configData[0]},
+          {title: 'Scheduled Orders', value: configData[1]},
+          {title: 'Save Later', value: configData[2]},
+        ].map((item, index) => {
+          return (
+            <Pressable
+              key={index}
+              style={{
+                ...STYLES.common,
+                borderColor:
+                  selectedTab === index ? Colors.darkBlue : '#ACABCD',
+                borderBottomWidth: selectedTab === index ? 2 : 0,
+              }}
+              onPress={() => setSelectedTab(index)}>
+              <Text
                 style={{
-                  ...STYLES.common,
-                  borderColor:
-                    selectedTab === index ? Colors.darkBlue : '#ACABCD',
-                  borderBottomWidth: selectedTab === index ? 2 : 0,
-                }}
-                onPress={() => setSelectedTab(index)}>
-                <Text
-                  style={{
-                    ...STYLES.tabText,
-                    color: selectedTab === index ? Colors.darkBlue : '#ACABCD',
-                  }}>
-                  {item}
-                </Text>
-              </Pressable>
-            );
-          },
-        )}
+                  ...STYLES.tabText,
+                  color: selectedTab === index ? Colors.darkBlue : '#ACABCD',
+                }}>
+                {item?.title}
+              </Text>
+            </Pressable>
+          );
+        })}
       </View>
       <View style={{flex: 1}}>
-        <FlatList
-          bounces={false}
-          showsVerticalScrollIndicator={false}
-          data={[1, 2, 3]}
-          renderItem={renderItem}
-          ListEmptyComponent={() => (
-            <Text
-              style={{
-                fontFamily: 'Roboto-Italic',
-                fontSize: wp(3.5),
-                color: '#99A0A5',
-                textAlign: 'center',
-                marginHorizontal: 20,
-                marginVertical: hp(5),
-              }}>
-              No any orders!
-            </Text>
-          )}
-        />
+        {(!!isLoading && (
+          <View style={{flex: 1, marginTop: hp(25)}}>
+            <ActivityIndicator size="large" color={Colors.darkBlue} />
+          </View>
+        )) || (
+          <FlatList
+            bounces={false}
+            showsVerticalScrollIndicator={false}
+            data={order?.bookings || []}
+            extraData={order?.bookings}
+            renderItem={renderItem}
+            ListEmptyComponent={() => (
+              <Text
+                style={{
+                  fontFamily: 'Roboto-Italic',
+                  fontSize: wp(3.5),
+                  color: '#99A0A5',
+                  textAlign: 'center',
+                  marginHorizontal: 20,
+                  marginVertical: hp(5),
+                }}>
+                No any orders!
+              </Text>
+            )}
+          />
+        )}
       </View>
       {selectedTab === 1 && (
         <FilterButton onPress={() => setFilterVisible(true)} />

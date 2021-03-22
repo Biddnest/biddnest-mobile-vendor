@@ -1,11 +1,16 @@
-import React, {useEffect} from 'react';
-import {View, Text, StyleSheet, Image} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, Text, StyleSheet, Image, ActivityIndicator} from 'react-native';
 import OneSignal from 'react-native-onesignal';
 import NetInfo from '@react-native-community/netinfo';
 import {CustomAlert, resetNavigator} from '../../constant/commonFun';
 import {Colors, hp, wp} from '../../constant/colors';
+import {initialConfig} from '../../redux/actions/user';
+import {useDispatch, useSelector} from 'react-redux';
 
 const Splash = (props) => {
+  const dispatch = useDispatch();
+  const [isLoading, setLoading] = useState(false);
+  const userData = useSelector((state) => state.Login?.loginData);
   useEffect(() => {
     OneSignal.setLogLevel(6, 0);
 
@@ -39,11 +44,28 @@ const Splash = (props) => {
   function onIds(device) {
     console.log('Device info: ', device);
   }
+  const callServiceAPI = () => {
+    setLoading(true);
+    dispatch(initialConfig())
+      .then((res) => {
+        setLoading(false);
+        if (res.status === 'success') {
+          if (userData?.token) {
+            resetNavigator(props, 'Dashboard');
+          } else {
+            resetNavigator(props, 'Login');
+          }
+        }
+      })
+      .catch((err) => {
+        checkConnectivity();
+        setLoading(false);
+        err?.data && CustomAlert(err?.data?.message);
+      });
+  };
   useEffect(() => {
     checkConnectivity();
-    setTimeout(() => {
-      resetNavigator(props, 'Login');
-    }, 1500);
+    callServiceAPI();
   }, []);
   const checkConnectivity = () => {
     NetInfo.addEventListener((state) => {
@@ -54,6 +76,11 @@ const Splash = (props) => {
   };
   return (
     <View style={styles.container}>
+      {!!isLoading && (
+        <View style={{position: 'absolute', bottom: hp(20), zIndex: 111}}>
+          <ActivityIndicator size="large" color={Colors.darkBlue} />
+        </View>
+      )}
       <Image
         source={require('../../assets/images/logo.png')}
         style={{height: hp(50), width: wp(80)}}
