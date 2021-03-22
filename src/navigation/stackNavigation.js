@@ -14,7 +14,6 @@ import RaiseRequest from '../screens/dashboard/drawer/raiseRequest';
 import FAQS from '../screens/dashboard/drawer/faqs';
 import PayOuts from '../screens/dashboard/drawer/payOuts';
 import PayOutDetails from '../screens/dashboard/drawer/payOutDetails';
-import AcceptOrder from '../screens/dashboard/home/acceptOrder';
 
 const Stack = createStackNavigator();
 
@@ -31,7 +30,6 @@ const MainStackNavigator = () => {
     <Stack.Navigator screenOptions={screenOptionStyle} headerMode={false}>
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="OrderDetails" component={OrderDetails} />
-      <Stack.Screen name="AcceptOrder" component={AcceptOrder} />
       <Stack.Screen name="UserRole" component={UserRole} />
       <Stack.Screen name="Reports" component={Reports} />
       <Stack.Screen name="LegalPolicies" component={LegalPolicies} />

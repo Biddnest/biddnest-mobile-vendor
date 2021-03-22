@@ -9,12 +9,7 @@ import {
   Linking,
   FlatList,
 } from 'react-native';
-import {
-  boxShadow,
-  Colors,
-  hp,
-  wp,
-} from '../../../constant/colors';
+import {boxShadow, Colors, hp, wp} from '../../../constant/colors';
 import {STYLES} from '../../../constant/commonStyle';
 import TwoButton from '../../../components/twoButton';
 import CustomModalAndroid from '../../../components/customModal';
@@ -160,7 +155,7 @@ const Requirements = (props) => {
             leftLabel={'REJECT'}
             rightLabel={'ACCEPT'}
             leftOnPress={() => setRejectVisible(true)}
-            rightOnPress={() => props.navigation.navigate('AcceptOrder')}
+            rightOnPress={() => setAcceptVisible(true)}
           />
         </View>
       </ScrollView>
@@ -188,6 +183,10 @@ const Requirements = (props) => {
           rightOnPress={() => setRejectVisible(false)}
         />
       </CustomModalAndroid>
+      <AcceptOrder
+        visible={acceptVisible}
+        onCloseIcon={() => setAcceptVisible(false)}
+      />
     </View>
   );
 };
