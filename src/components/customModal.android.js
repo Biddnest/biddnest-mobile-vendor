@@ -19,7 +19,7 @@ const CustomModalAndroid = (props) => {
             bounces={false}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{alignItems: 'center'}}
-            style={styles.modalView}>
+            style={[styles.modalView, {maxHeight: props.maxHeight ? props.maxHeight : hp(80)}]}>
             {props.children}
           </ScrollView>
         </View>
@@ -44,7 +44,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: wp(100),
-    maxHeight: hp(80),
   },
   modalText: {
     marginBottom: 15,

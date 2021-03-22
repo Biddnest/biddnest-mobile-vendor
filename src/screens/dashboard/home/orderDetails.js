@@ -48,6 +48,7 @@ const OrderDetails = (props) => {
   const [placedSuccessVisible, setPlacedSuccessVisible] = useState(false);
   const [mapVisible, setMapVisible] = useState(null);
   const [isLoading, setLoading] = useState(false);
+  const [acceptVisible, setAcceptVisible] = useState(false);
 
   useEffect(() => {
     let obj = {
@@ -321,7 +322,7 @@ const OrderDetails = (props) => {
                 leftLabel={'REJECT'}
                 rightLabel={'ACCEPT'}
                 leftOnPress={() => setRejectVisible(true)}
-                rightOnPress={() => props.navigation.navigate('AcceptOrder')}
+                rightOnPress={() => setAcceptVisible(true)}
               />
             </View>
           )}
@@ -383,6 +384,10 @@ const OrderDetails = (props) => {
           }}
         />
       </CustomModalAndroid>
+      <AcceptOrder
+        visible={acceptVisible}
+        onCloseIcon={() => setAcceptVisible(false)}
+      />
       <CustomModalAndroid
         visible={placedSuccessVisible}
         onPress={() => setPlacedSuccessVisible(false)}>
