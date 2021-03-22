@@ -7,21 +7,21 @@ import {Colors, hp, wp} from '../../constant/colors';
 
 const Splash = (props) => {
   useEffect(() => {
-    // OneSignal.setLogLevel(6, 0);
-    //
-    // OneSignal.init('6b33862a-ec91-44bd-bf29-1c8ae35317d1', {
-    //   kOSSettingsKeyAutoPrompt: false,
-    //   kOSSettingsKeyInAppLaunchURL: false,
-    //   kOSSettingsKeyInFocusDisplayOption: 2,
-    // });
-    // OneSignal.inFocusDisplaying(2); // Controls what should happen if a notification is received while the app is open. 2 means that the notification will go directly to the device's notification center.
-    //
-    // // The promptForPushNotifications function code will show the iOS push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission (See step below)
-    // OneSignal.promptForPushNotificationsWithUserResponse(myiOSPromptCallback);
-    //
-    // OneSignal.addEventListener('received', onReceived);
-    // OneSignal.addEventListener('opened', onOpened);
-    // OneSignal.addEventListener('ids', onIds);
+    OneSignal.setLogLevel(6, 0);
+
+    OneSignal.init('42d0f367-a40c-41e2-a9e3-95d62e38ad99', {
+      kOSSettingsKeyAutoPrompt: false,
+      kOSSettingsKeyInAppLaunchURL: false,
+      kOSSettingsKeyInFocusDisplayOption: 2,
+    });
+    OneSignal.inFocusDisplaying(2); // Controls what should happen if a notification is received while the app is open. 2 means that the notification will go directly to the device's notification center.
+
+    // The promptForPushNotifications function code will show the iOS push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission (See step below)
+    OneSignal.promptForPushNotificationsWithUserResponse(myiOSPromptCallback);
+
+    OneSignal.addEventListener('received', onReceived);
+    OneSignal.addEventListener('opened', onOpened);
+    OneSignal.addEventListener('ids', onIds);
   }, []);
   function myiOSPromptCallback(permission) {
     // do something with permission value
