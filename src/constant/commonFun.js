@@ -16,16 +16,18 @@ export const CustomAlert = (msg = '') => {
   return Toast.show(msg, Toast.LONG);
 };
 
-export const DiffMin = (dt2, dt1) => {
-  let diff = (dt2.getTime() - dt1.getTime()) / 1000;
-  diff /= 60;
-  let d = Math.abs(Math.round(diff));
+export const DiffMin = (dt1) => {
+  let diffInMilliSeconds = Math.abs(dt1 - new Date()) / 1000;
+  return Math.floor(diffInMilliSeconds / 60) % 60;
 
-  d = Number(d);
-  let h = Math.floor(d / 3600);
-  let m = Math.floor((d % 3600) / 60);
-  let s = Math.floor((d % 3600) % 60);
-  return h + ' : ' + m + ' : ' + s;
+  // let diff = (dt2.getTime() - dt1.getTime()) / 1000;
+  // diff /= 60;
+  // let d = Math.abs(Math.round(diff));
+  //
+  // d = Number(d);
+  // let h = Math.floor(d / 3600);
+  // let m = Math.floor((d % 3600) / 60);
+  // let s = Math.floor((d % 3600) % 60);
 };
 
 export const ImageSelection = () => {

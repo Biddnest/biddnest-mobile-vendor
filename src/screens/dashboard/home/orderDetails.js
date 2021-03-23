@@ -38,6 +38,7 @@ import {
 import {APICall} from '../../../redux/actions/user';
 import {getDistance} from 'geolib';
 import moment from 'moment';
+import CountDown from '../../../components/countDown';
 
 const OrderDetails = (props) => {
   const [orderDetails, setOrderDetails] = useState(
@@ -49,10 +50,12 @@ const OrderDetails = (props) => {
   const [mapVisible, setMapVisible] = useState(null);
   const [isLoading, setLoading] = useState(false);
   const [acceptVisible, setAcceptVisible] = useState(false);
+  const [tab, setTab] = useState(['Order Details', 'Requirements']);
+  const [priceList, setPriceList] = useState({});
 
   useEffect(() => {
     let obj = {
-      url: `v1/bookings?id=${orderDetails?.public_booking_id}`,
+      url: `vendors/bookings/details?public_booking_id=${orderDetails?.public_booking_id}`,
       method: 'get',
       headers: {
         Authorization: 'Bearer ' + STORE.getState().Login?.loginData?.token,
@@ -62,6 +65,30 @@ const OrderDetails = (props) => {
       .then((res) => {
         if (res?.data?.status === 'success') {
           setOrderDetails(res?.data?.data?.booking);
+          if (res?.data?.data?.booking?.bid !== null) {
+            setTab(['Order Details', 'Requirements', 'Order Status']);
+          }
+        } else {
+          CustomAlert(res?.data?.message);
+        }
+      })
+      .catch((err) => {
+        CustomAlert(err?.message);
+      });
+  }, []);
+
+  useEffect(() => {
+    let obj = {
+      url: `vendors/bid/price-list?public_booking_id=${orderDetails?.public_booking_id}`,
+      method: 'get',
+      headers: {
+        Authorization: 'Bearer ' + STORE.getState().Login?.loginData?.token,
+      },
+    };
+    APICall(obj)
+      .then((res) => {
+        if (res?.data?.status === 'success') {
+          setPriceList(res?.data?.data?.price_list);
         } else {
           CustomAlert(res?.data?.message);
         }
@@ -88,14 +115,19 @@ const OrderDetails = (props) => {
       </View>
     );
   };
-  console.log(orderDetails);
   let dateArray = [];
-  let source_meta = JSON.parse(orderDetails?.source_meta?.toString()) || {};
+  let source_meta =
+    (orderDetails?.source_meta &&
+      JSON.parse(orderDetails?.source_meta?.toString())) ||
+    {};
   let destination_meta =
-    JSON.parse(orderDetails?.destination_meta?.toString()) || {};
-  let meta = JSON.parse(orderDetails?.meta?.toString()) || {};
+    (orderDetails?.destination_meta &&
+      JSON.parse(orderDetails?.destination_meta?.toString())) ||
+    {};
+  let meta =
+    (orderDetails?.meta && JSON.parse(orderDetails?.meta?.toString())) || {};
   orderDetails?.movement_dates?.forEach((i) => {
-    dateArray.push(moment(i.date).format('D MMM yyyy'));
+    dateArray.push(moment(i.date).format('D MMM'));
   });
   let coordinates =
     mapVisible === 'pickup'
@@ -108,13 +140,39 @@ const OrderDetails = (props) => {
           latitude: parseFloat(orderDetails?.destination_lat),
           longitude: parseFloat(orderDetails?.destination_lng),
         };
-  return (
+    return (
     <View style={{flex: 1, backgroundColor: Colors.white}}>
       <SimpleHeader
-        heart={true}
+        heart={!!orderDetails?.bookmarked}
         headerText={'Order Details'}
         right={true}
         onRightPress={() => {}}
+        onheartPress={() => {
+          // Add into bookmark API
+          let obj = {
+            url: 'vendors/bookings/bookmark',
+            method: 'post',
+            headers: {
+              Authorization:
+                'Bearer ' + STORE.getState().Login?.loginData?.token,
+            },
+            data: {
+              public_booking_id: orderDetails?.public_booking_id,
+            },
+          };
+          APICall(obj)
+            .then((res) => {
+              setLoading(false);
+              if (res?.data?.status === 'success') {
+              } else {
+                CustomAlert(res?.data?.message);
+              }
+            })
+            .catch((err) => {
+              setLoading(false);
+              CustomAlert(err?.message);
+            });
+        }}
         navigation={props.navigation}
         onBack={() => props.navigation.goBack()}
       />
@@ -131,19 +189,29 @@ const OrderDetails = (props) => {
             }}>
             <View style={STYLES.flexBoxOrders}>
               <View style={[STYLES.priceView, {width: '40%'}]}>
-                <Text style={STYLES.participatedText}>Rs. 4000</Text>
+                <Text style={STYLES.participatedText}>
+                  Rs. {orderDetails?.final_estimated_quote}
+                </Text>
               </View>
               <View style={[STYLES.priceView, {width: '40%'}]}>
-                <Text style={STYLES.participatedText}>
-                  {DiffMin(
-                    new Date(),
-                    new Date(
-                      JSON.parse(
-                        orderDetails.meta?.toString(),
-                      ).timings?.bid_result,
-                    ),
-                  )}
-                </Text>
+                {orderDetails?.meta && (
+                  <CountDown
+                    until={DiffMin(
+                      new Date(
+                        JSON.parse(
+                          orderDetails.meta?.toString(),
+                        ).timings?.bid_result,
+                      ),
+                    )}
+                    size={18}
+                    digitStyle={{height: '100%'}}
+                    digitTxtStyle={STYLES.participatedText}
+                    separatorStyle={{color: '#000'}}
+                    timeToShow={['H', 'M', 'S']}
+                    timeLabels={{h: null, m: null, s: null}}
+                    showSeparator
+                  />
+                )}
               </View>
             </View>
             <View style={STYLES.flexBoxOrders}>
@@ -170,21 +238,23 @@ const OrderDetails = (props) => {
             }}>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>DISTANCE</Text>
-              <Text style={STYLES.rightText}>
-                {parseInt(
-                  getDistance(
-                    {
-                      latitude: orderDetails?.source_lat,
-                      longitude: orderDetails?.source_lng,
-                    },
-                    {
-                      latitude: orderDetails?.destination_lat,
-                      longitude: orderDetails?.destination_lng,
-                    },
-                  ) / 1000,
-                )}{' '}
-                KM
-              </Text>
+              {orderDetails?.source_lat && (
+                <Text style={STYLES.rightText}>
+                  {parseInt(
+                    getDistance(
+                      {
+                        latitude: orderDetails?.source_lat,
+                        longitude: orderDetails?.source_lng,
+                      },
+                      {
+                        latitude: orderDetails?.destination_lat,
+                        longitude: orderDetails?.destination_lng,
+                      },
+                    ) / 1000,
+                  )}{' '}
+                  KM
+                </Text>
+              )}
             </View>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>MOVING DATE</Text>
@@ -202,30 +272,28 @@ const OrderDetails = (props) => {
             </View>
           </View>
           <View style={STYLES.tabView}>
-            {['Order Details', 'Requirements', 'Order Status'].map(
-              (item, index) => {
-                return (
-                  <Pressable
-                    key={index}
+            {tab.map((item, index) => {
+              return (
+                <Pressable
+                  key={index}
+                  style={{
+                    ...STYLES.common,
+                    borderColor:
+                      selectedTab === index ? Colors.darkBlue : '#ACABCD',
+                    borderBottomWidth: selectedTab === index ? 2 : 0,
+                  }}
+                  onPress={() => setSelectedTab(index)}>
+                  <Text
                     style={{
-                      ...STYLES.common,
-                      borderColor:
+                      ...STYLES.tabText,
+                      color:
                         selectedTab === index ? Colors.darkBlue : '#ACABCD',
-                      borderBottomWidth: selectedTab === index ? 2 : 0,
-                    }}
-                    onPress={() => setSelectedTab(index)}>
-                    <Text
-                      style={{
-                        ...STYLES.tabText,
-                        color:
-                          selectedTab === index ? Colors.darkBlue : '#ACABCD',
-                      }}>
-                      {item}
-                    </Text>
-                  </Pressable>
-                );
-              },
-            )}
+                    }}>
+                    {item}
+                  </Text>
+                </Pressable>
+              );
+            })}
           </View>
           {selectedTab === 0 && (
             <View>
@@ -326,7 +394,12 @@ const OrderDetails = (props) => {
               />
             </View>
           )}
-          {selectedTab === 1 && <Requirements navigation={props.navigation} />}
+          {selectedTab === 1 && (
+            <Requirements
+              navigation={props.navigation}
+              orderDetails={orderDetails}
+            />
+          )}
           {selectedTab === 2 && (
             // <OrderStatusWin />
             // <OrderStatusPending />
@@ -359,13 +432,15 @@ const OrderDetails = (props) => {
           rightOnPress={() => {
             setLoading(true);
             let obj = {
-              url: 'vendors/reject',
-              method: 'delete',
+              url: 'vendors/bookings/reject',
+              method: 'post',
               headers: {
                 Authorization:
                   'Bearer ' + STORE.getState().Login?.loginData?.token,
               },
-              data: {},
+              data: {
+                public_booking_id: orderDetails?.public_booking_id,
+              },
             };
             APICall(obj)
               .then((res) => {
@@ -385,6 +460,9 @@ const OrderDetails = (props) => {
         />
       </CustomModalAndroid>
       <AcceptOrder
+        navigator={props}
+        public_booking_id={orderDetails?.public_booking_id}
+        priceList={priceList}
         visible={acceptVisible}
         onCloseIcon={() => setAcceptVisible(false)}
       />

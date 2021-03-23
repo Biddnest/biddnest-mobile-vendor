@@ -1,12 +1,10 @@
 import React from 'react';
-import {Image, Pressable, View, Text, StyleSheet} from 'react-native';
+import {Pressable, View, Text, StyleSheet} from 'react-native';
 import {boxShadow, Colors, wp} from '../constant/colors';
-import Fontisto from 'react-native-vector-icons/Fontisto';
 import {STYLES} from '../constant/commonStyle';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import Switch from './switch';
-import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import BackArrow from '../assets/svg/back_arrow.svg';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const SimpleHeader = (props) => {
   return (
@@ -32,7 +30,7 @@ const SimpleHeader = (props) => {
       </Pressable>
       <View
         style={{
-          width: props.right ? (props.heart ? wp(66) : wp(74)) : wp(87),
+          width: props.right ? (props.onheartPress ? wp(66) : wp(74)) : wp(87),
           height: '100%',
           ...styles.common,
         }}>
@@ -50,11 +48,15 @@ const SimpleHeader = (props) => {
       {props.right ? (
         <View
           style={[STYLES.common, {alignItems: 'center', flexDirection: 'row'}]}>
-          {props.heart && (
+          {props.onheartPress && (
             <Pressable
               style={{...STYLES.common, width: wp(8)}}
-              onPress={props.onRightPress}>
-              <EvilIcons name={'heart'} color={Colors.darkBlue} size={30} />
+              onPress={props.onheartPress}>
+              <FontAwesome
+                name={props.heart ? 'heart' : 'heart-o'}
+                color={Colors.darkBlue}
+                size={20}
+              />
             </Pressable>
           )}
           <Pressable

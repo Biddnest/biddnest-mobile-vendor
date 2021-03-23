@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   FlatList,
   Text,
@@ -20,15 +20,57 @@ import OTPInputView from '@twotalltotems/react-native-otp-input';
 import Entypo from 'react-native-vector-icons/Entypo';
 import DatePicker from 'react-native-datepicker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import moment from 'moment';
+import {STORE} from '../../../redux';
+import {APICall} from '../../../redux/actions/user';
+import {CustomAlert, resetNavigator} from '../../../constant/commonFun';
 
 const AcceptOrder = (props) => {
+  const {priceList, public_booking_id} = props;
   const [step, setStep] = useState(0);
-  const [low, setLow] = useState(2);
-  const [high, setHigh] = useState(4);
   const [forgotPin, setForgotPin] = useState(false);
+  const [applyBidData, setApplyBidData] = useState({
+    public_booking_id: public_booking_id,
+    inventory: [],
+    bid_amount: 0,
+    type_of_movement: 'shared',
+    moving_date: moment(new Date()).format('yyyy-MM-DD'),
+    vehicle_type: 'tempo',
+    man_power: {
+      min: 2,
+      max: 4,
+    },
+  });
+  const [modalData, setModalData] = useState({
+    password: '',
+    pin: '',
+  });
+  const [error, setError] = useState({
+    password: undefined,
+    pin: undefined,
+  });
+  const [isLoading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (priceList?.inventories?.length > 0) {
+      let temp = [];
+      priceList?.inventories.forEach((item) => {
+        temp.push({
+          booking_inventory_id: item?.bid_inventory_id || 0,
+          amount: item?.price || 0,
+        });
+      });
+      setApplyBidData({
+        ...applyBidData,
+        inventory: temp,
+      });
+    }
+  }, [priceList]);
   const handleValueChange = useCallback((low, high) => {
-    setLow(low);
-    setHigh(high);
+    let temp = {...applyBidData.man_power};
+    temp.min = low;
+    temp.max = high;
+    setApplyBidData({...applyBidData, man_power: temp});
   }, []);
   const renderStep0 = () => {
     return (
@@ -69,7 +111,8 @@ const AcceptOrder = (props) => {
               bounces={false}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{backgroundColor: Colors.white}}
-              data={[1, 2, 3]}
+              data={priceList?.inventories || []}
+              extraData={priceList?.inventories}
               renderItem={({item, index}) => {
                 return (
                   <View
@@ -83,7 +126,7 @@ const AcceptOrder = (props) => {
                     <View style={{flex: 1}}>
                       <Text
                         style={[STYLES.modalHeaderText, {textAlign: 'left'}]}>
-                        Capboards
+                        {item?.name}
                       </Text>
                       <Text
                         style={[
@@ -95,18 +138,29 @@ const AcceptOrder = (props) => {
                       <Text
                         style={[
                           STYLES.modalHeaderText,
-                          {textAlign: 'left', marginTop: 1},
+                          {
+                            textAlign: 'left',
+                            marginTop: 1,
+                            textTransform: 'capitalize',
+                          },
                         ]}>
-                        Size: Medium
+                        Size: {item?.size}
                       </Text>
                     </View>
                     <View style={{width: '40%'}}>
                       <TextInput
                         label={''}
+                        value={applyBidData?.inventory[
+                          index
+                        ]?.amount?.toString()}
                         inputStyle={{textAlign: 'center'}}
                         placeHolder={'4200'}
                         keyboard={'decimal-pad'}
-                        onChange={(text) => {}}
+                        onChange={(text) => {
+                          let temp = [...applyBidData.inventory];
+                          temp[index].amount = text;
+                          setApplyBidData({...applyBidData, inventory: temp});
+                        }}
                       />
                     </View>
                   </View>
@@ -134,9 +188,12 @@ const AcceptOrder = (props) => {
               <TextInput
                 inputStyle={{textAlign: 'center'}}
                 label={''}
+                value={applyBidData?.bid_amount?.toString()}
                 placeHolder={'4200'}
                 keyboard={'decimal-pad'}
-                onChange={(text) => {}}
+                onChange={(text) =>
+                  setApplyBidData({...applyBidData, bid_amount: text})
+                }
               />
             </View>
           </View>
@@ -165,6 +222,7 @@ const AcceptOrder = (props) => {
           }}
           onPress={() => {
             setStep(0);
+            setForgotPin(false);
             props.onCloseIcon();
           }}
         />
@@ -199,7 +257,7 @@ const AcceptOrder = (props) => {
                   color: Colors.textLabelColor,
                   fontSize: wp(4),
                 }}>
-                Date Of Birth
+                Moving Date
               </Text>
               <View
                 style={{
@@ -218,12 +276,11 @@ const AcceptOrder = (props) => {
                     height: '100%',
                     justifyContent: 'center',
                   }}
-                  date={new Date()}
+                  date={moment(applyBidData?.moving_date).format('D MMM yyyy')}
                   mode="date"
                   placeholder="select date"
                   format="D MMM yyyy"
-                  minDate="2016-05-01"
-                  maxDate={new Date()}
+                  minDate={new Date()}
                   confirmBtnText="Confirm"
                   cancelBtnText="Cancel"
                   iconComponent={
@@ -256,7 +313,12 @@ const AcceptOrder = (props) => {
                       justifyContent: 'flex-start',
                     },
                   }}
-                  onDateChange={(date) => {}}
+                  onDateChange={(date) => {
+                    setApplyBidData({
+                      ...applyBidData,
+                      moving_date: moment(date).format('yyyy-MM-DD'),
+                    });
+                  }}
                 />
               </View>
             </View>
@@ -279,13 +341,13 @@ const AcceptOrder = (props) => {
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <View style={styles.manPowerView}>
                 <Text style={[STYLES.inputTextStyle, {height: 'auto'}]}>
-                  {low}
+                  {applyBidData?.man_power?.min}
                 </Text>
               </View>
               <Slider
                 style={styles.sliderStyle}
-                min={2}
-                max={4}
+                min={1}
+                max={5}
                 step={1}
                 floatingLabel
                 renderThumb={() => <View style={STYLES.sliderThumb} />}
@@ -306,7 +368,7 @@ const AcceptOrder = (props) => {
               />
               <View style={styles.manPowerView}>
                 <Text style={[STYLES.inputTextStyle, {height: 'auto'}]}>
-                  {high}
+                  {applyBidData?.man_power?.max}
                 </Text>
               </View>
             </View>
@@ -354,7 +416,10 @@ const AcceptOrder = (props) => {
                 label={'Password'}
                 secureTextEntry={true}
                 placeHolder={'**********'}
-                onChange={(text) => {}}
+                isRight={error.password}
+                onChange={(text) =>
+                  setModalData({...modalData, password: text})
+                }
               />
               <View style={{marginLeft: wp(2)}}>
                 <Text style={STYLES.inputTextLabel}>New 4 digit PIN</Text>
@@ -365,8 +430,16 @@ const AcceptOrder = (props) => {
                   }}>
                   <OTPInputView
                     pinCount={4}
-                    onCodeChanged={(code) => console.log(code)}
-                    codeInputFieldStyle={styles.textInput}
+                    onCodeChanged={(code) =>
+                      setModalData({...modalData, pin: code})
+                    }
+                    codeInputFieldStyle={[
+                      styles.textInput,
+                      {
+                        borderColor:
+                          error.pin === false ? Colors.red : Colors.silver,
+                      },
+                    ]}
                     codeInputHighlightStyle={[
                       styles.textInput,
                       {borderColor: '#243C99'},
@@ -410,6 +483,7 @@ const AcceptOrder = (props) => {
         </View>
       )}
       <FlatButton
+        isLaoding={isLoading}
         label={step === 0 ? 'next' : step === 1 ? 'place your bid' : 'submit'}
         onPress={() => {
           if (step === 0) {
@@ -417,13 +491,75 @@ const AcceptOrder = (props) => {
           } else if (step === 1) {
             setStep(2);
           } else {
+            console.log(applyBidData);
+            setLoading(true);
             if (forgotPin) {
-              setStep(2);
-              setForgotPin(false);
+              let tempError = {};
+              setLoading(true);
+              tempError.password = !(
+                !modalData.password || modalData.password.length === 0
+              );
+              tempError.password = !!modalData.password;
+              tempError.pin = !(!modalData.pin || modalData.pin.length !== 4);
+              setError(tempError);
+              if (
+                Object.values(tempError).findIndex((item) => item === false) ===
+                -1
+              ) {
+                // set pin API
+                let obj = {
+                  url: 'vendors/pin/reset',
+                  method: 'post',
+                  headers: {
+                    Authorization:
+                      'Bearer ' + STORE.getState().Login?.loginData?.token,
+                  },
+                  data: modalData,
+                };
+                APICall(obj)
+                  .then((res) => {
+                    setLoading(false);
+                    if (res?.data?.status === 'success') {
+                      setStep(2);
+                      setForgotPin(false);
+                    } else {
+                      CustomAlert(res?.data?.message);
+                    }
+                  })
+                  .catch((err) => {
+                    setLoading(false);
+                    CustomAlert(err?.message);
+                  });
+              } else {
+                setLoading(false);
+              }
             } else {
-              setStep(0);
-              setForgotPin(false);
-              props.onCloseIcon();
+              // Bid Submit API
+              let obj = {
+                url: 'vendors/bookings/submit',
+                method: 'post',
+                headers: {
+                  Authorization:
+                    'Bearer ' + STORE.getState().Login?.loginData?.token,
+                },
+                data: applyBidData,
+              };
+              APICall(obj)
+                .then((res) => {
+                  setLoading(false);
+                  if (res?.data?.status === 'success') {
+                    setStep(0);
+                    setForgotPin(false);
+                    resetNavigator(props.navigator, 'Dashboard');
+                    props.onCloseIcon();
+                  } else {
+                    CustomAlert(res?.data?.message);
+                  }
+                })
+                .catch((err) => {
+                  setLoading(false);
+                  CustomAlert(err?.message);
+                });
             }
           }
         }}

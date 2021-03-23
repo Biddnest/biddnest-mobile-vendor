@@ -1,10 +1,5 @@
 import instance from '../../constant/baseService';
-import {
-  GET_BOOKMARK,
-  LIVE_ORDERS,
-  LOGIN_USER_DATA,
-  CONFIG_DATA, ORDERS,
-} from '../types';
+import {LOGIN_USER_DATA, CONFIG_DATA, ORDERS} from '../types';
 import {CustomAlert} from '../../constant/commonFun';
 import {STORE} from '../index';
 
@@ -105,4 +100,33 @@ export const getOrders = (url) => {
         });
     });
   };
+};
+
+export const checkPinStatus = (url) => {
+  return new Promise((resolve, reject) => {
+    let obj = {
+      url: 'vendors/pin/status',
+      method: 'get',
+      headers: {
+        Authorization: 'Bearer ' + STORE.getState().Login?.loginData?.token,
+      },
+    };
+    APICall(obj)
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        if (err?.status === 401) {
+          // dispatch({
+          //   type: RESET_STORE,
+          // });
+          // CommonActions.reset({
+          //   index: 0,
+          //   routes: [{name: 'Login'}],
+          // });
+        }
+        CustomAlert(err?.data?.message);
+        reject(err);
+      });
+  });
 };

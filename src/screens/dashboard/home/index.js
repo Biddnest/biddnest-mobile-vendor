@@ -23,10 +23,21 @@ import MenuIcon from '../../../assets/svg/menu_icon.svg';
 import TwoButton from '../../../components/twoButton';
 import {useDispatch, useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
-import {CustomAlert, DiffMin} from '../../../constant/commonFun';
-import {getOrders} from '../../../redux/actions/user';
+import {
+  CustomAlert,
+  DiffMin,
+} from '../../../constant/commonFun';
+import {
+  APICall,
+  checkPinStatus,
+  getOrders,
+} from '../../../redux/actions/user';
 import {getDistance} from 'geolib';
 import moment from 'moment';
+import TextInput from '../../../components/textInput';
+import OTPInputView from '@twotalltotems/react-native-otp-input';
+import {STORE} from '../../../redux';
+import CountDown from '../../../components/countDown';
 
 export const HomeHeader = (props) => {
   return (
@@ -115,10 +126,34 @@ const Home = (props) => {
   const [offNotification, setOffNotification] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [order, setOrder] = useState({});
+  const [pinModal, setPinModal] = useState(false);
+  const [modalData, setModalData] = useState({
+    password: '',
+    pin: '',
+  });
+  const [error, setError] = useState({
+    password: undefined,
+    pin: undefined,
+  });
 
   useEffect(() => {
     if (isFocused && userData?.token) {
       setLoading(true);
+      checkPinStatus()
+        .then((res) => {
+          setLoading(false);
+          if (res.status === 'success' && res?.data) {
+            if (!res?.data?.pin?.set) {
+              setPinModal(true);
+            }
+          } else {
+            CustomAlert(res.message);
+          }
+        })
+        .catch((err) => {
+          setLoading(false);
+          CustomAlert(err?.data?.message);
+        });
       dispatch(getOrders(configData[selectedTab]))
         .then((res) => {
           setLoading(false);
@@ -140,7 +175,7 @@ const Home = (props) => {
     let dateArray = [];
     let meta = JSON.parse(item?.meta?.toString()) || {};
     item?.movement_dates?.forEach((i) => {
-      dateArray.push(moment(i.date).format('D MMM yyyy'));
+      dateArray.push(moment(i.date).format('D MMM'));
     });
     return (
       <Pressable
@@ -191,12 +226,21 @@ const Home = (props) => {
               }}>
               <View style={STYLES.flexBoxOrders}>
                 <View style={STYLES.priceView}>
-                  <Text style={STYLES.participatedText}>Rs. 4000</Text>
+                  <Text style={STYLES.participatedText}>
+                    Rs. {item?.final_estimated_quote}
+                  </Text>
                 </View>
                 <View style={STYLES.priceView}>
-                  <Text style={STYLES.participatedText}>
-                    {DiffMin(new Date(), new Date(meta?.timings?.bid_result))}
-                  </Text>
+                  <CountDown
+                    until={DiffMin(new Date(item?.bid_result_at))}
+                    size={18}
+                    digitStyle={{height: '100%'}}
+                    digitTxtStyle={STYLES.participatedText}
+                    separatorStyle={{color: '#000'}}
+                    timeToShow={['H', 'M', 'S']}
+                    timeLabels={{h: null, m: null, s: null}}
+                    showSeparator
+                  />
                 </View>
               </View>
               <View style={STYLES.flexBoxOrders}>
@@ -500,6 +544,97 @@ const Home = (props) => {
           }}
         />
       </CustomModalAndroid>
+      <CustomModalAndroid visible={pinModal}>
+        <View style={STYLES.modalHeaderView}>
+          <Text style={STYLES.modalHeaderText}>SET PIN</Text>
+        </View>
+        <View style={{...STYLES.separatorView, width: '85%'}} />
+        <View style={{width: '100%', alignItems: 'center'}}>
+          <View
+            style={{
+              width: '85%',
+              marginVertical: hp(2),
+            }}>
+            <TextInput
+              label={'Password'}
+              secureTextEntry={true}
+              placeHolder={'**********'}
+              isRight={error.password}
+              onChange={(text) => setModalData({...modalData, password: text})}
+            />
+            <View style={{marginLeft: wp(2)}}>
+              <Text style={STYLES.inputTextLabel}>New 4 digit PIN</Text>
+              <View
+                style={{
+                  height: hp(9),
+                  width: hp(28),
+                }}>
+                <OTPInputView
+                  pinCount={4}
+                  onCodeChanged={(code) =>
+                    setModalData({...modalData, pin: code})
+                  }
+                  codeInputFieldStyle={[
+                    styles.textInput,
+                    {
+                      borderColor:
+                        error.pin === false ? Colors.red : Colors.silver,
+                    },
+                  ]}
+                  codeInputHighlightStyle={[
+                    styles.textInput,
+                    {borderColor: '#243C99'},
+                  ]}
+                />
+              </View>
+            </View>
+          </View>
+        </View>
+        <FlatButton
+          label={'submit'}
+          isLoading={isLoading}
+          onPress={() => {
+            let tempError = {};
+            setLoading(true);
+            tempError.password = !(
+              !modalData.password || modalData.password.length === 0
+            );
+            tempError.password = !!modalData.password;
+            tempError.pin = !(!modalData.pin || modalData.pin.length !== 4);
+            setError(tempError);
+            if (
+              Object.values(tempError).findIndex((item) => item === false) ===
+              -1
+            ) {
+              // set pin API
+              let obj = {
+                url: 'vendors/pin/reset',
+                method: 'post',
+                headers: {
+                  Authorization:
+                    'Bearer ' + STORE.getState().Login?.loginData?.token,
+                },
+                data: modalData,
+              };
+              APICall(obj)
+                .then((res) => {
+                  setLoading(false);
+                  if (res?.data?.status === 'success') {
+                    setPinModal(false);
+                  } else {
+                    CustomAlert(res?.data?.message);
+                  }
+                })
+                .catch((err) => {
+                  setLoading(false);
+                  CustomAlert(err?.message);
+                });
+            } else {
+              setLoading(false);
+            }
+          }}
+        />
+      </CustomModalAndroid>
     </LinearGradient>
   );
 };
@@ -527,5 +662,14 @@ const styles = StyleSheet.create({
     fontSize: wp(3.5),
     color: '#99A0A5',
     marginLeft: wp(4),
+  },
+  textInput: {
+    borderWidth: 2,
+    borderRadius: 10,
+    height: hp(6.5),
+    width: hp(6.5),
+    borderColor: Colors.silver,
+    color: Colors.textLabelColor,
+    fontSize: wp(6),
   },
 });

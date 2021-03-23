@@ -1,24 +1,56 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
-  Platform,
   Pressable,
   ScrollView,
   Text,
   View,
   StyleSheet,
-  Linking,
   FlatList,
+  Image,
 } from 'react-native';
-import {boxShadow, Colors, hp, wp} from '../../../constant/colors';
+import {Colors, hp, wp} from '../../../constant/colors';
 import {STYLES} from '../../../constant/commonStyle';
 import TwoButton from '../../../components/twoButton';
 import CustomModalAndroid from '../../../components/customModal';
 import CloseIcon from '../../../components/closeIcon';
 import AcceptOrder from './acceptOrder';
+import {useSelector} from 'react-redux';
+import {STORE} from '../../../redux';
+import {APICall} from '../../../redux/actions/user';
+import {CustomAlert, resetNavigator} from '../../../constant/commonFun';
 
 const Requirements = (props) => {
+  const {orderDetails} = props;
   const [rejectVisible, setRejectVisible] = useState(false);
   const [acceptVisible, setAcceptVisible] = useState(false);
+  const [isLoading, setLoading] = useState(false);
+  const configData =
+    useSelector((state) => state.Login?.configData?.enums?.service) || {};
+  let meta =
+    (orderDetails?.meta && JSON.parse(orderDetails?.meta?.toString())) || {};
+  const [priceList, setPriceList] = useState({});
+
+  useEffect(() => {
+    let obj = {
+      url: `vendors/bid/price-list?public_booking_id=${orderDetails?.public_booking_id}`,
+      method: 'get',
+      headers: {
+        Authorization: 'Bearer ' + STORE.getState().Login?.loginData?.token,
+      },
+    };
+    APICall(obj)
+      .then((res) => {
+        if (res?.data?.status === 'success') {
+          setPriceList(res?.data?.data?.price_list);
+        } else {
+          CustomAlert(res?.data?.message);
+        }
+      })
+      .catch((err) => {
+        CustomAlert(err?.message);
+      });
+  }, []);
+
   return (
     <View style={{flex: 1, backgroundColor: Colors.white}}>
       <ScrollView
@@ -34,7 +66,7 @@ const Requirements = (props) => {
             <View style={[STYLES.flexBox, {marginTop: 0}]}>
               <Text style={STYLES.leftText}>category</Text>
               <Text style={[STYLES.rightText, {marginBottom: hp(2)}]}>
-                1 BHK
+                {meta?.subcategory || 'null'}
               </Text>
             </View>
           </View>
@@ -53,25 +85,13 @@ const Requirements = (props) => {
               bounces={false}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{marginTop: hp(2)}}
-              data={[
-                {
-                  title: 'Tables',
-                  body: 'Medium, Arcrylic',
-                },
-                {
-                  title: 'TV',
-                  body: 'Small, Polycarbonate',
-                },
-                {
-                  title: 'Chair',
-                  body: 'Large, Wood',
-                },
-              ]}
+              data={orderDetails?.inventories || []}
+              extraData={orderDetails?.inventories}
               renderItem={({item, index}) => {
                 return (
                   <View style={styles.textWrapper} key={index}>
                     <View style={{width: '75%'}}>
-                      <Text style={styles.headerText}>{item.title}</Text>
+                      <Text style={styles.headerText}>{item.name}</Text>
                       <Text
                         style={[
                           styles.headerText,
@@ -79,12 +99,20 @@ const Requirements = (props) => {
                             fontFamily: 'Roboto-Regular',
                             marginTop: 5,
                             fontSize: wp(3.5),
+                            textTransform: 'capitalize',
                           },
                         ]}>
-                        {item.body}
+                        {item?.material}
                       </Text>
                     </View>
-                    <Text style={styles.rightText}>01</Text>
+                    <Text style={styles.rightText}>
+                      {configData?.inventory_quantity_type.range ===
+                      item?.quantity_type
+                        ? JSON.parse(item?.quantity?.toString()).min +
+                          '-' +
+                          JSON.parse(item?.quantity?.toString()).max
+                        : item?.quantity}
+                    </Text>
                   </View>
                 );
               }}
@@ -111,9 +139,9 @@ const Requirements = (props) => {
                 color: Colors.inputTextColor,
                 marginTop: hp(2),
               }}>
-              Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-              nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-              erat, sed diam voluptua.
+              {meta?.customer
+                ? JSON.parse(meta?.customer?.toString()).remarks
+                : 'No Any comments'}
             </Text>
           </View>
           <View style={STYLES.inputForm}>
@@ -134,7 +162,7 @@ const Requirements = (props) => {
               contentContainerStyle={{
                 paddingTop: hp(2),
               }}>
-              {[1, 2].map((item, index) => {
+              {meta?.images?.map((item, index) => {
                 return (
                   <Pressable
                     key={index}
@@ -145,8 +173,13 @@ const Requirements = (props) => {
                       borderRadius: wp(3),
                       backgroundColor: Colors.silver,
                       marginRight: wp(3),
-                    }}
-                  />
+                    }}>
+                    <Image
+                      source={{uri: item}}
+                      style={{height: '100%', width: '100%'}}
+                      resizeMode={'contain'}
+                    />
+                  </Pressable>
                 );
               })}
             </ScrollView>
@@ -177,13 +210,44 @@ const Requirements = (props) => {
           Are you sure you want to REJECT the order?
         </Text>
         <TwoButton
+          isLoading={isLoading}
           leftLabel={'NO'}
           rightLabel={'YES'}
           leftOnPress={() => setRejectVisible(false)}
-          rightOnPress={() => setRejectVisible(false)}
+          rightOnPress={() => {
+            setLoading(true);
+            let obj = {
+              url: 'vendors/bookings/reject',
+              method: 'post',
+              headers: {
+                Authorization:
+                  'Bearer ' + STORE.getState().Login?.loginData?.token,
+              },
+              data: {
+                public_booking_id: orderDetails?.public_booking_id,
+              },
+            };
+            APICall(obj)
+              .then((res) => {
+                setLoading(false);
+                if (res?.data?.status === 'success') {
+                  setRejectVisible(false);
+                  resetNavigator(props.navigation, 'Dashboard');
+                } else {
+                  CustomAlert(res?.data?.message);
+                }
+              })
+              .catch((err) => {
+                setLoading(false);
+                CustomAlert(err?.message);
+              });
+          }}
         />
       </CustomModalAndroid>
       <AcceptOrder
+        navigator={props}
+        public_booking_id={orderDetails?.public_booking_id}
+        priceList={priceList}
         visible={acceptVisible}
         onCloseIcon={() => setAcceptVisible(false)}
       />
@@ -201,7 +265,7 @@ const styles = StyleSheet.create({
   },
   rightText: {
     paddingVertical: 8,
-    paddingHorizontal: 25,
+    paddingHorizontal: 12,
     borderRadius: 5,
     backgroundColor: Colors.pageBG,
   },
