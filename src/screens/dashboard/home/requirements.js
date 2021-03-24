@@ -32,7 +32,7 @@ const Requirements = (props) => {
 
   useEffect(() => {
     let obj = {
-      url: `vendors/bid/price-list?public_booking_id=${orderDetails?.public_booking_id}`,
+      url: `bid/price-list?public_booking_id=${orderDetails?.public_booking_id}`,
       method: 'get',
       headers: {
         Authorization: 'Bearer ' + STORE.getState().Login?.loginData?.token,
@@ -219,7 +219,7 @@ const Requirements = (props) => {
           rightOnPress={() => {
             setLoading(true);
             let obj = {
-              url: 'vendors/bookings/reject',
+              url: 'bookings/reject',
               method: 'post',
               headers: {
                 Authorization:

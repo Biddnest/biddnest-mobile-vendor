@@ -149,7 +149,14 @@ const Home = (props) => {
         });
       getOrdersList();
     }
-  }, [isFocused, selectedTab]);
+  }, [isFocused]);
+
+  useEffect(() => {
+    if (isFocused && userData?.token) {
+      setLoading(true);
+      getOrdersList();
+    }
+  }, [selectedTab]);
   const getOrdersList = (pageNo = 1) => {
     dispatch(getOrders(configData[selectedTab], pageNo))
       .then((res) => {
@@ -606,7 +613,7 @@ const Home = (props) => {
             ) {
               // set pin API
               let obj = {
-                url: 'vendors/pin/reset',
+                url: 'pin/reset',
                 method: 'post',
                 headers: {
                   Authorization:

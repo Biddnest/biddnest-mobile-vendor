@@ -2,6 +2,7 @@ import instance from '../../constant/baseService';
 import {LOGIN_USER_DATA, CONFIG_DATA, ORDERS} from '../types';
 import {CustomAlert} from '../../constant/commonFun';
 import {STORE} from '../index';
+import axios from 'axios';
 
 export const APICall = (obj) => {
   return new Promise((resolve, reject) => {
@@ -23,11 +24,10 @@ export const APICall = (obj) => {
 export const initialConfig = () => {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
-      let obj = {
-        url: 'v1/configuration',
-        method: 'get',
-      };
-      APICall(obj)
+      axios
+        .get(
+          'https://dashboard-biddnest.dev.diginnovators.com/api/v1/configuration',
+        )
         .then((res) => {
           dispatch({
             type: CONFIG_DATA,
@@ -46,7 +46,7 @@ export const signIn = (data) => {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
       let obj = {
-        url: 'v1/vendor/auth/login',
+        url: 'auth/login',
         method: 'post',
         data: data,
       };
@@ -71,7 +71,7 @@ export const getOrders = (url, page) => {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
       let obj = {
-        url: `vendors/bookings/${url}?page=${page}`,
+        url: `bookings/${url}?page=${page}`,
         method: 'get',
         headers: {
           Authorization: 'Bearer ' + STORE.getState().Login?.loginData?.token,
@@ -105,7 +105,7 @@ export const getOrders = (url, page) => {
 export const checkPinStatus = (url) => {
   return new Promise((resolve, reject) => {
     let obj = {
-      url: 'vendors/pin/status',
+      url: 'pin/status',
       method: 'get',
       headers: {
         Authorization: 'Bearer ' + STORE.getState().Login?.loginData?.token,

@@ -59,7 +59,7 @@ const OrderDetails = (props) => {
 
   useEffect(() => {
     let obj = {
-      url: `vendors/bid/price-list?public_booking_id=${orderDetails?.public_booking_id}`,
+      url: `bid/price-list?public_booking_id=${orderDetails?.public_booking_id}`,
       method: 'get',
       headers: {
         Authorization: 'Bearer ' + STORE.getState().Login?.loginData?.token,
@@ -80,7 +80,7 @@ const OrderDetails = (props) => {
 
   const fetchOrderData = () => {
     let obj = {
-      url: `vendors/bookings/details?public_booking_id=${orderDetails?.public_booking_id}`,
+      url: `bookings/details?public_booking_id=${orderDetails?.public_booking_id}`,
       method: 'get',
       headers: {
         Authorization: 'Bearer ' + STORE.getState().Login?.loginData?.token,
@@ -168,7 +168,7 @@ const OrderDetails = (props) => {
         onheartPress={() => {
           // Add into bookmark API
           let obj = {
-            url: 'vendors/bookings/bookmark',
+            url: 'bookings/bookmark',
             method: 'post',
             headers: {
               Authorization:
@@ -448,7 +448,7 @@ const OrderDetails = (props) => {
           rightOnPress={() => {
             setLoading(true);
             let obj = {
-              url: 'vendors/bookings/reject',
+              url: 'bookings/reject',
               method: 'post',
               headers: {
                 Authorization:
