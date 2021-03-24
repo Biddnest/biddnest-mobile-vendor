@@ -67,11 +67,11 @@ export const signIn = (data) => {
   };
 };
 
-export const getOrders = (url) => {
+export const getOrders = (url, page) => {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
       let obj = {
-        url: `vendors/bookings/${url}?page=1`,
+        url: `vendors/bookings/${url}?page=${page}`,
         method: 'get',
         headers: {
           Authorization: 'Bearer ' + STORE.getState().Login?.loginData?.token,

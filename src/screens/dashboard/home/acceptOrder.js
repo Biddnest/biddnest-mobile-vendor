@@ -24,11 +24,14 @@ import moment from 'moment';
 import {STORE} from '../../../redux';
 import {APICall} from '../../../redux/actions/user';
 import {CustomAlert, resetNavigator} from '../../../constant/commonFun';
+import {useSelector} from 'react-redux';
 
 const AcceptOrder = (props) => {
-  const {priceList, public_booking_id} = props;
+  const {priceList, public_booking_id, orderDetails} = props;
   const [step, setStep] = useState(0);
   const [forgotPin, setForgotPin] = useState(false);
+  const configData =
+    useSelector((state) => state.Login?.configData?.enums?.service) || {};
   const [applyBidData, setApplyBidData] = useState({
     public_booking_id: public_booking_id,
     inventory: [],
@@ -40,10 +43,12 @@ const AcceptOrder = (props) => {
       min: 2,
       max: 4,
     },
+    pin: '',
   });
+  const [errorPin, setErrorPin] = useState(false);
   const [modalData, setModalData] = useState({
     password: '',
-    pin: '',
+    pin: 0,
   });
   const [error, setError] = useState({
     password: undefined,
@@ -133,7 +138,13 @@ const AcceptOrder = (props) => {
                           STYLES.modalHeaderText,
                           {textAlign: 'left', marginTop: 1},
                         ]}>
-                        Quantity: 2
+                        Quantity:{' '}
+                        {configData?.inventory_quantity_type.range ===
+                        orderDetails?.inventories[index]?.quantity_type
+                          ? orderDetails?.inventories[index]?.quantity?.min +
+                            '-' +
+                            orderDetails?.inventories[index]?.quantity?.max
+                          : orderDetails?.inventories[index]?.quantity}
                       </Text>
                       <Text
                         style={[
@@ -465,8 +476,16 @@ const AcceptOrder = (props) => {
                 }}>
                 <OTPInputView
                   pinCount={4}
-                  onCodeChanged={(code) => console.log(code)}
-                  codeInputFieldStyle={styles.textInput}
+                  onCodeChanged={(text) =>
+                    setApplyBidData({...applyBidData, pin: parseInt(text)})
+                  }
+                  codeInputFieldStyle={[
+                    styles.textInput,
+                    {
+                      borderColor:
+                        errorPin === true ? Colors.red : Colors.silver,
+                    },
+                  ]}
                   codeInputHighlightStyle={[
                     styles.textInput,
                     {borderColor: '#243C99'},
@@ -491,7 +510,6 @@ const AcceptOrder = (props) => {
           } else if (step === 1) {
             setStep(2);
           } else {
-            console.log(applyBidData);
             setLoading(true);
             if (forgotPin) {
               let tempError = {};
@@ -535,31 +553,37 @@ const AcceptOrder = (props) => {
               }
             } else {
               // Bid Submit API
-              let obj = {
-                url: 'vendors/bookings/submit',
-                method: 'post',
-                headers: {
-                  Authorization:
-                    'Bearer ' + STORE.getState().Login?.loginData?.token,
-                },
-                data: applyBidData,
-              };
-              APICall(obj)
-                .then((res) => {
-                  setLoading(false);
-                  if (res?.data?.status === 'success') {
-                    setStep(0);
-                    setForgotPin(false);
-                    resetNavigator(props.navigator, 'Dashboard');
-                    props.onCloseIcon();
-                  } else {
-                    CustomAlert(res?.data?.message);
-                  }
-                })
-                .catch((err) => {
-                  setLoading(false);
-                  CustomAlert(err?.message);
-                });
+              if (applyBidData?.pin === 0) {
+                setErrorPin(true);
+                setLoading(false);
+              } else {
+                setErrorPin(false);
+                let obj = {
+                  url: 'vendors/bookings/submit',
+                  method: 'post',
+                  headers: {
+                    Authorization:
+                      'Bearer ' + STORE.getState().Login?.loginData?.token,
+                  },
+                  data: applyBidData,
+                };
+                APICall(obj)
+                  .then((res) => {
+                    setLoading(false);
+                    if (res?.data?.status === 'success') {
+                      setStep(0);
+                      setForgotPin(false);
+                      resetNavigator(props.navigator, 'Dashboard');
+                      props.onCloseIcon();
+                    } else {
+                      CustomAlert(res?.data?.message);
+                    }
+                  })
+                  .catch((err) => {
+                    setLoading(false);
+                    CustomAlert(err?.message);
+                  });
+              }
             }
           }
         }}

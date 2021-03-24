@@ -23,15 +23,8 @@ import MenuIcon from '../../../assets/svg/menu_icon.svg';
 import TwoButton from '../../../components/twoButton';
 import {useDispatch, useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
-import {
-  CustomAlert,
-  DiffMin,
-} from '../../../constant/commonFun';
-import {
-  APICall,
-  checkPinStatus,
-  getOrders,
-} from '../../../redux/actions/user';
+import {CustomAlert, DiffMin} from '../../../constant/commonFun';
+import {APICall, checkPinStatus, getOrders} from '../../../redux/actions/user';
 import {getDistance} from 'geolib';
 import moment from 'moment';
 import TextInput from '../../../components/textInput';
@@ -154,21 +147,24 @@ const Home = (props) => {
           setLoading(false);
           CustomAlert(err?.data?.message);
         });
-      dispatch(getOrders(configData[selectedTab]))
-        .then((res) => {
-          setLoading(false);
-          if (res.status === 'success' && res?.data) {
-            setOrder(res?.data);
-          } else {
-            CustomAlert(res.message);
-          }
-        })
-        .catch((err) => {
-          setLoading(false);
-          CustomAlert(err?.data?.message);
-        });
+      getOrdersList();
     }
   }, [isFocused, selectedTab]);
+  const getOrdersList = (pageNo = 1) => {
+    dispatch(getOrders(configData[selectedTab], pageNo))
+      .then((res) => {
+        setLoading(false);
+        if (res.status === 'success' && res?.data) {
+          setOrder(res?.data);
+        } else {
+          CustomAlert(res.message);
+        }
+      })
+      .catch((err) => {
+        setLoading(false);
+        CustomAlert(err?.data?.message);
+      });
+  };
   const renderItem = ({item, index}) => {
     let source_meta = JSON.parse(item?.source_meta?.toString()) || {};
     let destination_meta = JSON.parse(item?.destination_meta?.toString()) || {};
@@ -185,11 +181,11 @@ const Home = (props) => {
         ]}
         key={index}
         onPress={() => {
-          if (selectedTab !== 2) {
+          if (selectedTab !== 2 || item?.bid?.status !== 5) {
             props.navigation.navigate('OrderDetails', {orderData: item});
           }
         }}>
-        {selectedTab === 2 && (
+        {selectedTab === 2 && item?.bid?.status === 5 && (
           <Image
             source={require('../../../assets/images/expired.png')}
             style={{
@@ -404,6 +400,8 @@ const Home = (props) => {
             data={order?.bookings || []}
             extraData={order?.bookings}
             renderItem={renderItem}
+            onEndReachedThreshold={0.5}
+            onEndReached={() => getOrdersList(order?.paging?.next_page || 1)}
             ListEmptyComponent={() => (
               <Text
                 style={{

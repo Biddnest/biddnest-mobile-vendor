@@ -3,8 +3,11 @@ import {Text, View, StyleSheet, Image} from 'react-native';
 import {Colors, hp, wp} from '../../../constant/colors';
 import {STYLES} from '../../../constant/commonStyle';
 import TimerClock from '../../../assets/svg/timer_clock.svg';
+import CountDown from '../../../components/countDown';
+import {DiffMin} from '../../../constant/commonFun';
 
 const OrderStatusPending = (props) => {
+  const {orderDetails} = props;
   return (
     <View>
       <View
@@ -44,7 +47,23 @@ const OrderStatusPending = (props) => {
             textAlign: 'center',
             alignSelf: 'center',
           }}>
-          11:00
+          {orderDetails?.meta && (
+            <CountDown
+              until={DiffMin(
+                new Date(
+                  JSON.parse(orderDetails.meta?.toString()).timings?.bid_result,
+                ),
+              )}
+              onFinish={() => {}}
+              size={18}
+              digitStyle={{height: '100%'}}
+              digitTxtStyle={[STYLES.participatedText, {fontSize: wp(3.5)}]}
+              separatorStyle={{color: '#000'}}
+              timeToShow={['H', 'M', 'S']}
+              timeLabels={{h: null, m: null, s: null}}
+              showSeparator
+            />
+          )}
         </Text>
         <Text style={[STYLES.inputTextLabel, {textAlign: 'center'}]}>
           Time at which the Bid ends
@@ -55,5 +74,3 @@ const OrderStatusPending = (props) => {
 };
 
 export default OrderStatusPending;
-
-const styles = StyleSheet.create({});

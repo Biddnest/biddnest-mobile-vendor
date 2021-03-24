@@ -184,12 +184,14 @@ const Requirements = (props) => {
               })}
             </ScrollView>
           </View>
-          <TwoButton
-            leftLabel={'REJECT'}
-            rightLabel={'ACCEPT'}
-            leftOnPress={() => setRejectVisible(true)}
-            rightOnPress={() => setAcceptVisible(true)}
-          />
+          {orderDetails?.bid?.status === 0 && (
+            <TwoButton
+              leftLabel={'REJECT'}
+              rightLabel={'ACCEPT'}
+              leftOnPress={() => setRejectVisible(true)}
+              rightOnPress={() => setAcceptVisible(true)}
+            />
+          )}
         </View>
       </ScrollView>
       <CustomModalAndroid
@@ -248,6 +250,7 @@ const Requirements = (props) => {
         navigator={props}
         public_booking_id={orderDetails?.public_booking_id}
         priceList={priceList}
+        orderDetails={orderDetails}
         visible={acceptVisible}
         onCloseIcon={() => setAcceptVisible(false)}
       />

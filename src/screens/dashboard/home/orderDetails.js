@@ -54,27 +54,7 @@ const OrderDetails = (props) => {
   const [priceList, setPriceList] = useState({});
 
   useEffect(() => {
-    let obj = {
-      url: `vendors/bookings/details?public_booking_id=${orderDetails?.public_booking_id}`,
-      method: 'get',
-      headers: {
-        Authorization: 'Bearer ' + STORE.getState().Login?.loginData?.token,
-      },
-    };
-    APICall(obj)
-      .then((res) => {
-        if (res?.data?.status === 'success') {
-          setOrderDetails(res?.data?.data?.booking);
-          if (res?.data?.data?.booking?.bid !== null) {
-            setTab(['Order Details', 'Requirements', 'Order Status']);
-          }
-        } else {
-          CustomAlert(res?.data?.message);
-        }
-      })
-      .catch((err) => {
-        CustomAlert(err?.message);
-      });
+    fetchOrderData();
   }, []);
 
   useEffect(() => {
@@ -97,6 +77,33 @@ const OrderDetails = (props) => {
         CustomAlert(err?.message);
       });
   }, []);
+
+  const fetchOrderData = () => {
+    let obj = {
+      url: `vendors/bookings/details?public_booking_id=${orderDetails?.public_booking_id}`,
+      method: 'get',
+      headers: {
+        Authorization: 'Bearer ' + STORE.getState().Login?.loginData?.token,
+      },
+    };
+    APICall(obj)
+      .then((res) => {
+        if (res?.data?.status === 'success') {
+          setOrderDetails(res?.data?.data?.booking);
+          if (
+            res?.data?.data?.booking?.bid?.status !== 0 &&
+            res?.data?.data?.booking?.bid?.status !== 5
+          ) {
+            setTab(['Order Details', 'Requirements', 'Bid Status']);
+          }
+        } else {
+          CustomAlert(res?.data?.message);
+        }
+      })
+      .catch((err) => {
+        CustomAlert(err?.message);
+      });
+  };
 
   const renderText = (key, value) => {
     return (
@@ -140,10 +147,21 @@ const OrderDetails = (props) => {
           latitude: parseFloat(orderDetails?.destination_lat),
           longitude: parseFloat(orderDetails?.destination_lng),
         };
-    return (
+  const renderOrderStatus = () => {
+    if (orderDetails?.bid?.status === 1) {
+      return <OrderStatusPending orderDetails={orderDetails} />;
+    } else if (orderDetails?.bid?.status === 3) {
+      return <OrderStatusWin orderDetails={orderDetails} />;
+    } else if (orderDetails?.bid?.status === 4) {
+      return <OrderStatusLost orderDetails={orderDetails} />;
+    } else {
+      return null;
+    }
+  };
+  return (
     <View style={{flex: 1, backgroundColor: Colors.white}}>
       <SimpleHeader
-        heart={!!orderDetails?.bookmarked}
+        heart={!!orderDetails?.bid?.bookmarked}
         headerText={'Order Details'}
         right={true}
         onRightPress={() => {}}
@@ -162,14 +180,13 @@ const OrderDetails = (props) => {
           };
           APICall(obj)
             .then((res) => {
-              setLoading(false);
               if (res?.data?.status === 'success') {
+                fetchOrderData();
               } else {
                 CustomAlert(res?.data?.message);
               }
             })
             .catch((err) => {
-              setLoading(false);
               CustomAlert(err?.message);
             });
         }}
@@ -203,6 +220,7 @@ const OrderDetails = (props) => {
                         ).timings?.bid_result,
                       ),
                     )}
+                    onFinish={() => fetchOrderData()}
                     size={18}
                     digitStyle={{height: '100%'}}
                     digitTxtStyle={STYLES.participatedText}
@@ -304,7 +322,7 @@ const OrderDetails = (props) => {
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                 }}>
-                <View>
+                <View style={{maxWidth: '80%'}}>
                   {renderText('Pickup Address', source_meta?.address)}
                 </View>
                 <Pressable
@@ -350,7 +368,7 @@ const OrderDetails = (props) => {
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                 }}>
-                <View>
+                <View style={{maxWidth: '80%'}}>
                   {renderText('Drop Address', destination_meta?.address)}
                 </View>
                 <Pressable
@@ -386,12 +404,14 @@ const OrderDetails = (props) => {
                   )}
                 </View>
               </View>
-              <TwoButton
-                leftLabel={'REJECT'}
-                rightLabel={'ACCEPT'}
-                leftOnPress={() => setRejectVisible(true)}
-                rightOnPress={() => setAcceptVisible(true)}
-              />
+              {orderDetails?.bid?.status === 0 && (
+                <TwoButton
+                  leftLabel={'REJECT'}
+                  rightLabel={'ACCEPT'}
+                  leftOnPress={() => setRejectVisible(true)}
+                  rightOnPress={() => setAcceptVisible(true)}
+                />
+              )}
             </View>
           )}
           {selectedTab === 1 && (
@@ -400,11 +420,7 @@ const OrderDetails = (props) => {
               orderDetails={orderDetails}
             />
           )}
-          {selectedTab === 2 && (
-            // <OrderStatusWin />
-            // <OrderStatusPending />
-            <OrderStatusLost />
-          )}
+          {selectedTab === 2 && renderOrderStatus()}
         </View>
       </ScrollView>
       <CustomModalAndroid
@@ -446,6 +462,7 @@ const OrderDetails = (props) => {
               .then((res) => {
                 setLoading(false);
                 if (res?.data?.status === 'success') {
+                  fetchOrderData();
                   setRejectVisible(false);
                   resetNavigator(props.navigation, 'Dashboard');
                 } else {
@@ -463,6 +480,7 @@ const OrderDetails = (props) => {
         navigator={props}
         public_booking_id={orderDetails?.public_booking_id}
         priceList={priceList}
+        orderDetails={orderDetails}
         visible={acceptVisible}
         onCloseIcon={() => setAcceptVisible(false)}
       />
