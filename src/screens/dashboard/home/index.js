@@ -25,7 +25,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
 import {CustomAlert, DiffMin} from '../../../constant/commonFun';
 import {APICall, checkPinStatus, getOrders} from '../../../redux/actions/user';
-import {getDistance} from 'geolib';
 import moment from 'moment';
 import TextInput from '../../../components/textInput';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
@@ -57,11 +56,11 @@ export const HomeHeader = (props) => {
         {(props.title && (
           <Text
             style={{
-              fontFamily: 'Gilroy-Semibold',
+              fontFamily: 'Gilroy-Bold',
               color: Colors.inputTextColor,
-              fontSize: wp(4.5),
+              fontSize: wp(5),
               marginRight: props.right ? wp(0) : wp(13),
-              textTransform: 'uppercase',
+              textTransform: 'capitalize',
             }}>
             {props.title}
           </Text>
@@ -112,6 +111,8 @@ const Home = (props) => {
     useSelector(
       (state) => state.Login?.configData?.enums?.booking?.fetch_type,
     ) || [];
+  const statusData =
+    useSelector((state) => state.Login?.configData?.enums?.booking) || {};
   const userData = useSelector((state) => state.Login?.loginData) || {};
   const [selectedTab, setSelectedTab] = useState(0);
   const [filterVisible, setFilterVisible] = useState(false);
@@ -131,20 +132,20 @@ const Home = (props) => {
 
   useEffect(() => {
     if (isFocused && userData?.token) {
-      setLoading(true);
+      // setLoading(true);
       checkPinStatus()
         .then((res) => {
-          setLoading(false);
-          if (res.status === 'success' && res?.data) {
+          // setLoading(false);
+          if (res?.status === 'success' && res?.data) {
             if (!res?.data?.pin?.set) {
               setPinModal(true);
             }
           } else {
-            CustomAlert(res.message);
+            CustomAlert(res?.message);
           }
         })
         .catch((err) => {
-          setLoading(false);
+          // setLoading(false);
           CustomAlert(err?.data?.message);
         });
       getOrdersList();
@@ -161,10 +162,10 @@ const Home = (props) => {
     dispatch(getOrders(configData[selectedTab], pageNo))
       .then((res) => {
         setLoading(false);
-        if (res.status === 'success' && res?.data) {
+        if (res?.status === 'success' && res?.data) {
           setOrder(res?.data);
         } else {
-          CustomAlert(res.message);
+          CustomAlert(res?.message);
         }
       })
       .catch((err) => {
@@ -177,6 +178,10 @@ const Home = (props) => {
     let destination_meta = JSON.parse(item?.destination_meta?.toString()) || {};
     let dateArray = [];
     let meta = JSON.parse(item?.meta?.toString()) || {};
+    let ind = Object.values(statusData?.status).findIndex(
+      (ele) => ele === item?.status,
+    );
+    let status = Object.keys(statusData?.status)[ind]?.replace('_', ' ');
     item?.movement_dates?.forEach((i) => {
       dateArray.push(moment(i.date).format('D MMM'));
     });
@@ -212,7 +217,7 @@ const Home = (props) => {
           }}>
           <Text style={STYLES.leftText}>ORDER ID</Text>
           <Text style={[STYLES.rightText, {width: '70%'}]}>
-            #{item?.public_booking_id}
+            {item?.public_booking_id}
           </Text>
         </View>
         <View
@@ -234,16 +239,16 @@ const Home = (props) => {
                   </Text>
                 </View>
                 <View style={STYLES.priceView}>
-                  <CountDown
-                    until={DiffMin(new Date(item?.bid_result_at))}
-                    size={18}
-                    digitStyle={{height: '100%'}}
-                    digitTxtStyle={STYLES.participatedText}
-                    separatorStyle={{color: '#000'}}
-                    timeToShow={['H', 'M', 'S']}
-                    timeLabels={{h: null, m: null, s: null}}
-                    showSeparator
-                  />
+                  {/*<CountDown*/}
+                  {/*  until={DiffMin(new Date(item?.bid_result_at)) * 60}*/}
+                  {/*  size={18}*/}
+                  {/*  digitStyle={{height: '100%'}}*/}
+                  {/*  digitTxtStyle={STYLES.participatedText}*/}
+                  {/*  separatorStyle={{color: '#000'}}*/}
+                  {/*  timeToShow={['H', 'M', 'S']}*/}
+                  {/*  timeLabels={{h: null, m: null, s: null}}*/}
+                  {/*  showSeparator*/}
+                  {/*/>*/}
                 </View>
               </View>
               <View style={STYLES.flexBoxOrders}>
@@ -272,16 +277,23 @@ const Home = (props) => {
               flex: 1,
               alignItems: 'center',
             }}>
-            <View>
+            <View style={{maxWidth: '50%'}}>
               <Text
                 style={{
                   ...STYLES.locationText,
                   marginTop: 0,
-                  textTransform: 'uppercase',
-                }}>
+                  textTransform: 'capitalize',
+                  fontFamily: 'Gilroy-Bold',
+                }}
+                numberOfLines={1}>
                 {source_meta?.city}
               </Text>
-              <Text style={[STYLES.locationText, {textTransform: 'uppercase'}]}>
+              <Text
+                style={[
+                  STYLES.locationText,
+                  {textTransform: 'capitalize', fontFamily: 'Gilroy-Bold'},
+                ]}
+                numberOfLines={1}>
                 {destination_meta?.city}
               </Text>
             </View>
@@ -295,17 +307,8 @@ const Home = (props) => {
                   alignItems: 'center',
                   marginTop: hp(1),
                 }}>
-                <Text style={STYLES.rightText}>
-                  {parseInt(
-                    getDistance(
-                      {latitude: item?.source_lat, longitude: item?.source_lng},
-                      {
-                        latitude: item?.destination_lat,
-                        longitude: item?.destination_lng,
-                      },
-                    ) / 1000,
-                  )}{' '}
-                  KM
+                <Text style={STYLES.rightText} numberOfLines={1}>
+                  {JSON.parse(item?.meta?.toString()).distance} KM
                 </Text>
               </View>
             </View>
@@ -316,23 +319,31 @@ const Home = (props) => {
           <View>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>bid price</Text>
-              <Text style={STYLES.rightText}>Rs. 5000</Text>
+              <Text style={STYLES.rightText}>Rs. {item?.final_quote}</Text>
             </View>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>Moving Date</Text>
-              <Text style={STYLES.rightText}>{dateArray.join(', ')}</Text>
+              <Text style={STYLES.rightText}>
+                {moment(JSON.parse(item?.bid?.meta)?.moving_date).format(
+                  'D MMM yyyy',
+                )}
+              </Text>
             </View>
-            <View style={STYLES.flexBox}>
-              <Text style={STYLES.leftText}>category</Text>
-              <Text style={STYLES.rightText}>1 BHK</Text>
-            </View>
+            {meta?.subcategory && (
+              <View style={STYLES.flexBox}>
+                <Text style={STYLES.leftText}>category</Text>
+                <Text style={STYLES.rightText}>{meta?.subcategory}</Text>
+              </View>
+            )}
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>bid submitted by</Text>
               <Text style={STYLES.rightText}>Mayank Shah</Text>
             </View>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>status</Text>
-              <Text style={STYLES.rightText}>Driver Unassigned</Text>
+              <Text style={[STYLES.rightText, {textTransform: 'capitalize'}]}>
+                {status}
+              </Text>
             </View>
           </View>
         )}
@@ -340,14 +351,16 @@ const Home = (props) => {
           <View>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>Moving Date</Text>
-              <Text style={STYLES.rightText}>{dateArray.join(', ')}</Text>
+              <Text style={STYLES.rightText}>{dateArray.join('\n')}</Text>
             </View>
-            <View style={STYLES.flexBox}>
-              <Text style={STYLES.leftText}>category</Text>
-              <Text style={STYLES.rightText}>
-                {meta?.subcategory || 'null'}
-              </Text>
-            </View>
+            {meta?.subcategory && (
+              <View style={STYLES.flexBox}>
+                <Text style={STYLES.leftText}>category</Text>
+                <Text style={STYLES.rightText}>
+                  {meta?.subcategory || 'null'}
+                </Text>
+              </View>
+            )}
           </View>
         )}
       </Pressable>
@@ -431,17 +444,8 @@ const Home = (props) => {
       <CustomModalAndroid
         visible={filterVisible}
         onPress={() => setFilterVisible(false)}>
-        <View style={STYLES.modalHeaderView}>
-          <Text style={STYLES.modalHeaderText}>FILTERS</Text>
-          <CloseIcon
-            style={{
-              position: 'absolute',
-              right: 10,
-            }}
-            onPress={() => setFilterVisible(false)}
-          />
-        </View>
-        <View style={{...STYLES.separatorView, width: '85%'}} />
+        <Text style={STYLES.modalHeaderText}>FILTERS</Text>
+        <CloseIcon onPress={() => setFilterVisible(false)} />
         <View style={{marginTop: hp(2)}}>
           <Text style={STYLES.inputTextLabel}>Date</Text>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>

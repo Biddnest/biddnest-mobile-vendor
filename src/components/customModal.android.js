@@ -5,7 +5,7 @@ import {wp, hp} from '../constant/colors';
 const CustomModalAndroid = (props) => {
   return (
     <Modal
-      animationType="slide"
+      animationType="fade"
       transparent={true}
       visible={props.visible}
       onRequestClose={() => {
@@ -19,7 +19,10 @@ const CustomModalAndroid = (props) => {
             bounces={false}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{alignItems: 'center'}}
-            style={[styles.modalView, {maxHeight: props.maxHeight ? props.maxHeight : hp(80)}]}>
+            style={[
+              styles.modalView,
+              {maxHeight: props.maxHeight ? props.maxHeight : hp(80)},
+            ]}>
             {props.children}
           </ScrollView>
         </View>

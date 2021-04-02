@@ -138,12 +138,23 @@ const AcceptOrder = (props) => {
                           STYLES.modalHeaderText,
                           {textAlign: 'left', marginTop: 1},
                         ]}>
-                        Quantity:{' '}
+                        {console.log(
+                          orderDetails?.inventories[index]?.quantity,
+                        )}
+                        Quantity: x
                         {configData?.inventory_quantity_type.range ===
                         orderDetails?.inventories[index]?.quantity_type
-                          ? orderDetails?.inventories[index]?.quantity?.min +
+                          ? JSON.parse(
+                              orderDetails?.inventories[
+                                index
+                              ]?.quantity?.toString(),
+                            )?.min +
                             '-' +
-                            orderDetails?.inventories[index]?.quantity?.max
+                            JSON.parse(
+                              orderDetails?.inventories[
+                                index
+                              ]?.quantity?.toString(),
+                            )?.max
                           : orderDetails?.inventories[index]?.quantity}
                       </Text>
                       <Text
@@ -214,31 +225,25 @@ const AcceptOrder = (props) => {
   };
   return (
     <CustomModalAndroid visible={props.visible} maxHeight={hp(90)}>
-      <View style={STYLES.modalHeaderView}>
-        {step === 1 && (
-          <Pressable
-            onPress={() => setStep(0)}
-            style={{
-              position: 'absolute',
-              left: 10,
-            }}>
-            <Ionicons name="arrow-back-sharp" size={25} color={'#C9CDCF'} />
-          </Pressable>
-        )}
-        <Text style={STYLES.modalHeaderText}>APPLY FOR BID</Text>
-        <CloseIcon
+      {step === 1 && (
+        <Pressable
+          onPress={() => setStep(0)}
           style={{
             position: 'absolute',
-            right: 10,
-          }}
-          onPress={() => {
-            setStep(0);
-            setForgotPin(false);
-            props.onCloseIcon();
-          }}
-        />
-      </View>
-      <View style={{...STYLES.separatorView, width: '85%'}} />
+            left: 15,
+            top: 15,
+          }}>
+          <Ionicons name="arrow-back-sharp" size={25} color={'#C9CDCF'} />
+        </Pressable>
+      )}
+      <Text style={STYLES.modalHeaderText}>APPLY FOR BID</Text>
+      <CloseIcon
+        onPress={() => {
+          setStep(0);
+          setForgotPin(false);
+          props.onCloseIcon();
+        }}
+      />
       {step === 0 ? (
         renderStep0()
       ) : step === 1 ? (

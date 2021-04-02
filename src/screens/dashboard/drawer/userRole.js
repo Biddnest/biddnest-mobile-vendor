@@ -230,18 +230,13 @@ const UserRole = (props) => {
       <CustomModalAndroid
         visible={filterVisible}
         onPress={() => setFilterVisible(false)}>
-        <View style={STYLES.modalHeaderView}>
-          <Text style={STYLES.modalHeaderText}>FILTERS</Text>
-          <CloseIcon
-            style={{
-              position: 'absolute',
-              right: 10,
-            }}
-            onPress={() => setFilterVisible(false)}
-          />
-        </View>
-        <View style={{...STYLES.separatorView, width: '85%'}} />
-        <View style={[{marginVertical: hp(2)}, Platform.OS !== 'android' && {zIndex: 5001},]}>
+        <Text style={STYLES.modalHeaderText}>FILTERS</Text>
+        <CloseIcon onPress={() => setFilterVisible(false)} />
+        <View
+          style={[
+            {marginVertical: hp(2)},
+            Platform.OS !== 'android' && {zIndex: 5001},
+          ]}>
           <DropDownAndroid
             label={'Branch'}
             width={wp(90)}
@@ -249,7 +244,11 @@ const UserRole = (props) => {
             onChangeItem={(text) => {}}
           />
         </View>
-        <View style={[{marginBottom: hp(2)}, Platform.OS !== 'android' && {zIndex: 5001},]}>
+        <View
+          style={[
+            {marginBottom: hp(2)},
+            Platform.OS !== 'android' && {zIndex: 5001},
+          ]}>
           <DropDownAndroid
             label={'Status'}
             width={wp(90)}

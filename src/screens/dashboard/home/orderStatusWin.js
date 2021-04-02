@@ -11,9 +11,43 @@ import DropDownAndroid from '../../../components/dropDown';
 import TextInput from '../../../components/textInput';
 import FlatButton from '../../../components/flatButton';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
+import {STORE} from '../../../redux';
+import {APICall} from '../../../redux/actions/user';
+import {CustomAlert} from '../../../constant/commonFun';
+import {useSelector} from 'react-redux';
+import moment from 'moment';
 
 const OrderStatusWin = (props) => {
+  const {orderDetails, fetchOrderData} = props;
+  const driverVehicleList =
+    useSelector((state) => state.Login?.driverVehicleList) || {};
   const [driverAssignVisible, setDriverAssignVisible] = useState(false);
+  const [pinModalVisible, setPinModalVisible] = useState(false);
+  const [pin, setPin] = useState('');
+  const [pinError, setPinError] = useState(false);
+  const [isLoading, setLoading] = useState(false);
+  const [driverAssignData, setDriverAssignData] = useState({
+    driver_id: null,
+    vehicle_id: null,
+  });
+  console.log(orderDetails);
+  let driverList = [];
+  let vehicleList = [];
+  driverVehicleList?.drivers?.forEach((item, index) => {
+    driverList.push({
+      ...item,
+      label: item?.fname,
+      value: item?.id,
+    });
+  });
+  driverVehicleList?.vehicles?.forEach((item, index) => {
+    vehicleList.push({
+      ...item,
+      label: item?.name,
+      value: item?.id,
+    });
+  });
+
   const stepHeader = (title) => {
     return (
       <View style={{flexDirection: 'row'}}>
@@ -52,18 +86,28 @@ const OrderStatusWin = (props) => {
           <Text style={STYLES.circleBottomText}>Direction</Text>
         </View>
       </View>
-      <View style={STYLES.separatorView} />
-      <View style={{alignItems: 'center'}}>
-        <Button label={'Start Trip'} width={wp(90)} />
-      </View>
-      <View style={styles.flexBoxWrapper}>
-        <EvilIcons
-          name={'exclamation'}
-          size={20}
-          color={Colors.inputTextColor}
-        />
-        <Text style={styles.warningText}>Assign driver to this order</Text>
-      </View>
+      <View style={[STYLES.separatorView, {marginBottom: wp(5)}]} />
+      {((orderDetails?.status === 6 || orderDetails?.status === 7) && (
+        <View style={{alignItems: 'center'}}>
+          <Button
+            spaceTop={hp(0.1)}
+            label={orderDetails?.status === 6 ? 'Start Trip' : 'End Trip'}
+            width={wp(90)}
+            onPress={() => setPinModalVisible(true)}
+          />
+        </View>
+      )) ||
+        null}
+      {orderDetails?.driver === null && (
+        <View style={styles.flexBoxWrapper}>
+          <EvilIcons
+            name={'exclamation'}
+            size={20}
+            color={Colors.inputTextColor}
+          />
+          <Text style={styles.warningText}>Assign driver to this order</Text>
+        </View>
+      )}
       <View style={[STYLES.inputForm, {borderRadius: hp(1), marginTop: 0}]}>
         <Text style={STYLES.inputTextLabel}>Customer Details</Text>
         <View
@@ -104,85 +148,117 @@ const OrderStatusWin = (props) => {
         <View style={{flexDirection: 'row'}}>
           <View style={styles.dotView} />
           <Text style={styles.stepHeaderText}>{'Assign Driver'}</Text>
-          <Text
-            style={styles.driverView}
-            onPress={() => setDriverAssignVisible(true)}>
-            ASSIGN DRIVER
+          {orderDetails?.driver === null && (
+            <Text
+              style={styles.driverView}
+              onPress={() => setDriverAssignVisible(true)}>
+              ASSIGN DRIVER
+            </Text>
+          )}
+        </View>
+        <View
+          style={{
+            ...styles.stepBodyView,
+          }}>
+          <Text style={styles.subHeaderText}>
+            {orderDetails?.status < 5 ? 'Pending' : 'Completed'}
           </Text>
         </View>
-        <View
-          style={{
-            ...styles.stepBodyView,
-          }}>
-          <Text style={styles.subHeaderText}>Pending</Text>
-        </View>
-        {stepHeader('In Transit')}
-        <View
-          style={{
-            ...styles.stepBodyView,
-          }}>
-          <Text style={styles.subHeaderText}>Pending</Text>
-        </View>
-        {stepHeader('Completed')}
+        {stepHeader(orderDetails?.status === 8 ? 'Completed' : 'In Transit')}
         <View
           style={{
             ...styles.stepBodyView,
             borderLeftWidth: 0,
+            paddingBottom: 0,
           }}>
-          <Text style={styles.subHeaderText}>Pending</Text>
+          <Text style={styles.subHeaderText}>
+            {orderDetails?.status < 7
+              ? 'Pending'
+              : orderDetails?.status === 7
+              ? 'On Going'
+              : 'Completed at ' +
+                moment(
+                  orderDetails?.status_history?.find((item) => item.status == 8)
+                    ?.created_at,
+                ).format('MMMM Do YYYY, h:mm A')}
+          </Text>
         </View>
       </View>
       <CustomModalAndroid
         visible={driverAssignVisible}
         onPress={() => setDriverAssignVisible(false)}>
-        <View style={STYLES.modalHeaderView}>
-          <Text style={STYLES.modalHeaderText}>ASSIGN DRIVER</Text>
-          <CloseIcon
-            style={{
-              position: 'absolute',
-              right: 10,
-            }}
-            onPress={() => setDriverAssignVisible(false)}
-          />
-        </View>
-        <View style={{...STYLES.separatorView, width: '85%'}} />
+        <Text style={STYLES.modalHeaderText}>ASSIGN DRIVER</Text>
+        <CloseIcon onPress={() => setDriverAssignVisible(false)} />
         <View style={{marginVertical: hp(2)}}>
           <DropDownAndroid
-            label={'Service Type'}
+            value={driverAssignData?.driver_id}
+            label={'Driver'}
             width={wp(90)}
-            items={[
-              {label: 'Male', value: 'male'},
-              {label: 'Female', value: 'female'},
-            ]}
-            onChangeItem={(text) => {}}
+            items={driverList}
+            onChangeItem={(text) =>
+              setDriverAssignData({...driverAssignData, driver_id: text})
+            }
           />
         </View>
-        <View style={{width: wp(90)}}>
-          <TextInput
-            label={'Vehicle Registration Number'}
-            placeHolder={'XXXXXXX'}
-            onChange={(text) => {}}
+        <View style={{marginVertical: hp(2)}}>
+          <DropDownAndroid
+            value={driverAssignData?.vehicle_id}
+            label={'Vehicle'}
+            width={wp(90)}
+            items={vehicleList}
+            onChangeItem={(text) =>
+              setDriverAssignData({...driverAssignData, vehicle_id: text})
+            }
           />
         </View>
         <FlatButton
           label={'assign'}
-          onPress={() => setDriverAssignVisible(false)}
+          onPress={() => {
+            if (
+              driverAssignData?.driver_id === null ||
+              driverAssignData?.vehicle_id === null
+            ) {
+              CustomAlert('Please fill all the fields');
+            } else {
+              // Call Driver assign API
+              setLoading(true);
+              let obj = {
+                url: 'bookings/driver',
+                method: 'post',
+                headers: {
+                  Authorization:
+                    'Bearer ' + STORE.getState().Login?.loginData?.token,
+                },
+                data: {
+                  public_booking_id: orderDetails?.public_booking_id,
+                  driver_id: '5',
+                  vehicle_id: '1',
+                },
+              };
+              APICall(obj)
+                .then((res) => {
+                  setLoading(false);
+                  if (res?.data?.status === 'success') {
+                    CustomAlert('Driver Assigned successfully');
+                    setDriverAssignVisible(false);
+                    fetchOrderData();
+                  } else {
+                    CustomAlert(res?.data?.message);
+                  }
+                })
+                .catch((err) => {
+                  setLoading(false);
+                  CustomAlert(err?.message);
+                });
+            }
+          }}
         />
       </CustomModalAndroid>
       <CustomModalAndroid
-        visible={false}
-        onPress={() => setDriverAssignVisible(false)}>
-        <View style={STYLES.modalHeaderView}>
-          <Text style={STYLES.modalHeaderText}>PIN VERIFICATION</Text>
-          <CloseIcon
-            style={{
-              position: 'absolute',
-              right: 10,
-            }}
-            onPress={() => setDriverAssignVisible(false)}
-          />
-        </View>
-        <View style={{...STYLES.separatorView, width: '85%'}} />
+        visible={pinModalVisible}
+        onPress={() => setPinModalVisible(false)}>
+        <Text style={STYLES.modalHeaderText}>PIN VERIFICATION</Text>
+        <CloseIcon onPress={() => setPinModalVisible(false)} />
         <View
           style={{
             width: '85%',
@@ -199,8 +275,14 @@ const OrderStatusWin = (props) => {
             }}>
             <OTPInputView
               pinCount={4}
-              onCodeChanged={(code) => console.log(code)}
-              codeInputFieldStyle={styles.textInput}
+              code={pin?.toString()}
+              onCodeChanged={(code) => setPin(code)}
+              codeInputFieldStyle={[
+                styles.textInput,
+                {
+                  borderColor: pinError ? Colors.red : Colors.silver,
+                },
+              ]}
               codeInputHighlightStyle={[
                 styles.textInput,
                 {borderColor: '#243C99'},
@@ -208,7 +290,54 @@ const OrderStatusWin = (props) => {
             />
           </View>
         </View>
-        <FlatButton label={'submit'} onPress={() => {}} />
+        <FlatButton
+          isLoading={isLoading}
+          label={'submit'}
+          onPress={() => {
+            if (pin.length !== 4) {
+              setPinError(true);
+            } else {
+              setPinError(false);
+              setLoading(true);
+              let obj = {
+                url:
+                  orderDetails?.status === 6
+                    ? 'bookings/trip/start'
+                    : 'bookings/trip/end',
+                method: 'post',
+                headers: {
+                  Authorization:
+                    'Bearer ' + STORE.getState().Login?.loginData?.token,
+                },
+                data: {
+                  public_booking_id: orderDetails?.public_booking_id,
+                  pin: pin,
+                },
+              };
+              APICall(obj)
+                .then((res) => {
+                  setLoading(false);
+                  if (res?.data?.status === 'success') {
+                    CustomAlert(
+                      orderDetails?.status === 6
+                        ? 'Start trip successfully'
+                        : 'End trip successfully',
+                    );
+                    setPin('');
+                    setPinError(false);
+                    setPinModalVisible(false);
+                    fetchOrderData();
+                  } else {
+                    CustomAlert(res?.data?.message);
+                  }
+                })
+                .catch((err) => {
+                  setLoading(false);
+                  CustomAlert(err?.message);
+                });
+            }
+          }}
+        />
       </CustomModalAndroid>
     </View>
   );

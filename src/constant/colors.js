@@ -12,7 +12,7 @@ export const Colors = {
   textLabelColor: '#424D58',
   inputTextColor: '#3B4B58',
   textBG: '#FDFDFD',
-  btnBG: '#EBC352',
+  btnBG: '#FFBC1E',
   silver: '#E0E5EC',
   grey: 'grey',
   transparent: 'transparent',
@@ -99,8 +99,8 @@ export const OTHER_INFORMATION = [
 
 export const SIDE_DRAWER = [
   {
-    iconFamily: 'FontAwesome5',
-    icon: 'list-ul',
+    iconFamily: 'Ionicons',
+    icon: 'home-outline',
     topText: 'Home',
     bottomText: 'Search Orders',
     navigate: 'Home',

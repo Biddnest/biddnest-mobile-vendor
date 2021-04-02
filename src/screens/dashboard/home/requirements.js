@@ -73,11 +73,11 @@ const Requirements = (props) => {
           <View style={[STYLES.inputForm, {marginTop: 0}]}>
             <Text
               style={{
-                fontFamily: 'Gilroy-Regular',
+                fontFamily: 'Gilroy-SemiBold',
                 fontSize: wp(4),
                 color: Colors.inputTextColor,
                 textAlign: 'center',
-                marginVertical: hp(2),
+                marginVertical: hp(1.5),
               }}>
               ITEM LIST
             </Text>
@@ -106,6 +106,7 @@ const Requirements = (props) => {
                       </Text>
                     </View>
                     <Text style={styles.rightText}>
+                      x
                       {configData?.inventory_quantity_type.range ===
                       item?.quantity_type
                         ? JSON.parse(item?.quantity?.toString()).min +
@@ -197,17 +198,8 @@ const Requirements = (props) => {
       <CustomModalAndroid
         visible={rejectVisible}
         onPress={() => setRejectVisible(false)}>
-        <View style={STYLES.modalHeaderView}>
-          <Text style={STYLES.modalHeaderText}>REJECT ORDER</Text>
-          <CloseIcon
-            style={{
-              position: 'absolute',
-              right: 10,
-            }}
-            onPress={() => setRejectVisible(false)}
-          />
-        </View>
-        <View style={{...STYLES.separatorView, width: '85%'}} />
+        <Text style={STYLES.modalHeaderText}>REJECT ORDER</Text>
+        <CloseIcon onPress={() => setRejectVisible(false)} />
         <Text style={STYLES.rejectText}>
           Are you sure you want to REJECT the order?
         </Text>

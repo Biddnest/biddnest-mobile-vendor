@@ -5,7 +5,7 @@ import {wp, hp, Colors} from '../constant/colors';
 const MapModalAndroid = (props) => {
   return (
     <Modal
-      animationType="slide"
+      animationType="fade"
       transparent={true}
       visible={props.visible}
       onRequestClose={() => {

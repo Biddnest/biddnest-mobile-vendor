@@ -8,7 +8,8 @@ import {DiffMin} from '../../../constant/commonFun';
 
 const OrderStatusPending = (props) => {
   const {orderDetails} = props;
-  return (
+    console.log("===========", orderDetails);
+    return (
     <View>
       <View
         style={{
@@ -47,23 +48,17 @@ const OrderStatusPending = (props) => {
             textAlign: 'center',
             alignSelf: 'center',
           }}>
-          {orderDetails?.meta && (
-            <CountDown
-              until={DiffMin(
-                new Date(
-                  JSON.parse(orderDetails.meta?.toString()).timings?.bid_result,
-                ),
-              )}
-              onFinish={() => {}}
-              size={18}
-              digitStyle={{height: '100%'}}
-              digitTxtStyle={[STYLES.participatedText, {fontSize: wp(3.5)}]}
-              separatorStyle={{color: '#000'}}
-              timeToShow={['H', 'M', 'S']}
-              timeLabels={{h: null, m: null, s: null}}
-              showSeparator
-            />
-          )}
+          {/*<CountDown*/}
+          {/*  until={DiffMin(new Date(orderDetails?.bid_result_at)) * 60}*/}
+          {/*  onFinish={() => {}}*/}
+          {/*  size={18}*/}
+          {/*  digitStyle={{height: '100%'}}*/}
+          {/*  digitTxtStyle={[STYLES.participatedText, {fontSize: wp(3.5)}]}*/}
+          {/*  separatorStyle={{color: '#000'}}*/}
+          {/*  timeToShow={['H', 'M', 'S']}*/}
+          {/*  timeLabels={{h: null, m: null, s: null}}*/}
+          {/*  showSeparator*/}
+          {/*/>*/}
         </Text>
         <Text style={[STYLES.inputTextLabel, {textAlign: 'center'}]}>
           Time at which the Bid ends

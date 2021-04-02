@@ -28,15 +28,16 @@ const DropDownAndroid = (props) => {
           }
         }>
         <DropDownPicker
+          searchable={false}
+          placeholder={'-Select'}
           items={props.items}
-          defaultValue={props.items[0]?.value}
+          defaultValue={props.value}
           customArrowUp={() => (
             <MaterialIcons name="arrow-drop-up" size={25} color={'#3B4B58'} />
           )}
           customArrowDown={() => (
             <MaterialIcons name="arrow-drop-down" size={25} color={'#3B4B58'} />
           )}
-          selectedLabelLength={10}
           containerStyle={{
             height: hp(6.5),
             // borderWidth: 1,
@@ -58,11 +59,12 @@ const DropDownAndroid = (props) => {
             backgroundColor: Colors.textBG,
             color: Colors.inputTextColor,
           }}
+          selectedLabelLength={props.width ? props.width : wp(45)}
           itemStyle={{
             justifyContent: 'flex-start',
           }}
           dropDownStyle={styles.customDropDown}
-          onChangeItem={(item) => props.onChangeItem(item.value)}
+          onChangeItem={(item) => props.onChangeItem(item.value, item)}
         />
       </View>
     </View>

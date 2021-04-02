@@ -36,11 +36,11 @@ const SimpleHeader = (props) => {
         }}>
         <Text
           style={{
-            fontFamily: 'Gilroy-Medium',
+            fontFamily: 'Gilroy-Bold',
             fontSize: wp(5),
             color: Colors.inputTextColor,
             marginRight: props.right ? wp(0) : wp(13),
-            textTransform: 'uppercase',
+            textTransform: 'capitalize',
           }}>
           {props.headerText}
         </Text>

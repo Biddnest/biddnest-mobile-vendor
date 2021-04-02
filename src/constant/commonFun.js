@@ -17,17 +17,9 @@ export const CustomAlert = (msg = '') => {
 };
 
 export const DiffMin = (dt1) => {
-  let diffInMilliSeconds = Math.abs(dt1 - new Date()) / 1000;
-  return Math.floor(diffInMilliSeconds / 60) % 60;
-
-  // let diff = (dt2.getTime() - dt1.getTime()) / 1000;
-  // diff /= 60;
-  // let d = Math.abs(Math.round(diff));
-  //
-  // d = Number(d);
-  // let h = Math.floor(d / 3600);
-  // let m = Math.floor((d % 3600) / 60);
-  // let s = Math.floor((d % 3600) % 60);
+  let dif = dt1 - new Date();
+  dif = Math.round(dif / 1000 / 60);
+  return dif;
 };
 
 export const ImageSelection = () => {

@@ -26,11 +26,8 @@ import {useDispatch, useSelector} from 'react-redux';
 
 export function DrawerContent(props) {
   const dispatch = useDispatch();
-  const userData = useSelector((state) => state.Login?.loginData?.vendor?.organization) || {};
-  useEffect(() => {
-    // let buildNumber = DeviceInfo.getBuildNumber(); // 1
-    let buildNumber = DeviceInfo.getReadableVersion(); // 1.0.1
-  }, []);
+  const userData =
+    useSelector((state) => state.Login?.loginData?.vendor?.organization) || {};
   const renderIcon = (item) => {
     switch (item.iconFamily) {
       case 'FontAwesome5':
@@ -55,7 +52,7 @@ export function DrawerContent(props) {
         );
       case 'Ionicons':
         return (
-          <Ionicons name={item.icon} color={Colors.darkBlue} size={wp(6)} />
+          <Ionicons name={item.icon} color={Colors.darkBlue} size={wp(7)} />
         );
       default:
         return item.image;
@@ -96,68 +93,72 @@ export function DrawerContent(props) {
       style={{
         flex: 1,
       }}>
-      <View
-        style={{
-          height: hp(15),
-          width: '100%',
-        }}>
-        <ImageBackground
-          source={require('../assets/images/logo_background.png')}
-          style={{height: '100%', width: '100%', ...STYLES.common}}
-          resizeMode={'cover'}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <View style={styles.profilePhoto}>
-              <Image
-                source={{uri: userData?.image}}
-                style={{height: '100%', width: '100%'}}
-                resizeMode={'contain'}
-              />
-            </View>
-            <View style={{width: wp(45), paddingLeft: wp(2)}}>
-              <Text numberOfLines={1} style={styles.userText}>
-                {userData?.org_name} {userData?.org_type}
-              </Text>
-              <Text
-                numberOfLines={1}
-                style={{
-                  fontFamily: 'Roboto-Regular',
-                  color: Colors.white,
-                  fontSize: wp(3.6),
-                  marginTop: 6,
-                }}>
-                +91 {userData?.phone}
-              </Text>
-            </View>
-            <View style={{width: wp(10)}}>
-              <Pressable
-                style={styles.logoutWrapper}
-                onPress={() => {
-                  dispatch({
-                    type: RESET_STORE,
-                  });
-                  resetNavigator(props, 'Login');
-                }}>
-                <MaterialIcons
-                  name={'logout'}
-                  color={Colors.white}
-                  size={wp(6)}
-                />
-              </Pressable>
-            </View>
+      <ImageBackground
+        source={require('../assets/images/logo_background.png')}
+        style={{height: hp(15), width: '100%', ...STYLES.common}}
+        resizeMode={'cover'}>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <View style={styles.profilePhoto}>
+            <Image
+              source={{uri: userData?.image}}
+              style={{height: '100%', width: '100%'}}
+              resizeMode={'contain'}
+            />
           </View>
-        </ImageBackground>
-      </View>
-      <ScrollView
-        bounces={false}
-        showsVerticalScrollIndicator={false}
-        style={styles.bottomView}>
+          <View style={{width: wp(45), paddingLeft: wp(2)}}>
+            <Text numberOfLines={1} style={styles.userText}>
+              {userData?.org_name} {userData?.org_type}
+            </Text>
+            <Text
+              numberOfLines={1}
+              style={{
+                fontFamily: 'Gilroy-SemiBold',
+                color: Colors.white,
+                fontSize: wp(3.6),
+                marginTop: 5,
+              }}>
+              +91 {userData?.phone}
+            </Text>
+          </View>
+          <View style={{width: wp(10)}}>
+            <Pressable
+              style={styles.logoutWrapper}
+              onPress={() => {
+                dispatch({
+                  type: RESET_STORE,
+                });
+                resetNavigator(props, 'Login');
+              }}>
+              <MaterialIcons
+                name={'logout'}
+                color={Colors.white}
+                size={wp(6)}
+              />
+            </Pressable>
+          </View>
+        </View>
+      </ImageBackground>
+      <View style={styles.bottomView}>
         <FlatList
           bounces={false}
           showsVerticalScrollIndicator={false}
           data={SIDE_DRAWER}
           renderItem={renderItem}
         />
-      </ScrollView>
+        <View>
+          <Text
+            style={{
+              color: Colors.inputTextColor,
+              marginLeft: wp(3),
+              fontSize: wp(3.1),
+              fontFamily: 'Gilroy-Regular',
+              textAlign: 'center',
+              latterSpacing: 1,
+            }}>
+            App Version: v{DeviceInfo.getReadableVersion()}
+          </Text>
+        </View>
+      </View>
     </LinearGradient>
   );
 }
@@ -189,26 +190,27 @@ const styles = StyleSheet.create({
   },
   userText: {
     color: Colors.white,
-    fontFamily: 'Roboto-Bold',
+    fontFamily: 'Gilroy-SemiBold',
     fontSize: wp(4),
   },
   bottomView: {
     borderTopLeftRadius: wp(8),
     borderTopRightRadius: wp(8),
     backgroundColor: Colors.white,
-    padding: wp(3),
+    paddingHorizontal: wp(3),
+    paddingTop: wp(3),
     flex: 1,
   },
   menuView: {
     flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderColor: Colors.silver,
+    // borderBottomWidth: 1,
+    // borderColor: Colors.silver,
     paddingVertical: 20,
     marginHorizontal: wp(3),
     alignItems: 'center',
   },
   topText: {
-    fontFamily: 'Roboto-Regular',
+    fontFamily: 'Gilroy-SemiBold',
     color: Colors.darkBlue,
     fontSize: wp(4),
   },

@@ -8,6 +8,7 @@ import {
   StyleSheet,
   Linking,
   Image,
+  RefreshControl,
 } from 'react-native';
 import {boxShadow, Colors, hp, wp} from '../../../constant/colors';
 import SimpleHeader from '../../../components/simpleHeader';
@@ -24,7 +25,6 @@ import MapView, {
   PROVIDER_DEFAULT,
 } from 'react-native-maps';
 import FlatButton from '../../../components/flatButton';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import OrderStatusWin from './orderStatusWin';
 import OrderStatusPending from './orderStatusPending';
 import OrderStatusLost from './orderStatusLost';
@@ -35,12 +35,13 @@ import {
   DiffMin,
   resetNavigator,
 } from '../../../constant/commonFun';
-import {APICall} from '../../../redux/actions/user';
-import {getDistance} from 'geolib';
+import {APICall, getDriverAndVehicle} from '../../../redux/actions/user';
 import moment from 'moment';
 import CountDown from '../../../components/countDown';
+import {useDispatch} from 'react-redux';
 
 const OrderDetails = (props) => {
+  const dispatch = useDispatch();
   const [orderDetails, setOrderDetails] = useState(
     props?.route?.params?.orderData || {},
   );
@@ -55,54 +56,59 @@ const OrderDetails = (props) => {
 
   useEffect(() => {
     fetchOrderData();
+    dispatch(getDriverAndVehicle());
   }, []);
 
   useEffect(() => {
-    let obj = {
-      url: `bid/price-list?public_booking_id=${orderDetails?.public_booking_id}`,
-      method: 'get',
-      headers: {
-        Authorization: 'Bearer ' + STORE.getState().Login?.loginData?.token,
-      },
-    };
-    APICall(obj)
-      .then((res) => {
-        if (res?.data?.status === 'success') {
-          setPriceList(res?.data?.data?.price_list);
-        } else {
-          CustomAlert(res?.data?.message);
-        }
-      })
-      .catch((err) => {
-        CustomAlert(err?.message);
-      });
+    if (orderDetails?.public_booking_id) {
+      let obj = {
+        url: `bid/price-list?public_booking_id=${orderDetails?.public_booking_id}`,
+        method: 'get',
+        headers: {
+          Authorization: 'Bearer ' + STORE.getState().Login?.loginData?.token,
+        },
+      };
+      APICall(obj)
+        .then((res) => {
+          if (res?.data?.status === 'success') {
+            setPriceList(res?.data?.data?.price_list);
+          } else {
+            CustomAlert(res?.data?.message);
+          }
+        })
+        .catch((err) => {
+          CustomAlert(err?.message);
+        });
+    }
   }, []);
 
   const fetchOrderData = () => {
-    let obj = {
-      url: `bookings/details?public_booking_id=${orderDetails?.public_booking_id}`,
-      method: 'get',
-      headers: {
-        Authorization: 'Bearer ' + STORE.getState().Login?.loginData?.token,
-      },
-    };
-    APICall(obj)
-      .then((res) => {
-        if (res?.data?.status === 'success') {
-          setOrderDetails(res?.data?.data?.booking);
-          if (
-            res?.data?.data?.booking?.bid?.status !== 0 &&
-            res?.data?.data?.booking?.bid?.status !== 5
-          ) {
-            setTab(['Order Details', 'Requirements', 'Bid Status']);
+    if (orderDetails?.public_booking_id) {
+      let obj = {
+        url: `bookings/details?public_booking_id=${orderDetails?.public_booking_id}`,
+        method: 'get',
+        headers: {
+          Authorization: 'Bearer ' + STORE.getState().Login?.loginData?.token,
+        },
+      };
+      APICall(obj)
+        .then((res) => {
+          if (res?.data?.status === 'success') {
+            setOrderDetails(res?.data?.data?.booking);
+            if (
+              res?.data?.data?.booking?.bid?.status !== 0 &&
+              res?.data?.data?.booking?.bid?.status !== 5
+            ) {
+              setTab(['Order Details', 'Requirements', 'Bid Status']);
+            }
+          } else {
+            CustomAlert(res?.data?.message);
           }
-        } else {
-          CustomAlert(res?.data?.message);
-        }
-      })
-      .catch((err) => {
-        CustomAlert(err?.message);
-      });
+        })
+        .catch((err) => {
+          CustomAlert(err?.message);
+        });
+    }
   };
 
   const renderText = (key, value) => {
@@ -149,11 +155,26 @@ const OrderDetails = (props) => {
         };
   const renderOrderStatus = () => {
     if (orderDetails?.bid?.status === 1) {
-      return <OrderStatusPending orderDetails={orderDetails} />;
+      return (
+        <OrderStatusPending
+          orderDetails={orderDetails}
+          fetchOrderData={fetchOrderData}
+        />
+      );
     } else if (orderDetails?.bid?.status === 3) {
-      return <OrderStatusWin orderDetails={orderDetails} />;
+      return (
+        <OrderStatusWin
+          orderDetails={orderDetails}
+          fetchOrderData={fetchOrderData}
+        />
+      );
     } else if (orderDetails?.bid?.status === 4) {
-      return <OrderStatusLost orderDetails={orderDetails} />;
+      return (
+        <OrderStatusLost
+          orderDetails={orderDetails}
+          fetchOrderData={fetchOrderData}
+        />
+      );
     } else {
       return null;
     }
@@ -194,6 +215,9 @@ const OrderDetails = (props) => {
         onBack={() => props.navigation.goBack()}
       />
       <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={isLoading} onRefresh={fetchOrderData} />
+        }
         style={{flex: 1}}
         showsVerticalScrollIndicator={false}
         bounces={false}>
@@ -207,29 +231,24 @@ const OrderDetails = (props) => {
             <View style={STYLES.flexBoxOrders}>
               <View style={[STYLES.priceView, {width: '40%'}]}>
                 <Text style={STYLES.participatedText}>
-                  Rs. {orderDetails?.final_estimated_quote}
+                  Rs.{' '}
+                  {orderDetails?.bod?.status === 0
+                    ? orderDetails?.final_estimated_quote
+                    : orderDetails?.final_quote}
                 </Text>
               </View>
               <View style={[STYLES.priceView, {width: '40%'}]}>
-                {orderDetails?.meta && (
-                  <CountDown
-                    until={DiffMin(
-                      new Date(
-                        JSON.parse(
-                          orderDetails.meta?.toString(),
-                        ).timings?.bid_result,
-                      ),
-                    )}
-                    onFinish={() => fetchOrderData()}
-                    size={18}
-                    digitStyle={{height: '100%'}}
-                    digitTxtStyle={STYLES.participatedText}
-                    separatorStyle={{color: '#000'}}
-                    timeToShow={['H', 'M', 'S']}
-                    timeLabels={{h: null, m: null, s: null}}
-                    showSeparator
-                  />
-                )}
+                {/*<CountDown*/}
+                {/*  until={DiffMin(new Date(orderDetails?.bid_result_at)) * 60}*/}
+                {/*  onFinish={() => fetchOrderData()}*/}
+                {/*  size={18}*/}
+                {/*  digitStyle={{height: '100%'}}*/}
+                {/*  digitTxtStyle={STYLES.participatedText}*/}
+                {/*  separatorStyle={{color: '#000'}}*/}
+                {/*  timeToShow={['H', 'M', 'S']}*/}
+                {/*  timeLabels={{h: null, m: null, s: null}}*/}
+                {/*  showSeparator*/}
+                {/*/>*/}
               </View>
             </View>
             <View style={STYLES.flexBoxOrders}>
@@ -245,7 +264,7 @@ const OrderDetails = (props) => {
             <View style={[STYLES.flexBox, {marginTop: 0}]}>
               <Text style={STYLES.leftText}>order id</Text>
               <Text style={[STYLES.rightText, {marginBottom: hp(2)}]}>
-                #{orderDetails?.public_booking_id}
+                {orderDetails?.public_booking_id}
               </Text>
             </View>
           </View>
@@ -253,41 +272,38 @@ const OrderDetails = (props) => {
             style={{
               paddingHorizontal: wp(5),
               backgroundColor: Colors.pageBG,
+              paddingBottom: hp(2),
             }}>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>DISTANCE</Text>
               {orderDetails?.source_lat && (
                 <Text style={STYLES.rightText}>
-                  {parseInt(
-                    getDistance(
-                      {
-                        latitude: orderDetails?.source_lat,
-                        longitude: orderDetails?.source_lng,
-                      },
-                      {
-                        latitude: orderDetails?.destination_lat,
-                        longitude: orderDetails?.destination_lng,
-                      },
-                    ) / 1000,
-                  )}{' '}
-                  KM
+                  {JSON.parse(orderDetails?.meta?.toString()).distance} KM
                 </Text>
               )}
             </View>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>MOVING DATE</Text>
-              <Text style={STYLES.rightText}>{dateArray.join(', ')}</Text>
-            </View>
-            <View style={STYLES.flexBox}>
-              <Text style={STYLES.leftText}>Category</Text>
               <Text style={STYLES.rightText}>
-                {meta?.subcategory || 'null'}
+                {orderDetails?.bid?.status === 0
+                  ? dateArray.join('\n')
+                  : moment(
+                      JSON.parse(orderDetails?.bid?.meta)?.moving_date,
+                    ).format('D MMM yyyy')}
               </Text>
             </View>
-            <View style={[STYLES.flexBox, {marginBottom: hp(2)}]}>
-              <Text style={STYLES.leftText}>TYPE OF MOVEMENT</Text>
-              <Text style={STYLES.rightText}>Shared</Text>
-            </View>
+            {meta?.subcategory && (
+              <View style={STYLES.flexBox}>
+                <Text style={STYLES.leftText}>Category</Text>
+                <Text style={STYLES.rightText}>{meta?.subcategory}</Text>
+              </View>
+            )}
+            {orderDetails?.bid?.status !== 0 && (
+              <View style={STYLES.flexBox}>
+                <Text style={STYLES.leftText}>TYPE OF MOVEMENT</Text>
+                <Text style={STYLES.rightText}>Shared</Text>
+              </View>
+            )}
           </View>
           <View style={STYLES.tabView}>
             {tab.map((item, index) => {
@@ -426,17 +442,8 @@ const OrderDetails = (props) => {
       <CustomModalAndroid
         visible={rejectVisible}
         onPress={() => setRejectVisible(false)}>
-        <View style={STYLES.modalHeaderView}>
-          <Text style={STYLES.modalHeaderText}>REJECT ORDER</Text>
-          <CloseIcon
-            style={{
-              position: 'absolute',
-              right: 10,
-            }}
-            onPress={() => setRejectVisible(false)}
-          />
-        </View>
-        <View style={{...STYLES.separatorView, width: '85%'}} />
+        <Text style={STYLES.modalHeaderText}>REJECT ORDER</Text>
+        <CloseIcon onPress={() => setRejectVisible(false)} />
         <Text style={STYLES.rejectText}>
           Are you sure you want to REJECT the order?
         </Text>
@@ -464,7 +471,7 @@ const OrderDetails = (props) => {
                 if (res?.data?.status === 'success') {
                   fetchOrderData();
                   setRejectVisible(false);
-                  resetNavigator(props.navigation, 'Dashboard');
+                  resetNavigator(props, 'Dashboard');
                 } else {
                   CustomAlert(res?.data?.message);
                 }

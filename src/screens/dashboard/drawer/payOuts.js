@@ -96,17 +96,8 @@ const PayOuts = (props) => {
       <CustomModalAndroid
         visible={filterVisible}
         onPress={() => setFilterVisible(false)}>
-        <View style={STYLES.modalHeaderView}>
-          <Text style={STYLES.modalHeaderText}>FILTERS</Text>
-          <CloseIcon
-            style={{
-              position: 'absolute',
-              right: 10,
-            }}
-            onPress={() => setFilterVisible(false)}
-          />
-        </View>
-        <View style={{...STYLES.separatorView, width: '85%'}} />
+        <Text style={STYLES.modalHeaderText}>FILTERS</Text>
+        <CloseIcon onPress={() => setFilterVisible(false)} />
         <View style={{marginTop: hp(2)}}>
           <Text style={STYLES.inputTextLabel}>Date</Text>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>

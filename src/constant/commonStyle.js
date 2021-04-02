@@ -14,10 +14,10 @@ export const STYLES = {
   emptyText: {
     fontFamily: 'Roboto-Italic',
     fontSize: wp(3.6),
-    color: Colors.darkBlue
+    color: Colors.darkBlue,
   },
   authScreenHeader: {
-    fontFamily: 'Gilroy-Semibold',
+    fontFamily: 'Gilroy-Bold',
     color: Colors.inputTextColor,
     fontSize: wp(4),
     marginBottom: hp(4),
@@ -33,9 +33,11 @@ export const STYLES = {
   },
   modalHeaderText: {
     textAlign: 'center',
-    fontFamily: 'Roboto-Regular',
+    fontFamily: 'Gilroy-Bold',
     color: Colors.inputTextColor,
     fontSize: wp(4),
+    marginTop: 25,
+    marginBottom: 10
   },
   tabView: {
     height: hp(7),
@@ -50,7 +52,7 @@ export const STYLES = {
   },
   tabText: {
     fontSize: wp(4),
-    fontFamily: 'Roboto-Medium',
+    fontFamily: 'Gilroy-Bold',
   },
   inputForm: {
     marginHorizontal: wp(5),
@@ -80,7 +82,7 @@ export const STYLES = {
     marginTop: hp(2),
   },
   leftText: {
-    fontFamily: 'Roboto-Regular',
+    fontFamily: 'Gilroy-SemiBold',
     fontSize: wp(4.3),
     color: Colors.inputTextColor,
     textTransform: 'uppercase',
@@ -113,7 +115,7 @@ export const STYLES = {
   participatedText: {
     color: Colors.darkBlue,
     fontSize: wp(5),
-    fontFamily: 'Roboto-Bold',
+    fontFamily: 'Gilroy-Bold',
   },
   flexBoxOrders: {
     flexDirection: 'row',
@@ -129,7 +131,7 @@ export const STYLES = {
     marginTop: 3,
   },
   staticLabel: {
-    fontFamily: 'Roboto-Bold',
+    fontFamily: 'Gilroy-Bold',
     fontSize: wp(4),
     color: Colors.inputTextColor,
   },

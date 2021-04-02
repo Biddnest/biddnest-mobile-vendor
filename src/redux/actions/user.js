@@ -1,5 +1,10 @@
 import instance from '../../constant/baseService';
-import {LOGIN_USER_DATA, CONFIG_DATA, ORDERS} from '../types';
+import {
+  LOGIN_USER_DATA,
+  CONFIG_DATA,
+  ORDERS,
+  DRIVER_VEHICLE_LIST,
+} from '../types';
 import {CustomAlert} from '../../constant/commonFun';
 import {STORE} from '../index';
 import axios from 'axios';
@@ -129,4 +134,41 @@ export const checkPinStatus = (url) => {
         reject(err);
       });
   });
+};
+
+export const getDriverAndVehicle = () => {
+  return (dispatch) => {
+    return new Promise((resolve, reject) => {
+      let obj = {
+        url: 'bookings/driver/get',
+        method: 'get',
+        headers: {
+          Authorization: 'Bearer ' + STORE.getState().Login?.loginData?.token,
+        },
+      };
+      APICall(obj)
+        .then((res) => {
+          if (res?.data?.status === 'success') {
+            dispatch({
+              type: DRIVER_VEHICLE_LIST,
+              payload: res?.data?.data,
+            });
+          }
+          resolve(res.data);
+        })
+        .catch((err) => {
+          if (err?.status === 401) {
+            // dispatch({
+            //   type: RESET_STORE,
+            // });
+            // CommonActions.reset({
+            //   index: 0,
+            //   routes: [{name: 'Login'}],
+            // });
+          }
+          CustomAlert(err?.data?.message);
+          reject(err);
+        });
+    });
+  };
 };
