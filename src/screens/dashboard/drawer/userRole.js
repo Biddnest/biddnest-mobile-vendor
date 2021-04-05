@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   FlatList,
   Platform,
@@ -7,6 +7,8 @@ import {
   Text,
   View,
   StyleSheet,
+  ActivityIndicator,
+  Linking,
 } from 'react-native';
 import {Colors, hp, wp} from '../../../constant/colors';
 import LinearGradient from 'react-native-linear-gradient';
@@ -19,51 +21,91 @@ import CustomModalAndroid from '../../../components/customModal';
 import TwoButton from '../../../components/twoButton';
 import FlatButton from '../../../components/flatButton';
 import DropDownAndroid from '../../../components/dropDown';
+import {useSelector} from 'react-redux';
+import {APICall} from '../../../redux/actions/user';
+import {CustomAlert} from '../../../constant/commonFun';
+import {STORE} from '../../../redux';
 
 const UserRole = (props) => {
-  const [selectedTab, setSelectedTab] = useState(0);
+  const userData = useSelector((state) => state.Login?.loginData) || {};
+  const configData =
+    useSelector((state) => state.Login?.configData?.enums?.vendor?.roles) || {};
+  const [isLoading, setLoading] = useState(false);
+  const [selectedTab, setSelectedTab] = useState('manager');
   const [detailsVisible, setDetailsVisible] = useState(false);
+  const [detailsData, setDetailsData] = useState({});
   const [filterVisible, setFilterVisible] = useState(false);
   const [switchValue, setSwitchValue] = useState(false);
   const [deActivateUser, setDeActivateUser] = useState(false);
+  const [userRoles, setUserRoles] = useState([]);
+
+  useEffect(() => {
+    if (userData?.token) {
+      setLoading(true);
+      getUserRoleList();
+    }
+  }, [selectedTab]);
+
+  const getUserRoleList = (pageNo = 1) => {
+    let obj = {
+      url: `user/${selectedTab}?page=${pageNo}`,
+      method: 'get',
+      headers: {
+        Authorization: 'Bearer ' + STORE.getState().Login?.loginData?.token,
+      },
+    };
+    APICall(obj)
+      .then((res) => {
+        setLoading(false);
+        if (res?.data?.status === 'success') {
+          setUserRoles(res?.data?.data);
+        } else {
+          CustomAlert(res?.message);
+        }
+      })
+      .catch((err) => {
+        setLoading(false);
+        CustomAlert(err?.data?.message);
+      });
+  };
 
   const renderItem = ({item, index}) => {
     return (
       <Pressable
-        onPress={() => setDetailsVisible(true)}
+        onPress={() => {
+          setDetailsVisible(true);
+          setDetailsData(item);
+        }}
         key={index}
         style={{
           flexDirection: 'row',
           flex: 1,
           paddingHorizontal: hp(2),
-          paddingVertical: hp(1.5),
+          paddingVertical: hp(2),
           alignItems: 'center',
+          backgroundColor: Colors.white,
         }}>
         <Text
           style={[
-            STYLES.modalHeaderText,
+            STYLES.headerText,
             {
-              textAlign: 'left',
               width: '45%',
-              fontFamily: 'Roboto-Bold',
             },
           ]}>
-          Rohit Kole
+          {item?.fname} {item?.lname}
         </Text>
         <Text
           style={[
-            STYLES.modalHeaderText,
+            STYLES.headerText,
             {
-              textAlign: 'left',
               width: '35%',
-              fontFamily: 'Roboto-Bold',
             },
           ]}>
-          Branch {index}
+          {item?.organization?.city}
         </Text>
         <View style={{width: '20%', alignItems: 'center'}}>
           <Switch
-            switchValue={switchValue}
+            switchValue={item?.status}
             onChange={() => {
               if (!switchValue === false) {
                 setDeActivateUser(true);
@@ -85,7 +127,11 @@ const UserRole = (props) => {
         onBack={() => props.navigation.goBack()}
       />
       <View style={STYLES.tabView}>
-        {['Managers', 'Admins', 'Drivers'].map((item, index) => {
+        {[
+          {title: 'Managers', value: 'manager'},
+          {title: 'Admins', value: 'admin'},
+          {title: 'Drivers', value: 'driver'},
+        ].map((item, index) => {
           return (
             <Pressable
               key={index}
@@ -93,80 +139,109 @@ const UserRole = (props) => {
                 ...STYLES.common,
                 flex: 1,
                 borderColor:
-                  selectedTab === index ? Colors.darkBlue : '#ACABCD',
-                borderBottomWidth: selectedTab === index ? 2 : 0.8,
+                  selectedTab === item.value ? Colors.darkBlue : '#ACABCD',
+                borderBottomWidth: selectedTab === item.value ? 2 : 0.8,
               }}
-              onPress={() => setSelectedTab(index)}>
+              onPress={() => setSelectedTab(item.value)}>
               <Text
                 style={{
                   ...STYLES.tabText,
-                  color: selectedTab === index ? Colors.darkBlue : '#ACABCD',
+                  color:
+                    selectedTab === item.value ? Colors.darkBlue : '#ACABCD',
                 }}>
-                {item}
+                {item?.title}
               </Text>
             </Pressable>
           );
         })}
       </View>
-      <ScrollView
-        contentContainerStyle={{
-          flex: 1,
-          padding: hp(2),
-        }}
-        showsVerticalScrollIndicator={false}
-        bounces={false}>
-        <View style={styles.tableView}>
-          <View
-            style={{
-              flexDirection: 'row',
-              paddingHorizontal: hp(2),
-              paddingVertical: hp(1.5),
-            }}>
-            <Text
-              style={[
-                STYLES.modalHeaderText,
-                {
-                  textAlign: 'left',
-                  width: '45%',
-                  color: Colors.white,
-                },
-              ]}>
-              Name
-            </Text>
-            <Text
-              style={[
-                STYLES.modalHeaderText,
-                {
-                  textAlign: 'left',
-                  width: '35%',
-                  color: Colors.white,
-                },
-              ]}>
-              Branch
-            </Text>
-            <Text
-              style={[
-                STYLES.modalHeaderText,
-                {
-                  width: '20%',
-                  color: Colors.white,
-                },
-              ]}>
-              Status
-            </Text>
-          </View>
-          <FlatList
-            bounces={false}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={{backgroundColor: Colors.white}}
-            data={[1, 2, 3, 4, 5, 6, 17, 8, 9, 10, 11]}
-            renderItem={renderItem}
-            ItemSeparatorComponent={() => (
-              <View style={[STYLES.separatorView, {marginTop: 0}]} />
-            )}
-          />
+      {(!!isLoading && (
+        <View style={{flex: 1, marginTop: hp(25)}}>
+          <ActivityIndicator size="large" color={Colors.darkBlue} />
         </View>
-      </ScrollView>
+      )) || (
+        <FlatList
+          bounces={false}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            borderWidth: userRoles?.user_role?.length > 0 ? 1 : 0,
+            borderColor: Colors.silver,
+            overflow: 'hidden',
+            margin: hp(2),
+          }}
+          data={userRoles?.user_role}
+          onRefresh={() => getUserRoleList(userRoles?.paging?.next_page || 1)}
+          ListHeaderComponent={() => {
+            if (userRoles?.user_role?.length > 0) {
+              return (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    paddingHorizontal: hp(2),
+                    paddingVertical: hp(1.5),
+                    backgroundColor: Colors.darkBlue,
+                  }}>
+                  <Text
+                    style={[
+                      STYLES.headerText,
+                      {
+                        width: '45%',
+                        color: Colors.white,
+                      },
+                    ]}>
+                    Name
+                  </Text>
+                  <Text
+                    style={[
+                      STYLES.headerText,
+                      {
+                        width: '35%',
+                        color: Colors.white,
+                      },
+                    ]}>
+                    Branch
+                  </Text>
+                  <Text
+                    style={[
+                      STYLES.headerText,
+                      {
+                        width: '20%',
+                        color: Colors.white,
+                      },
+                    ]}>
+                    Status
+                  </Text>
+                </View>
+              );
+            }
+            return null;
+          }}
+          refreshing={isLoading}
+          extraData={userRoles?.user_role}
+          onEndReachedThreshold={0.5}
+          onEndReached={() =>
+            getUserRoleList(userRoles?.paging?.next_page || 1)
+          }
+          renderItem={renderItem}
+          ItemSeparatorComponent={() => (
+            <View style={[STYLES.separatorView, {marginTop: 0}]} />
+          )}
+          ListEmptyComponent={() => (
+            <Text
+              style={{
+                fontFamily: 'Roboto-Italic',
+                fontSize: wp(3.5),
+                color: '#99A0A5',
+                textAlign: 'center',
+                marginHorizontal: 20,
+                marginVertical: hp(5),
+                textTransform: 'capitalize',
+              }}>
+              No {selectedTab} orders!
+            </Text>
+          )}
+        />
+      )}
       <FilterButton onPress={() => setFilterVisible(true)} />
       <CustomModalAndroid visible={false} onPress={() => {}}>
         <View style={STYLES.modalHeaderView}>
@@ -193,38 +268,52 @@ const UserRole = (props) => {
       <CustomModalAndroid
         visible={detailsVisible}
         onPress={() => setDetailsVisible(false)}>
-        <View style={STYLES.modalHeaderView}>
-          <Text style={STYLES.modalHeaderText}>USER DETAILS</Text>
-          <CloseIcon
-            style={{
-              position: 'absolute',
-              right: 10,
-            }}
-            onPress={() => setDetailsVisible(false)}
-          />
-        </View>
-        <View style={{...STYLES.separatorView, width: '85%'}} />
+        <Text style={STYLES.modalHeaderText}>USER DETAILS</Text>
+        <CloseIcon onPress={() => setDetailsVisible(false)} />
         <View style={styles.flexBox}>
           <Text style={styles.topText}>Name</Text>
-          <Text style={styles.bottomText}>Amit Patel</Text>
+          <Text style={[styles.bottomText, {textTransform: 'capitalize'}]}>
+            {detailsData?.fname} {detailsData?.lname}
+          </Text>
         </View>
         <View style={{...STYLES.separatorView, width: '85%'}} />
         <View style={styles.flexBox}>
           <Text style={styles.topText}>Phone Number</Text>
-          <Text style={styles.bottomText}>+91 90909090</Text>
+          <Text style={styles.bottomText}>+91 {detailsData?.phone}</Text>
         </View>
         <View style={{...STYLES.separatorView, width: '85%'}} />
         <View style={styles.flexBox}>
-          <Text style={styles.topText}>Employee Id</Text>
-          <Text style={styles.bottomText}>#0112</Text>
+          <Text style={styles.topText}>Email</Text>
+          <Text style={styles.bottomText}>{detailsData?.email}</Text>
         </View>
         <View style={{...STYLES.separatorView, width: '85%'}} />
-        <View style={styles.flexBox}>
-          <Text style={styles.topText}>Role</Text>
-          <Text style={styles.bottomText}>Manager</Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            flex: 1,
+            width: '85%',
+            marginTop: hp(2),
+          }}>
+          <View style={{flex: 1}}>
+            <Text style={styles.topText}>Employee Id</Text>
+            <Text style={styles.bottomText}>#{detailsData?.id}</Text>
+          </View>
+          <View style={{flex: 1}}>
+            <Text style={styles.topText}>Role</Text>
+            <Text style={[styles.bottomText, {textTransform: 'capitalize'}]}>
+              {Object.keys(configData)[
+                Object.values(configData).findIndex(
+                  (ele) => ele === detailsData?.user_role,
+                )
+              ]?.replace('_', ' ')}
+            </Text>
+          </View>
         </View>
         <View style={{marginTop: hp(2)}}>
-          <FlatButton label={'call'} onPress={() => {}} />
+          <FlatButton
+            label={'call'}
+            onPress={() => Linking.openURL(`tel:${detailsData?.phone}`)}
+          />
         </View>
       </CustomModalAndroid>
       <CustomModalAndroid
@@ -294,12 +383,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   topText: {
-    fontFamily: 'Roboto-Regular',
+    fontFamily: 'Gilroy-SemiBold',
     color: Colors.inputTextColor,
-    fontSize: wp(3.2),
+    fontSize: wp(3.5),
   },
   bottomText: {
-    fontFamily: 'Roboto-Regular',
+    fontFamily: 'Roboto-Bold',
     color: Colors.inputTextColor,
     fontSize: wp(4),
   },
