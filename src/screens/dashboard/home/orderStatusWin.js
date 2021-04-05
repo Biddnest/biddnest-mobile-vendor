@@ -109,7 +109,7 @@ const OrderStatusWin = (props) => {
           />
           <Text style={styles.warningText}>
             {orderDetails?.status === 4
-              ? 'Payment is pending from customer'
+              ? 'Confirmation is pending from the customer'
               : 'Assign driver to this order'}
           </Text>
         </View>
@@ -158,7 +158,7 @@ const OrderStatusWin = (props) => {
         <View style={{flexDirection: 'row'}}>
           <View style={styles.dotView} />
           <Text style={styles.stepHeaderText}>{'Assign Driver'}</Text>
-          {(orderDetails?.status !== 8 || orderDetails?.status !== 4) && (
+          {orderDetails?.status !== 8 && orderDetails?.status !== 4 && (
             <Text
               style={styles.driverView}
               onPress={() => setDriverAssignVisible(true)}>
@@ -172,13 +172,7 @@ const OrderStatusWin = (props) => {
             ...styles.stepBodyView,
           }}>
           <Text style={styles.subHeaderText}>
-            {orderDetails?.status < 6
-              ? 'Pending'
-              : 'Completed at ' +
-                moment(
-                  orderDetails?.status_history?.find((item) => item.status == 6)
-                    ?.created_at,
-                ).format('MMMM Do YYYY, h:mm A')}
+            {orderDetails?.status < 6 ? 'Pending' : 'Completed'}
           </Text>
         </View>
         {stepHeader(orderDetails?.status === 8 ? 'Completed' : 'In Transit')}

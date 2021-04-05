@@ -1,13 +1,28 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, Text, StyleSheet, Image, ScrollView} from 'react-native';
 import {Colors, hp, wp} from '../../../constant/colors';
 import SimpleHeader from '../../../components/simpleHeader';
 import LinearGradient from 'react-native-linear-gradient';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import Button from '../../../components/button';
 import TextInput from '../../../components/textInput';
+import {STORE} from '../../../redux';
+import {APICall} from '../../../redux/actions/user';
+import {CustomAlert} from '../../../constant/commonFun';
 
 const RaiseRequest = (props) => {
+  const public_booking_id = props?.route?.params?.public_booking_id || null;
+  const [isLoading, setLoading] = useState(false);
+  const [data, setData] = useState({
+    category: '',
+    heading: '',
+    desc: '',
+  });
+  const [error, setError] = useState({
+    category: undefined,
+    heading: undefined,
+    desc: undefined,
+  });
+
   return (
     <LinearGradient colors={[Colors.pageBG, Colors.white]} style={{flex: 1}}>
       <SimpleHeader
@@ -22,26 +37,83 @@ const RaiseRequest = (props) => {
         showsVerticalScrollIndicator={false}
         style={{flex: 1, margin: hp(3)}}>
         <TextInput
+          isRight={error?.category}
+          value={data?.category}
           label={'Category'}
           placeHolder={'Abc'}
-          onChange={(text) => {}}
+          onChange={(text) => setData({...data, category: text})}
         />
         <TextInput
+          isRight={error?.heading}
+          value={data?.heading}
           label={'Subject'}
           placeHolder={'Abc'}
-          onChange={(text) => {}}
+          onChange={(text) => setData({...data, heading: text})}
         />
+        {error?.heading === false && (
+          <Text style={styles.errorText}>Minimun 15 character required</Text>
+        )}
         <TextInput
+          isRight={error?.desc}
+          value={data?.desc}
           label={'Message'}
           placeHolder={
             'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.'
           }
           numberOfLines={4}
           height={hp(20)}
-          onChange={(text) => {}}
+          onChange={(text) => setData({...data, desc: text})}
         />
+        {error?.desc === false && (
+          <Text style={styles.errorText}>Minimun 50 character required</Text>
+        )}
         <View style={{alignSelf: 'center'}}>
-          <Button label={'submit'} onPress={() => {}} spaceTop={hp(2)} />
+          <Button
+            label={'submit'}
+            isLoading={isLoading}
+            onPress={() => {
+              // API call
+              setLoading(true);
+              let tempError = {};
+              tempError.category = !(
+                !data?.category || data?.category.length < 1
+              );
+              tempError.heading = !(
+                !data?.heading || data?.heading.length < 15
+              );
+              tempError.desc = !(!data?.desc || data?.desc.length < 50);
+              setError(tempError);
+              if (
+                Object.values(tempError).findIndex((item) => item === false) ===
+                -1
+              ) {
+                let obj = {
+                  url: 'tickets/create',
+                  method: 'post',
+                  headers: {
+                    Authorization:
+                      'Bearer ' + STORE.getState().Login?.loginData?.token,
+                  },
+                  data: data,
+                };
+                APICall(obj)
+                  .then((res) => {
+                    if (res?.data?.status === 'success') {
+                      CustomAlert('Ticket Raised Successfully');
+                      props.navigation.goBack();
+                    } else {
+                      CustomAlert(res?.data?.message);
+                    }
+                  })
+                  .catch((err) => {
+                    CustomAlert(err);
+                  });
+              } else {
+                setLoading(false);
+              }
+            }}
+            spaceTop={hp(2)}
+          />
         </View>
       </ScrollView>
     </LinearGradient>
@@ -75,5 +147,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginHorizontal: wp(5),
+  },
+  errorText: {
+    position: 'relative',
+    top: -hp(3),
+    alignSelf: 'flex-end',
+    right: wp(5),
+    color: Colors.red,
+    fontSize: wp(3.5),
+    fontFamily: 'Roboto-Regular',
   },
 });

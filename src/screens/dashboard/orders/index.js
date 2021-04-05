@@ -88,7 +88,7 @@ const Orders = (props) => {
                 STYLES.statusView,
                 {
                   backgroundColor:
-                    item?.status === 8 ? Colors.lightGreen : Colors.red,
+                    item?.status === 8 ? Colors.lightGreen : Colors.error,
                 },
               ]}>
               {item?.status === 8 ? 'Completed' : 'Cancelled'}

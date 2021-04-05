@@ -1,12 +1,44 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {FlatList, Image, Platform, ScrollView, Text, View} from 'react-native';
 import {Colors, hp, wp} from '../../../constant/colors';
 import LinearGradient from 'react-native-linear-gradient';
 import SimpleHeader from '../../../components/simpleHeader';
 import {STYLES} from '../../../constant/commonStyle';
+import {STORE} from '../../../redux';
+import {APICall} from '../../../redux/actions/user';
+import {CustomAlert, LoadingScreen} from '../../../constant/commonFun';
 
 const Reports = (props) => {
-  return (
+  const [data, setData] = useState({});
+  const [isLoading, setLoading] = useState(true);
+  useEffect(() => {
+    let obj = {
+      url: 'reports',
+      method: 'get',
+      headers: {
+        Authorization: 'Bearer ' + STORE.getState().Login?.loginData?.token,
+      },
+    };
+    APICall(obj)
+      .then((res) => {
+        setLoading(false);
+        if (res?.data?.status === 'success') {
+          if (res?.data?.data?.reports) {
+            setData(res?.data?.data?.reports);
+          } else {
+            setData({});
+          }
+        } else {
+          CustomAlert(res?.data?.message);
+        }
+      })
+      .catch((err) => {
+        setLoading(false);
+        CustomAlert(err);
+      });
+  }, []);
+    console.log(data);
+    return (
     <LinearGradient colors={[Colors.pageBG, Colors.white]} style={{flex: 1}}>
       <SimpleHeader
         headerText={'reports'}
@@ -14,6 +46,7 @@ const Reports = (props) => {
         navigation={props.navigation}
         onBack={() => props.navigation.goBack()}
       />
+      {isLoading && <LoadingScreen />}
       <ScrollView
         style={{flex: 1}}
         showsVerticalScrollIndicator={false}
@@ -24,15 +57,15 @@ const Reports = (props) => {
           data={[
             {
               title: 'NUMBER OF ORDERS WON',
-              count: 40,
+              count: data?.won || 0,
             },
             {
               title: 'NUMBER OF ORDERS LOST',
-              count: 16,
+              count: data?.lost || 0,
             },
             {
               title: 'NUMBER OF ORDERS PARTICIPATED',
-              count: 56,
+              count: data?.participated || 0,
             },
           ]}
           renderItem={({item, index}) => {

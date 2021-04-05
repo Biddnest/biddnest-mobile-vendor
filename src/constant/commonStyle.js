@@ -37,7 +37,14 @@ export const STYLES = {
     color: Colors.inputTextColor,
     fontSize: wp(4),
     marginTop: 25,
-    marginBottom: 10
+    marginBottom: 10,
+  },
+  headerText: {
+    color: Colors.inputTextColor,
+    fontSize: wp(4),
+    textAlign: 'left',
+    fontFamily: 'Roboto-Bold',
+    textTransform: 'capitalize',
   },
   tabView: {
     height: hp(7),
@@ -141,11 +148,11 @@ export const STYLES = {
     fontSize: wp(4),
   },
   inputTextStyle: {
+    fontFamily: 'Gilroy-SemiBold',
     fontSize: wp(4),
     backgroundColor: Colors.textBG,
     color: Colors.inputTextColor,
-    fontFamily: 'Roboto-Regular',
-    height: '99%',
+    height: '98%',
   },
   mapPinCircle: {
     height: wp(12),

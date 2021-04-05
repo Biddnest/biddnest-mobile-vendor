@@ -186,6 +186,9 @@ const OrderDetails = (props) => {
         headerText={'Order Details'}
         right={true}
         onRightPress={() => {}}
+        isBookmark={
+          orderDetails?.bid?.status === 0 || orderDetails?.bid?.status === 1
+        }
         onheartPress={() => {
           // Add into bookmark API
           let obj = {
@@ -222,46 +225,54 @@ const OrderDetails = (props) => {
         showsVerticalScrollIndicator={false}
         bounces={false}>
         <View>
-          <View
-            style={{
-              flex: 1,
-              marginHorizontal: wp(5),
-              marginTop: hp(2),
-            }}>
-            <View style={STYLES.flexBoxOrders}>
-              <View style={[STYLES.priceView, {width: '40%'}]}>
-                <Text style={STYLES.participatedText}>
-                  Rs.{' '}
-                  {orderDetails?.bid?.status === 0
-                    ? orderDetails?.final_estimated_quote
-                    : orderDetails?.final_quote}
-                </Text>
+          {orderDetails?.status < 4 && (
+            <View
+              style={{
+                flex: 1,
+                marginHorizontal: wp(5),
+                marginTop: hp(2),
+              }}>
+              <View style={STYLES.flexBoxOrders}>
+                <View style={[STYLES.priceView, {width: '40%'}]}>
+                  <Text style={STYLES.participatedText}>
+                    Rs.{' '}
+                    {orderDetails?.bid?.status === 0
+                      ? orderDetails?.final_estimated_quote
+                      : orderDetails?.final_quote}
+                  </Text>
+                </View>
+                <View style={[STYLES.priceView, {width: '40%'}]}>
+                  {/*<CountDown*/}
+                  {/*  until={DiffMin(new Date(orderDetails?.bid_result_at)) * 60}*/}
+                  {/*  onFinish={() => fetchOrderData()}*/}
+                  {/*  size={18}*/}
+                  {/*  digitStyle={{height: '100%'}}*/}
+                  {/*  digitTxtStyle={STYLES.participatedText}*/}
+                  {/*  separatorStyle={{color: '#000'}}*/}
+                  {/*  timeToShow={['H', 'M', 'S']}*/}
+                  {/*  timeLabels={{h: null, m: null, s: null}}*/}
+                  {/*  showSeparator*/}
+                  {/*/>*/}
+                </View>
               </View>
-              <View style={[STYLES.priceView, {width: '40%'}]}>
-                {/*<CountDown*/}
-                {/*  until={DiffMin(new Date(orderDetails?.bid_result_at)) * 60}*/}
-                {/*  onFinish={() => fetchOrderData()}*/}
-                {/*  size={18}*/}
-                {/*  digitStyle={{height: '100%'}}*/}
-                {/*  digitTxtStyle={STYLES.participatedText}*/}
-                {/*  separatorStyle={{color: '#000'}}*/}
-                {/*  timeToShow={['H', 'M', 'S']}*/}
-                {/*  timeLabels={{h: null, m: null, s: null}}*/}
-                {/*  showSeparator*/}
-                {/*/>*/}
+              <View style={STYLES.flexBoxOrders}>
+                <Text style={STYLES.labelText}>Expected Rate</Text>
+                <Text style={STYLES.labelText}>Time Left</Text>
               </View>
             </View>
-            <View style={STYLES.flexBoxOrders}>
-              <Text style={STYLES.labelText}>Expected Rate</Text>
-              <Text style={STYLES.labelText}>Time Left</Text>
-            </View>
-          </View>
-          <View style={[STYLES.separatorView, {marginBottom: hp(2)}]} />
+          )}
+          {orderDetails?.status < 4 && (
+            <View style={[STYLES.separatorView, {marginBottom: hp(2)}]} />
+          )}
           <View
             style={{
               marginHorizontal: wp(5),
             }}>
-            <View style={[STYLES.flexBox, {marginTop: 0}]}>
+            <View
+              style={[
+                STYLES.flexBox,
+                {marginTop: orderDetails?.status < 4 ? 0 : hp(2)},
+              ]}>
               <Text style={STYLES.leftText}>order id</Text>
               <Text style={[STYLES.rightText, {marginBottom: hp(2)}]}>
                 {orderDetails?.public_booking_id}

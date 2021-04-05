@@ -30,7 +30,7 @@ const SimpleHeader = (props) => {
       </Pressable>
       <View
         style={{
-          width: props.right ? (props.onheartPress ? wp(66) : wp(74)) : wp(87),
+          width: props.right ? (props.isBookmark ? wp(66) : wp(74)) : wp(87),
           height: '100%',
           ...styles.common,
         }}>
@@ -48,7 +48,7 @@ const SimpleHeader = (props) => {
       {props.right ? (
         <View
           style={[STYLES.common, {alignItems: 'center', flexDirection: 'row'}]}>
-          {props.onheartPress && (
+          {props.isBookmark && (
             <Pressable
               style={{...STYLES.common, width: wp(8)}}
               onPress={props.onheartPress}>

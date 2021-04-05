@@ -80,7 +80,11 @@ const TextInput = (props) => {
         alignItems: 'center',
       }}
       labelStyle={STYLES.inputTextLabel}
-      inputStyle={[STYLES.inputTextStyle, props.inputStyle]}
+      inputStyle={[
+        STYLES.inputTextStyle,
+        props.inputStyle,
+        {textAlignVertical: props.numberOfLines ? 'top' : 'center'},
+      ]}
     />
   );
 };
