@@ -1,4 +1,10 @@
-import {CONFIG_DATA, DRIVER_VEHICLE_LIST, LOGIN_USER_DATA, ORDERS} from '../types';
+import {
+  CONFIG_DATA,
+  DRIVER_VEHICLE_LIST,
+  LOGIN_USER_DATA,
+  ORDERS,
+  NOTIFICATION,
+} from '../types';
 import {appDefaultReducer} from './default';
 const INITIAL_STATE = appDefaultReducer.Login;
 
@@ -15,6 +21,9 @@ export default (state = INITIAL_STATE, action) => {
     }
     case ORDERS: {
       return {...state, orders: action.payload};
+    }
+    case NOTIFICATION: {
+      return {...state, notification: action.payload};
     }
     default:
       return state;

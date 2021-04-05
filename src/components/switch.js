@@ -3,7 +3,7 @@ import {Animated, Pressable, Text, View} from 'react-native';
 import {Colors, wp} from '../constant/colors';
 
 const Switch = (props) => {
-  return (
+    return (
     <View style={{flexDirection: 'row', alignItems: 'center'}}>
       <Text
         style={{

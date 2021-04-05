@@ -29,10 +29,11 @@ export const APICall = (obj) => {
 export const initialConfig = () => {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
-      axios
-        .get(
-          'https://dashboard-biddnest.dev.diginnovators.com/api/v1/configuration',
-        )
+      let obj = {
+        url: 'configuration',
+        method: 'get',
+      };
+      APICall(obj)
         .then((res) => {
           dispatch({
             type: CONFIG_DATA,

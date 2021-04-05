@@ -1,5 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {View, ImageBackground, StyleSheet, Image, ActivityIndicator} from 'react-native';
+import {
+  View,
+  ImageBackground,
+  StyleSheet,
+  Image,
+  ActivityIndicator,
+} from 'react-native';
 import OneSignal from 'react-native-onesignal';
 import NetInfo from '@react-native-community/netinfo';
 import {CustomAlert, resetNavigator} from '../../constant/commonFun';

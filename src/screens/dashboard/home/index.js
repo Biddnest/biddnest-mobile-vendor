@@ -9,6 +9,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import {Colors, wp, boxShadow, hp} from '../../../constant/colors';
 import {STYLES} from '../../../constant/commonStyle';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -30,6 +31,7 @@ import TextInput from '../../../components/textInput';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import {STORE} from '../../../redux';
 import CountDown from '../../../components/countDown';
+import {CONFIG_DATA, NOTIFICATION} from '../../../redux/types';
 
 export const HomeHeader = (props) => {
   return (
@@ -116,7 +118,9 @@ const Home = (props) => {
   const userData = useSelector((state) => state.Login?.loginData) || {};
   const [selectedTab, setSelectedTab] = useState(0);
   const [filterVisible, setFilterVisible] = useState(false);
-  const [notificationToggle, setNotificationToggle] = useState(false);
+  const [notificationToggle, setNotificationToggle] = useState(
+    useSelector((state) => state.Login?.notification),
+  );
   const [offNotification, setOffNotification] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [order, setOrder] = useState({});
@@ -174,10 +178,14 @@ const Home = (props) => {
       });
   };
   const renderItem = ({item, index}) => {
-    let source_meta = JSON.parse(item?.source_meta?.toString()) || {};
-    let destination_meta = JSON.parse(item?.destination_meta?.toString()) || {};
+    let source_meta =
+      (item?.source_meta && JSON.parse(item?.source_meta?.toString())) || {};
+    let destination_meta =
+      (item?.destination_meta &&
+        JSON.parse(item?.destination_meta?.toString())) ||
+      {};
     let dateArray = [];
-    let meta = JSON.parse(item?.meta?.toString()) || {};
+    let meta = (item?.meta && JSON.parse(item?.meta?.toString())) || {};
     let ind = Object.values(statusData?.status).findIndex(
       (ele) => ele === item?.status,
     );
@@ -346,7 +354,9 @@ const Home = (props) => {
             )}
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>bid submitted by</Text>
-              <Text style={STYLES.rightText}>{item?.user?.fname} {item?.user?.lname}</Text>
+              <Text style={STYLES.rightText}>
+                {item?.user?.fname} {item?.user?.lname}
+              </Text>
             </View>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>status</Text>
@@ -383,6 +393,10 @@ const Home = (props) => {
           if (!notificationToggle === false) {
             setOffNotification(true);
           } else {
+            dispatch({
+              type: NOTIFICATION,
+              payload: !notificationToggle,
+            });
             setNotificationToggle(!notificationToggle);
           }
         }}
@@ -548,6 +562,10 @@ const Home = (props) => {
           rightLabel={'Yes'}
           leftOnPress={() => setOffNotification(false)}
           rightOnPress={() => {
+            dispatch({
+              type: NOTIFICATION,
+              payload: false,
+            });
             setNotificationToggle(false);
             setOffNotification(false);
           }}

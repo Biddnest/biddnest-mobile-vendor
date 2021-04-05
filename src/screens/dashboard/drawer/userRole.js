@@ -89,7 +89,10 @@ const UserRole = (props) => {
           style={[
             STYLES.headerText,
             {
-              width: '45%',
+              width:
+                configData?.admin === userData?.vendor?.user_role
+                  ? '45%'
+                  : '50%',
             },
           ]}>
           {item?.fname} {item?.lname}
@@ -98,23 +101,28 @@ const UserRole = (props) => {
           style={[
             STYLES.headerText,
             {
-              width: '35%',
+              width:
+                configData?.admin === userData?.vendor?.user_role
+                  ? '35%'
+                  : '50%',
             },
           ]}>
           {item?.organization?.city}
         </Text>
-        <View style={{width: '20%', alignItems: 'center'}}>
-          <Switch
-            switchValue={item?.status}
-            onChange={() => {
-              if (!switchValue === false) {
-                setDeActivateUser(true);
-              } else {
-                setSwitchValue(true);
-              }
-            }}
-          />
-        </View>
+        {configData?.admin === userData?.vendor?.user_role && (
+          <View style={{width: '20%', alignItems: 'center'}}>
+            <Switch
+              switchValue={item?.status}
+              onChange={() => {
+                if (!switchValue === false) {
+                  setDeActivateUser(true);
+                } else {
+                  setSwitchValue(true);
+                }
+              }}
+            />
+          </View>
+        )}
       </Pressable>
     );
   };
@@ -185,7 +193,10 @@ const UserRole = (props) => {
                     style={[
                       STYLES.headerText,
                       {
-                        width: '45%',
+                        width:
+                          configData?.admin === userData?.vendor?.user_role
+                            ? '45%'
+                            : '50%',
                         color: Colors.white,
                       },
                     ]}>
@@ -195,22 +206,27 @@ const UserRole = (props) => {
                     style={[
                       STYLES.headerText,
                       {
-                        width: '35%',
+                        width:
+                          configData?.admin === userData?.vendor?.user_role
+                            ? '35%'
+                            : '50%',
                         color: Colors.white,
                       },
                     ]}>
                     Branch
                   </Text>
-                  <Text
-                    style={[
-                      STYLES.headerText,
-                      {
-                        width: '20%',
-                        color: Colors.white,
-                      },
-                    ]}>
-                    Status
-                  </Text>
+                  {configData?.admin === userData?.vendor?.user_role && (
+                    <Text
+                      style={[
+                        STYLES.headerText,
+                        {
+                          width: '20%',
+                          color: Colors.white,
+                        },
+                      ]}>
+                      Status
+                    </Text>
+                  )}
                 </View>
               );
             }

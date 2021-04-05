@@ -3,4 +3,5 @@ export const LoginData = {
   driverVehicleList: {},
   orders: {},
   configData: {},
+  notification: true,
 };

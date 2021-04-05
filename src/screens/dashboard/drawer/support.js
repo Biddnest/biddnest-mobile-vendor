@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet, Image} from 'react-native';
+import {View, Text, StyleSheet, Image, Linking} from 'react-native';
 import {Colors, hp, wp} from '../../../constant/colors';
 import SimpleHeader from '../../../components/simpleHeader';
 import LinearGradient from 'react-native-linear-gradient';
@@ -7,8 +7,12 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Button from '../../../components/button';
 import FinishMapPin from '../../../assets/svg/finish_map_pin.svg';
 import Email from '../../../assets/svg/email.svg';
+import {useSelector} from 'react-redux';
 
 const Support = (props) => {
+  const configData =
+    useSelector((state) => state.Login?.configData?.contact_us?.details) || '';
+  let data = JSON.parse(configData.toString());
   return (
     <LinearGradient colors={[Colors.pageBG, Colors.white]} style={{flex: 1}}>
       <SimpleHeader
@@ -24,15 +28,13 @@ const Support = (props) => {
             <View style={{height: wp(10), width: wp(10)}}>
               <FinishMapPin width={'60%'} height={'60%'} />
             </View>
-            <Text style={styles.bottomText}>
-              ABC Studio, ABC Street, KBC, Chennai 4904390
-            </Text>
+            <Text style={styles.bottomText}>{data?.address}</Text>
           </View>
           <View style={[styles.flexBox, {marginTop: hp(2)}]}>
             <View style={{height: wp(10), width: wp(10)}}>
               <Email width={'60%'} height={'60%'} />
             </View>
-            <Text style={styles.bottomText}>hello@gmail.com</Text>
+            <Text style={styles.bottomText}>{data?.email_id?.join(', ')}</Text>
           </View>
           <View style={[styles.flexBox, {marginTop: hp(2)}]}>
             <View style={{height: wp(10), width: wp(10)}}>
@@ -42,7 +44,9 @@ const Support = (props) => {
                 size={wp(6)}
               />
             </View>
-            <Text style={styles.bottomText}>+91 - 8989898989</Text>
+            <Text style={styles.bottomText}>
+              {data?.contact_no?.join(', ')}
+            </Text>
           </View>
         </View>
         <View style={styles.btnWrapper}>
@@ -62,8 +66,22 @@ const Support = (props) => {
           />
         </View>
         <View style={styles.btnWrapper}>
-          <Button label={'call us'} width={wp(43)} />
-          <Button label={'email us'} width={wp(43)} />
+          <Button
+            label={'call us'}
+            width={wp(43)}
+            onPress={() =>
+              data?.contact_no?.length > 0 &&
+              Linking.openURL(`tel:${data?.contact_no[0]}`)
+            }
+          />
+          <Button
+            label={'email us'}
+            width={wp(43)}
+            onPress={() =>
+              data?.email_id?.length > 0 &&
+              Linking.openURL(`mailto:${data?.email_id[0]}`)
+            }
+          />
         </View>
       </View>
     </LinearGradient>
