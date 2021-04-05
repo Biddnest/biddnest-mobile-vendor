@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import {Text, View, StyleSheet, Pressable, Linking} from 'react-native';
 import {Colors, hp, wp} from '../../../constant/colors';
 import {STYLES} from '../../../constant/commonStyle';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -66,13 +66,15 @@ const OrderStatusWin = (props) => {
           marginTop: hp(3),
         }}>
         <View style={{alignItems: 'center'}}>
-          <View style={STYLES.circleBtnView}>
+          <Pressable
+            style={STYLES.circleBtnView}
+            onPress={() => Linking.openURL(`tel:${orderDetails?.user?.phone}`)}>
             <Ionicons
               name={'call-outline'}
               color={Colors.darkBlue}
               size={wp(7)}
             />
-          </View>
+          </Pressable>
           <Text style={STYLES.circleBottomText}>Call Customer</Text>
         </View>
         <View style={{alignItems: 'center'}}>
@@ -105,22 +107,30 @@ const OrderStatusWin = (props) => {
             size={20}
             color={Colors.inputTextColor}
           />
-          <Text style={styles.warningText}>Assign driver to this order</Text>
+          <Text style={styles.warningText}>
+            {orderDetails?.status === 4
+              ? 'Payment is pending from customer'
+              : 'Assign driver to this order'}
+          </Text>
         </View>
       )}
       <View style={[STYLES.inputForm, {borderRadius: hp(1), marginTop: 0}]}>
         <Text style={STYLES.inputTextLabel}>Customer Details</Text>
         <View
-          style={{flexDirection: 'row', alignItems: 'center', marginTop: 3}}>
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginTop: hp(1),
+          }}>
           <Text style={[STYLES.sliderText, {width: wp(20), fontSize: wp(4)}]}>
             Name
           </Text>
           <Text
             style={[
               STYLES.modalHeaderText,
-              {width: wp(60), textAlign: 'left'},
+              {width: wp(60), textAlign: 'left', marginTop: 0, marginBottom: 0},
             ]}>
-            Dominic Stellar
+            {orderDetails?.user?.fname} {orderDetails?.user?.lname}
           </Text>
         </View>
         <View
@@ -131,9 +141,9 @@ const OrderStatusWin = (props) => {
           <Text
             style={[
               STYLES.modalHeaderText,
-              {width: wp(60), textAlign: 'left'},
+              {width: wp(60), textAlign: 'left', marginTop: 0, marginBottom: 0},
             ]}>
-            ABC Studio, ABC Street, Chennai
+            {orderDetails?.user?.address}
           </Text>
         </View>
       </View>
@@ -148,11 +158,12 @@ const OrderStatusWin = (props) => {
         <View style={{flexDirection: 'row'}}>
           <View style={styles.dotView} />
           <Text style={styles.stepHeaderText}>{'Assign Driver'}</Text>
-          {orderDetails?.driver === null && (
+          {(orderDetails?.status !== 8 || orderDetails?.status !== 4) && (
             <Text
               style={styles.driverView}
               onPress={() => setDriverAssignVisible(true)}>
-              ASSIGN DRIVER
+              {(orderDetails?.driver === null && 'ASSIGN DRIVER') ||
+                'CHANGE DRIVER'}
             </Text>
           )}
         </View>
@@ -161,7 +172,13 @@ const OrderStatusWin = (props) => {
             ...styles.stepBodyView,
           }}>
           <Text style={styles.subHeaderText}>
-            {orderDetails?.status < 5 ? 'Pending' : 'Completed'}
+            {orderDetails?.status < 6
+              ? 'Pending'
+              : 'Completed at ' +
+                moment(
+                  orderDetails?.status_history?.find((item) => item.status == 6)
+                    ?.created_at,
+                ).format('MMMM Do YYYY, h:mm A')}
           </Text>
         </View>
         {stepHeader(orderDetails?.status === 8 ? 'Completed' : 'In Transit')}

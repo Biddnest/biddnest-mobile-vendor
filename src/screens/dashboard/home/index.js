@@ -189,7 +189,12 @@ const Home = (props) => {
       <Pressable
         style={[
           STYLES.inputForm,
-          {backgroundColor: selectedTab === 2 ? '#F8F8FA' : Colors.white},
+          {
+            backgroundColor:
+              selectedTab === 2 && item?.bid?.status === 5
+                ? '#F8F8FA'
+                : Colors.white,
+          },
         ]}
         key={index}
         onPress={() => {
@@ -286,7 +291,9 @@ const Home = (props) => {
                   fontFamily: 'Gilroy-Bold',
                 }}
                 numberOfLines={1}>
-                {source_meta?.city}
+                {source_meta?.city === destination_meta?.city
+                  ? source_meta?.address
+                  : source_meta?.city}
               </Text>
               <Text
                 style={[
@@ -294,7 +301,9 @@ const Home = (props) => {
                   {textTransform: 'capitalize', fontFamily: 'Gilroy-Bold'},
                 ]}
                 numberOfLines={1}>
-                {destination_meta?.city}
+                {destination_meta?.city === source_meta?.city
+                  ? destination_meta?.address
+                  : destination_meta?.city}
               </Text>
             </View>
             <View style={{alignItems: 'flex-end'}}>
@@ -337,7 +346,7 @@ const Home = (props) => {
             )}
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>bid submitted by</Text>
-              <Text style={STYLES.rightText}>Mayank Shah</Text>
+              <Text style={STYLES.rightText}>{item?.user?.fname} {item?.user?.lname}</Text>
             </View>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>status</Text>
@@ -529,17 +538,8 @@ const Home = (props) => {
       <CustomModalAndroid
         visible={offNotification}
         onPress={() => setOffNotification(false)}>
-        <View style={STYLES.modalHeaderView}>
-          <Text style={STYLES.modalHeaderText}>TURN OF NOTIFICATIONS</Text>
-          <CloseIcon
-            style={{
-              position: 'absolute',
-              right: 10,
-            }}
-            onPress={() => setOffNotification(false)}
-          />
-        </View>
-        <View style={{...STYLES.separatorView, width: '85%'}} />
+        <Text style={STYLES.modalHeaderText}>TURN OF NOTIFICATIONS</Text>
+        <CloseIcon onPress={() => setOffNotification(false)} />
         <Text style={[STYLES.rejectText, {marginTop: hp(5)}]}>
           Are you sure you want to turn off notifications?
         </Text>

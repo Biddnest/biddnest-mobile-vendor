@@ -232,7 +232,7 @@ const OrderDetails = (props) => {
               <View style={[STYLES.priceView, {width: '40%'}]}>
                 <Text style={STYLES.participatedText}>
                   Rs.{' '}
-                  {orderDetails?.bod?.status === 0
+                  {orderDetails?.bid?.status === 0
                     ? orderDetails?.final_estimated_quote
                     : orderDetails?.final_quote}
                 </Text>
@@ -287,7 +287,8 @@ const OrderDetails = (props) => {
               <Text style={STYLES.rightText}>
                 {orderDetails?.bid?.status === 0
                   ? dateArray.join('\n')
-                  : moment(
+                  : orderDetails?.bid &&
+                    moment(
                       JSON.parse(orderDetails?.bid?.meta)?.moving_date,
                     ).format('D MMM yyyy')}
               </Text>
@@ -301,7 +302,11 @@ const OrderDetails = (props) => {
             {orderDetails?.bid?.status !== 0 && (
               <View style={STYLES.flexBox}>
                 <Text style={STYLES.leftText}>TYPE OF MOVEMENT</Text>
-                <Text style={STYLES.rightText}>Shared</Text>
+                <Text style={[STYLES.rightText, {textTransform: 'capitalize'}]}>
+                  {orderDetails?.bid?.meta &&
+                    JSON.parse(orderDetails?.bid?.meta?.toString())
+                      .type_of_movement}
+                </Text>
               </View>
             )}
           </View>

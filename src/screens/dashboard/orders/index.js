@@ -1,33 +1,102 @@
-import React, {useState} from 'react';
-import {View, Text, StyleSheet, Pressable, FlatList, Image} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  FlatList,
+  Image,
+  ActivityIndicator,
+} from 'react-native';
 import {Colors, hp, wp} from '../../../constant/colors';
 import {HomeHeader} from '../home';
 import {STYLES} from '../../../constant/commonStyle';
 import LinearGradient from 'react-native-linear-gradient';
+import {getOrders} from '../../../redux/actions/user';
+import {CustomAlert} from '../../../constant/commonFun';
+import {useDispatch, useSelector} from 'react-redux';
+import {useIsFocused} from '@react-navigation/native';
+import moment from 'moment';
 
 const Orders = (props) => {
-  const [selectedTab, setSelectedTab] = useState(0);
+  const dispatch = useDispatch();
+  const isFocused = useIsFocused();
+  const userData = useSelector((state) => state.Login?.loginData) || {};
+  const [selectedTab, setSelectedTab] = useState('participated');
+  const [order, setOrder] = useState({});
+  const [isLoading, setLoading] = useState(false);
+  useEffect(() => {
+    if (isFocused && userData?.token) {
+      setLoading(true);
+      getOrdersList();
+    }
+  }, [selectedTab]);
+  const getOrdersList = (pageNo = 1) => {
+    dispatch(getOrders('past', pageNo))
+      .then((res) => {
+        setLoading(false);
+        if (res?.status === 'success' && res?.data) {
+          setOrder(res?.data);
+        } else {
+          CustomAlert(res?.message);
+        }
+      })
+      .catch((err) => {
+        setLoading(false);
+        CustomAlert(err?.data?.message);
+      });
+  };
   const handleOrderClicked = (item) => {
-    props.navigation.navigate('OrderDetails');
+    if (selectedTab === 'past') {
+      if (item?.status === 8) {
+        props.navigation.navigate('OrderDetails', {orderData: item});
+      }
+    } else {
+      props.navigation.navigate('OrderDetails', {orderData: item});
+    }
   };
   const renderItem = ({item, index}) => {
+    let source_meta = JSON.parse(item?.source_meta?.toString()) || {};
+    let destination_meta = JSON.parse(item?.destination_meta?.toString()) || {};
+    let meta = JSON.parse(item?.meta?.toString()) || {};
+    let started_at = {};
+    let completed_at = {};
+
+    item?.status_history.forEach((ele) => {
+      if (ele.status === 1) {
+        started_at = ele;
+      } else if (ele.status === 8) {
+        completed_at = ele;
+      }
+    });
     return (
       <Pressable
         style={STYLES.inputForm}
         key={index}
-        onPress={() => selectedTab === 0 && handleOrderClicked(item)}>
+        onPress={() => handleOrderClicked(item)}>
         <View
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
           }}>
-          {selectedTab === 0 ? (
+          {selectedTab === 'participated' ? (
             <Text style={STYLES.leftText}>ORDER ID</Text>
           ) : (
-            <Text style={STYLES.statusView}>Completed</Text>
+            <Text
+              style={[
+                STYLES.statusView,
+                {
+                  backgroundColor:
+                    item?.status === 8 ? Colors.lightGreen : Colors.red,
+                },
+              ]}>
+              {item?.status === 8 ? 'Completed' : 'Cancelled'}
+            </Text>
           )}
-          <Text style={STYLES.rightText}>#342345</Text>
+          <Text style={[STYLES.rightText, {width: '60%'}]}>
+            {item?.public_booking_id}
+          </Text>
         </View>
         <View
           style={[
@@ -35,7 +104,7 @@ const Orders = (props) => {
             {width: wp(90), alignSelf: 'center', marginBottom: hp(2)},
           ]}
         />
-        {selectedTab === 0 && (
+        {selectedTab === 'participated' && (
           <View>
             <View
               style={{
@@ -43,7 +112,9 @@ const Orders = (props) => {
               }}>
               <View style={STYLES.flexBoxOrders}>
                 <View style={STYLES.priceView}>
-                  <Text style={STYLES.participatedText}>Rs. 4000</Text>
+                  <Text style={STYLES.participatedText}>
+                    Rs. {item?.final_quote}
+                  </Text>
                 </View>
                 <View style={STYLES.priceView}>
                   <Text style={STYLES.participatedText}>00 : 50 : 00</Text>
@@ -57,7 +128,6 @@ const Orders = (props) => {
             <View style={[STYLES.separatorView, {marginBottom: hp(2)}]} />
           </View>
         )}
-
         <View
           style={{
             backgroundColor: Colors.white,
@@ -76,13 +146,41 @@ const Orders = (props) => {
               alignItems: 'center',
             }}>
             <View>
-              <Text style={{...STYLES.locationText, marginTop: 0}}>
-                CHENNAI
+              <Text
+                numberOfLines={1}
+                style={{
+                  ...STYLES.locationText,
+                  marginTop: 0,
+                  textTransform: 'uppercase',
+                  width: wp(40),
+                }}>
+                {source_meta?.city === destination_meta?.city
+                  ? source_meta?.address
+                  : source_meta?.city}
               </Text>
-              <Text style={STYLES.locationText}>BENGALURU</Text>
+              <Text
+                numberOfLines={1}
+                style={[
+                  STYLES.locationText,
+                  {
+                    textTransform: 'uppercase',
+                    width: wp(40),
+                  },
+                ]}>
+                {destination_meta?.city === source_meta?.city
+                  ? destination_meta?.address
+                  : destination_meta?.city}
+              </Text>
             </View>
             <View style={{alignItems: 'flex-end'}}>
-              <Text style={{...STYLES.locationText, marginTop: 0}}>
+              <Text
+                numberOfLines={1}
+                style={{
+                  ...STYLES.locationText,
+                  marginTop: 0,
+                  width: wp(28),
+                  textAlign: 'right',
+                }}>
                 DISTANCE
               </Text>
               <View
@@ -91,45 +189,73 @@ const Orders = (props) => {
                   alignItems: 'center',
                   marginTop: hp(1),
                 }}>
-                <Text style={STYLES.rightText}>314KM</Text>
+                <Text
+                  numberOfLines={1}
+                  style={[
+                    STYLES.rightText,
+                    {
+                      width: wp(28),
+                      textAlign: 'right',
+                    },
+                  ]}>
+                  {meta?.distance} KM
+                </Text>
               </View>
             </View>
           </View>
         </View>
         <View style={STYLES.separatorView} />
-        {selectedTab === 1 && (
+        {selectedTab === 'past' && (
           <View>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>bid price</Text>
-              <Text style={STYLES.rightText}>Rs. 5000</Text>
+              <Text style={[STYLES.rightText, {width: '50%'}]}>
+                Rs. {item?.final_quote}
+              </Text>
             </View>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>accepted on</Text>
-              <Text style={STYLES.rightText}>25 Jan 2021</Text>
+              <Text style={[STYLES.rightText, {width: '50%'}]}>
+                {moment(started_at?.created_at).format('D MMM yyyy')}
+              </Text>
             </View>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>completed on</Text>
-              <Text style={STYLES.rightText}>25 Jan 2021</Text>
+              <Text style={[STYLES.rightText, {width: '50%'}]}>
+                {moment(completed_at?.created_at).format('D MMM yyyy')}
+              </Text>
             </View>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>bid submitted by</Text>
-              <Text style={STYLES.rightText}>Mayank Shah</Text>
+              <Text style={[STYLES.rightText, {width: '50%'}]}>
+                {item?.user?.fname} {item?.user?.lname}
+              </Text>
             </View>
           </View>
         )}
-        {selectedTab === 0 && (
+        {selectedTab === 'participated' && (
           <View>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>Moving Date</Text>
-              <Text style={STYLES.rightText}>25 Jan 2021</Text>
+              <Text style={[STYLES.rightText, {width: '50%'}]}>
+                {moment(JSON.parse(item?.bid?.meta)?.moving_date).format(
+                  'D MMM yyyy',
+                )}
+              </Text>
             </View>
-            <View style={STYLES.flexBox}>
-              <Text style={STYLES.leftText}>category</Text>
-              <Text style={STYLES.rightText}>1 BHK</Text>
-            </View>
+            {meta?.subcategory && (
+              <View style={STYLES.flexBox}>
+                <Text style={STYLES.leftText}>category</Text>
+                <Text style={[STYLES.rightText, {width: '50%'}]}>
+                  {meta?.subcategory}
+                </Text>
+              </View>
+            )}
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>bid submitted by</Text>
-              <Text style={STYLES.rightText}>Mayank Shah</Text>
+              <Text style={[STYLES.rightText, {width: '50%'}]}>
+                {item?.user?.fname} {item?.user?.lname}
+              </Text>
             </View>
           </View>
         )}
@@ -147,48 +273,61 @@ const Orders = (props) => {
         onRightPress={() => {}}
       />
       <View style={STYLES.tabView}>
-        {['Participated Orders', 'Past Orders'].map((item, index) => {
+        {[
+          {title: 'Participated Orders', value: 'participated'},
+          {title: 'Past Orders', value: 'past'},
+        ].map((item, index) => {
           return (
             <Pressable
               key={index}
               style={{
                 ...STYLES.common,
                 borderColor:
-                  selectedTab === index ? Colors.darkBlue : '#ACABCD',
-                borderBottomWidth: selectedTab === index ? 2 : 0,
+                  selectedTab === item.value ? Colors.darkBlue : '#ACABCD',
+                borderBottomWidth: selectedTab === item.value ? 2 : 0,
               }}
-              onPress={() => setSelectedTab(index)}>
+              onPress={() => setSelectedTab(item.value)}>
               <Text
                 style={{
                   ...STYLES.tabText,
-                  color: selectedTab === index ? Colors.darkBlue : '#ACABCD',
+                  color:
+                    selectedTab === item.value ? Colors.darkBlue : '#ACABCD',
                 }}>
-                {item}
+                {item?.title}
               </Text>
             </Pressable>
           );
         })}
       </View>
       <View style={{flex: 1}}>
-        <FlatList
-          bounces={false}
-          showsVerticalScrollIndicator={false}
-          data={[1, 2, 3]}
-          renderItem={renderItem}
-          ListEmptyComponent={() => (
-            <Text
-              style={{
-                fontFamily: 'Roboto-Italic',
-                fontSize: wp(3.5),
-                color: '#99A0A5',
-                textAlign: 'center',
-                marginHorizontal: 20,
-                marginVertical: hp(5),
-              }}>
-              No any orders!
-            </Text>
-          )}
-        />
+        {(!!isLoading && (
+          <View style={{flex: 1, marginTop: hp(25)}}>
+            <ActivityIndicator size="large" color={Colors.darkBlue} />
+          </View>
+        )) || (
+          <FlatList
+            bounces={false}
+            showsVerticalScrollIndicator={false}
+            data={order?.bookings || []}
+            extraData={order?.bookings}
+            renderItem={renderItem}
+            onEndReachedThreshold={0.5}
+            onEndReached={() => getOrdersList(order?.paging?.next_page || 1)}
+            ListEmptyComponent={() => (
+              <Text
+                style={{
+                  fontFamily: 'Roboto-Italic',
+                  fontSize: wp(3.5),
+                  color: '#99A0A5',
+                  textAlign: 'center',
+                  marginHorizontal: 20,
+                  marginVertical: hp(5),
+                }}>
+                No any orders!
+              </Text>
+            )}
+          />
+        )}
       </View>
     </LinearGradient>
   );

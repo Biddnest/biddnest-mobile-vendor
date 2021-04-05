@@ -255,6 +255,7 @@ const AcceptOrder = (props) => {
               zIndex: Platform.OS !== 'android' ? 5001 : 11,
             }}>
             <DropDown
+              value={applyBidData?.type_of_movement}
               label={'Type Of Movement'}
               width={wp(90)}
               items={[{label: 'Shared', value: 'shared'}]}
@@ -344,6 +345,7 @@ const AcceptOrder = (props) => {
           </View>
           <View style={{marginBottom: hp(2), marginTop: hp(2)}}>
             <DropDown
+              value={applyBidData?.vehicle_type}
               label={'Vendor Type'}
               width={wp(90)}
               items={[{label: 'Tempo', value: 'tempo'}]}

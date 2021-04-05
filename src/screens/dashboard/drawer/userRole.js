@@ -264,17 +264,8 @@ const UserRole = (props) => {
       <CustomModalAndroid
         visible={deActivateUser}
         onPress={() => setDeActivateUser(false)}>
-        <View style={STYLES.modalHeaderView}>
-          <Text style={STYLES.modalHeaderText}>TURN OF NOTIFICATIONS</Text>
-          <CloseIcon
-            style={{
-              position: 'absolute',
-              right: 10,
-            }}
-            onPress={() => setDeActivateUser(false)}
-          />
-        </View>
-        <View style={{...STYLES.separatorView, width: '85%'}} />
+        <Text style={STYLES.modalHeaderText}>TURN OF NOTIFICATIONS</Text>
+        <CloseIcon onPress={() => setDeActivateUser(false)} />
         <Text style={[STYLES.rejectText, {marginTop: hp(5)}]}>
           Do you want to deactivate this user?
         </Text>

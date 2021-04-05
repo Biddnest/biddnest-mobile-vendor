@@ -48,6 +48,7 @@ const OrdersStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={screenOptionStyle} headerMode={false}>
       <Stack.Screen name="Orders" component={Orders} />
+      <Stack.Screen name="OrderDetails" component={OrderDetails} />
     </Stack.Navigator>
   );
 };
