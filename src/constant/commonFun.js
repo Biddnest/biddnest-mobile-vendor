@@ -19,6 +19,12 @@ export const CustomAlert = (msg = '') => {
   return Toast.show(msg, Toast.LONG);
 };
 
+export const CustomConsole = (msg) => {
+  if (__DEV__) {
+    console.log(msg);
+  }
+};
+
 export const DiffMin = (dt1) => {
   let dif = dt1 - new Date();
   dif = Math.round(dif / 1000 / 60);

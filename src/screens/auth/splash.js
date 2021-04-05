@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import {
   View,
   ImageBackground,
-  StyleSheet,
   Image,
   ActivityIndicator,
 } from 'react-native';
@@ -13,6 +12,7 @@ import {Colors, hp, wp} from '../../constant/colors';
 import {initialConfig} from '../../redux/actions/user';
 import {useDispatch, useSelector} from 'react-redux';
 import {STYLES} from '../../constant/commonStyle';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const Splash = (props) => {
   const dispatch = useDispatch();
@@ -49,6 +49,9 @@ const Splash = (props) => {
     console.log('openResult: ', openResult);
   }
   function onIds(device) {
+    if (device && device.userId) {
+      AsyncStorage.setItem('oneSignalData', JSON.stringify(device));
+    }
     console.log('Device info: ', device);
   }
   const callServiceAPI = () => {

@@ -1,13 +1,49 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, Pressable, FlatList} from 'react-native';
-import {Colors, hp, wp} from '../../../constant/colors';
+import {Colors, hp, wp} from '../../../../constant/colors';
+import SimpleHeader from '../../../../components/simpleHeader';
 import LinearGradient from 'react-native-linear-gradient';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import SimpleHeader from '../../../components/simpleHeader';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {STORE} from '../../../../redux';
+import {APICall} from '../../../../redux/actions/user';
+import {
+  CustomAlert,
+  CustomConsole,
+} from '../../../../constant/commonFun';
 
-const FAQS = (props) => {
+const FAQDetails = (props) => {
+  const category = props?.route?.params?.category || '';
   const [openArray, setOpenArray] = useState([0]);
+  const [faqQue, setFaqQue] = useState([]);
+  const [isLoading, setLoading] = useState(true);
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = () => {
+    setLoading(true);
+    let obj = {
+      url: `faq/categories/${category}`,
+      method: 'get',
+      headers: {
+        Authorization: 'Bearer ' + STORE.getState().Login?.loginData?.token,
+      },
+    };
+    APICall(obj)
+      .then((res) => {
+        setLoading(false);
+        if (res?.data?.status === 'success') {
+          setFaqQue(res?.data?.data?.faqs);
+        } else {
+          CustomAlert(res?.data?.message);
+        }
+      })
+      .catch((err) => {
+        setLoading(false);
+        CustomConsole(err);
+      });
+  };
+
   const renderItem = ({item, index}) => {
     return (
       <Pressable
@@ -26,25 +62,21 @@ const FAQS = (props) => {
         style={styles.inputForm}
         key={index}>
         <View style={styles.flexBox}>
-          <Text style={styles.topText}>{index + 1}. Test and save</Text>
+          <Text style={styles.topText}>
+            {index + 1}. {item?.title} sdfsd fds sdf
+          </Text>
           <View>
-            <MaterialIcons
-              name={
-                openArray.includes(index) ? 'arrow-drop-up' : 'arrow-drop-down'
-              }
+            <MaterialCommunityIcons
+              name={openArray.includes(index) ? 'minus' : 'plus'}
               size={26}
-              color={Colors.inputTextColor}
+              color={'#9A9FA4'}
             />
           </View>
         </View>
         {openArray.includes(index) && (
           <View>
             <View style={styles.separatorView} />
-            <Text style={styles.bottomText}>
-              Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-              nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-              erat, sed diam voluptua. Lorem ipsum dolor sit amet.
-            </Text>
+            <Text style={styles.bottomText}>{item?.desc}</Text>
           </View>
         )}
       </Pressable>
@@ -56,22 +88,35 @@ const FAQS = (props) => {
         headerText={'FAQS'}
         navigation={props.navigation}
         onBack={() => props.navigation.goBack()}
-        right={true}
-        onRightPress={() => {}}
       />
       <View style={{flex: 1}}>
         <FlatList
+          onRefresh={fetchData}
+          refreshing={isLoading}
           bounces={false}
           showsVerticalScrollIndicator={false}
-          data={[1, 2, 3, 4, 5, 6]}
+          data={faqQue || []}
           renderItem={renderItem}
+          ListEmptyComponent={() => (
+            <Text
+              style={{
+                fontFamily: 'Roboto-Italic',
+                fontSize: wp(3.5),
+                color: '#99A0A5',
+                textAlign: 'center',
+                marginHorizontal: 20,
+                marginVertical: hp(5),
+              }}>
+              No FAQs here!
+            </Text>
+          )}
         />
       </View>
     </LinearGradient>
   );
 };
 
-export default FAQS;
+export default FAQDetails;
 
 const styles = StyleSheet.create({
   inputForm: {
@@ -93,6 +138,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto-Bold',
     fontSize: wp(4),
     color: Colors.inputTextColor,
+    width: '90%',
   },
   bottomText: {
     fontFamily: 'Roboto-Regular',

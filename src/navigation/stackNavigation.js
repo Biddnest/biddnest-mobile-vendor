@@ -12,6 +12,7 @@ import PrivacyPolicy from '../screens/dashboard/drawer/privacyPolicy';
 import Support from '../screens/dashboard/drawer/support';
 import RaiseRequest from '../screens/dashboard/drawer/raiseRequest';
 import FAQS from '../screens/dashboard/drawer/faqs';
+import FAQDetails from '../screens/dashboard/drawer/faqs/faqDetails';
 import PayOuts from '../screens/dashboard/drawer/payOuts';
 import PayOutDetails from '../screens/dashboard/drawer/payOutDetails';
 
@@ -37,7 +38,8 @@ const MainStackNavigator = () => {
       <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
       <Stack.Screen name="Support" component={Support} />
       <Stack.Screen name="RaiseRequest" component={RaiseRequest} />
-      <Stack.Screen name="FAQS" component={FAQS} />
+      <Stack.Screen name="FAQs" component={FAQS} />
+      <Stack.Screen name="FAQDetails" component={FAQDetails} />
       <Stack.Screen name="PayOuts" component={PayOuts} />
       <Stack.Screen name="PayOutDetails" component={PayOutDetails} />
     </Stack.Navigator>

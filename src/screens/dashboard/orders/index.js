@@ -13,10 +13,11 @@ import {HomeHeader} from '../home';
 import {STYLES} from '../../../constant/commonStyle';
 import LinearGradient from 'react-native-linear-gradient';
 import {getOrders} from '../../../redux/actions/user';
-import {CustomAlert} from '../../../constant/commonFun';
+import {CustomAlert, DiffMin} from '../../../constant/commonFun';
 import {useDispatch, useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
 import moment from 'moment';
+import CountDown from '../../../components/countDown';
 
 const Orders = (props) => {
   const dispatch = useDispatch();
@@ -32,7 +33,7 @@ const Orders = (props) => {
     }
   }, [selectedTab]);
   const getOrdersList = (pageNo = 1) => {
-    dispatch(getOrders('past', pageNo))
+    dispatch(getOrders(selectedTab, pageNo))
       .then((res) => {
         setLoading(false);
         if (res?.status === 'success' && res?.data) {
@@ -113,11 +114,25 @@ const Orders = (props) => {
               <View style={STYLES.flexBoxOrders}>
                 <View style={STYLES.priceView}>
                   <Text style={STYLES.participatedText}>
-                    Rs. {item?.final_quote}
+                    Rs. {item?.final_quote || item?.final_estimated_quote}
                   </Text>
                 </View>
                 <View style={STYLES.priceView}>
-                  <Text style={STYLES.participatedText}>00 : 50 : 00</Text>
+                  <CountDown
+                    until={
+                      (DiffMin(new Date(item?.bid_result_at)) > 0 &&
+                        DiffMin(new Date(item?.bid_result_at)) * 60) ||
+                      0
+                    }
+                    onFinish={() => getOrdersList()}
+                    size={18}
+                    digitStyle={{height: '100%'}}
+                    digitTxtStyle={STYLES.participatedText}
+                    separatorStyle={{color: '#000'}}
+                    timeToShow={['H', 'M', 'S']}
+                    timeLabels={{h: null, m: null, s: null}}
+                    showSeparator
+                  />
                 </View>
               </View>
               <View style={STYLES.flexBoxOrders}>
@@ -312,6 +327,8 @@ const Orders = (props) => {
             extraData={order?.bookings}
             renderItem={renderItem}
             onEndReachedThreshold={0.5}
+            onRefresh={() => getOrdersList(order?.paging?.next_page || 1)}
+            refreshing={isLoading}
             onEndReached={() => getOrdersList(order?.paging?.next_page || 1)}
             ListEmptyComponent={() => (
               <Text

@@ -62,7 +62,7 @@ const Support = (props) => {
             width={wp(43)}
             spaceBottom={wp(0.1)}
             backgroundColor={Colors.white}
-            onPress={() => props.navigation.navigate('FAQS')}
+            onPress={() => props.navigation.navigate('FAQs')}
           />
         </View>
         <View style={styles.btnWrapper}>

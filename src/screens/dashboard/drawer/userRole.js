@@ -69,6 +69,30 @@ const UserRole = (props) => {
       });
   };
 
+  const changeStatus = (item) => {
+    setLoading(true);
+    let obj = {
+      url: `user?id=${item?.id}&status=${item?.status === 1 ? 0 : 1}`,
+      method: 'get',
+      headers: {
+        Authorization: 'Bearer ' + STORE.getState().Login?.loginData?.token,
+      },
+    };
+    APICall(obj)
+      .then((res) => {
+        setLoading(false);
+        if (res?.data?.status === 'success') {
+          getUserRoleList();
+        } else {
+          CustomAlert(res?.message);
+        }
+      })
+      .catch((err) => {
+        setLoading(false);
+        CustomAlert(err?.data?.message);
+      });
+  };
+
   const renderItem = ({item, index}) => {
     return (
       <Pressable
@@ -117,7 +141,7 @@ const UserRole = (props) => {
                 if (!switchValue === false) {
                   setDeActivateUser(true);
                 } else {
-                  setSwitchValue(true);
+                  changeStatus(item);
                 }
               }}
             />
@@ -380,7 +404,7 @@ const UserRole = (props) => {
           leftOnPress={() => setDeActivateUser(false)}
           rightOnPress={() => {
             setDeActivateUser(false);
-            setSwitchValue(false);
+            changeStatus(detailsData);
           }}
         />
       </CustomModalAndroid>

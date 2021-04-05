@@ -137,6 +137,23 @@ const Home = (props) => {
   useEffect(() => {
     if (isFocused && userData?.token) {
       // setLoading(true);
+      AsyncStorage.getItem('oneSignalData').then((signalData) => {
+        let player_id = signalData && JSON.parse(signalData).userId;
+        if (player_id) {
+          let obj = {
+            url: 'notification/player',
+            method: 'post',
+            headers: {
+              Authorization:
+                'Bearer ' + STORE.getState().Login?.loginData?.token,
+            },
+            data: {
+              player_id: player_id,
+            },
+          };
+          APICall(obj);
+        }
+      });
       checkPinStatus()
         .then((res) => {
           // setLoading(false);
@@ -252,16 +269,20 @@ const Home = (props) => {
                   </Text>
                 </View>
                 <View style={STYLES.priceView}>
-                  {/*<CountDown*/}
-                  {/*  until={DiffMin(new Date(item?.bid_result_at)) * 60}*/}
-                  {/*  size={18}*/}
-                  {/*  digitStyle={{height: '100%'}}*/}
-                  {/*  digitTxtStyle={STYLES.participatedText}*/}
-                  {/*  separatorStyle={{color: '#000'}}*/}
-                  {/*  timeToShow={['H', 'M', 'S']}*/}
-                  {/*  timeLabels={{h: null, m: null, s: null}}*/}
-                  {/*  showSeparator*/}
-                  {/*/>*/}
+                  <CountDown
+                    until={
+                      (DiffMin(new Date(item?.bid_result_at)) > 0 &&
+                        DiffMin(new Date(item?.bid_result_at)) * 60) ||
+                      0
+                    }
+                    size={18}
+                    digitStyle={{height: '100%'}}
+                    digitTxtStyle={STYLES.participatedText}
+                    separatorStyle={{color: '#000'}}
+                    timeToShow={['H', 'M', 'S']}
+                    timeLabels={{h: null, m: null, s: null}}
+                    showSeparator
+                  />
                 </View>
               </View>
               <View style={STYLES.flexBoxOrders}>
@@ -444,6 +465,8 @@ const Home = (props) => {
             extraData={order?.bookings}
             renderItem={renderItem}
             onEndReachedThreshold={0.5}
+            onRefresh={() => getOrdersList(order?.paging?.next_page || 1)}
+            refreshing={isLoading}
             onEndReached={() => getOrdersList(order?.paging?.next_page || 1)}
             ListEmptyComponent={() => (
               <Text

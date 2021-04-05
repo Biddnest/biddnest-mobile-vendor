@@ -238,21 +238,26 @@ const OrderDetails = (props) => {
                     Rs.{' '}
                     {orderDetails?.bid?.status === 0
                       ? orderDetails?.final_estimated_quote
-                      : orderDetails?.final_quote}
+                      : orderDetails?.final_quote ||
+                        orderDetails?.final_estimated_quote}
                   </Text>
                 </View>
                 <View style={[STYLES.priceView, {width: '40%'}]}>
-                  {/*<CountDown*/}
-                  {/*  until={DiffMin(new Date(orderDetails?.bid_result_at)) * 60}*/}
-                  {/*  onFinish={() => fetchOrderData()}*/}
-                  {/*  size={18}*/}
-                  {/*  digitStyle={{height: '100%'}}*/}
-                  {/*  digitTxtStyle={STYLES.participatedText}*/}
-                  {/*  separatorStyle={{color: '#000'}}*/}
-                  {/*  timeToShow={['H', 'M', 'S']}*/}
-                  {/*  timeLabels={{h: null, m: null, s: null}}*/}
-                  {/*  showSeparator*/}
-                  {/*/>*/}
+                  <CountDown
+                    until={
+                      (DiffMin(new Date(orderDetails?.bid_result_at)) > 0 &&
+                        DiffMin(new Date(orderDetails?.bid_result_at)) * 60) ||
+                      0
+                    }
+                    onFinish={() => fetchOrderData()}
+                    size={18}
+                    digitStyle={{height: '100%'}}
+                    digitTxtStyle={STYLES.participatedText}
+                    separatorStyle={{color: '#000'}}
+                    timeToShow={['H', 'M', 'S']}
+                    timeLabels={{h: null, m: null, s: null}}
+                    showSeparator
+                  />
                 </View>
               </View>
               <View style={STYLES.flexBoxOrders}>
