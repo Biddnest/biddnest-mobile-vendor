@@ -10,24 +10,22 @@ import {
   ScrollView,
   Platform,
 } from 'react-native';
-import {
-  Colors,
-  hp,
-  wp,
-} from '../../../constant/colors';
+import {Colors, hp, wp} from '../../../constant/colors';
 import {HomeHeader} from '../home';
 import {STYLES} from '../../../constant/commonStyle';
 import LinearGradient from 'react-native-linear-gradient';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import VendorInformation from './vendorInformation';
 import LocationDetails from './locationDetails';
-import OtherDetails from './otherDetails';
 import {useSelector} from 'react-redux';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import ChangePassword from './changePassword';
 
 const Profile = (props) => {
   const userData = useSelector((state) => state.Login?.loginData) || {};
   const [openArray, setOpenArray] = useState([]);
   const [openIndex, setOpenIndex] = useState();
+  const [changePassVisible, setChangePassVisible] = useState(false);
   const onPress = (index) => {
     let temp = [...openArray];
     if (openArray.includes(index)) {
@@ -40,7 +38,6 @@ const Profile = (props) => {
     }
     setOpenArray(temp);
   };
-  console.log(userData);
   const renderIcon = (index, header) => {
     return (
       <Pressable
@@ -66,7 +63,7 @@ const Profile = (props) => {
               ]}>
               {header}
             </Text>
-            {openArray.includes(index) && (
+            {index !== 2 && openArray.includes(index) && (
               <Pressable
                 style={styles.singleEdit}
                 onPress={() => setOpenIndex(index)}>
@@ -145,14 +142,26 @@ const Profile = (props) => {
               {userData?.vendor?.email}
             </Text>
           </View>
-          <View style={{width: wp(12)}}>
-            <View style={styles.profileEdit}>
-              <MaterialIcons name={'edit'} color={Colors.white} size={30} />
-            </View>
+          <View
+            style={{
+              width: wp(12),
+              justifyContent: 'space-between',
+              height: hp(12),
+            }}>
+            <Pressable
+              style={styles.profileEdit}
+              onPress={() => props.navigation.navigate('EditProfile')}>
+              <MaterialIcons name={'edit'} color={Colors.white} size={20} />
+            </Pressable>
+            <Pressable
+              style={styles.profileEdit}
+              onPress={() => setChangePassVisible(true)}>
+              <EvilIcons name={'lock'} color={Colors.white} size={28} />
+            </Pressable>
           </View>
         </ImageBackground>
         <View style={{flex: 1}}>
-          {renderIcon(0, 'Vendor Information')}
+          {renderIcon(0, 'Organization Information')}
           {openArray.includes(0) && (
             <View
               style={{
@@ -169,10 +178,6 @@ const Profile = (props) => {
                     body: userData?.vendor?.organization?.org_name,
                   },
                   {
-                    title: 'Vendor Type',
-                    body: userData?.vendor?.organization?.org_type,
-                  },
-                  {
                     title: 'Organization Description',
                     body: JSON.parse(
                       userData?.vendor?.organization?.meta?.toString(),
@@ -183,10 +188,6 @@ const Profile = (props) => {
                     body: JSON.parse(
                       userData?.vendor?.organization?.meta?.toString(),
                     ).secondory_phone,
-                  },
-                  {
-                    title: 'Password',
-                    body: '*********',
                   },
                   {
                     title: 'GSTIN Number',
@@ -243,10 +244,6 @@ const Profile = (props) => {
                     body: userData?.vendor?.organization?.city,
                   },
                   {
-                    title: 'District',
-                    body: 'Bengaluru',
-                  },
-                  {
                     title: 'Pincode',
                     body: userData?.vendor?.organization?.pincode,
                   },
@@ -287,11 +284,14 @@ const Profile = (props) => {
                   },
                   {
                     title: 'Commission Rate',
-                    body: '10%',
+                    body: userData?.vendor?.organization?.commission + '%',
                   },
                   {
                     title: 'Status',
-                    body: 'Active',
+                    body:
+                      userData?.vendor?.organization?.status === 1
+                        ? 'Active'
+                        : 'Inactive',
                   },
                   {
                     title: 'Service Type',
@@ -299,7 +299,9 @@ const Profile = (props) => {
                   },
                   {
                     title: 'Vendor Status',
-                    body: 'Verified',
+                    body: userData?.vendor?.organization?.service_type
+                      ? 'Verified'
+                      : 'Not Verified',
                   },
                 ]}
                 contentContainerStyle={{marginTop: hp(2)}}
@@ -351,9 +353,9 @@ const Profile = (props) => {
         onCloseIcon={() => setOpenIndex(-1)}
         visible={openIndex === 1}
       />
-      <OtherDetails
-        onCloseIcon={() => setOpenIndex(-1)}
-        visible={openIndex === 2}
+      <ChangePassword
+        onCloseIcon={() => setChangePassVisible(false)}
+        visible={changePassVisible}
       />
     </LinearGradient>
   );
@@ -422,6 +424,7 @@ const styles = StyleSheet.create({
     fontSize: wp(4.5),
     color: Colors.inputTextColor,
     marginBottom: 10,
+    textTransform: 'capitalize',
   },
   textWrapper: {
     paddingHorizontal: hp(1),
@@ -435,9 +438,9 @@ const styles = StyleSheet.create({
     ...STYLES.common,
   },
   profileEdit: {
-    height: wp(12),
-    width: wp(12),
-    borderRadius: wp(6),
+    height: wp(10),
+    width: wp(10),
+    borderRadius: wp(5),
     backgroundColor: '#5643A8',
     ...STYLES.common,
   },

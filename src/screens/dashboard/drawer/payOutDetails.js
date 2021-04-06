@@ -1,77 +1,113 @@
-import React, {useState} from 'react';
-import {
-  FlatList,
-  Platform,
-  Pressable,
-  ScrollView,
-  Text,
-  View,
-  StyleSheet,
-} from 'react-native';
+import React from 'react';
+import {Text, View, StyleSheet} from 'react-native';
 import {Colors, hp, wp} from '../../../constant/colors';
 import LinearGradient from 'react-native-linear-gradient';
-import SimpleHeader from '../../../components/simpleHeader';
 import {STYLES} from '../../../constant/commonStyle';
-import Switch from '../../../components/switch';
-import FilterButton from '../../../components/filterButton';
 import CloseIcon from '../../../components/closeIcon';
 import CustomModalAndroid from '../../../components/customModal';
-import TwoButton from '../../../components/twoButton';
-import FlatButton from '../../../components/flatButton';
-import Slider from 'rn-range-slider';
-import DropDownAndroid from '../../../components/dropDown';
+import {useSelector} from 'react-redux';
+import moment from 'moment';
 
 const PayOutDetails = (props) => {
+  const {data} = props;
+  const statusData =
+    useSelector((state) => state.Login?.configData?.enums?.payout?.status) ||
+    {};
+  let total_bookings = data?.meta && JSON.parse(data?.meta?.toString());
+
+  const renderStatus = (item) => {
+    if (statusData?.scheduled === item?.status) {
+      return (
+        <Text style={[styles.transferView, {backgroundColor: Colors.btnBG}]}>
+          scheduled
+        </Text>
+      );
+    } else if (statusData?.processing === item?.status) {
+      return (
+        <Text style={[styles.transferView, {backgroundColor: Colors.btnBG}]}>
+          processing
+        </Text>
+      );
+    } else if (statusData?.transferred === item?.status) {
+      return (
+        <Text
+          style={[styles.transferView, {backgroundColor: Colors.lightGreen}]}>
+          transferred
+        </Text>
+      );
+    } else if (statusData?.suspended === item?.status) {
+      return (
+        <Text style={[styles.transferView, {backgroundColor: Colors.red}]}>
+          suspended
+        </Text>
+      );
+    } else if (statusData?.cancelled === item?.status) {
+      return (
+        <Text style={[styles.transferView, {backgroundColor: Colors.red}]}>
+          cancelled
+        </Text>
+      );
+    }
+    return null;
+  };
   return (
-    <LinearGradient colors={[Colors.pageBG, Colors.white]} style={{flex: 1}}>
-      <SimpleHeader
-        headerText={'PayOuts'}
-        right={true}
-        navigation={props.navigation}
-        onBack={() => props.navigation.goBack()}
-      />
-      <ScrollView
-        contentContainerStyle={{
-          flex: 1,
+    <CustomModalAndroid
+      visible={props.visible}
+      onPress={() => {
+        props.onCloseIcon();
+      }}>
+      <Text style={STYLES.modalHeaderText}>PAYOUT DETAILS</Text>
+      <CloseIcon
+        onPress={() => {
+          props.onCloseIcon();
         }}
-        showsVerticalScrollIndicator={false}
-        bounces={false}>
+      />
+      <View
+        style={{
+          flex: 1,
+          width: '100%',
+          marginBottom: hp(2),
+        }}>
         <View style={styles.inputForm}>
           <View style={[styles.flexBox, {marginTop: 0}]}>
-            <Text style={styles.topText}>3rd Feb 2021</Text>
-            <Text style={[styles.bottomText, styles.transferView]}>
-              TRANSFERRED
+            <Text style={styles.topText}>
+              {moment(data?.dispatch_at).format('Do MMM YYYY')}
             </Text>
+            {renderStatus(data)}
           </View>
           <Text style={[styles.bottomText, {width: '100%', marginTop: hp(1)}]}>
-            Number of Orders: 2
+            Number of Orders: {total_bookings?.total_bookings}
           </Text>
           <Text style={[styles.bottomText, {maxWidth: '65%'}]}>
-            Transaction Id: 12345678987
+            Transaction Id: {data?.bank_transaction_id}
           </Text>
           <View style={styles.separatorView} />
           <View style={[styles.flexBox, {marginTop: 0}]}>
             <Text style={[styles.bottomText, {maxWidth: '65%'}]}>
               Total Amount
             </Text>
-            <Text style={[styles.bottomText, {maxWidth: '35%'}]}>9000</Text>
+            <Text style={[styles.bottomText, {maxWidth: '35%'}]}>
+              Rs. {data?.amount}
+            </Text>
           </View>
           <View style={styles.flexBox}>
             <Text style={[styles.bottomText, {maxWidth: '65%'}]}>
               Commission(10%)
             </Text>
-            <Text style={[styles.bottomText, {maxWidth: '35%'}]}>900</Text>
-          </View>
-          <View style={styles.flexBox}>
-            <Text style={[styles.bottomText, {maxWidth: '65%'}]}>Taxes</Text>
-            <Text style={[styles.bottomText, {maxWidth: '35%'}]}>50</Text>
-          </View>
-          <View style={styles.flexBox}>
-            <Text style={[styles.bottomText, {maxWidth: '65%'}]}>
-              Other Adjustments
+            <Text style={[styles.bottomText, {maxWidth: '35%'}]}>
+              Rs. {data?.commission}
             </Text>
-            <Text style={[styles.bottomText, {maxWidth: '35%'}]}>50</Text>
           </View>
+          {/*<View style={styles.flexBox}>*/}
+          {/*  <Text style={[styles.bottomText, {maxWidth: '65%'}]}>Taxes</Text>*/}
+          {/*  <Text style={[styles.bottomText, {maxWidth: '35%'}]}>50</Text>*/}
+          {/*</View>*/}
+          {/*<View style={styles.flexBox}>*/}
+          {/*  <Text style={[styles.bottomText, {maxWidth: '65%'}]}>*/}
+          {/*    Other Adjustments*/}
+          {/*  </Text>*/}
+          {/*  <Text style={[styles.bottomText, {maxWidth: '35%'}]}>50</Text>*/}
+          {/*</View>*/}
           <View style={styles.separatorView} />
           <LinearGradient
             colors={[Colors.darkBlue, '#462F97']}
@@ -101,12 +137,12 @@ const PayOutDetails = (props) => {
                 fontFamily: 'Roboto-Bold',
                 color: Colors.white,
               }}>
-              Rs. 10,000
+              Rs. {data?.final_payout}
             </Text>
           </LinearGradient>
         </View>
-      </ScrollView>
-    </LinearGradient>
+      </View>
+    </CustomModalAndroid>
   );
 };
 
@@ -135,9 +171,14 @@ const styles = StyleSheet.create({
   transferView: {
     paddingHorizontal: 10,
     paddingVertical: 3,
-    borderWidth: 0.5,
-    borderColor: Colors.inputTextColor,
+    // borderWidth: 0.5,
+    // borderColor: Colors.inputTextColor,
     borderRadius: 5,
+    fontFamily: 'Gilroy-SemiBold',
+    fontSize: wp(3.8),
+    maxWidth: '35%',
+    textTransform: 'uppercase',
+    color: Colors.white,
   },
   flexBox: {
     flexDirection: 'row',

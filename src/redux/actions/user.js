@@ -173,3 +173,73 @@ export const getDriverAndVehicle = () => {
     });
   };
 };
+
+export const sendOTP = (data) => {
+  return new Promise((resolve, reject) => {
+    let obj = {
+      url: 'auth/verification/phone',
+      method: 'post',
+      data: data,
+    };
+    APICall(obj)
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};
+
+export const verifyOTP = (data) => {
+  return new Promise((resolve, reject) => {
+    let obj = {
+      url: 'auth/verification/otp',
+      method: 'post',
+      data: data,
+    };
+    APICall(obj)
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};
+
+export const updateProfile = (data, type = '') => {
+  return (dispatch) => {
+    return new Promise((resolve, reject) => {
+      let obj = {
+        url:
+          type === 'organization'
+            ? 'organization/update'
+            : type === 'vendor'
+            ? 'profile/update'
+            : type === 'location'
+            ? 'location/update'
+            : 'details/update',
+        method: 'put',
+        headers: {
+          Authorization: 'Bearer ' + STORE.getState().Login?.loginData?.token,
+        },
+        data: data,
+      };
+      APICall(obj)
+        .then((res) => {
+          dispatch({
+            type: LOGIN_USER_DATA,
+            payload: {
+              ...STORE.getState().Login?.loginData,
+              vendor: res?.data?.data?.vendor,
+            },
+          });
+          resolve(res.data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  };
+};

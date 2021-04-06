@@ -58,6 +58,7 @@ const DropDownAndroid = (props) => {
             fontSize: wp(4),
             backgroundColor: Colors.textBG,
             color: Colors.inputTextColor,
+            textTransform: 'capitalize',
           }}
           selectedLabelLength={props.width ? props.width : wp(45)}
           itemStyle={{

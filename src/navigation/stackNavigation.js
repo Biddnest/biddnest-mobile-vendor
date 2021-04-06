@@ -14,7 +14,7 @@ import RaiseRequest from '../screens/dashboard/drawer/raiseRequest';
 import FAQS from '../screens/dashboard/drawer/faqs';
 import FAQDetails from '../screens/dashboard/drawer/faqs/faqDetails';
 import PayOuts from '../screens/dashboard/drawer/payOuts';
-import PayOutDetails from '../screens/dashboard/drawer/payOutDetails';
+import EditProfile from '../screens/dashboard/profile/editProfile';
 
 const Stack = createStackNavigator();
 
@@ -41,7 +41,6 @@ const MainStackNavigator = () => {
       <Stack.Screen name="FAQs" component={FAQS} />
       <Stack.Screen name="FAQDetails" component={FAQDetails} />
       <Stack.Screen name="PayOuts" component={PayOuts} />
-      <Stack.Screen name="PayOutDetails" component={PayOutDetails} />
     </Stack.Navigator>
   );
 };
@@ -59,6 +58,7 @@ const ProfileStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={screenOptionStyle} headerMode={false}>
       <Stack.Screen name="Profile" component={Profile} />
+      <Stack.Screen name="EditProfile" component={EditProfile} />
     </Stack.Navigator>
   );
 };

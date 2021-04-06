@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   FlatList,
   Platform,
@@ -19,13 +19,103 @@ import CustomModalAndroid from '../../../components/customModal';
 import FlatButton from '../../../components/flatButton';
 import DropDownAndroid from '../../../components/dropDown';
 import Slider from 'rn-range-slider';
+import {STORE} from '../../../redux';
+import {APICall} from '../../../redux/actions/user';
+import {CustomAlert} from '../../../constant/commonFun';
+import moment from 'moment';
+import {useSelector} from 'react-redux';
+import PayOutDetails from './payOutDetails';
 
 const PayOuts = (props) => {
+  const statusData =
+    useSelector((state) => state.Login?.configData?.enums?.payout?.status) ||
+    {};
+  const [isLoading, setLoading] = useState(false);
+  const [payoutList, setPayOutList] = useState({});
   const [filterVisible, setFilterVisible] = useState(false);
+  const [filterData, setFilterData] = useState({
+    from: new Date(),
+    to: new Date(),
+    status: 0,
+  });
+  const [payoutDetailsVisible, setPayoutDetailsVisible] = useState(false);
+  const [payoutDetailsData, setPayoutDetailsData] = useState({});
+  let filterOptions = [];
+  Object.keys(statusData).forEach((item, index) => {
+    filterOptions.push({
+      label: item,
+      value: Object.values(statusData)[index],
+    });
+  });
+  useEffect(() => {
+    setLoading(true);
+    fetchData();
+  }, []);
+  const fetchData = (pageNo = 1) => {
+    let obj = {
+      url: 'payouts?from=2021-04-04&to=2021-04-05&status=0',
+      method: 'get',
+      headers: {
+        Authorization: 'Bearer ' + STORE.getState().Login?.loginData?.token,
+      },
+    };
+    APICall(obj)
+      .then((res) => {
+        setLoading(false);
+        if (res?.data?.status === 'success') {
+          setPayOutList(res?.data?.data);
+        } else {
+          CustomAlert(res?.data?.message);
+        }
+      })
+      .catch((err) => {
+        setLoading(false);
+        CustomAlert(err?.message);
+      });
+  };
+  const renderStatus = (item) => {
+    if (statusData?.scheduled === item?.status) {
+      return (
+        <Text style={[styles.transferView, {backgroundColor: Colors.btnBG}]}>
+          scheduled
+        </Text>
+      );
+    } else if (statusData?.processing === item?.status) {
+      return (
+        <Text style={[styles.transferView, {backgroundColor: Colors.btnBG}]}>
+          processing
+        </Text>
+      );
+    } else if (statusData?.transferred === item?.status) {
+      return (
+        <Text
+          style={[styles.transferView, {backgroundColor: Colors.lightGreen}]}>
+          transferred
+        </Text>
+      );
+    } else if (statusData?.suspended === item?.status) {
+      return (
+        <Text style={[styles.transferView, {backgroundColor: Colors.red}]}>
+          suspended
+        </Text>
+      );
+    } else if (statusData?.cancelled === item?.status) {
+      return (
+        <Text style={[styles.transferView, {backgroundColor: Colors.red}]}>
+          cancelled
+        </Text>
+      );
+    }
+    return null;
+  };
   const renderItem = ({item, index}) => {
+    let total_bookings = item?.meta && JSON.parse(item?.meta?.toString());
     return (
       <Pressable
-        onPress={() => props.navigation.navigate('PayOutDetails')}
+        onPress={() => {
+          setPayoutDetailsVisible(true);
+          setPayoutDetailsData(item);
+        }}
         key={index}
         style={{
           flex: 1,
@@ -35,21 +125,21 @@ const PayOuts = (props) => {
           backgroundColor: Colors.white,
         }}>
         <View style={styles.flexBox}>
-          <Text style={styles.topText}>3rd Feb 2021</Text>
+          <Text style={styles.topText}>
+            {moment(item?.dispatch_at).format('Do MMM YYYY')}
+          </Text>
           <Text style={[styles.topText, {color: Colors.darkBlue}]}>
-            Rs. 10,000
+            Rs. {item?.final_payout}
           </Text>
         </View>
         <Text style={[styles.bottomText, {width: '100%', marginTop: hp(1)}]}>
-          Number of Orders: 2
+          Number of Orders: {total_bookings?.total_bookings}
         </Text>
         <View style={styles.flexBox}>
           <Text style={[styles.bottomText, {width: '65%'}]}>
-            Transaction Id: 12345678987
+            Transaction Id: {item?.bank_transaction_id}
           </Text>
-          <Text style={[styles.bottomText, styles.transferView]}>
-            TRANSFERRED
-          </Text>
+          {renderStatus(item)}
         </View>
       </Pressable>
     );
@@ -72,7 +162,12 @@ const PayOuts = (props) => {
           <FlatList
             bounces={false}
             showsVerticalScrollIndicator={false}
-            data={[1, 2, 3, 4, 5, 6]}
+            data={payoutList?.payouts}
+            extraData={payoutList?.payouts}
+            onEndReachedThreshold={0.5}
+            onRefresh={() => fetchData(payoutList?.paging?.next_page || 1)}
+            refreshing={isLoading}
+            onEndReached={() => fetchData(payoutList?.paging?.next_page || 1)}
             renderItem={renderItem}
             ItemSeparatorComponent={() => (
               <View style={[STYLES.separatorView, {marginTop: 0}]} />
@@ -93,6 +188,14 @@ const PayOuts = (props) => {
         </View>
       </ScrollView>
       <FilterButton onPress={() => setFilterVisible(true)} />
+      <PayOutDetails
+        visible={payoutDetailsVisible}
+        data={payoutDetailsData}
+        onCloseIcon={() => {
+          setPayoutDetailsVisible(false);
+          setPayoutDetailsData({});
+        }}
+      />
       <CustomModalAndroid
         visible={filterVisible}
         onPress={() => setFilterVisible(false)}>
@@ -103,7 +206,7 @@ const PayOuts = (props) => {
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <View style={styles.manPowerView}>
               <Text style={[STYLES.inputTextStyle, {height: 'auto'}]}>
-                {'02 Jan'}
+                {moment(filterData?.from).format('D MMM')}
               </Text>
             </View>
             <Slider
@@ -130,7 +233,7 @@ const PayOuts = (props) => {
             />
             <View style={styles.manPowerView}>
               <Text style={[STYLES.inputTextStyle, {height: 'auto'}]}>
-                {'04 Feb'}
+                {moment(filterData?.to).format('D MMM')}
               </Text>
             </View>
           </View>
@@ -161,9 +264,15 @@ const PayOuts = (props) => {
           ]}>
           <DropDownAndroid
             label={'Status'}
+            value={filterData?.status}
             width={wp(90)}
-            items={[{label: 'Driver Unassigned', value: 'driverunassigned'}]}
-            onChangeItem={(text) => {}}
+            items={filterOptions}
+            onChangeItem={(text) =>
+              setFilterData({
+                ...filterData,
+                status: text,
+              })
+            }
           />
         </View>
         <FlatButton label={'apply'} onPress={() => setFilterVisible(false)} />
@@ -194,10 +303,14 @@ const styles = StyleSheet.create({
   transferView: {
     paddingHorizontal: 10,
     paddingVertical: 3,
-    borderWidth: 0.5,
-    borderColor: Colors.inputTextColor,
+    fontFamily: 'Gilroy-SemiBold',
+    // borderWidth: 0.5,
+    // borderColor: Colors.inputTextColor,
     borderRadius: 5,
+    fontSize: wp(3.8),
     maxWidth: '35%',
+    textTransform: 'uppercase',
+    color: Colors.white,
   },
   flexBox: {
     flexDirection: 'row',

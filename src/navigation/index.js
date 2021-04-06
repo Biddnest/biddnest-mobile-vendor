@@ -22,7 +22,7 @@ const App = () => {
         <Stack.Screen name="Splash" component={Splash} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
-        <Stack.Screen name="ChangePassword" component={ChangePassword} />
+        <Stack.Screen name="ChangePasswordAuth" component={ChangePassword} />
         <Stack.Screen name="Dashboard" component={DrawerNavigation} />
       </Stack.Navigator>
     </NavigationContainer>

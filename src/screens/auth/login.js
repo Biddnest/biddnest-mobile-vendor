@@ -15,7 +15,7 @@ const Login = (props) => {
   const dispatch = useDispatch();
   const [isLoading, setLoading] = useState(false);
   const [data, setData] = useState({
-    username: 'vendor@biddnest.com',
+    username: 'dhanashree18@gmail.com',
     password: 'admin123',
   });
   const [error, setError] = useState({});

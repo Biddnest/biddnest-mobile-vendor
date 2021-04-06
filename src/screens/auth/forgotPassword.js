@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Colors, hp, wp} from '../../constant/colors';
@@ -8,12 +8,48 @@ import OTPInputView from '@twotalltotems/react-native-otp-input';
 import Header from './header';
 import LinearGradient from 'react-native-linear-gradient';
 import {STYLES} from '../../constant/commonStyle';
+import {CustomAlert} from '../../constant/commonFun';
+import {sendOTP, verifyOTP} from '../../redux/actions/user';
 
 const ForgotPassword = (props) => {
-  const [phoneNumber, setPhoneNumber] = React.useState();
-  const [phoneValidate, setPhoneValidate] = React.useState(undefined);
-  const [otpSend, setOtpSend] = React.useState(false);
-  const [isAgree, setAgree] = React.useState(true);
+  const [isLoading, setLoading] = useState(false);
+  const [phone, setPhone] = useState();
+  const [otp, setOTP] = React.useState();
+  const [phoneValidate, setPhoneValidate] = useState(undefined);
+  const [otpSend, setOtpSend] = useState(false);
+  const [isAgree, setAgree] = useState(true);
+  const [otpResponse, setOtpResponse] = useState({});
+
+  const sendOTPFun = () => {
+    setLoading(true);
+    if (!phone?.length || phone?.length !== 10 || /\D/.test(phone)) {
+      setPhoneValidate(false);
+      setLoading(false);
+    } else if (!isAgree) {
+      setPhoneValidate(true);
+      setLoading(false);
+      CustomAlert('Agree to the Terms & Conditions');
+    } else {
+      setPhoneValidate(true);
+      // Send OTP
+      sendOTP({phone})
+        .then((res) => {
+          setLoading(false);
+          if (res.status === 'success') {
+            CustomAlert(res.message + res.data.otp);
+            setOtpResponse(res.data);
+            setOtpSend(true);
+          } else {
+            CustomAlert(res.message);
+          }
+        })
+        .catch((err) => {
+          setLoading(false);
+          CustomAlert(err?.data?.message);
+        });
+    }
+  };
+
   return (
     <View style={[styles.container, {...styles.common}]}>
       <Header />
@@ -35,29 +71,22 @@ const ForgotPassword = (props) => {
           <View style={styles.bottomView}>
             <Text style={STYLES.authScreenHeader}>Forgot Password</Text>
             <TextInput
-              disable={otpSend}
               isRight={phoneValidate}
               label={'Phone Number'}
               placeHolder={'Phone Number'}
               keyboard={'decimal-pad'}
-              onChange={(text) => setPhoneNumber(text)}
+              onChange={(text) => {
+                setOtpSend(false);
+                setPhone(text);
+              }}
             />
             {(!otpSend && (
               <View style={{alignItems: 'center'}}>
                 <Button
+                  isLoading={isLoading}
                   label={'SEND OTP'}
                   onPress={() => {
-                    if (
-                      !phoneNumber?.length ||
-                      phoneNumber?.length !== 10 ||
-                      /\D/.test(phoneNumber)
-                    ) {
-                      setPhoneValidate(false);
-                    } else if (!isAgree) {
-                    } else {
-                      setPhoneValidate(true);
-                      setOtpSend(true);
-                    }
+                    sendOTPFun();
                   }}
                 />
               </View>
@@ -81,7 +110,7 @@ const ForgotPassword = (props) => {
                     }}>
                     <OTPInputView
                       pinCount={6}
-                      onCodeChanged={(code) => console.log(code)}
+                      onCodeChanged={(code) => setOTP(code)}
                       codeInputFieldStyle={styles.textInput}
                       codeInputHighlightStyle={[
                         styles.textInput,
@@ -99,8 +128,31 @@ const ForgotPassword = (props) => {
                   Waiting for OTP
                 </Text>
                 <Button
+                  isLoading={isLoading}
                   label={'SUBMIT'}
-                  onPress={() => props.navigation.navigate('ChangePassword')}
+                  onPress={() => {
+                    // Verify OTP
+                    setLoading(true);
+                    verifyOTP({
+                      phone,
+                      otp,
+                    })
+                      .then((res) => {
+                        setLoading(false);
+                        if (res.status === 'success') {
+                          props.navigation.navigate('ChangePasswordAuth', {
+                            phone,
+                            otp,
+                          });
+                        } else {
+                          CustomAlert(res.message);
+                        }
+                      })
+                      .catch((err) => {
+                        setLoading(false);
+                        CustomAlert(err?.data?.message);
+                      });
+                  }}
                 />
                 <Text
                   style={{
@@ -109,7 +161,7 @@ const ForgotPassword = (props) => {
                   }}>
                   Did not receive OTP?{' '}
                   <Text
-                    onPress={() => setOtpSend(false)}
+                    onPress={() => sendOTPFun()}
                     style={{
                       fontFamily: 'Roboto-Bold',
                       color: Colors.darkBlue,

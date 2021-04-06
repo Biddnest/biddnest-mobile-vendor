@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, Text, StyleSheet, Platform} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Colors, hp, wp} from '../../constant/colors';
@@ -7,11 +7,23 @@ import TextInput from '../../components/textInput';
 import Button from '../../components/button';
 import LinearGradient from 'react-native-linear-gradient';
 import {STYLES} from '../../constant/commonStyle';
-import {resetNavigator} from '../../constant/commonFun';
+import {CustomAlert, resetNavigator} from '../../constant/commonFun';
+import {STORE} from '../../redux';
+import {APICall} from '../../redux/actions/user';
 
 const ChangePassword = (props) => {
-  const [data, setData] = React.useState({});
-  const [error, setError] = React.useState({});
+  const details = props?.route?.params;
+  const [isLoading, setLoading] = useState(false);
+  const [data, setData] = React.useState({
+    phone: details?.phone,
+    otp: details?.otp,
+    new_password: 'admin123',
+    confirm_password: 'admin123',
+  });
+  const [error, setError] = React.useState({
+    new_password: undefined,
+    confirm_password: undefined,
+  });
   const handleState = (key, value) => {
     setData({
       ...data,
@@ -40,6 +52,7 @@ const ChangePassword = (props) => {
             <Text style={STYLES.authScreenHeader}>Change Password</Text>
             <TextInput
               label={'New Password'}
+              value={data?.new_password}
               placeHolder={'New Password'}
               isRight={error.newPassword}
               secureTextEntry={true}
@@ -47,22 +60,55 @@ const ChangePassword = (props) => {
             />
             <TextInput
               label={'Confirm New Password'}
+              value={data?.confirm_password}
               placeHolder={'Confirm New Password'}
               isRight={error.ConfirmNewPassword}
               secureTextEntry={true}
               onChange={(text) => handleState('ConfirmNewPassword', text)}
             />
             <Button
+              isLoading={isLoading}
               label={'submit'}
               onPress={() => {
                 let tempError = {};
+                setLoading(true);
+                tempError.new_password = !(
+                  !data.new_password || data.new_password.length === 0
+                );
+                tempError.confirm_password = !(
+                  !data.confirm_password || data.confirm_password.length === 0
+                );
                 setError(tempError);
                 if (
                   Object.values(tempError).findIndex(
                     (item) => item === false,
                   ) === -1
                 ) {
-                  resetNavigator(props, 'Login');
+                  let obj = {
+                    url: 'auth/reset-password',
+                    method: 'post',
+                    headers: {
+                      Authorization:
+                        'Bearer ' + STORE.getState().Login?.loginData?.token,
+                    },
+                    data: data,
+                  };
+                  APICall(obj)
+                    .then((res) => {
+                      setLoading(false);
+                      if (res?.data?.status === 'success') {
+                        CustomAlert('Updated Password Successfully');
+                        resetNavigator(props, 'Login');
+                      } else {
+                        CustomAlert(res?.data?.message);
+                      }
+                    })
+                    .catch((err) => {
+                      setLoading(false);
+                      CustomAlert(err.data.message);
+                    });
+                } else {
+                  setLoading(false);
                 }
               }}
             />

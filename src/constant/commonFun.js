@@ -5,6 +5,7 @@ import ImagePicker from 'react-native-image-picker';
 import Toast from 'react-native-simple-toast';
 import {IMAGE_OPTIONS, Colors} from './colors';
 import {STYLES} from './commonStyle';
+import moment from 'moment';
 
 export const resetNavigator = (props, screenName) => {
   props.navigation.dispatch(
@@ -26,7 +27,7 @@ export const CustomConsole = (msg) => {
 };
 
 export const DiffMin = (dt1) => {
-  let dif = dt1 - new Date();
+  let dif = moment(dt1) - moment();
   dif = Math.round(dif / 1000 / 60);
   return dif;
 };
@@ -50,20 +51,20 @@ export const LoadingScreen = () => {
 };
 
 export const ImageSelection = () => {
-  ImagePicker.showImagePicker(IMAGE_OPTIONS, (response) => {
-    console.log('Response = ', response);
+  return new Promise((resolve, reject) => {
+    ImagePicker.showImagePicker(IMAGE_OPTIONS, (response) => {
+      console.log('Response = ', response);
 
-    if (response.didCancel) {
-      console.log('User cancelled image picker');
-    } else if (response.error) {
-      console.log('ImagePicker Error: ', response.error);
-    } else if (response.customButton) {
-      console.log('User tapped custom button: ', response.customButton);
-    } else {
-      const source = {uri: response.uri};
-
-      // You can also display the image using data:
-      // const source = { uri: 'data:image/jpeg;base64,' + response.data };
-    }
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      } else {
+        resolve('data:image/jpeg;base64,' + response.data);
+      }
+      reject(false);
+    });
   });
 };

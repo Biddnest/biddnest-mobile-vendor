@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Text, View, StyleSheet} from 'react-native';
 import CustomModalAndroid from '../../../components/customModal';
 import CloseIcon from '../../../components/closeIcon';
@@ -8,32 +8,47 @@ import DropDownAndroid from '../../../components/dropDown';
 import FlatButton from '../../../components/flatButton';
 import {STYLES} from '../../../constant/commonStyle';
 import Switch from '../../../components/switch';
+import {useDispatch, useSelector} from 'react-redux';
+import {updateProfile} from '../../../redux/actions/user';
+import {CustomAlert} from '../../../constant/commonFun';
 
 const OtherDetails = (props) => {
+  const dispatch = useDispatch();
+  const userData = useSelector((state) => state.Login?.loginData?.vendor) || {};
+  const [isLoading, setLoading] = useState(false);
+  const [data, setData] = useState({
+    commission: userData?.organization?.commission,
+    status: userData?.organization?.status,
+    service_type: userData?.organization?.service_type,
+  });
+  const [error, setError] = useState({
+    commission: undefined,
+  });
+
   return (
     <CustomModalAndroid
       visible={props.visible}
       onPress={() => {
         props.onCloseIcon();
       }}>
-      <View style={STYLES.modalHeaderView}>
-        <Text style={STYLES.modalHeaderText}>EDIT OTHER DETAILS</Text>
-        <CloseIcon
-          style={{
-            position: 'absolute',
-            right: 10,
-          }}
-          onPress={() => {
-            props.onCloseIcon();
-          }}
-        />
-      </View>
-      <View style={{...styles.separatorView, width: '85%'}} />
-      <View style={{width: '90%'}}>
+      <Text style={STYLES.modalHeaderText}>EDIT OTHER DETAILS</Text>
+      <CloseIcon
+        onPress={() => {
+          props.onCloseIcon();
+        }}
+      />
+      <View style={{width: '90%', marginTop: hp(2)}}>
         <TextInput
+          value={data?.commission?.toString()}
           label={'Commission Rate'}
           placeHolder={'10%'}
-          onChange={(text) => {}}
+          keyboard={'decimal-pad'}
+          onChange={(text) =>
+            setData({
+              ...data,
+              commission: text,
+            })
+          }
         />
         <View style={{width: '95%', alignSelf: 'center', marginBottom: hp(3)}}>
           <Text
@@ -45,44 +60,71 @@ const OtherDetails = (props) => {
             }}>
             Status
           </Text>
-          <Switch left={'Inactive'} right={'Active'} />
+          <Switch
+            left={'Inactive'}
+            right={'Active'}
+            switchValue={data?.status}
+            onChange={() =>
+              setData({
+                ...data,
+                status: data?.status ? 0 : 1,
+              })
+            }
+          />
         </View>
         <View style={{marginBottom: hp(3)}}>
           <DropDownAndroid
+            value={data?.service_type}
             label={'Service Type'}
             width={wp(90)}
             items={[
-              {label: 'Male', value: 'male'},
-              {label: 'Female', value: 'female'},
+              {label: 'Economic', value: 'economic'},
+              {label: 'Premium', value: 'premium'},
             ]}
-            onChangeItem={(text) => {}}
-          />
-        </View>
-        <View style={{marginBottom: hp(3)}}>
-          <DropDownAndroid
-            label={'Vendor Status'}
-            width={wp(90)}
-            items={[
-              {label: 'Male', value: 'male'},
-              {label: 'Female', value: 'female'},
-            ]}
-            onChangeItem={(text) => {}}
+            onChangeItem={(text) => {
+              setData({
+                ...data,
+                service_type: text,
+              });
+            }}
           />
         </View>
       </View>
-      <FlatButton label={'save'} onPress={() => props.onCloseIcon()} />
+      <FlatButton
+        isLoading={isLoading}
+        label={'save'}
+        onPress={() => {
+          let tempError = {};
+          setLoading(true);
+          tempError.organization_name = !(
+            !data.organization_name || data.organization_name.length === 0
+          );
+          setError(tempError);
+          if (
+            Object.values(tempError).findIndex((item) => item === false) === -1
+          ) {
+            // API call
+            dispatch(updateProfile(data))
+              .then((res) => {
+                setLoading(false);
+                if (res.status === 'success') {
+                  CustomAlert('Updated Successfully');
+                  props.onCloseIcon();
+                } else {
+                  CustomAlert(res.message);
+                }
+              })
+              .catch((err) => {
+                setLoading(false);
+                CustomAlert(err.data.message);
+              });
+          } else {
+            setLoading(false);
+          }
+        }}
+      />
     </CustomModalAndroid>
   );
 };
 
 export default OtherDetails;
-
-const styles = StyleSheet.create({
-  separatorView: {
-    borderWidth: 0.8,
-    borderColor: Colors.silver,
-    width: '100%',
-    marginTop: hp(1),
-    marginBottom: hp(2),
-  },
-});

@@ -16,40 +16,7 @@ const TextInput = (props) => {
       secureTextEntry={props.secureTextEntry || false}
       value={props.value}
       onFocus={props.onFocus}
-      label={() => {
-        if (props.smallLabel) {
-          return (
-            <Text
-              style={{
-                fontFamily: 'Roboto-Bold',
-                color: Colors.textLabelColor,
-                fontSize: wp(4),
-              }}>
-              {props.label}
-              {'  '}
-              <Text
-                style={{
-                  fontFamily: 'Roboto-Regular',
-                  color: Colors.textLabelColor,
-                  fontSize: wp(3),
-                }}>
-                {props.smallLabel}
-              </Text>
-            </Text>
-          );
-        } else {
-          return (
-            <Text
-              style={{
-                fontFamily: 'Roboto-Bold',
-                color: Colors.textLabelColor,
-                fontSize: wp(4),
-              }}>
-              {props.label}
-            </Text>
-          );
-        }
-      }}
+      label={props.label}
       rightIcon={() => {
         if (props.isRight === true) {
           return (

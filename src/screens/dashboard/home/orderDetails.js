@@ -245,8 +245,8 @@ const OrderDetails = (props) => {
                 <View style={[STYLES.priceView, {width: '40%'}]}>
                   <CountDown
                     until={
-                      (DiffMin(new Date(orderDetails?.bid_result_at)) > 0 &&
-                        DiffMin(new Date(orderDetails?.bid_result_at)) * 60) ||
+                      (DiffMin(orderDetails?.bid_result_at) > 0 &&
+                        DiffMin(orderDetails?.bid_result_at) * 60) ||
                       0
                     }
                     onFinish={() => fetchOrderData()}

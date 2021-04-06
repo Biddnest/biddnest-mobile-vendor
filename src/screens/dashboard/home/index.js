@@ -271,8 +271,8 @@ const Home = (props) => {
                 <View style={STYLES.priceView}>
                   <CountDown
                     until={
-                      (DiffMin(new Date(item?.bid_result_at)) > 0 &&
-                        DiffMin(new Date(item?.bid_result_at)) * 60) ||
+                      (DiffMin(item?.bid_result_at) > 0 &&
+                        DiffMin(item?.bid_result_at) * 60) ||
                       0
                     }
                     size={18}
