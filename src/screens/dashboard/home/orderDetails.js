@@ -99,7 +99,8 @@ const OrderDetails = (props) => {
               res?.data?.data?.booking?.bid?.status !== 0 &&
               res?.data?.data?.booking?.bid?.status !== 5
             ) {
-              setTab(['Order Details', 'Requirements', 'Bid Status']);
+              setSelectedTab(2);
+              setTab(['Order Details', 'Requirements', 'My Bid']);
             }
           } else {
             CustomAlert(res?.data?.message);

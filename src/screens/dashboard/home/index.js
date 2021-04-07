@@ -33,6 +33,7 @@ import CountDown from '../../../components/countDown';
 import {NOTIFICATION} from '../../../redux/types';
 import DatePicker from 'react-native-datepicker';
 import Entypo from 'react-native-vector-icons/Entypo';
+import OneSignal from 'react-native-onesignal';
 
 export const HomeHeader = (props) => {
   return (
@@ -119,6 +120,8 @@ const Home = (props) => {
     [];
   const statusData =
     useSelector((state) => state.Login?.configData?.enums?.booking) || {};
+  const bidType =
+    useSelector((state) => state.Login?.configData?.enums?.bid?.type) || {};
   const userData = useSelector((state) => state.Login?.loginData) || {};
   const [selectedTab, setSelectedTab] = useState(0);
   const [filterVisible, setFilterVisible] = useState(false);
@@ -243,6 +246,10 @@ const Home = (props) => {
               selectedTab === 2 && item?.bid?.status === 5
                 ? '#F8F8FA'
                 : Colors.white,
+            borderColor:
+              item?.bid?.bid_type === bidType?.rebid
+                ? Colors.darkBlue
+                : '#DEE6ED',
           },
         ]}
         key={index}
@@ -299,6 +306,7 @@ const Home = (props) => {
                         DiffMin(item?.bid_result_at) * 60) ||
                       0
                     }
+                    onFinish={() => getOrdersList()}
                     size={18}
                     digitStyle={{height: '100%'}}
                     digitTxtStyle={STYLES.participatedText}
@@ -443,6 +451,7 @@ const Home = (props) => {
               type: NOTIFICATION,
               payload: !notificationToggle,
             });
+            OneSignal.setSubscription(!notificationToggle);
             setNotificationToggle(!notificationToggle);
           }
         }}
@@ -485,6 +494,7 @@ const Home = (props) => {
         )) || (
           <FlatList
             bounces={false}
+            contentContainerStyle={{paddingBottom: hp(3)}}
             showsVerticalScrollIndicator={false}
             data={order?.bookings || []}
             extraData={order?.bookings}
@@ -632,6 +642,7 @@ const Home = (props) => {
               type: NOTIFICATION,
               payload: false,
             });
+            OneSignal.setSubscription(false);
             setNotificationToggle(false);
             setOffNotification(false);
           }}

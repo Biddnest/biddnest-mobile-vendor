@@ -17,8 +17,8 @@ const ChangePassword = (props) => {
   const [data, setData] = React.useState({
     phone: details?.phone,
     otp: details?.otp,
-    new_password: 'admin123',
-    confirm_password: 'admin123',
+    new_password: '',
+    confirm_password: '',
   });
   const [error, setError] = React.useState({
     new_password: undefined,
@@ -54,17 +54,17 @@ const ChangePassword = (props) => {
               label={'New Password'}
               value={data?.new_password}
               placeHolder={'New Password'}
-              isRight={error.newPassword}
+              isRight={error.new_password}
               secureTextEntry={true}
-              onChange={(text) => handleState('newPassword', text)}
+              onChange={(text) => handleState('new_password', text)}
             />
             <TextInput
               label={'Confirm New Password'}
               value={data?.confirm_password}
               placeHolder={'Confirm New Password'}
-              isRight={error.ConfirmNewPassword}
+              isRight={error.confirm_password}
               secureTextEntry={true}
-              onChange={(text) => handleState('ConfirmNewPassword', text)}
+              onChange={(text) => handleState('confirm_password', text)}
             />
             <Button
               isLoading={isLoading}

@@ -272,7 +272,6 @@ const EditProfile = (props) => {
                     (item) => item === false,
                   ) === -1
                 ) {
-                  console.log('=========', data);
                   dispatch(updateProfile(data, 'vendor'))
                     .then((res) => {
                       setLoading(false);

@@ -22,6 +22,8 @@ const Login = (props) => {
   const [data, setData] = useState({
     username: 'dhanashree18@gmail.com',
     password: 'admin123',
+    // username: 'dhanashree79@gmail.com',
+    // password: 'vendor123',
   });
   const [error, setError] = useState({});
   const handleState = (key, value) => {

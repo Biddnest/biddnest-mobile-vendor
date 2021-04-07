@@ -20,11 +20,11 @@ const Splash = (props) => {
     useSelector(
       (state) => state.Login?.configData?.enums?.notification?.type,
     ) || {};
+  const notificationValue = useSelector((state) => state.Login?.notification);
   let key =
     (oneSignalData && JSON.parse(oneSignalData).toString().split(',')) || '';
   const [isLoading, setLoading] = useState(false);
   const userData = useSelector((state) => state.Login?.loginData);
-  console.log(notificationData);
   useEffect(() => {
     OneSignal.setLogLevel(6, 0);
     OneSignal.init(
@@ -39,7 +39,7 @@ const Splash = (props) => {
 
     // The promptForPushNotifications function code will show the iOS push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission (See step below)
     OneSignal.promptForPushNotificationsWithUserResponse(myiOSPromptCallback);
-
+    OneSignal.setSubscription(notificationValue);
     OneSignal.addEventListener('received', onReceived);
     OneSignal.addEventListener('opened', onOpened);
     OneSignal.addEventListener('ids', onIds);

@@ -5,8 +5,9 @@ import {STYLES} from '../../../constant/commonStyle';
 import {BarChart} from 'react-native-chart-kit';
 
 const OrderStatusLost = (props) => {
+  const {orderDetails} = props;
   return (
-    <View>
+    <View style={{marginBottom: hp(3)}}>
       <View
         style={{
           alignItems: 'center',
@@ -30,13 +31,15 @@ const OrderStatusLost = (props) => {
         </Text>
         <BarChart
           data={{
-            labels: ['January', 'February', 'March', 'April'],
+            labels: orderDetails?.bid?.statistics?.axis?.x || [],
             datasets: [
               {
-                data: [1000, 2000, 3000, 4000],
+                data: orderDetails?.bid?.statistics?.axis?.y || [],
               },
             ],
           }}
+          fromZero={true}
+          yAxisLabel={'₹'}
           width={wp(80)}
           height={hp(40)}
           chartConfig={{
@@ -54,7 +57,16 @@ const OrderStatusLost = (props) => {
         />
         <Text style={styles.rankText}>
           YOUR POSITION {'   '}
-          <Text style={{fontFamily: 'Roboto-Bold'}}>4th</Text>
+          <Text style={{fontFamily: 'Roboto-Bold'}}>
+            {orderDetails?.bid?.statistics?.rank}
+            {orderDetails?.bid?.statistics?.rank === 1
+              ? 'st'
+              : orderDetails?.bid?.statistics?.rank === 2
+              ? 'nd'
+              : orderDetails?.bid?.statistics?.rank === 3
+              ? 'rd'
+              : 'th'}
+          </Text>
         </Text>
       </View>
     </View>

@@ -22,6 +22,8 @@ import CountDown from '../../../components/countDown';
 const Orders = (props) => {
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
+  const statusData =
+    useSelector((state) => state.Login?.configData?.enums?.bid?.status) || {};
   const userData = useSelector((state) => state.Login?.loginData) || {};
   const [selectedTab, setSelectedTab] = useState('participated');
   const [order, setOrder] = useState({});
@@ -62,6 +64,12 @@ const Orders = (props) => {
     let meta = JSON.parse(item?.meta?.toString()) || {};
     let started_at = {};
     let completed_at = {};
+    let status;
+    Object.values(statusData)?.forEach((i, ind) => {
+      if (i === item?.bid?.status) {
+        status = Object.keys(statusData)[ind].replace('_', ' ');
+      }
+    });
 
     item?.status_history.forEach((ele) => {
       if (ele.status === 1) {
@@ -272,6 +280,16 @@ const Orders = (props) => {
                 {item?.user?.fname} {item?.user?.lname}
               </Text>
             </View>
+            <View style={STYLES.flexBox}>
+              <Text style={STYLES.leftText}>status</Text>
+              <Text
+                style={[
+                  STYLES.rightText,
+                  {width: '50%', textTransform: 'capitalize'},
+                ]}>
+                {status}
+              </Text>
+            </View>
           </View>
         )}
       </Pressable>
@@ -322,6 +340,7 @@ const Orders = (props) => {
         )) || (
           <FlatList
             bounces={false}
+            contentContainerStyle={{paddingBottom: hp(3)}}
             showsVerticalScrollIndicator={false}
             data={order?.bookings || []}
             extraData={order?.bookings}

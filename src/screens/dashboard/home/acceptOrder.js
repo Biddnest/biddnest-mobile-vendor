@@ -35,7 +35,7 @@ const AcceptOrder = (props) => {
   const [applyBidData, setApplyBidData] = useState({
     public_booking_id: public_booking_id,
     inventory: [],
-    bid_amount: 0,
+    bid_amount: orderDetails?.final_estimated_quote,
     type_of_movement: 'shared',
     moving_date: moment(new Date()).format('yyyy-MM-DD'),
     vehicle_type: 'tempo',
@@ -138,9 +138,6 @@ const AcceptOrder = (props) => {
                           STYLES.modalHeaderText,
                           {textAlign: 'left', marginTop: 1},
                         ]}>
-                        {console.log(
-                          orderDetails?.inventories[index]?.quantity,
-                        )}
                         Quantity: x
                         {configData?.inventory_quantity_type.range ===
                         orderDetails?.inventories[index]?.quantity_type
