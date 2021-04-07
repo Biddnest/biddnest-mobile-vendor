@@ -25,6 +25,7 @@ import {useSelector} from 'react-redux';
 import {APICall} from '../../../redux/actions/user';
 import {CustomAlert} from '../../../constant/commonFun';
 import {STORE} from '../../../redux';
+import moment from 'moment';
 
 const UserRole = (props) => {
   const userData = useSelector((state) => state.Login?.loginData) || {};
@@ -45,8 +46,8 @@ const UserRole = (props) => {
   const [switchValue, setSwitchValue] = useState(false);
   const [deActivateUser, setDeActivateUser] = useState(false);
   const [userRoles, setUserRoles] = useState([]);
+  const [filterBranchOptions, setFilterBranchOptions] = useState([]);
   let filterStatusOptions = [];
-  let filterBranchOptions = [];
   Object.keys(vendorStatus)?.forEach((item, index) => {
     filterStatusOptions.push({
       label: item?.replace('_', ' '),
@@ -57,9 +58,43 @@ const UserRole = (props) => {
   useEffect(() => {
     if (userData?.token) {
       setLoading(true);
+      let obj = {
+        url: 'branch',
+        method: 'get',
+        headers: {
+          Authorization: 'Bearer ' + STORE.getState().Login?.loginData?.token,
+        },
+      };
+      APICall(obj)
+        .then((res) => {
+          if (res?.data?.status === 'success') {
+            let temp = [];
+            if (res?.data?.data?.branches?.length > 0) {
+              res?.data?.data?.branches?.forEach((item, index) => {
+                temp.push({
+                  label:
+                    (item?.parent_org_id && item?.city?.replace('_', ' ')) ||
+                    item?.city?.replace('_', ' ') + ' (Main)',
+                  value: item?.id,
+                });
+              });
+            }
+            setFilterData({
+              ...filterData,
+              branch: temp[0].value,
+            });
+            setFilterBranchOptions(temp);
+          } else {
+            CustomAlert(res?.data?.message);
+          }
+        })
+        .catch((err) => {
+          CustomAlert(err?.message);
+        });
       getUserRoleList();
     }
   }, [selectedTab]);
+  console.log(filterBranchOptions);
 
   const getUserRoleList = (data = {}, pageNo = 1) => {
     let obj = {
@@ -388,8 +423,9 @@ const UserRole = (props) => {
           ]}>
           <DropDownAndroid
             label={'Branch'}
+            value={filterData?.branch}
             width={wp(90)}
-            items={[{label: 'Commercial', value: 'Commercial'}]}
+            items={filterBranchOptions}
             onChangeItem={(text) => {
               setFilterData({
                 ...filterData,

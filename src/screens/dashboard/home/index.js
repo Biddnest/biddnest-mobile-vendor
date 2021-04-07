@@ -16,7 +16,6 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import CustomModalAndroid from '../../../components/customModal';
 import CloseIcon from '../../../components/closeIcon';
 import DropDownAndroid from '../../../components/dropDown';
-import Slider from 'rn-range-slider';
 import FlatButton from '../../../components/flatButton';
 import Switch from '../../../components/switch';
 import FilterButton from '../../../components/filterButton';
@@ -32,6 +31,8 @@ import OTPInputView from '@twotalltotems/react-native-otp-input';
 import {STORE} from '../../../redux';
 import CountDown from '../../../components/countDown';
 import {NOTIFICATION} from '../../../redux/types';
+import DatePicker from 'react-native-datepicker';
+import Entypo from 'react-native-vector-icons/Entypo';
 
 export const HomeHeader = (props) => {
   return (
@@ -491,9 +492,9 @@ const Home = (props) => {
             onEndReachedThreshold={0.5}
             onRefresh={() => getOrdersList({}, order?.paging?.next_page || 1)}
             refreshing={isLoading}
-            onEndReached={() =>
-              getOrdersList({}, order?.paging?.next_page || 1)
-            }
+            // onEndReached={() =>
+            //   getOrdersList({}, order?.paging?.next_page || 1)
+            // }
             ListEmptyComponent={() => (
               <Text
                 style={{
@@ -519,59 +520,63 @@ const Home = (props) => {
         <Text style={STYLES.modalHeaderText}>FILTERS</Text>
         <CloseIcon onPress={() => setFilterVisible(false)} />
         <View style={{marginTop: hp(2)}}>
-          <Text style={STYLES.inputTextLabel}>Date</Text>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <View style={styles.manPowerView}>
-              <Text style={[STYLES.inputTextStyle, {height: 'auto'}]}>
-                {moment(filterData?.from).format('D MMM')}
-              </Text>
-            </View>
-            <Slider
-              style={styles.sliderStyle}
-              min={2}
-              max={4}
-              step={1}
-              floatingLabel
-              renderThumb={() => <View style={STYLES.sliderThumb} />}
-              renderRail={() => (
-                <View
-                  style={{
-                    ...STYLES.sliderRail,
-                    width: '100%',
-                    borderColor: '#EEE5FC',
-                  }}
-                />
-              )}
-              renderRailSelected={() => <View style={STYLES.sliderRail} />}
-              renderLabel={(value) => (
-                <Text style={STYLES.sliderLabel}>{value}</Text>
-              )}
-              onValueChanged={() => {}}
-            />
-            <View style={styles.manPowerView}>
-              <Text style={[STYLES.inputTextStyle, {height: 'auto'}]}>
-                {moment(filterData?.to).format('D MMM')}
-              </Text>
-            </View>
-          </View>
           <View
             style={{
               flexDirection: 'row',
-              alignItems: 'center',
+              width: wp(85),
               justifyContent: 'space-between',
-              marginTop: 0,
+              alignSelf: 'center',
             }}>
-            <Text style={styles.dateBottomText}>From</Text>
-            <Text
-              style={[
-                styles.dateBottomText,
-                {
-                  marginLeft: 0,
-                  marginRight: wp(4),
-                },
-              ]}>
-              To
-            </Text>
+            {['from', 'to'].map((item, index) => {
+              return (
+                <View style={{width: '46%'}} key={index}>
+                  <Text
+                    style={[
+                      STYLES.inputTextLabel,
+                      {textTransform: 'capitalize'},
+                    ]}>
+                    {item} Date
+                  </Text>
+                  <View style={STYLES.dateView}>
+                    <DatePicker
+                      style={STYLES.datePicker}
+                      date={moment(
+                        item === 'from' ? filterData?.from : filterData?.to,
+                      ).format('D MMM yyyy')}
+                      mode="date"
+                      placeholder="Select date"
+                      format="D MMM yyyy"
+                      maxDate={new Date()}
+                      confirmBtnText="Confirm"
+                      cancelBtnText="Cancel"
+                      iconComponent={
+                        <Entypo
+                          name={'calendar'}
+                          size={25}
+                          color={Colors.inputTextColor}
+                          style={{
+                            position: 'absolute',
+                            right: 8,
+                            top: 7,
+                            marginLeft: 0,
+                          }}
+                        />
+                      }
+                      customStyles={{
+                        dateInput: STYLES.dateInput,
+                        dateText: STYLES.dateText,
+                      }}
+                      onDateChange={(date) => {
+                        setFilterData({
+                          ...filterData,
+                          [item]: date,
+                        });
+                      }}
+                    />
+                  </View>
+                </View>
+              );
+            })}
           </View>
         </View>
         <View style={{marginVertical: hp(2)}}>

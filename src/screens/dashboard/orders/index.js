@@ -33,7 +33,7 @@ const Orders = (props) => {
     }
   }, [selectedTab]);
   const getOrdersList = (pageNo = 1) => {
-    dispatch(getOrders(selectedTab, pageNo))
+    dispatch(getOrders(selectedTab, {}, pageNo))
       .then((res) => {
         setLoading(false);
         if (res?.status === 'success' && res?.data) {

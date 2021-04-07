@@ -209,5 +209,33 @@ export const STYLES = {
     fontSize: wp(4),
     marginHorizontal: wp(5),
     textAlign: 'center',
-  }
+  },
+  dateView: {
+    marginTop: hp(1),
+    borderWidth: 2,
+    borderRadius: 10,
+    height: hp(6.5),
+    borderColor: Colors.silver,
+    backgroundColor: Colors.white,
+  },
+  dateInput: {
+    borderWidth: 0,
+    height: hp(6.5),
+    marginTop: 1,
+    width: '100%',
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    paddingHorizontal: 15,
+  },
+  dateText: {
+    fontSize: wp(4),
+    backgroundColor: Colors.textBG,
+    color: Colors.inputTextColor,
+    justifyContent: 'flex-start',
+  },
+  datePicker: {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+  },
 };
