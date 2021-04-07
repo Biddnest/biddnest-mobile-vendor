@@ -9,7 +9,12 @@ import LinearGradient from 'react-native-linear-gradient';
 import {STYLES} from '../../constant/commonStyle';
 import {useDispatch} from 'react-redux';
 import {signIn} from '../../redux/actions/user';
-import {CustomAlert, resetNavigator} from '../../constant/commonFun';
+import {
+  CustomAlert,
+  CustomConsole,
+  resetNavigator,
+} from '../../constant/commonFun';
+import OneSignal from 'react-native-onesignal';
 
 const Login = (props) => {
   const dispatch = useDispatch();
@@ -86,6 +91,12 @@ const Login = (props) => {
                     .then((res) => {
                       setLoading(false);
                       if (res.status === 'success') {
+                        OneSignal.setExternalUserId(
+                          res?.data?.vendor?.id?.toString(),
+                          (results) => {
+                            CustomConsole('===============', results);
+                          },
+                        );
                         resetNavigator(props, 'Dashboard');
                       } else {
                         CustomAlert(res.message);

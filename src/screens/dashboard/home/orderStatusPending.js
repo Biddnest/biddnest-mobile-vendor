@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View, StyleSheet, Image} from 'react-native';
+import {Text, View} from 'react-native';
 import {Colors, hp, wp} from '../../../constant/colors';
 import {STYLES} from '../../../constant/commonStyle';
 import TimerClock from '../../../assets/svg/timer_clock.svg';
@@ -8,9 +8,8 @@ import {DiffMin} from '../../../constant/commonFun';
 
 const OrderStatusPending = (props) => {
   const {orderDetails} = props;
-  console.log('===========', orderDetails);
   return (
-    <View>
+    <View style={{backgroundColor: Colors.white, marginBottom: hp(3)}}>
       <View
         style={{
           alignItems: 'center',
@@ -54,10 +53,9 @@ const OrderStatusPending = (props) => {
                 DiffMin(orderDetails?.bid_result_at) * 60) ||
               0
             }
-            onFinish={() => {}}
             size={18}
             digitStyle={{height: '100%'}}
-            digitTxtStyle={[STYLES.participatedText, {fontSize: wp(3.5)}]}
+            digitTxtStyle={[STYLES.participatedText, {fontSize: wp(3.8)}]}
             separatorStyle={{color: '#000'}}
             timeToShow={['H', 'M', 'S']}
             timeLabels={{h: null, m: null, s: null}}

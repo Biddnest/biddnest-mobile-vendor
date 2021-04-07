@@ -1,10 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  View,
-  ImageBackground,
-  Image,
-  ActivityIndicator,
-} from 'react-native';
+import {View, ImageBackground, Image, ActivityIndicator} from 'react-native';
 import OneSignal from 'react-native-onesignal';
 import NetInfo from '@react-native-community/netinfo';
 import {CustomAlert, resetNavigator} from '../../constant/commonFun';
@@ -13,19 +8,33 @@ import {initialConfig} from '../../redux/actions/user';
 import {useDispatch, useSelector} from 'react-redux';
 import {STYLES} from '../../constant/commonStyle';
 import AsyncStorage from '@react-native-community/async-storage';
+import {CustomTabs} from 'react-native-custom-tabs';
 
 const Splash = (props) => {
   const dispatch = useDispatch();
+  const oneSignalData =
+    useSelector(
+      (state) => state.Login?.configData?.onesignal?.vendor_app_creds,
+    ) || '';
+  const notificationData =
+    useSelector(
+      (state) => state.Login?.configData?.enums?.notification?.type,
+    ) || {};
+  let key =
+    (oneSignalData && JSON.parse(oneSignalData).toString().split(',')) || '';
   const [isLoading, setLoading] = useState(false);
   const userData = useSelector((state) => state.Login?.loginData);
+  console.log(notificationData);
   useEffect(() => {
     OneSignal.setLogLevel(6, 0);
-
-    OneSignal.init('42d0f367-a40c-41e2-a9e3-95d62e38ad99', {
-      kOSSettingsKeyAutoPrompt: false,
-      kOSSettingsKeyInAppLaunchURL: false,
-      kOSSettingsKeyInFocusDisplayOption: 2,
-    });
+    OneSignal.init(
+      (key.length > 0 && key[0]) || '42d0f367-a40c-41e2-a9e3-95d62e38ad99',
+      {
+        kOSSettingsKeyAutoPrompt: false,
+        kOSSettingsKeyInAppLaunchURL: false,
+        kOSSettingsKeyInFocusDisplayOption: 2,
+      },
+    );
     OneSignal.inFocusDisplaying(2); // Controls what should happen if a notification is received while the app is open. 2 means that the notification will go directly to the device's notification center.
 
     // The promptForPushNotifications function code will show the iOS push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission (See step below)
@@ -43,10 +52,19 @@ const Splash = (props) => {
   }
 
   function onOpened(openResult) {
-    console.log('Message: ', openResult.notification.payload.body);
-    console.log('Data: ', openResult.notification.payload.additionalData);
-    console.log('isActive: ', openResult.notification.isAppInFocus);
-    console.log('openResult: ', openResult);
+    console.log('Data: ', openResult);
+    let temp = openResult?.notification?.payload?.additionalData || {};
+    if (temp?.type === notificationData?.booking) {
+      props.navigation.navigate('OrderDetails', {
+        orderData: {public_booking_id: temp?.public_booking_id},
+      });
+    } else if (temp?.type === notificationData?.link) {
+      CustomTabs.openURL(temp?.url)
+        .then(() => {})
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }
   function onIds(device) {
     if (device && device.userId) {
@@ -68,7 +86,6 @@ const Splash = (props) => {
         }
       })
       .catch((err) => {
-        console.log('call', err);
         checkConnectivity();
         setLoading(false);
         err?.data && CustomAlert(err?.data?.message);

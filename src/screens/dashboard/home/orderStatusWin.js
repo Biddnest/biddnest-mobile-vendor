@@ -93,7 +93,7 @@ const OrderStatusWin = (props) => {
               getDirections(directionData);
             }}>
             <Ionicons
-              name={'call-outline'}
+              name={'navigate-outline'}
               color={Colors.darkBlue}
               size={wp(7)}
             />
