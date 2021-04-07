@@ -8,7 +8,7 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import CustomModalAndroid from '../../../components/customModal';
 import CloseIcon from '../../../components/closeIcon';
 import DropDownAndroid from '../../../components/dropDown';
-import TextInput from '../../../components/textInput';
+import getDirections from 'react-native-google-maps-directions';
 import FlatButton from '../../../components/flatButton';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import {STORE} from '../../../redux';
@@ -30,7 +30,6 @@ const OrderStatusWin = (props) => {
     driver_id: null,
     vehicle_id: null,
   });
-  console.log(orderDetails);
   let driverList = [];
   let vehicleList = [];
   driverVehicleList?.drivers?.forEach((item, index) => {
@@ -78,13 +77,27 @@ const OrderStatusWin = (props) => {
           <Text style={STYLES.circleBottomText}>Call Customer</Text>
         </View>
         <View style={{alignItems: 'center'}}>
-          <View style={STYLES.circleBtnView}>
+          <Pressable
+            style={STYLES.circleBtnView}
+            onPress={() => {
+              const directionData = {
+                source: {
+                  latitude: parseFloat(orderDetails?.source_lat),
+                  longitude: parseFloat(orderDetails?.source_lng),
+                },
+                destination: {
+                  latitude: parseFloat(orderDetails?.destination_lat),
+                  longitude: parseFloat(orderDetails?.destination_lng),
+                },
+              };
+              getDirections(directionData);
+            }}>
             <Ionicons
               name={'call-outline'}
               color={Colors.darkBlue}
               size={wp(7)}
             />
-          </View>
+          </Pressable>
           <Text style={STYLES.circleBottomText}>Direction</Text>
         </View>
       </View>
@@ -133,19 +146,26 @@ const OrderStatusWin = (props) => {
             {orderDetails?.user?.fname} {orderDetails?.user?.lname}
           </Text>
         </View>
-        <View
-          style={{flexDirection: 'row', alignItems: 'center', marginTop: 3}}>
-          <Text style={[STYLES.sliderText, {width: wp(20), fontSize: wp(4)}]}>
-            Address
-          </Text>
-          <Text
-            style={[
-              STYLES.modalHeaderText,
-              {width: wp(60), textAlign: 'left', marginTop: 0, marginBottom: 0},
-            ]}>
-            {orderDetails?.user?.address}
-          </Text>
-        </View>
+        {orderDetails?.user?.address && (
+          <View
+            style={{flexDirection: 'row', alignItems: 'center', marginTop: 3}}>
+            <Text style={[STYLES.sliderText, {width: wp(20), fontSize: wp(4)}]}>
+              Address
+            </Text>
+            <Text
+              style={[
+                STYLES.modalHeaderText,
+                {
+                  width: wp(60),
+                  textAlign: 'left',
+                  marginTop: 0,
+                  marginBottom: 0,
+                },
+              ]}>
+              {orderDetails?.user?.address}
+            </Text>
+          </View>
+        )}
       </View>
       <View style={{marginHorizontal: wp(8), marginVertical: hp(2)}}>
         {stepHeader('Booked')}

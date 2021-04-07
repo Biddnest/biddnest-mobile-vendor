@@ -26,6 +26,10 @@ const Profile = (props) => {
   const [openArray, setOpenArray] = useState([]);
   const [openIndex, setOpenIndex] = useState();
   const [changePassVisible, setChangePassVisible] = useState(false);
+  let tempMeta =
+    (userData?.vendor?.organization?.meta &&
+      JSON.parse(userData?.vendor?.organization?.meta?.toString())) ||
+    {};
   const onPress = (index) => {
     let temp = [...openArray];
     if (openArray.includes(index)) {
@@ -48,6 +52,10 @@ const Profile = (props) => {
             backgroundColor: openArray.includes(index)
               ? Colors.darkBlue
               : Colors.white,
+            padding: 0,
+            height: wp(15),
+            justifyContent: 'center',
+            paddingHorizontal: wp(4),
           },
         ]}>
         <View style={styles.flexBox}>
@@ -179,21 +187,15 @@ const Profile = (props) => {
                   },
                   {
                     title: 'Organization Description',
-                    body: JSON.parse(
-                      userData?.vendor?.organization?.meta?.toString(),
-                    ).org_description,
+                    body: tempMeta?.org_description,
                   },
                   {
                     title: 'Secondary Contact Number',
-                    body: JSON.parse(
-                      userData?.vendor?.organization?.meta?.toString(),
-                    ).secondory_phone,
+                    body: tempMeta?.secondory_phone,
                   },
                   {
                     title: 'GSTIN Number',
-                    body: JSON.parse(
-                      userData?.vendor?.organization?.meta?.toString(),
-                    ).gstin_no,
+                    body: tempMeta?.gstin_no,
                   },
                 ]}
                 renderItem={({item, index}) => {
@@ -223,21 +225,15 @@ const Profile = (props) => {
                 data={[
                   {
                     title: 'Address Line 1',
-                    body: JSON.parse(
-                      userData?.vendor?.organization?.meta?.toString(),
-                    ).address_line_1,
+                    body: tempMeta?.address_line_1,
                   },
                   {
                     title: 'Address Line 2',
-                    body: JSON.parse(
-                      userData?.vendor?.organization?.meta?.toString(),
-                    ).address_line_2,
+                    body: tempMeta?.address_line_2,
                   },
                   {
                     title: 'Landmark',
-                    body: JSON.parse(
-                      userData?.vendor?.organization?.meta?.toString(),
-                    ).landmark,
+                    body: tempMeta?.landmark,
                   },
                   {
                     title: 'City',

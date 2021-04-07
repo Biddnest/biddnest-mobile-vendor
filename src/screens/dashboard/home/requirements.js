@@ -57,7 +57,7 @@ const Requirements = (props) => {
         style={{flex: 1}}
         showsVerticalScrollIndicator={false}
         bounces={false}>
-        <View>
+        <View style={{marginBottom: hp(2)}}>
           <View
             style={{
               marginHorizontal: wp(10),
@@ -122,69 +122,74 @@ const Requirements = (props) => {
               )}
             />
           </View>
-          <View style={STYLES.inputForm}>
-            <Text
-              style={{
-                fontFamily: 'Roboto-Regular',
-                fontSize: wp(4),
-                color: Colors.inputTextColor,
-                textAlign: 'center',
-                textTransform: 'uppercase',
-              }}>
-              Comments from customer
-            </Text>
-            <Text
-              style={{
-                fontFamily: 'Roboto-Italic',
-                fontSize: wp(3.6),
-                color: Colors.inputTextColor,
-                marginTop: hp(2),
-              }}>
-              {meta?.customer
-                ? JSON.parse(meta?.customer?.toString()).remarks
-                : 'No Any comments'}
-            </Text>
-          </View>
-          <View style={STYLES.inputForm}>
-            <Text
-              style={{
-                fontFamily: 'Roboto-Regular',
-                fontSize: wp(4),
-                color: Colors.inputTextColor,
-                textAlign: 'center',
-                textTransform: 'uppercase',
-              }}>
-              Pictures uploaded by the customer
-            </Text>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              bounces={false}
-              contentContainerStyle={{
-                paddingTop: hp(2),
-              }}>
-              {meta?.images?.map((item, index) => {
-                return (
-                  <Pressable
-                    key={index}
-                    onPress={() => {}}
-                    style={{
-                      height: wp(16),
-                      width: wp(16),
-                      borderRadius: wp(3),
-                      backgroundColor: Colors.silver,
-                      marginRight: wp(3),
-                    }}>
-                    <Image
-                      source={{uri: item}}
-                      style={{height: '100%', width: '100%'}}
-                      resizeMode={'contain'}
-                    />
-                  </Pressable>
-                );
-              })}
-            </ScrollView>
-          </View>
+          {meta?.customer &&
+            JSON.parse(meta?.customer?.toString()).remarks !== null && (
+              <View style={STYLES.inputForm}>
+                <Text
+                  style={{
+                    fontFamily: 'Roboto-Regular',
+                    fontSize: wp(4),
+                    color: Colors.inputTextColor,
+                    textAlign: 'center',
+                    textTransform: 'uppercase',
+                  }}>
+                  Comments from customer
+                </Text>
+                <Text
+                  style={{
+                    fontFamily: 'Roboto-Italic',
+                    fontSize: wp(3.6),
+                    color: Colors.inputTextColor,
+                    marginTop: hp(2),
+                  }}>
+                  {meta?.customer
+                    ? JSON.parse(meta?.customer?.toString()).remarks
+                    : 'No Any comments'}
+                </Text>
+              </View>
+            )}
+          {meta?.images?.length > 0 && (
+            <View style={STYLES.inputForm}>
+              <Text
+                style={{
+                  fontFamily: 'Roboto-Regular',
+                  fontSize: wp(4),
+                  color: Colors.inputTextColor,
+                  textAlign: 'center',
+                  textTransform: 'uppercase',
+                }}>
+                Pictures uploaded by the customer
+              </Text>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                bounces={false}
+                contentContainerStyle={{
+                  paddingTop: hp(2),
+                }}>
+                {meta?.images?.map((item, index) => {
+                  return (
+                    <Pressable
+                      key={index}
+                      onPress={() => {}}
+                      style={{
+                        height: wp(16),
+                        width: wp(16),
+                        borderRadius: wp(3),
+                        backgroundColor: Colors.silver,
+                        marginRight: wp(3),
+                      }}>
+                      <Image
+                        source={{uri: item}}
+                        style={{height: '100%', width: '100%'}}
+                        resizeMode={'contain'}
+                      />
+                    </Pressable>
+                  );
+                })}
+              </ScrollView>
+            </View>
+          )}
           {orderDetails?.bid?.status === 0 && (
             <TwoButton
               leftLabel={'REJECT'}

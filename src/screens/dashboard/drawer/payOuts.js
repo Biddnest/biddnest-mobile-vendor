@@ -51,9 +51,16 @@ const PayOuts = (props) => {
     setLoading(true);
     fetchData();
   }, []);
-  const fetchData = (pageNo = 1) => {
+  const fetchData = (data = {}) => {
     let obj = {
-      url: 'payouts?from=2021-04-04&to=2021-04-05&status=0',
+      url:
+        Object.keys(data)?.length > 0
+          ? `payouts?from=${moment(data?.from).format(
+              'yyyy/MM/DD',
+            )}&to=${moment(data?.to).format('yyyy/MM/DD')}&status=${
+              data?.status
+            }`
+          : 'payouts',
       method: 'get',
       headers: {
         Authorization: 'Bearer ' + STORE.getState().Login?.loginData?.token,
@@ -275,7 +282,13 @@ const PayOuts = (props) => {
             }
           />
         </View>
-        <FlatButton label={'apply'} onPress={() => setFilterVisible(false)} />
+        <FlatButton
+          label={'apply'}
+          onPress={() => {
+            fetchData(filterData);
+            setFilterVisible(false);
+          }}
+        />
       </CustomModalAndroid>
     </LinearGradient>
   );
