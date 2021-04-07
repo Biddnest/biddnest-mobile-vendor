@@ -31,7 +31,7 @@ import TextInput from '../../../components/textInput';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import {STORE} from '../../../redux';
 import CountDown from '../../../components/countDown';
-import {CONFIG_DATA, NOTIFICATION} from '../../../redux/types';
+import {NOTIFICATION} from '../../../redux/types';
 
 export const HomeHeader = (props) => {
   return (
@@ -113,11 +113,20 @@ const Home = (props) => {
     useSelector(
       (state) => state.Login?.configData?.enums?.booking?.fetch_type,
     ) || [];
+  const categoriesData =
+    useSelector((state) => state.Login?.configData?.categories?.categories) ||
+    [];
   const statusData =
     useSelector((state) => state.Login?.configData?.enums?.booking) || {};
   const userData = useSelector((state) => state.Login?.loginData) || {};
   const [selectedTab, setSelectedTab] = useState(0);
   const [filterVisible, setFilterVisible] = useState(false);
+  const [filterData, setFilterData] = useState({
+    from: new Date(),
+    to: new Date(),
+    status: 0,
+    service_id: 1,
+  });
   const [notificationToggle, setNotificationToggle] = useState(
     useSelector((state) => state.Login?.notification),
   );
@@ -132,6 +141,20 @@ const Home = (props) => {
   const [error, setError] = useState({
     password: undefined,
     pin: undefined,
+  });
+  let filterStatusOptions = [];
+  let filterCategoryOptions = [];
+  Object.keys(statusData?.status)?.forEach((item, index) => {
+    filterStatusOptions.push({
+      label: item?.replace('_', ' '),
+      value: Object.values(statusData?.status)[index],
+    });
+  });
+  categoriesData?.forEach((item, index) => {
+    filterCategoryOptions.push({
+      label: item?.name?.replace('_', ' '),
+      value: categoriesData[index]?.id,
+    });
   });
 
   useEffect(() => {
@@ -179,8 +202,8 @@ const Home = (props) => {
       getOrdersList();
     }
   }, [selectedTab]);
-  const getOrdersList = (pageNo = 1) => {
-    dispatch(getOrders(configData[selectedTab], pageNo))
+  const getOrdersList = (data = {}, pageNo = 1) => {
+    dispatch(getOrders(configData[selectedTab], data, pageNo))
       .then((res) => {
         setLoading(false);
         if (res?.status === 'success' && res?.data) {
@@ -362,9 +385,10 @@ const Home = (props) => {
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>Moving Date</Text>
               <Text style={STYLES.rightText}>
-                {moment(JSON.parse(item?.bid?.meta)?.moving_date).format(
-                  'D MMM yyyy',
-                )}
+                {item?.bid?.meta &&
+                  moment(JSON.parse(item?.bid?.meta)?.moving_date).format(
+                    'D MMM yyyy',
+                  )}
               </Text>
             </View>
             {meta?.subcategory && (
@@ -465,9 +489,11 @@ const Home = (props) => {
             extraData={order?.bookings}
             renderItem={renderItem}
             onEndReachedThreshold={0.5}
-            onRefresh={() => getOrdersList(order?.paging?.next_page || 1)}
+            onRefresh={() => getOrdersList({}, order?.paging?.next_page || 1)}
             refreshing={isLoading}
-            onEndReached={() => getOrdersList(order?.paging?.next_page || 1)}
+            onEndReached={() =>
+              getOrdersList({}, order?.paging?.next_page || 1)
+            }
             ListEmptyComponent={() => (
               <Text
                 style={{
@@ -497,7 +523,7 @@ const Home = (props) => {
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <View style={styles.manPowerView}>
               <Text style={[STYLES.inputTextStyle, {height: 'auto'}]}>
-                {'02 Jan'}
+                {moment(filterData?.from).format('D MMM')}
               </Text>
             </View>
             <Slider
@@ -524,7 +550,7 @@ const Home = (props) => {
             />
             <View style={styles.manPowerView}>
               <Text style={[STYLES.inputTextStyle, {height: 'auto'}]}>
-                {'04 Feb'}
+                {moment(filterData?.to).format('D MMM')}
               </Text>
             </View>
           </View>
@@ -551,26 +577,38 @@ const Home = (props) => {
         <View style={{marginVertical: hp(2)}}>
           <DropDownAndroid
             label={'Status'}
+            value={filterData?.status}
             width={wp(90)}
-            items={[
-              {label: 'Male', value: 'male'},
-              {label: 'Female', value: 'female'},
-            ]}
-            onChangeItem={(text) => {}}
+            items={filterStatusOptions}
+            onChangeItem={(text) => {
+              setFilterData({
+                ...filterData,
+                status: text,
+              });
+            }}
           />
         </View>
         <View style={{marginBottom: hp(2)}}>
           <DropDownAndroid
             label={'Category'}
+            value={filterData?.service_id}
             width={wp(90)}
-            items={[
-              {label: 'Male', value: 'male'},
-              {label: 'Female', value: 'female'},
-            ]}
-            onChangeItem={(text) => {}}
+            items={filterCategoryOptions}
+            onChangeItem={(text) => {
+              setFilterData({
+                ...filterData,
+                service_id: text,
+              });
+            }}
           />
         </View>
-        <FlatButton label={'apply'} onPress={() => setFilterVisible(false)} />
+        <FlatButton
+          label={'apply'}
+          onPress={() => {
+            getOrdersList(filterData);
+            setFilterVisible(false);
+          }}
+        />
       </CustomModalAndroid>
       <CustomModalAndroid
         visible={offNotification}

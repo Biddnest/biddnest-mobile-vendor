@@ -51,16 +51,16 @@ const PayOuts = (props) => {
     setLoading(true);
     fetchData();
   }, []);
-  const fetchData = (data = {}) => {
+  const fetchData = (data = {}, pageNo = 1) => {
     let obj = {
       url:
         Object.keys(data)?.length > 0
-          ? `payouts?from=${moment(data?.from).format(
+          ? `payouts?page=${pageNo}&from=${moment(data?.from).format(
               'yyyy/MM/DD',
             )}&to=${moment(data?.to).format('yyyy/MM/DD')}&status=${
               data?.status
             }`
-          : 'payouts',
+          : `payouts?page=${pageNo}`,
       method: 'get',
       headers: {
         Authorization: 'Bearer ' + STORE.getState().Login?.loginData?.token,
@@ -172,9 +172,11 @@ const PayOuts = (props) => {
             data={payoutList?.payouts}
             extraData={payoutList?.payouts}
             onEndReachedThreshold={0.5}
-            onRefresh={() => fetchData(payoutList?.paging?.next_page || 1)}
+            onRefresh={() => fetchData({}, payoutList?.paging?.next_page || 1)}
             refreshing={isLoading}
-            onEndReached={() => fetchData(payoutList?.paging?.next_page || 1)}
+            onEndReached={() =>
+              fetchData({}, payoutList?.paging?.next_page || 1)
+            }
             renderItem={renderItem}
             ItemSeparatorComponent={() => (
               <View style={[STYLES.separatorView, {marginTop: 0}]} />

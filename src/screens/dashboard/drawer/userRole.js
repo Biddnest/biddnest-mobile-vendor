@@ -30,14 +30,29 @@ const UserRole = (props) => {
   const userData = useSelector((state) => state.Login?.loginData) || {};
   const configData =
     useSelector((state) => state.Login?.configData?.enums?.vendor?.roles) || {};
+  const vendorStatus =
+    useSelector((state) => state.Login?.configData?.enums?.vendor?.status) ||
+    {};
   const [isLoading, setLoading] = useState(false);
   const [selectedTab, setSelectedTab] = useState('manager');
   const [detailsVisible, setDetailsVisible] = useState(false);
   const [detailsData, setDetailsData] = useState({});
   const [filterVisible, setFilterVisible] = useState(false);
+  const [filterData, setFilterData] = useState({
+    status: 1,
+    branch: 15,
+  });
   const [switchValue, setSwitchValue] = useState(false);
   const [deActivateUser, setDeActivateUser] = useState(false);
   const [userRoles, setUserRoles] = useState([]);
+  let filterStatusOptions = [];
+  let filterBranchOptions = [];
+  Object.keys(vendorStatus)?.forEach((item, index) => {
+    filterStatusOptions.push({
+      label: item?.replace('_', ' '),
+      value: Object.values(vendorStatus)[index],
+    });
+  });
 
   useEffect(() => {
     if (userData?.token) {
@@ -46,9 +61,12 @@ const UserRole = (props) => {
     }
   }, [selectedTab]);
 
-  const getUserRoleList = (pageNo = 1) => {
+  const getUserRoleList = (data = {}, pageNo = 1) => {
     let obj = {
-      url: `user/${selectedTab}?page=${pageNo}`,
+      url:
+        Object.keys(data)?.length > 0
+          ? `user/${selectedTab}?page=${pageNo}&status=${data?.status}&branch=${data?.branch}`
+          : `user/${selectedTab}?page=${pageNo}`,
       method: 'get',
       headers: {
         Authorization: 'Bearer ' + STORE.getState().Login?.loginData?.token,
@@ -202,7 +220,9 @@ const UserRole = (props) => {
             margin: hp(2),
           }}
           data={userRoles?.user_role}
-          onRefresh={() => getUserRoleList(userRoles?.paging?.next_page || 1)}
+          onRefresh={() =>
+            getUserRoleList({}, userRoles?.paging?.next_page || 1)
+          }
           ListHeaderComponent={() => {
             if (userRoles?.user_role?.length > 0) {
               return (
@@ -259,9 +279,9 @@ const UserRole = (props) => {
           refreshing={isLoading}
           extraData={userRoles?.user_role}
           onEndReachedThreshold={0.5}
-          onEndReached={() =>
-            getUserRoleList(userRoles?.paging?.next_page || 1)
-          }
+          // onEndReached={() =>
+          //   getUserRoleList({}, userRoles?.paging?.next_page || 1)
+          // }
           renderItem={renderItem}
           ItemSeparatorComponent={() => (
             <View style={[STYLES.separatorView, {marginTop: 0}]} />
@@ -370,7 +390,12 @@ const UserRole = (props) => {
             label={'Branch'}
             width={wp(90)}
             items={[{label: 'Commercial', value: 'Commercial'}]}
-            onChangeItem={(text) => {}}
+            onChangeItem={(text) => {
+              setFilterData({
+                ...filterData,
+                branch: text,
+              });
+            }}
           />
         </View>
         <View
@@ -379,16 +404,25 @@ const UserRole = (props) => {
             Platform.OS !== 'android' && {zIndex: 5001},
           ]}>
           <DropDownAndroid
+            value={filterData?.status}
             label={'Status'}
             width={wp(90)}
-            items={[
-              {label: 'Active', value: 'active'},
-              {label: 'Inactive', value: 'inactive'},
-            ]}
-            onChangeItem={(text) => {}}
+            items={filterStatusOptions}
+            onChangeItem={(text) => {
+              setFilterData({
+                ...filterData,
+                status: text,
+              });
+            }}
           />
         </View>
-        <FlatButton label={'apply'} onPress={() => setFilterVisible(false)} />
+        <FlatButton
+          label={'apply'}
+          onPress={() => {
+            getUserRoleList(filterData);
+            setFilterVisible(false);
+          }}
+        />
       </CustomModalAndroid>
       <CustomModalAndroid
         visible={deActivateUser}

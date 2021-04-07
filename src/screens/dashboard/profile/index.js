@@ -168,7 +168,7 @@ const Profile = (props) => {
             </Pressable>
           </View>
         </ImageBackground>
-        <View style={{flex: 1}}>
+        <View style={{flex: 1, marginBottom: hp(2)}}>
           {renderIcon(0, 'Organization Information')}
           {openArray.includes(0) && (
             <View
@@ -314,20 +314,25 @@ const Profile = (props) => {
                             marginBottom: 7,
                             flexWrap: 'wrap',
                           }}>
-                          {['Household', 'Office'].map((aryData, aryIndex) => {
-                            return (
-                              <View style={styles.categoryView} key={aryIndex}>
-                                <Text
-                                  style={{
-                                    color: Colors.inputTextColor,
-                                    fontSize: wp(3.8),
-                                    fontFamily: 'Roboto-Bold',
-                                  }}>
-                                  {aryData}
-                                </Text>
-                              </View>
-                            );
-                          })}
+                          {userData?.vendor?.organization?.services?.map(
+                            (aryData, aryIndex) => {
+                              return (
+                                <View
+                                  style={styles.categoryView}
+                                  key={aryIndex}>
+                                  <Text
+                                    style={{
+                                      color: Colors.inputTextColor,
+                                      fontSize: wp(3.8),
+                                      fontFamily: 'Roboto-Bold',
+                                      textTransform: 'capitalize',
+                                    }}>
+                                    {aryData?.name}
+                                  </Text>
+                                </View>
+                              );
+                            },
+                          )}
                         </View>
                       )}
                     </View>

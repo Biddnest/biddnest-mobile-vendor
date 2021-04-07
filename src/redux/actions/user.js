@@ -8,6 +8,7 @@ import {
 import {CustomAlert} from '../../constant/commonFun';
 import {STORE} from '../index';
 import axios from 'axios';
+import moment from 'moment';
 
 export const APICall = (obj) => {
   return new Promise((resolve, reject) => {
@@ -73,11 +74,18 @@ export const signIn = (data) => {
   };
 };
 
-export const getOrders = (url, page) => {
+export const getOrders = (url, data, page) => {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
       let obj = {
-        url: `bookings/${url}?page=${page}`,
+        url:
+          Object.keys(data)?.length > 0
+            ? `bookings/${url}?page=${page}&from=${moment(data?.from).format(
+                'yyyy/MM/DD',
+              )}&to=${moment(data?.to).format('yyyy/MM/DD')}&status=${
+                data?.status
+              }&service_id=${data?.service_id}`
+            : `bookings/${url}?page=${page}`,
         method: 'get',
         headers: {
           Authorization: 'Bearer ' + STORE.getState().Login?.loginData?.token,
