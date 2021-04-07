@@ -8,6 +8,7 @@ import ForgotPassword from '../screens/auth/forgotPassword';
 import Login from '../screens/auth/login';
 import ChangePassword from '../screens/auth/changePassword';
 import DrawerNavigation from './drawerNavigation';
+import ChatRedirect from '../screens/dashboard/orders/chatRedirection';
 
 const Stack = createStackNavigator();
 
@@ -24,6 +25,7 @@ const App = () => {
         <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
         <Stack.Screen name="ChangePasswordAuth" component={ChangePassword} />
         <Stack.Screen name="Dashboard" component={DrawerNavigation} />
+        <Stack.Screen name="ChatRedirect" component={ChatRedirect} />
       </Stack.Navigator>
     </NavigationContainer>
   );

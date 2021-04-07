@@ -94,7 +94,7 @@ export const HomeHeader = (props) => {
           )}
           <Pressable
             style={{...STYLES.common, width: wp(13)}}
-            onPress={props.onRightPress}>
+            onPress={() => props.navigation.navigate('ChatRedirect')}>
             <SimpleLineIcons
               name={'earphones-alt'}
               color={Colors.darkBlue}
