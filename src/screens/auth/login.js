@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {View, Text, StyleSheet, Platform} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, Text, StyleSheet} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Colors, hp, wp} from '../../constant/colors';
 import Header from './header';
@@ -8,7 +8,7 @@ import Button from '../../components/button';
 import LinearGradient from 'react-native-linear-gradient';
 import {STYLES} from '../../constant/commonStyle';
 import {useDispatch} from 'react-redux';
-import {signIn} from '../../redux/actions/user';
+import {signIn, signOut} from '../../redux/actions/user';
 import {
   CustomAlert,
   CustomConsole,
@@ -20,10 +20,8 @@ const Login = (props) => {
   const dispatch = useDispatch();
   const [isLoading, setLoading] = useState(false);
   const [data, setData] = useState({
-    username: 'dhanashree18@gmail.com',
-    password: 'admin123',
-    // username: 'dhanashree79@gmail.com',
-    // password: 'vendor123',
+    username: '',
+    password: '',
   });
   const [error, setError] = useState({});
   const handleState = (key, value) => {
@@ -32,6 +30,9 @@ const Login = (props) => {
       [key]: value,
     });
   };
+  useEffect(() => {
+    dispatch(signOut());
+  }, []);
   return (
     <View style={[styles.container, {...styles.common}]}>
       <Header />

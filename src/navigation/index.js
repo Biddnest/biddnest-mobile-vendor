@@ -9,6 +9,7 @@ import Login from '../screens/auth/login';
 import ChangePassword from '../screens/auth/changePassword';
 import DrawerNavigation from './drawerNavigation';
 import ChatRedirect from '../screens/dashboard/orders/chatRedirection';
+import {navigationRef} from './RootNavigation';
 
 const Stack = createStackNavigator();
 
@@ -18,7 +19,7 @@ const App = () => {
     Text.defaultProps.allowFontScaling = false;
   }, []);
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <Stack.Navigator initialRouteName="Splash" headerMode={false}>
         <Stack.Screen name="Splash" component={Splash} />
         <Stack.Screen name="Login" component={Login} />

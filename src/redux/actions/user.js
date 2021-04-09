@@ -4,10 +4,12 @@ import {
   CONFIG_DATA,
   ORDERS,
   DRIVER_VEHICLE_LIST,
+  RESET_STORE,
 } from '../types';
 import {CustomAlert} from '../../constant/commonFun';
 import {STORE} from '../index';
-import axios from 'axios';
+import {CommonActions} from '@react-navigation/native';
+import {navigationRef} from '../../navigation/RootNavigation';
 import moment from 'moment';
 
 export const APICall = (obj) => {
@@ -17,7 +19,15 @@ export const APICall = (obj) => {
         resolve(res);
       })
       .catch((err) => {
-        if (err?.response) {
+        if (err?.response?.status === 401) {
+          CustomAlert('Try to login again');
+          navigationRef.current?.dispatch(
+            CommonActions.reset({
+              index: 0,
+              routes: [{name: 'Login'}],
+            }),
+          );
+        } else if (err?.response) {
           reject(err.response);
         } else {
           CustomAlert('Server Down');
@@ -74,6 +84,14 @@ export const signIn = (data) => {
   };
 };
 
+export const signOut = () => {
+  return (dispatch) => {
+    dispatch({
+      type: RESET_STORE,
+    });
+  };
+};
+
 export const getOrders = (url, data, page) => {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
@@ -100,15 +118,6 @@ export const getOrders = (url, data, page) => {
           resolve(res.data);
         })
         .catch((err) => {
-          if (err?.status === 401) {
-            // dispatch({
-            //   type: RESET_STORE,
-            // });
-            // CommonActions.reset({
-            //   index: 0,
-            //   routes: [{name: 'Login'}],
-            // });
-          }
           CustomAlert(err?.data?.message);
           reject(err);
         });
@@ -130,15 +139,6 @@ export const checkPinStatus = (url) => {
         resolve(res.data);
       })
       .catch((err) => {
-        if (err?.status === 401) {
-          // dispatch({
-          //   type: RESET_STORE,
-          // });
-          // CommonActions.reset({
-          //   index: 0,
-          //   routes: [{name: 'Login'}],
-          // });
-        }
         CustomAlert(err?.data?.message);
         reject(err);
       });
@@ -166,15 +166,6 @@ export const getDriverAndVehicle = () => {
           resolve(res.data);
         })
         .catch((err) => {
-          if (err?.status === 401) {
-            // dispatch({
-            //   type: RESET_STORE,
-            // });
-            // CommonActions.reset({
-            //   index: 0,
-            //   routes: [{name: 'Login'}],
-            // });
-          }
           CustomAlert(err?.data?.message);
           reject(err);
         });
