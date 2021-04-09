@@ -6,10 +6,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {STORE} from '../../../../redux';
 import {APICall} from '../../../../redux/actions/user';
-import {
-  CustomAlert,
-  CustomConsole,
-} from '../../../../constant/commonFun';
+import {CustomAlert, CustomConsole} from '../../../../constant/commonFun';
 
 const FAQDetails = (props) => {
   const category = props?.route?.params?.category || '';
@@ -91,6 +88,7 @@ const FAQDetails = (props) => {
       />
       <View style={{flex: 1}}>
         <FlatList
+          keyExtractor={(item, index) => index.toString()}
           onRefresh={fetchData}
           refreshing={isLoading}
           bounces={false}

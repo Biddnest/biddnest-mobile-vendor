@@ -164,6 +164,21 @@ const Home = (props) => {
   useEffect(() => {
     if (isFocused && userData?.token) {
       // setLoading(true);
+      let obj = {
+        url: 'auth/verify',
+        method: 'get',
+        headers: {
+          Authorization: 'Bearer ' + STORE.getState().Login?.loginData?.token,
+        },
+      };
+      APICall(obj)
+        .then((res) => {
+          setLoading(false);
+        })
+        .catch((err) => {
+          setLoading(false);
+          CustomAlert(err?.data?.message);
+        });
       AsyncStorage.getItem('oneSignalData').then((signalData) => {
         let player_id = signalData && JSON.parse(signalData).userId;
         if (player_id) {
@@ -489,6 +504,7 @@ const Home = (props) => {
           </View>
         )) || (
           <FlatList
+            keyExtractor={(item, index) => index.toString()}
             bounces={false}
             contentContainerStyle={{paddingBottom: hp(3)}}
             showsVerticalScrollIndicator={false}

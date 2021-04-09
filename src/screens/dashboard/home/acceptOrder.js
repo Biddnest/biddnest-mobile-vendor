@@ -114,6 +114,7 @@ const AcceptOrder = (props) => {
             </View>
             <FlatList
               bounces={false}
+              keyExtractor={(item, index) => index.toString()}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{backgroundColor: Colors.white}}
               data={priceList?.inventories || []}

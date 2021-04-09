@@ -177,6 +177,7 @@ const Profile = (props) => {
                 alignSelf: 'center',
               }}>
               <FlatList
+                keyExtractor={(item, index) => index.toString()}
                 bounces={false}
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{marginTop: hp(2)}}
@@ -220,6 +221,7 @@ const Profile = (props) => {
                 alignSelf: 'center',
               }}>
               <FlatList
+                keyExtractor={(item, index) => index.toString()}
                 bounces={false}
                 showsVerticalScrollIndicator={false}
                 data={[
@@ -271,6 +273,7 @@ const Profile = (props) => {
                 alignSelf: 'center',
               }}>
               <FlatList
+                keyExtractor={(item, index) => index.toString()}
                 bounces={false}
                 showsVerticalScrollIndicator={false}
                 data={[

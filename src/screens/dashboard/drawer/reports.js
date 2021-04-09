@@ -37,8 +37,8 @@ const Reports = (props) => {
         CustomAlert(err);
       });
   }, []);
-    console.log(data);
-    return (
+  console.log(data);
+  return (
     <LinearGradient colors={[Colors.pageBG, Colors.white]} style={{flex: 1}}>
       <SimpleHeader
         headerText={'reports'}
@@ -52,6 +52,7 @@ const Reports = (props) => {
         showsVerticalScrollIndicator={false}
         bounces={false}>
         <FlatList
+          keyExtractor={(item, index) => index.toString()}
           bounces={false}
           showsVerticalScrollIndicator={false}
           data={[

@@ -168,6 +168,7 @@ const PayOuts = (props) => {
         bounces={false}>
         <View style={styles.tableView}>
           <FlatList
+            keyExtractor={(item, index) => index.toString()}
             bounces={false}
             showsVerticalScrollIndicator={false}
             data={payoutList?.payouts}

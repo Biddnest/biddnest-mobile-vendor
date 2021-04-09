@@ -82,6 +82,7 @@ const Requirements = (props) => {
               ITEM LIST
             </Text>
             <FlatList
+              keyExtractor={(item, index) => index.toString()}
               bounces={false}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{marginTop: hp(2)}}

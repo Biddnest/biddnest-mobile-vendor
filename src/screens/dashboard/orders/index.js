@@ -128,7 +128,9 @@ const Orders = (props) => {
                 <View style={STYLES.priceView}>
                   <CountDown
                     until={DiffMin(item?.bid_result_at)}
-                    onFinish={() => getOrdersList()}
+                    onFinish={() => {
+                      // getOrdersList()
+                    }}
                     size={18}
                     digitStyle={{height: '100%'}}
                     digitTxtStyle={STYLES.participatedText}
@@ -335,6 +337,7 @@ const Orders = (props) => {
           </View>
         )) || (
           <FlatList
+            keyExtractor={(item, index) => index.toString()}
             bounces={false}
             contentContainerStyle={{paddingBottom: hp(3)}}
             showsVerticalScrollIndicator={false}

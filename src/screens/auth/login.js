@@ -20,8 +20,8 @@ const Login = (props) => {
   const dispatch = useDispatch();
   const [isLoading, setLoading] = useState(false);
   const [data, setData] = useState({
-    username: '',
-    password: '',
+    username: 'dhanashree18@gmail.com',
+    password: 'admin123',
   });
   const [error, setError] = useState({});
   const handleState = (key, value) => {

@@ -94,7 +94,6 @@ const UserRole = (props) => {
       getUserRoleList();
     }
   }, [selectedTab]);
-  console.log(filterBranchOptions);
 
   const getUserRoleList = (data = {}, pageNo = 1) => {
     let obj = {
@@ -246,6 +245,7 @@ const UserRole = (props) => {
         </View>
       )) || (
         <FlatList
+          keyExtractor={(item, index) => index.toString()}
           bounces={false}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{

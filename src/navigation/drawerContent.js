@@ -140,6 +140,7 @@ export function DrawerContent(props) {
       </ImageBackground>
       <View style={styles.bottomView}>
         <FlatList
+          keyExtractor={(item, index) => index.toString()}
           bounces={false}
           showsVerticalScrollIndicator={false}
           data={SIDE_DRAWER}
@@ -154,7 +155,7 @@ export function DrawerContent(props) {
               fontSize: wp(3.1),
               fontFamily: 'Gilroy-Regular',
               textAlign: 'center',
-              latterSpacing: 1,
+              letterSpacing: 1,
             }}>
             App Version: v{DeviceInfo.getReadableVersion()}
           </Text>

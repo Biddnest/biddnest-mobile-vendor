@@ -46,6 +46,7 @@ const FAQS = (props) => {
       />
       <View style={{flex: 1, padding: wp(3)}}>
         <FlatList
+          keyExtractor={(item, index) => index.toString()}
           onRefresh={fetchData}
           refreshing={isLoading}
           numColumns={2}
