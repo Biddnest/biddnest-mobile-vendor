@@ -127,11 +127,7 @@ const Orders = (props) => {
                 </View>
                 <View style={STYLES.priceView}>
                   <CountDown
-                    until={
-                      (DiffMin(item?.bid_result_at) > 0 &&
-                        DiffMin(item?.bid_result_at) * 60) ||
-                      0
-                    }
+                    until={DiffMin(item?.bid_result_at)}
                     onFinish={() => getOrdersList()}
                     size={18}
                     digitStyle={{height: '100%'}}

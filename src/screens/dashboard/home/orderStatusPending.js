@@ -48,11 +48,7 @@ const OrderStatusPending = (props) => {
             alignSelf: 'center',
           }}>
           <CountDown
-            until={
-              (DiffMin(orderDetails?.bid_result_at) > 0 &&
-                DiffMin(orderDetails?.bid_result_at) * 60) ||
-              0
-            }
+            until={DiffMin(orderDetails?.bid_result_at)}
             size={18}
             digitStyle={{height: '100%'}}
             digitTxtStyle={[STYLES.participatedText, {fontSize: wp(3.8)}]}
