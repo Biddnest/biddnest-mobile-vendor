@@ -408,12 +408,10 @@ const Home = (props) => {
                   )}
               </Text>
             </View>
-            {meta?.subcategory && (
-              <View style={STYLES.flexBox}>
-                <Text style={STYLES.leftText}>category</Text>
-                <Text style={STYLES.rightText}>{meta?.subcategory}</Text>
-              </View>
-            )}
+            <View style={STYLES.flexBox}>
+              <Text style={STYLES.leftText}>category</Text>
+              <Text style={STYLES.rightText}>{item?.service?.name}</Text>
+            </View>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>bid submitted by</Text>
               <Text style={STYLES.rightText}>
@@ -434,14 +432,10 @@ const Home = (props) => {
               <Text style={STYLES.leftText}>Moving Date</Text>
               <Text style={STYLES.rightText}>{dateArray.join('\n')}</Text>
             </View>
-            {meta?.subcategory && (
-              <View style={STYLES.flexBox}>
-                <Text style={STYLES.leftText}>category</Text>
-                <Text style={STYLES.rightText}>
-                  {meta?.subcategory || 'null'}
-                </Text>
-              </View>
-            )}
+            <View style={STYLES.flexBox}>
+              <Text style={STYLES.leftText}>category</Text>
+              <Text style={STYLES.rightText}>{item?.service?.name}</Text>
+            </View>
           </View>
         )}
       </Pressable>

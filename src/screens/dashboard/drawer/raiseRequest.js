@@ -8,10 +8,14 @@ import TextInput from '../../../components/textInput';
 import {STORE} from '../../../redux';
 import {APICall} from '../../../redux/actions/user';
 import {CustomAlert} from '../../../constant/commonFun';
+import {useSelector} from 'react-redux';
+import DropDownAndroid from '../../../components/dropDown';
 
 const RaiseRequest = (props) => {
   const public_booking_id = props?.route?.params?.public_booking_id || null;
   const [isLoading, setLoading] = useState(false);
+  const configData =
+    useSelector((state) => state.Login?.configData?.enums?.ticket?.type) || {};
   const [data, setData] = useState({
     category: '',
     heading: '',
@@ -21,6 +25,13 @@ const RaiseRequest = (props) => {
     category: undefined,
     heading: undefined,
     desc: undefined,
+  });
+  let dropdownDefault = [];
+  Object.keys(configData).forEach((item, index) => {
+    dropdownDefault.push({
+      label: item.replace('_', ' '),
+      value: Object.values(configData)[index],
+    });
   });
 
   return (
@@ -36,13 +47,22 @@ const RaiseRequest = (props) => {
         bounces={false}
         showsVerticalScrollIndicator={false}
         style={{flex: 1, margin: hp(3)}}>
-        <TextInput
-          isRight={error?.category}
-          value={data?.category}
-          label={'Category'}
-          placeHolder={'Abc'}
-          onChange={(text) => setData({...data, category: text})}
-        />
+        <View style={{marginBottom: hp(3)}}>
+          <DropDownAndroid
+            customDropDown={
+              error?.category === false
+                ? {
+                    borderColor: 'red',
+                    borderWidth: 2,
+                  }
+                : {}
+            }
+            width={wp(90)}
+            label={'Category'}
+            items={dropdownDefault}
+            onChangeItem={(text) => setData({...data, category: text})}
+          />
+        </View>
         <TextInput
           isRight={error?.heading}
           value={data?.heading}
@@ -65,7 +85,7 @@ const RaiseRequest = (props) => {
           onChange={(text) => setData({...data, desc: text})}
         />
         {error?.desc === false && (
-          <Text style={styles.errorText}>Minimun 50 character required</Text>
+          <Text style={styles.errorText}>Minimun 15 character required</Text>
         )}
         <View style={{alignSelf: 'center'}}>
           <Button
@@ -75,13 +95,11 @@ const RaiseRequest = (props) => {
               // API call
               setLoading(true);
               let tempError = {};
-              tempError.category = !(
-                !data?.category || data?.category.length < 1
-              );
+              tempError.category = !!data?.category;
               tempError.heading = !(
                 !data?.heading || data?.heading.length < 15
               );
-              tempError.desc = !(!data?.desc || data?.desc.length < 50);
+              tempError.desc = !(!data?.desc || data?.desc.length < 15);
               setError(tempError);
               if (
                 Object.values(tempError).findIndex((item) => item === false) ===

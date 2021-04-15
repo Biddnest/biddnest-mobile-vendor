@@ -254,14 +254,12 @@ const Orders = (props) => {
                 )}
               </Text>
             </View>
-            {meta?.subcategory && (
-              <View style={STYLES.flexBox}>
-                <Text style={STYLES.leftText}>category</Text>
-                <Text style={[STYLES.rightText, {width: '50%'}]}>
-                  {meta?.subcategory}
-                </Text>
-              </View>
-            )}
+            <View style={STYLES.flexBox}>
+              <Text style={STYLES.leftText}>category</Text>
+              <Text style={[STYLES.rightText, {width: '50%'}]}>
+                {item?.service?.name}
+              </Text>
+            </View>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>bid submitted by</Text>
               <Text style={[STYLES.rightText, {width: '50%'}]}>

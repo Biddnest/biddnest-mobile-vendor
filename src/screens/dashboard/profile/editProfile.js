@@ -24,7 +24,6 @@ const EditProfile = (props) => {
     image: configData?.image,
     phone: configData?.phone,
   });
-  console.log(data);
   const [error, setError] = useState({
     fname: undefined,
     lname: undefined,

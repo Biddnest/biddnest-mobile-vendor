@@ -51,6 +51,7 @@ export const STYLES = {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     borderBottomWidth: 0.8,
+    borderTopWidth: 0.8,
     borderColor: '#ACABCD',
   },
   container: {

@@ -58,25 +58,19 @@ const Requirements = (props) => {
         showsVerticalScrollIndicator={false}
         bounces={false}>
         <View style={{marginBottom: hp(2)}}>
-          {meta?.subcategory && (
-            <View
-              style={{
-                marginHorizontal: wp(10),
-                marginTop: hp(2),
-              }}>
-              <View style={[STYLES.flexBox, {marginTop: 0}]}>
-                <Text style={STYLES.leftText}>category</Text>
-                <Text style={[STYLES.rightText, {marginBottom: hp(2)}]}>
-                  {meta?.subcategory}
-                </Text>
-              </View>
-            </View>
-          )}
           <View
-            style={[
-              STYLES.inputForm,
-              {marginTop: meta?.subcategory ? 0 : hp(4)},
-            ]}>
+            style={{
+              marginHorizontal: wp(10),
+              marginTop: hp(2),
+            }}>
+            <View style={[STYLES.flexBox, {marginTop: 0}]}>
+              <Text style={STYLES.leftText}>category</Text>
+              <Text style={[STYLES.rightText, {marginBottom: hp(2)}]}>
+                {orderDetails?.service?.name}
+              </Text>
+            </View>
+          </View>
+          <View style={[STYLES.inputForm, {marginTop: 0}]}>
             <Text
               style={{
                 fontFamily: 'Gilroy-SemiBold',

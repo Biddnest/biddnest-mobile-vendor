@@ -52,6 +52,7 @@ const DropDownAndroid = (props) => {
               borderTopRightRadius: 10,
               borderBottomLeftRadius: 10,
               borderBottomRightRadius: 10,
+              ...props.customDropDown,
             },
           ]}
           labelStyle={{

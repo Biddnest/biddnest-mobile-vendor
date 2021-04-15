@@ -277,56 +277,51 @@ const OrderDetails = (props) => {
               </Text>
             </View>
           </View>
-          <View
-            style={{
-              paddingHorizontal: wp(5),
-              backgroundColor: Colors.pageBG,
-              paddingBottom: hp(2),
-            }}>
-            {orderDetails?.final_quote && (
+          {!orderDetails?.final_quote && (
+            <View
+              style={{
+                paddingHorizontal: wp(5),
+                backgroundColor: Colors.pageBG,
+                paddingBottom: hp(2),
+              }}>
               <View style={STYLES.flexBox}>
-                <Text style={STYLES.leftText}>BID PRICE</Text>
+                <Text style={STYLES.leftText}>DISTANCE</Text>
+                {orderDetails?.source_lat && (
+                  <Text style={STYLES.rightText}>
+                    {JSON.parse(orderDetails?.meta?.toString()).distance} KM
+                  </Text>
+                )}
+              </View>
+              <View style={STYLES.flexBox}>
+                <Text style={STYLES.leftText}>MOVING DATE</Text>
                 <Text style={STYLES.rightText}>
-                  Rs. {orderDetails?.final_quote}
+                  {orderDetails?.bid?.status === 0
+                    ? dateArray.join('\n')
+                    : orderDetails?.bid &&
+                      moment(
+                        JSON.parse(orderDetails?.bid?.meta)?.moving_date,
+                      ).format('D MMM yyyy')}
                 </Text>
               </View>
-            )}
-            <View style={STYLES.flexBox}>
-              <Text style={STYLES.leftText}>DISTANCE</Text>
-              {orderDetails?.source_lat && (
-                <Text style={STYLES.rightText}>
-                  {JSON.parse(orderDetails?.meta?.toString()).distance} KM
-                </Text>
-              )}
-            </View>
-            <View style={STYLES.flexBox}>
-              <Text style={STYLES.leftText}>MOVING DATE</Text>
-              <Text style={STYLES.rightText}>
-                {orderDetails?.bid?.status === 0
-                  ? dateArray.join('\n')
-                  : orderDetails?.bid &&
-                    moment(
-                      JSON.parse(orderDetails?.bid?.meta)?.moving_date,
-                    ).format('D MMM yyyy')}
-              </Text>
-            </View>
-            {meta?.subcategory && (
               <View style={STYLES.flexBox}>
                 <Text style={STYLES.leftText}>Category</Text>
-                <Text style={STYLES.rightText}>{meta?.subcategory}</Text>
-              </View>
-            )}
-            {orderDetails?.bid?.status !== 0 && (
-              <View style={STYLES.flexBox}>
-                <Text style={STYLES.leftText}>TYPE OF MOVEMENT</Text>
-                <Text style={[STYLES.rightText, {textTransform: 'capitalize'}]}>
-                  {orderDetails?.bid?.meta &&
-                    JSON.parse(orderDetails?.bid?.meta?.toString())
-                      .type_of_movement}
+                <Text style={STYLES.rightText}>
+                  {orderDetails?.service?.name}
                 </Text>
               </View>
-            )}
-          </View>
+              {orderDetails?.bid?.status !== 0 && (
+                <View style={STYLES.flexBox}>
+                  <Text style={STYLES.leftText}>TYPE OF MOVEMENT</Text>
+                  <Text
+                    style={[STYLES.rightText, {textTransform: 'capitalize'}]}>
+                    {orderDetails?.bid?.meta &&
+                      JSON.parse(orderDetails?.bid?.meta?.toString())
+                        .type_of_movement}
+                  </Text>
+                </View>
+              )}
+            </View>
+          )}
           <View style={STYLES.tabView}>
             {tab.map((item, index) => {
               return (
@@ -449,6 +444,70 @@ const OrderDetails = (props) => {
                   leftOnPress={() => setRejectVisible(true)}
                   rightOnPress={() => setAcceptVisible(true)}
                 />
+              )}
+              {orderDetails?.final_quote && (
+                <View
+                  style={{
+                    paddingHorizontal: wp(5),
+                    marginTop: hp(2),
+                  }}>
+                  <View style={STYLES.flexBox}>
+                    <Text style={STYLES.leftText}>DISTANCE</Text>
+                    {orderDetails?.source_lat && (
+                      <Text style={STYLES.rightText}>
+                        {JSON.parse(orderDetails?.meta?.toString()).distance} KM
+                      </Text>
+                    )}
+                  </View>
+                  {orderDetails?.bid?.status !== 0 && (
+                    <View style={STYLES.flexBox}>
+                      <Text style={STYLES.leftText}>TYPE OF MOVEMENT</Text>
+                      <Text
+                        style={[
+                          STYLES.rightText,
+                          {textTransform: 'capitalize'},
+                        ]}>
+                        {orderDetails?.bid?.meta &&
+                          JSON.parse(orderDetails?.bid?.meta?.toString())
+                            .type_of_movement}
+                      </Text>
+                    </View>
+                  )}
+                  <View style={STYLES.flexBox}>
+                    <Text style={STYLES.leftText}>Category</Text>
+                    <Text style={STYLES.rightText}>
+                      {orderDetails?.service?.name}
+                    </Text>
+                  </View>
+                </View>
+              )}
+              {orderDetails?.final_quote && (
+                <View
+                  style={{
+                    paddingHorizontal: wp(5),
+                    backgroundColor: Colors.pageBG,
+                    paddingBottom: hp(2),
+                    marginTop: hp(2),
+                  }}>
+                  <View style={STYLES.flexBox}>
+                    <Text style={STYLES.leftText}>BID PRICE</Text>
+                    <Text style={STYLES.rightText}>
+                      Rs. {orderDetails?.final_quote}
+                    </Text>
+                  </View>
+
+                  <View style={STYLES.flexBox}>
+                    <Text style={STYLES.leftText}>MOVING DATE</Text>
+                    <Text style={STYLES.rightText}>
+                      {orderDetails?.bid?.status === 0
+                        ? dateArray.join('\n')
+                        : orderDetails?.bid &&
+                          moment(
+                            JSON.parse(orderDetails?.bid?.meta)?.moving_date,
+                          ).format('D MMM yyyy')}
+                    </Text>
+                  </View>
+                </View>
               )}
             </View>
           )}
