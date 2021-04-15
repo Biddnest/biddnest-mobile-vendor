@@ -25,17 +25,23 @@ import {STORE} from '../../../redux';
 import {APICall} from '../../../redux/actions/user';
 import {CustomAlert, resetNavigator} from '../../../constant/commonFun';
 import {useSelector} from 'react-redux';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {Calendar} from 'react-native-calendars';
+import {Input} from 'react-native-elements';
+import OrderDetails from './orderDetails';
 
 const AcceptOrder = (props) => {
   const {priceList, public_booking_id, orderDetails} = props;
   const [step, setStep] = useState(0);
+  const [openCalender, setCalender] = useState(false);
   const [forgotPin, setForgotPin] = useState(false);
+  const [calenderDate, setCalenderDate] = useState();
   const configData =
     useSelector((state) => state.Login?.configData?.enums?.service) || {};
   const [applyBidData, setApplyBidData] = useState({
     public_booking_id: public_booking_id,
     type_of_movement: 'shared',
-    moving_date: moment(new Date()).format('yyyy-MM-DD'),
+    moving_date: null,
     vehicle_type: 'tempo',
     man_power: {
       min: 2,
@@ -48,6 +54,7 @@ const AcceptOrder = (props) => {
     bid_amount: orderDetails?.final_estimated_quote,
   });
   const [errorPin, setErrorPin] = useState(false);
+  const [errorDate, setErrorDate] = useState(undefined);
   const [modalData, setModalData] = useState({
     password: '',
     pin: 0,
@@ -57,6 +64,21 @@ const AcceptOrder = (props) => {
     pin: undefined,
   });
   const [isLoading, setLoading] = useState(false);
+  const [dateArray, setDateArray] = useState({});
+
+  useEffect(() => {
+    let temp = {...dateArray};
+    orderDetails?.movement_dates?.forEach((item, index) => {
+      temp[item?.date] = {
+        customStyles: {
+          text: {
+            color: Colors.inputTextColor,
+          },
+        },
+      };
+    });
+    setDateArray(temp);
+  }, [orderDetails]);
 
   useEffect(() => {
     if (priceList?.inventories?.length > 0) {
@@ -268,78 +290,203 @@ const AcceptOrder = (props) => {
             style={{
               width: '90%',
               alignSelf: 'center',
+              marginTop: -hp(2),
             }}>
-            <View style={{width: '92%', marginHorizontal: wp(3)}}>
-              <Text
-                style={{
-                  fontFamily: 'Roboto-Bold',
-                  color: Colors.textLabelColor,
-                  fontSize: wp(4),
-                }}>
-                Moving Date
-              </Text>
-              <View
-                style={{
-                  marginTop: hp(1),
-                  marginBottom: hp(3),
-                  borderWidth: 2,
-                  // paddingHorizontal: 15,
-                  borderRadius: 10,
-                  height: hp(6.5),
-                  borderColor: Colors.silver,
-                  backgroundColor: Colors.white,
-                }}>
-                <DatePicker
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    justifyContent: 'center',
-                  }}
-                  date={moment(applyBidData?.moving_date).format('D MMM yyyy')}
-                  mode="date"
-                  placeholder="select date"
-                  format="D MMM yyyy"
-                  minDate={new Date()}
-                  confirmBtnText="Confirm"
-                  cancelBtnText="Cancel"
-                  iconComponent={
-                    <Entypo
-                      name={'calendar'}
-                      size={25}
-                      color={Colors.inputTextColor}
-                      style={{
-                        position: 'absolute',
-                        right: 8,
-                        top: 7,
-                        marginLeft: 0,
-                      }}
-                    />
+            <View style={{width: '100%', alignSelf: 'center'}}>
+              <Pressable
+                style={{marginTop: hp(3)}}
+                onPress={() => setCalender(true)}>
+                <Input
+                  placeholder={'Moving Date'}
+                  disabled={true}
+                  label={'Moving Date'}
+                  value={
+                    applyBidData?.moving_date !== 'Invalid date' &&
+                    moment(applyBidData?.moving_date).format('D MMM yyyy')
                   }
-                  customStyles={{
-                    dateInput: {
-                      borderWidth: 0,
-                      height: hp(6.5),
-                      marginTop: 1,
-                      width: '100%',
-                      alignItems: 'flex-start',
-                      justifyContent: 'center',
-                      paddingHorizontal: 15,
-                    },
-                    dateText: {
-                      fontSize: wp(4),
-                      backgroundColor: Colors.textBG,
-                      color: Colors.inputTextColor,
-                      justifyContent: 'flex-start',
-                    },
+                  rightIcon={() => {
+                    return (
+                      <MaterialIcons
+                        name="calendar-today"
+                        size={25}
+                        color={Colors.grey}
+                      />
+                    );
                   }}
-                  onDateChange={(date) => {
-                    setApplyBidData({
-                      ...applyBidData,
-                      moving_date: moment(date).format('yyyy-MM-DD'),
-                    });
+                  inputContainerStyle={{
+                    borderWidth: 2,
+                    paddingHorizontal: 15,
+                    borderRadius: 10,
+                    height: hp(6.5),
+                    marginTop: hp(1),
+                    borderColor:
+                      errorDate === false ? Colors.red : Colors.silver,
+                    borderBottomWidth: 2,
+                  }}
+                  labelStyle={{
+                    fontFamily: 'Roboto-Bold',
+                    color: Colors.textLabelColor,
+                    fontSize: wp(4),
+                  }}
+                  inputStyle={{
+                    fontSize: wp(4),
+                    backgroundColor: Colors.textBG,
+                    color: Colors.inputTextColor,
+                    height: '99%',
                   }}
                 />
-              </View>
+              </Pressable>
+              <CustomModalAndroid
+                visible={openCalender}
+                onPress={() => {
+                  setCalender(false);
+                }}>
+                <Text
+                  style={{
+                    fontFamily: 'Gilroy-Bold',
+                    color: Colors.inputTextColor,
+                    fontSize: wp(4),
+                    marginTop: 25,
+                    marginBottom: 10,
+                    textTransform: 'uppercase',
+                  }}>
+                  Choose Date
+                </Text>
+                <CloseIcon
+                  onPress={() => {
+                    setCalender(false);
+                  }}
+                />
+                <Calendar
+                  markingType={'custom'}
+                  markedDates={dateArray}
+                  style={{width: wp(90), height: hp(50)}}
+                  current={new Date()}
+                  minDate={new Date()}
+                  onDayPress={(day) => {
+                    let ind = Object.keys(dateArray).findIndex(
+                      (item) => item === day?.dateString,
+                    );
+                    if (ind >= 0) {
+                      let temp = {...dateArray};
+
+                      Object.keys(temp).forEach((i, index) => {
+                        if (i === day?.dateString) {
+                          temp[day?.dateString] = temp[day?.dateString]
+                            ?.customStyles?.text?.color
+                            ? {
+                                selected: true,
+                                selectedColor: Colors.btnBG,
+                              }
+                            : {
+                                customStyles: {
+                                  text: {
+                                    color: Colors.inputTextColor,
+                                  },
+                                },
+                              };
+                        } else {
+                          temp[i] = {
+                            customStyles: {
+                              text: {
+                                color: Colors.inputTextColor,
+                              },
+                            },
+                          };
+                        }
+                      });
+                      setDateArray(temp);
+                      setCalenderDate(
+                        day?.dateString === calenderDate
+                          ? null
+                          : day?.dateString,
+                      );
+                    }
+                  }}
+                  monthFormat={'MMM yyyy'}
+                  showWeekNumbers={true}
+                  onPressArrowLeft={(subtractMonth) => subtractMonth()}
+                  onPressArrowRight={(addMonth) => addMonth()}
+                  disableAllTouchEventsForDisabledDays={true}
+                  enableSwipeMonths={true}
+                  theme={{
+                    dayTextColor: Colors.silver,
+                    todayTextColor: Colors.silver,
+                  }}
+                />
+                <FlatButton
+                  label={'OKAY'}
+                  onPress={() => {
+                    setApplyBidData({
+                      ...applyBidData,
+                      moving_date: moment(calenderDate).format('yyyy-MM-DD'),
+                    });
+                    setCalender(false);
+                  }}
+                />
+              </CustomModalAndroid>
+              {/*<View*/}
+              {/*  style={{*/}
+              {/*    marginTop: hp(1),*/}
+              {/*    marginBottom: hp(3),*/}
+              {/*    borderWidth: 2,*/}
+              {/*    // paddingHorizontal: 15,*/}
+              {/*    borderRadius: 10,*/}
+              {/*    height: hp(6.5),*/}
+              {/*    borderColor: Colors.silver,*/}
+              {/*    backgroundColor: Colors.white,*/}
+              {/*  }}>*/}
+              {/*  <DatePicker*/}
+              {/*    style={{*/}
+              {/*      width: '100%',*/}
+              {/*      height: '100%',*/}
+              {/*      justifyContent: 'center',*/}
+              {/*    }}*/}
+              {/*    date={moment(applyBidData?.moving_date).format('D MMM yyyy')}*/}
+              {/*    mode="date"*/}
+              {/*    placeholder="select date"*/}
+              {/*    format="D MMM yyyy"*/}
+              {/*    minDate={new Date()}*/}
+              {/*    confirmBtnText="Confirm"*/}
+              {/*    cancelBtnText="Cancel"*/}
+              {/*    iconComponent={*/}
+              {/*      <Entypo*/}
+              {/*        name={'calendar'}*/}
+              {/*        size={25}*/}
+              {/*        color={Colors.inputTextColor}*/}
+              {/*        style={{*/}
+              {/*          position: 'absolute',*/}
+              {/*          right: 8,*/}
+              {/*          top: 7,*/}
+              {/*          marginLeft: 0,*/}
+              {/*        }}*/}
+              {/*      />*/}
+              {/*    }*/}
+              {/*    customStyles={{*/}
+              {/*      dateInput: {*/}
+              {/*        borderWidth: 0,*/}
+              {/*        height: hp(6.5),*/}
+              {/*        marginTop: 1,*/}
+              {/*        width: '100%',*/}
+              {/*        alignItems: 'flex-start',*/}
+              {/*        justifyContent: 'center',*/}
+              {/*        paddingHorizontal: 15,*/}
+              {/*      },*/}
+              {/*      dateText: {*/}
+              {/*        fontSize: wp(4),*/}
+              {/*        backgroundColor: Colors.textBG,*/}
+              {/*        color: Colors.inputTextColor,*/}
+              {/*        justifyContent: 'flex-start',*/}
+              {/*      },*/}
+              {/*    }}*/}
+              {/*    onDateChange={(date) => {*/}
+              {/*      setApplyBidData({*/}
+              {/*        ...applyBidData,*/}
+              {/*        moving_date: moment(date).format('yyyy-MM-DD'),*/}
+              {/*      });*/}
+              {/*    }}*/}
+              {/*  />*/}
+              {/*</View>*/}
             </View>
             <Text style={styles.dateBottomText}>
               Select preferred moving date.
@@ -517,7 +664,12 @@ const AcceptOrder = (props) => {
           if (step === 0) {
             setStep(1);
           } else if (step === 1) {
-            setStep(2);
+            if (applyBidData?.moving_date !== 'Invalid date') {
+              setErrorDate(true);
+              setStep(2);
+            } else {
+              setErrorDate(false);
+            }
           } else {
             setLoading(true);
             if (forgotPin) {
