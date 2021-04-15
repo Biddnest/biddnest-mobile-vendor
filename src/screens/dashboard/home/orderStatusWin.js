@@ -121,7 +121,7 @@ const OrderStatusWin = (props) => {
             color={Colors.inputTextColor}
           />
           <Text style={styles.warningText}>
-            {orderDetails?.status === 4
+            {orderDetails?.status <= 4
               ? 'Confirmation is pending from the customer'
               : 'Assign driver to this order'}
           </Text>
@@ -178,7 +178,7 @@ const OrderStatusWin = (props) => {
         <View style={{flexDirection: 'row'}}>
           <View style={styles.dotView} />
           <Text style={styles.stepHeaderText}>{'Assign Driver'}</Text>
-          {orderDetails?.status !== 8 && orderDetails?.status !== 4 && (
+          {orderDetails?.status !== 8 && orderDetails?.status > 4 && (
             <Text
               style={styles.driverView}
               onPress={() => setDriverAssignVisible(true)}>

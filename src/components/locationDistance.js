@@ -1,9 +1,10 @@
 import {Colors, hp, wp} from '../constant/colors';
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {STYLES} from '../constant/commonStyle';
 import EditPen from '../assets/svg/edit_pen.svg';
+import MapPin from '../assets/svg/map_pin.svg';
 
 const LocationDistance = (props) => {
   return (
@@ -14,17 +15,14 @@ const LocationDistance = (props) => {
         padding: hp(2),
         flexDirection: 'row',
       }}>
-      <Image
-        source={require('../assets/images/pin_distance.png')}
-        style={{height: wp(15), width: wp(10)}}
-        resizeMode={'contain'}
-      />
+      <MapPin />
       <View
         style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
           flex: 1,
           alignItems: 'center',
+          marginLeft: 5,
         }}>
         <View>
           <Text style={[styles.locationText, {marginTop: 0}]}>CHENNAI</Text>

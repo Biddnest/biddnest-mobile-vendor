@@ -122,7 +122,7 @@ export const STYLES = {
   participatedText: {
     color: Colors.darkBlue,
     fontSize: wp(5),
-    fontFamily: 'Gilroy-Bold',
+    fontFamily: 'Gilroy-SemiBold',
   },
   flexBoxOrders: {
     flexDirection: 'row',

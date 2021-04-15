@@ -1,13 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Pressable,
-  FlatList,
-  Image,
-  ActivityIndicator,
-} from 'react-native';
+import {View, Text, Pressable, FlatList, ActivityIndicator} from 'react-native';
 import {Colors, hp, wp} from '../../../constant/colors';
 import {HomeHeader} from '../home';
 import {STYLES} from '../../../constant/commonStyle';
@@ -18,6 +10,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
 import moment from 'moment';
 import CountDown from '../../../components/countDown';
+import MapPin from '../../../assets/svg/map_pin.svg';
 
 const Orders = (props) => {
   const dispatch = useDispatch();
@@ -142,7 +135,7 @@ const Orders = (props) => {
                 </View>
               </View>
               <View style={STYLES.flexBoxOrders}>
-                <Text style={STYLES.labelText}>Expected Rate</Text>
+                <Text style={STYLES.labelText}>Expected Price</Text>
                 <Text style={STYLES.labelText}>Time Left</Text>
               </View>
             </View>
@@ -154,17 +147,14 @@ const Orders = (props) => {
             backgroundColor: Colors.white,
             flexDirection: 'row',
           }}>
-          <Image
-            source={require('../../../assets/images/pin_distance.png')}
-            style={{height: wp(15), width: wp(10)}}
-            resizeMode={'contain'}
-          />
+          <MapPin />
           <View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
               flex: 1,
               alignItems: 'center',
+              marginLeft: 5,
             }}>
             <View>
               <Text
@@ -176,7 +166,7 @@ const Orders = (props) => {
                   width: wp(40),
                 }}>
                 {source_meta?.city === destination_meta?.city
-                  ? source_meta?.address
+                  ? source_meta?.geocode
                   : source_meta?.city}
               </Text>
               <Text
@@ -189,7 +179,7 @@ const Orders = (props) => {
                   },
                 ]}>
                 {destination_meta?.city === source_meta?.city
-                  ? destination_meta?.address
+                  ? destination_meta?.geocode
                   : destination_meta?.city}
               </Text>
             </View>

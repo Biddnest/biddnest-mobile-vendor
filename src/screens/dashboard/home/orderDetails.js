@@ -226,7 +226,7 @@ const OrderDetails = (props) => {
         showsVerticalScrollIndicator={false}
         bounces={false}>
         <View>
-          {orderDetails?.status < 4 && (
+          {!orderDetails?.final_quote && (
             <View
               style={{
                 flex: 1,
@@ -236,11 +236,7 @@ const OrderDetails = (props) => {
               <View style={STYLES.flexBoxOrders}>
                 <View style={[STYLES.priceView, {width: '40%'}]}>
                   <Text style={STYLES.participatedText}>
-                    Rs.{' '}
-                    {orderDetails?.bid?.status === 0
-                      ? orderDetails?.final_estimated_quote
-                      : orderDetails?.final_quote ||
-                        orderDetails?.final_estimated_quote}
+                    Rs. {orderDetails?.final_estimated_quote}
                   </Text>
                 </View>
                 <View style={[STYLES.priceView, {width: '40%'}]}>
@@ -258,7 +254,7 @@ const OrderDetails = (props) => {
                 </View>
               </View>
               <View style={STYLES.flexBoxOrders}>
-                <Text style={STYLES.labelText}>Expected Rate</Text>
+                <Text style={STYLES.labelText}>Expected Price</Text>
                 <Text style={STYLES.labelText}>Time Left</Text>
               </View>
             </View>
@@ -287,6 +283,14 @@ const OrderDetails = (props) => {
               backgroundColor: Colors.pageBG,
               paddingBottom: hp(2),
             }}>
+            {orderDetails?.final_quote && (
+              <View style={STYLES.flexBox}>
+                <Text style={STYLES.leftText}>BID PRICE</Text>
+                <Text style={STYLES.rightText}>
+                  Rs. {orderDetails?.final_quote}
+                </Text>
+              </View>
+            )}
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>DISTANCE</Text>
               {orderDetails?.source_lat && (
@@ -357,7 +361,7 @@ const OrderDetails = (props) => {
                   justifyContent: 'space-between',
                 }}>
                 <View style={{maxWidth: '80%'}}>
-                  {renderText('Pickup Address', source_meta?.address)}
+                  {renderText('Pickup Address', source_meta?.geocode)}
                 </View>
                 <Pressable
                   style={STYLES.mapPinCircle}
@@ -403,7 +407,7 @@ const OrderDetails = (props) => {
                   justifyContent: 'space-between',
                 }}>
                 <View style={{maxWidth: '80%'}}>
-                  {renderText('Drop Address', destination_meta?.address)}
+                  {renderText('Drop Address', destination_meta?.geocode)}
                 </View>
                 <Pressable
                   style={STYLES.mapPinCircle}
@@ -571,8 +575,8 @@ const OrderDetails = (props) => {
           {renderText(
             mapVisible === 'pickup' ? 'Pickup Address' : 'Drop Address',
             mapVisible === 'pickup'
-              ? source_meta?.address
-              : destination_meta?.address,
+              ? source_meta?.geocode
+              : destination_meta?.geocode,
           )}
         </View>
         <View style={{marginTop: hp(1)}}>

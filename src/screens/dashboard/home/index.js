@@ -20,6 +20,7 @@ import FlatButton from '../../../components/flatButton';
 import Switch from '../../../components/switch';
 import FilterButton from '../../../components/filterButton';
 import MenuIcon from '../../../assets/svg/menu_icon.svg';
+import MapPin from '../../../assets/svg/map_pin.svg';
 import TwoButton from '../../../components/twoButton';
 import {useDispatch, useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
@@ -172,11 +173,8 @@ const Home = (props) => {
         },
       };
       APICall(obj)
-        .then((res) => {
-          setLoading(false);
-        })
+        .then((res) => {})
         .catch((err) => {
-          setLoading(false);
           CustomAlert(err?.data?.message);
         });
       AsyncStorage.getItem('oneSignalData').then((signalData) => {
@@ -317,7 +315,7 @@ const Home = (props) => {
                 <View style={STYLES.priceView}>
                   <CountDown
                     until={DiffMin(item?.bid_result_at)}
-                    onFinish={() => getOrdersList()}
+                    // onFinish={() => getOrdersList()}
                     size={18}
                     digitStyle={{height: '100%'}}
                     digitTxtStyle={STYLES.participatedText}
@@ -329,7 +327,7 @@ const Home = (props) => {
                 </View>
               </View>
               <View style={STYLES.flexBoxOrders}>
-                <Text style={STYLES.labelText}>Expected Rate</Text>
+                <Text style={STYLES.labelText}>Expected Price</Text>
                 <Text style={STYLES.labelText}>Time Left</Text>
               </View>
             </View>
@@ -342,17 +340,14 @@ const Home = (props) => {
             backgroundColor: Colors.white,
             flexDirection: 'row',
           }}>
-          <Image
-            source={require('../../../assets/images/pin_distance.png')}
-            style={{height: wp(15), width: wp(10)}}
-            resizeMode={'contain'}
-          />
+          <MapPin />
           <View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
               flex: 1,
               alignItems: 'center',
+              marginLeft: 5,
             }}>
             <View style={{maxWidth: '50%'}}>
               <Text
@@ -364,7 +359,7 @@ const Home = (props) => {
                 }}
                 numberOfLines={1}>
                 {source_meta?.city === destination_meta?.city
-                  ? source_meta?.address
+                  ? source_meta?.geocode
                   : source_meta?.city}
               </Text>
               <Text
@@ -374,7 +369,7 @@ const Home = (props) => {
                 ]}
                 numberOfLines={1}>
                 {destination_meta?.city === source_meta?.city
-                  ? destination_meta?.address
+                  ? destination_meta?.geocode
                   : destination_meta?.city}
               </Text>
             </View>
@@ -400,7 +395,9 @@ const Home = (props) => {
           <View>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>bid price</Text>
-              <Text style={STYLES.rightText}>Rs. {item?.final_quote}</Text>
+              <Text style={STYLES.rightText}>
+                Rs. {item?.final_quote || item?.final_estimated_quote}
+              </Text>
             </View>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>Moving Date</Text>

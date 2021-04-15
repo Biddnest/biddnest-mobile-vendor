@@ -29,19 +29,19 @@ const OrderStatusPending = (props) => {
       <View style={[STYLES.inputForm, {borderRadius: hp(1), marginTop: 0}]}>
         <View
           style={{
-            width: wp(30),
-            height: wp(30),
+            width: wp(40),
+            height: wp(40),
             alignSelf: 'center',
             marginTop: hp(2),
             marginBottom: hp(1.5),
           }}>
-          <TimerClock width={wp(30)} height={wp(30)} />
+          <TimerClock width={wp(40)} height={wp(40)} />
         </View>
         <Text
           style={{
             color: Colors.darkBlue,
             position: 'absolute',
-            top: wp(30),
+            top: wp(35),
             fontFamily: 'Roboto-Medium',
             fontSize: wp(3.8),
             textAlign: 'center',

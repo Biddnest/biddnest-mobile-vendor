@@ -34,8 +34,6 @@ const AcceptOrder = (props) => {
     useSelector((state) => state.Login?.configData?.enums?.service) || {};
   const [applyBidData, setApplyBidData] = useState({
     public_booking_id: public_booking_id,
-    inventory: [],
-    bid_amount: orderDetails?.final_estimated_quote,
     type_of_movement: 'shared',
     moving_date: moment(new Date()).format('yyyy-MM-DD'),
     vehicle_type: 'tempo',
@@ -44,6 +42,10 @@ const AcceptOrder = (props) => {
       max: 4,
     },
     pin: '',
+  });
+  const [stepData, setStepData] = useState({
+    inventory: [],
+    bid_amount: orderDetails?.final_estimated_quote,
   });
   const [errorPin, setErrorPin] = useState(false);
   const [modalData, setModalData] = useState({
@@ -65,8 +67,8 @@ const AcceptOrder = (props) => {
           amount: item?.price || 0,
         });
       });
-      setApplyBidData({
-        ...applyBidData,
+      setStepData({
+        ...stepData,
         inventory: temp,
       });
     }
@@ -170,16 +172,14 @@ const AcceptOrder = (props) => {
                     <View style={{width: '40%'}}>
                       <TextInput
                         label={''}
-                        value={applyBidData?.inventory[
-                          index
-                        ]?.amount?.toString()}
+                        value={stepData?.inventory[index]?.amount?.toString()}
                         inputStyle={{textAlign: 'center'}}
                         placeHolder={'4200'}
                         keyboard={'decimal-pad'}
                         onChange={(text) => {
-                          let temp = [...applyBidData.inventory];
+                          let temp = [...stepData.inventory];
                           temp[index].amount = text;
-                          setApplyBidData({...applyBidData, inventory: temp});
+                          setStepData({...stepData, inventory: temp});
                         }}
                       />
                     </View>
@@ -208,11 +208,11 @@ const AcceptOrder = (props) => {
               <TextInput
                 inputStyle={{textAlign: 'center'}}
                 label={''}
-                value={applyBidData?.bid_amount?.toString()}
+                value={stepData?.bid_amount?.toString()}
                 placeHolder={'4200'}
                 keyboard={'decimal-pad'}
                 onChange={(text) =>
-                  setApplyBidData({...applyBidData, bid_amount: text})
+                  setStepData({...stepData, bid_amount: text})
                 }
               />
             </View>
@@ -237,6 +237,10 @@ const AcceptOrder = (props) => {
       <Text style={STYLES.modalHeaderText}>APPLY FOR BID</Text>
       <CloseIcon
         onPress={() => {
+          setStepData({
+            ...stepData,
+            bid_amount: orderDetails?.final_estimated_quote,
+          });
           setStep(0);
           setForgotPin(false);
           props.onCloseIcon();
@@ -570,7 +574,7 @@ const AcceptOrder = (props) => {
                     Authorization:
                       'Bearer ' + STORE.getState().Login?.loginData?.token,
                   },
-                  data: applyBidData,
+                  data: {...applyBidData, ...stepData},
                 };
                 APICall(obj)
                   .then((res) => {

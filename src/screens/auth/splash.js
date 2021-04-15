@@ -59,7 +59,9 @@ const Splash = (props) => {
         orderData: {public_booking_id: temp?.public_booking_id},
       });
     } else if (temp?.type === notificationData?.link) {
-      CustomTabs.openURL(temp?.url)
+      CustomTabs.openURL(temp?.url, {
+        toolbarColor: Colors.darkBlue,
+      })
         .then(() => {})
         .catch((err) => {
           console.log(err);

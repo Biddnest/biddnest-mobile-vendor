@@ -112,7 +112,7 @@ const UserRole = (props) => {
         if (res?.data?.status === 'success') {
           setUserRoles(res?.data?.data);
         } else {
-          CustomAlert(res?.message);
+          CustomAlert(res?.data?.message);
         }
       })
       .catch((err) => {
@@ -136,7 +136,7 @@ const UserRole = (props) => {
         if (res?.data?.status === 'success') {
           getUserRoleList();
         } else {
-          CustomAlert(res?.message);
+          CustomAlert(res?.data?.message);
         }
       })
       .catch((err) => {
