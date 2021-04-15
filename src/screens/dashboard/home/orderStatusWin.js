@@ -261,9 +261,8 @@ const OrderStatusWin = (props) => {
                     'Bearer ' + STORE.getState().Login?.loginData?.token,
                 },
                 data: {
+                  ...driverAssignData,
                   public_booking_id: orderDetails?.public_booking_id,
-                  driver_id: '5',
-                  vehicle_id: '1',
                 },
               };
               APICall(obj)

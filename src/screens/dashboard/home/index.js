@@ -260,7 +260,7 @@ const Home = (props) => {
                 ? '#F8F8FA'
                 : Colors.white,
             borderColor:
-              item?.bid?.bid_type === bidType?.rebid
+              item?.status === statusData?.status?.rebiding
                 ? Colors.darkBlue
                 : '#DEE6ED',
           },

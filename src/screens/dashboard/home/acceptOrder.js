@@ -17,8 +17,6 @@ import FlatButton from '../../../components/flatButton';
 import DropDown from '../../../components/dropDown';
 import Slider from 'rn-range-slider';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
-import Entypo from 'react-native-vector-icons/Entypo';
-import DatePicker from 'react-native-datepicker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
 import {STORE} from '../../../redux';
@@ -28,7 +26,6 @@ import {useSelector} from 'react-redux';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {Calendar} from 'react-native-calendars';
 import {Input} from 'react-native-elements';
-import OrderDetails from './orderDetails';
 
 const AcceptOrder = (props) => {
   const {priceList, public_booking_id, orderDetails} = props;
@@ -203,6 +200,16 @@ const AcceptOrder = (props) => {
                           temp[index].amount = text;
                           setStepData({...stepData, inventory: temp});
                         }}
+                        onBlur={() => {
+                          let temp = [...stepData?.inventory];
+                          let amount = 0;
+                          temp?.forEach((i, ind) => {
+                            amount = amount + parseFloat(i?.amount || 0);
+                          });
+                          if (amount > 0) {
+                            setStepData({...stepData, bid_amount: amount});
+                          }
+                        }}
                       />
                     </View>
                   </View>
@@ -301,6 +308,7 @@ const AcceptOrder = (props) => {
                   disabled={true}
                   label={'Moving Date'}
                   value={
+                    applyBidData?.moving_date &&
                     applyBidData?.moving_date !== 'Invalid date' &&
                     moment(applyBidData?.moving_date).format('D MMM yyyy')
                   }
@@ -362,7 +370,7 @@ const AcceptOrder = (props) => {
                   markedDates={dateArray}
                   style={{width: wp(90), height: hp(50)}}
                   current={new Date()}
-                  minDate={new Date()}
+                  // minDate={new Date()}
                   onDayPress={(day) => {
                     let ind = Object.keys(dateArray).findIndex(
                       (item) => item === day?.dateString,
@@ -425,68 +433,6 @@ const AcceptOrder = (props) => {
                   }}
                 />
               </CustomModalAndroid>
-              {/*<View*/}
-              {/*  style={{*/}
-              {/*    marginTop: hp(1),*/}
-              {/*    marginBottom: hp(3),*/}
-              {/*    borderWidth: 2,*/}
-              {/*    // paddingHorizontal: 15,*/}
-              {/*    borderRadius: 10,*/}
-              {/*    height: hp(6.5),*/}
-              {/*    borderColor: Colors.silver,*/}
-              {/*    backgroundColor: Colors.white,*/}
-              {/*  }}>*/}
-              {/*  <DatePicker*/}
-              {/*    style={{*/}
-              {/*      width: '100%',*/}
-              {/*      height: '100%',*/}
-              {/*      justifyContent: 'center',*/}
-              {/*    }}*/}
-              {/*    date={moment(applyBidData?.moving_date).format('D MMM yyyy')}*/}
-              {/*    mode="date"*/}
-              {/*    placeholder="select date"*/}
-              {/*    format="D MMM yyyy"*/}
-              {/*    minDate={new Date()}*/}
-              {/*    confirmBtnText="Confirm"*/}
-              {/*    cancelBtnText="Cancel"*/}
-              {/*    iconComponent={*/}
-              {/*      <Entypo*/}
-              {/*        name={'calendar'}*/}
-              {/*        size={25}*/}
-              {/*        color={Colors.inputTextColor}*/}
-              {/*        style={{*/}
-              {/*          position: 'absolute',*/}
-              {/*          right: 8,*/}
-              {/*          top: 7,*/}
-              {/*          marginLeft: 0,*/}
-              {/*        }}*/}
-              {/*      />*/}
-              {/*    }*/}
-              {/*    customStyles={{*/}
-              {/*      dateInput: {*/}
-              {/*        borderWidth: 0,*/}
-              {/*        height: hp(6.5),*/}
-              {/*        marginTop: 1,*/}
-              {/*        width: '100%',*/}
-              {/*        alignItems: 'flex-start',*/}
-              {/*        justifyContent: 'center',*/}
-              {/*        paddingHorizontal: 15,*/}
-              {/*      },*/}
-              {/*      dateText: {*/}
-              {/*        fontSize: wp(4),*/}
-              {/*        backgroundColor: Colors.textBG,*/}
-              {/*        color: Colors.inputTextColor,*/}
-              {/*        justifyContent: 'flex-start',*/}
-              {/*      },*/}
-              {/*    }}*/}
-              {/*    onDateChange={(date) => {*/}
-              {/*      setApplyBidData({*/}
-              {/*        ...applyBidData,*/}
-              {/*        moving_date: moment(date).format('yyyy-MM-DD'),*/}
-              {/*      });*/}
-              {/*    }}*/}
-              {/*  />*/}
-              {/*</View>*/}
             </View>
             <Text style={styles.dateBottomText}>
               Select preferred moving date.
@@ -664,7 +610,10 @@ const AcceptOrder = (props) => {
           if (step === 0) {
             setStep(1);
           } else if (step === 1) {
-            if (applyBidData?.moving_date !== 'Invalid date') {
+            if (
+              applyBidData?.moving_date &&
+              applyBidData?.moving_date !== 'Invalid date'
+            ) {
               setErrorDate(true);
               setStep(2);
             } else {

@@ -16,6 +16,7 @@ const TextInput = (props) => {
       secureTextEntry={props.secureTextEntry || false}
       value={props.value}
       onFocus={props.onFocus}
+      onBlur={props.onBlur}
       label={props.label}
       rightIcon={() => {
         if (props.isRight === true) {
