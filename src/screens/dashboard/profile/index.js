@@ -8,7 +8,6 @@ import {
   Image,
   ImageBackground,
   ScrollView,
-  Platform,
 } from 'react-native';
 import {Colors, hp, wp} from '../../../constant/colors';
 import {HomeHeader} from '../home';
@@ -23,6 +22,12 @@ import ChangePassword from './changePassword';
 
 const Profile = (props) => {
   const userData = useSelector((state) => state.Login?.loginData) || {};
+  const serviceType =
+    useSelector(
+      (state) => state.Login?.configData?.enums?.booking?.booking_type,
+    ) || {};
+  const roles =
+    useSelector((state) => state.Login?.configData?.enums?.vendor?.roles) || {};
   const [openArray, setOpenArray] = useState([]);
   const [openIndex, setOpenIndex] = useState();
   const [changePassVisible, setChangePassVisible] = useState(false);
@@ -30,6 +35,12 @@ const Profile = (props) => {
     (userData?.vendor?.organization?.meta &&
       JSON.parse(userData?.vendor?.organization?.meta?.toString())) ||
     {};
+  let service_index = Object.values(serviceType).findIndex(
+    (item) => item == userData?.vendor?.organization?.service_type,
+  );
+  let user_role_index = Object.values(roles).findIndex(
+    (item) => item == userData?.vendor?.user_role,
+  );
   const onPress = (index) => {
     let temp = [...openArray];
     if (openArray.includes(index)) {
@@ -43,6 +54,15 @@ const Profile = (props) => {
     setOpenArray(temp);
   };
   const renderIcon = (index, header) => {
+    let show = false;
+    if (index === 0 || index === 1) {
+      if (
+        roles?.admin === userData?.vendor?.user_role &&
+        openArray.includes(index)
+      ) {
+        show = true;
+      }
+    }
     return (
       <Pressable
         onPress={() => onPress(index)}
@@ -71,7 +91,7 @@ const Profile = (props) => {
               ]}>
               {header}
             </Text>
-            {index !== 2 && openArray.includes(index) && (
+            {show && (
               <Pressable
                 style={styles.singleEdit}
                 onPress={() => setOpenIndex(index)}>
@@ -148,6 +168,17 @@ const Profile = (props) => {
             </Text>
             <Text style={styles.profileDetailText}>
               {userData?.vendor?.email}
+            </Text>
+            <Text
+              style={[
+                styles.profileDetailText,
+                {
+                  textTransform: 'capitalize',
+                  fontFamily: 'Gilroy-Bold',
+                  fontSize: wp(4),
+                },
+              ]}>
+              {Object.keys(roles)[user_role_index]}
             </Text>
           </View>
           <View
@@ -294,7 +325,10 @@ const Profile = (props) => {
                   },
                   {
                     title: 'Service Type',
-                    body: userData?.vendor?.organization?.service_type,
+                    body:
+                      service_index > -1
+                        ? Object.keys(serviceType)[service_index]
+                        : ' ',
                   },
                   {
                     title: 'Vendor Status',
@@ -305,8 +339,26 @@ const Profile = (props) => {
                 ]}
                 contentContainerStyle={{marginTop: hp(2)}}
                 renderItem={({item, index}) => {
+                  if (
+                    roles?.admin !== userData?.vendor?.user_role &&
+                    item?.title === 'Commission Rate'
+                  ) {
+                    return null;
+                  }
                   return (
-                    <View style={styles.textWrapper} key={index}>
+                    <View
+                      style={[
+                        styles.textWrapper,
+                        index === 0
+                          ? {}
+                          : {
+                              borderTopWidth: 0.8,
+                              borderColor: Colors.silver,
+                              marginTop: hp(1.5),
+                              paddingTop: hp(1.5),
+                            },
+                      ]}
+                      key={index}>
                       <Text style={styles.headerText}>{item.title}</Text>
                       {(item.body !== '' && (
                         <Text style={styles.bodyText}>{item.body}</Text>
@@ -341,9 +393,6 @@ const Profile = (props) => {
                     </View>
                   );
                 }}
-                ItemSeparatorComponent={() => (
-                  <View style={styles.separatorView} />
-                )}
               />
             </View>
           )}
@@ -383,7 +432,7 @@ const styles = StyleSheet.create({
   profileDetailText: {
     color: Colors.white,
     fontFamily: 'Roboto-Light',
-    fontSize: wp(4),
+    fontSize: wp(3.5),
     lineHeight: 25,
   },
   inputForm: {

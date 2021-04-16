@@ -99,7 +99,9 @@ const OrderDetails = (props) => {
               res?.data?.data?.booking?.bid?.status !== 0 &&
               res?.data?.data?.booking?.bid?.status !== 5
             ) {
-              setSelectedTab(2);
+              if (orderDetails?.final_quote) {
+                setSelectedTab(2);
+              }
               setTab(['Order Details', 'Requirements', 'My Bid']);
             }
           } else {
@@ -437,7 +439,7 @@ const OrderDetails = (props) => {
                   )}
                 </View>
               </View>
-              {orderDetails?.bid?.status === 0 && (
+              {!orderDetails?.final_quote && (
                 <TwoButton
                   leftLabel={'REJECT'}
                   rightLabel={'ACCEPT'}

@@ -4,7 +4,7 @@ import {Colors, hp, wp} from '../../../constant/colors';
 import {HomeHeader} from '../home';
 import {STYLES} from '../../../constant/commonStyle';
 import LinearGradient from 'react-native-linear-gradient';
-import {getOrders} from '../../../redux/actions/user';
+import {getDriverOrders, getOrders} from '../../../redux/actions/user';
 import {CustomAlert, DiffMin} from '../../../constant/commonFun';
 import {useDispatch, useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
@@ -18,7 +18,11 @@ const Orders = (props) => {
   const statusData =
     useSelector((state) => state.Login?.configData?.enums?.bid?.status) || {};
   const userData = useSelector((state) => state.Login?.loginData) || {};
-  const [selectedTab, setSelectedTab] = useState('participated');
+  const roles =
+    useSelector((state) => state.Login?.configData?.enums?.vendor?.roles) || {};
+  const [selectedTab, setSelectedTab] = useState(
+    roles?.driver === userData?.vendor?.user_role ? 'past' : 'participated',
+  );
   const [order, setOrder] = useState({});
   const [isLoading, setLoading] = useState(false);
   useEffect(() => {
@@ -28,19 +32,35 @@ const Orders = (props) => {
     }
   }, [selectedTab]);
   const getOrdersList = (pageNo = 1) => {
-    dispatch(getOrders(selectedTab, {}, pageNo))
-      .then((res) => {
-        setLoading(false);
-        if (res?.status === 'success' && res?.data) {
-          setOrder(res?.data);
-        } else {
-          CustomAlert(res?.message);
-        }
-      })
-      .catch((err) => {
-        setLoading(false);
-        CustomAlert(err?.data?.message);
-      });
+    if (roles?.driver === userData?.vendor?.user_role) {
+      dispatch(getDriverOrders(selectedTab, {}, pageNo))
+        .then((res) => {
+          setLoading(false);
+          if (res?.status === 'success' && res?.data) {
+            setOrder(res?.data);
+          } else {
+            CustomAlert(res?.message);
+          }
+        })
+        .catch((err) => {
+          setLoading(false);
+          CustomAlert(err?.data?.message);
+        });
+    } else {
+      dispatch(getOrders(selectedTab, {}, pageNo))
+        .then((res) => {
+          setLoading(false);
+          if (res?.status === 'success' && res?.data) {
+            setOrder(res?.data);
+          } else {
+            CustomAlert(res?.message);
+          }
+        })
+        .catch((err) => {
+          setLoading(false);
+          CustomAlert(err?.data?.message);
+        });
+    }
   };
   const handleOrderClicked = (item) => {
     if (selectedTab === 'past') {
@@ -291,33 +311,35 @@ const Orders = (props) => {
         right={true}
         onRightPress={() => {}}
       />
-      <View style={STYLES.tabView}>
-        {[
-          {title: 'Participated Orders', value: 'participated'},
-          {title: 'Past Orders', value: 'past'},
-        ].map((item, index) => {
-          return (
-            <Pressable
-              key={index}
-              style={{
-                ...STYLES.common,
-                borderColor:
-                  selectedTab === item.value ? Colors.darkBlue : '#ACABCD',
-                borderBottomWidth: selectedTab === item.value ? 2 : 0,
-              }}
-              onPress={() => setSelectedTab(item.value)}>
-              <Text
+      {roles?.driver !== userData?.vendor?.user_role && (
+        <View style={STYLES.tabView}>
+          {[
+            {title: 'Participated Orders', value: 'participated'},
+            {title: 'Past Orders', value: 'past'},
+          ].map((item, index) => {
+            return (
+              <Pressable
+                key={index}
                 style={{
-                  ...STYLES.tabText,
-                  color:
+                  ...STYLES.common,
+                  borderColor:
                     selectedTab === item.value ? Colors.darkBlue : '#ACABCD',
-                }}>
-                {item?.title}
-              </Text>
-            </Pressable>
-          );
-        })}
-      </View>
+                  borderBottomWidth: selectedTab === item.value ? 2 : 0,
+                }}
+                onPress={() => setSelectedTab(item.value)}>
+                <Text
+                  style={{
+                    ...STYLES.tabText,
+                    color:
+                      selectedTab === item.value ? Colors.darkBlue : '#ACABCD',
+                  }}>
+                  {item?.title}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </View>
+      )}
       <View style={{flex: 1}}>
         {(!!isLoading && (
           <View style={{flex: 1, marginTop: hp(25)}}>

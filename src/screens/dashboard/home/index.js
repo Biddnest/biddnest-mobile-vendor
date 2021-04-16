@@ -25,7 +25,12 @@ import TwoButton from '../../../components/twoButton';
 import {useDispatch, useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
 import {CustomAlert, DiffMin} from '../../../constant/commonFun';
-import {APICall, checkPinStatus, getOrders} from '../../../redux/actions/user';
+import {
+  APICall,
+  checkPinStatus,
+  getDriverOrders,
+  getOrders,
+} from '../../../redux/actions/user';
 import moment from 'moment';
 import TextInput from '../../../components/textInput';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
@@ -35,6 +40,7 @@ import {NOTIFICATION} from '../../../redux/types';
 import DatePicker from 'react-native-datepicker';
 import Entypo from 'react-native-vector-icons/Entypo';
 import OneSignal from 'react-native-onesignal';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
 export const HomeHeader = (props) => {
   return (
@@ -124,7 +130,11 @@ const Home = (props) => {
   const bidType =
     useSelector((state) => state.Login?.configData?.enums?.bid?.type) || {};
   const userData = useSelector((state) => state.Login?.loginData) || {};
-  const [selectedTab, setSelectedTab] = useState(0);
+  const roles =
+    useSelector((state) => state.Login?.configData?.enums?.vendor?.roles) || {};
+  const [selectedTab, setSelectedTab] = useState(
+    roles?.driver === userData?.vendor?.user_role ? 1 : 0,
+  );
   const [filterVisible, setFilterVisible] = useState(false);
   const [filterData, setFilterData] = useState({
     from: new Date(),
@@ -220,19 +230,35 @@ const Home = (props) => {
     }
   }, [selectedTab]);
   const getOrdersList = (data = {}, pageNo = 1) => {
-    dispatch(getOrders(configData[selectedTab], data, pageNo))
-      .then((res) => {
-        setLoading(false);
-        if (res?.status === 'success' && res?.data) {
-          setOrder(res?.data);
-        } else {
-          CustomAlert(res?.message);
-        }
-      })
-      .catch((err) => {
-        setLoading(false);
-        CustomAlert(err?.data?.message);
-      });
+    if (roles?.driver === userData?.vendor?.user_role) {
+      dispatch(getDriverOrders(configData[selectedTab], data, pageNo))
+        .then((res) => {
+          setLoading(false);
+          if (res?.status === 'success' && res?.data) {
+            setOrder(res?.data);
+          } else {
+            CustomAlert(res?.message);
+          }
+        })
+        .catch((err) => {
+          setLoading(false);
+          CustomAlert(err?.data?.message);
+        });
+    } else {
+      dispatch(getOrders(configData[selectedTab], data, pageNo))
+        .then((res) => {
+          setLoading(false);
+          if (res?.status === 'success' && res?.data) {
+            setOrder(res?.data);
+          } else {
+            CustomAlert(res?.message);
+          }
+        })
+        .catch((err) => {
+          setLoading(false);
+          CustomAlert(err?.data?.message);
+        });
+    }
   };
   const renderItem = ({item, index}) => {
     let source_meta =
@@ -461,33 +487,35 @@ const Home = (props) => {
         onRightPress={() => {}}
         navigation={props.navigation}
       />
-      <View style={STYLES.tabView}>
-        {[
-          {title: 'Live Orders', value: configData[0]},
-          {title: 'Scheduled Orders', value: configData[1]},
-          {title: 'Save Later', value: configData[2]},
-        ].map((item, index) => {
-          return (
-            <Pressable
-              key={index}
-              style={{
-                ...STYLES.common,
-                borderColor:
-                  selectedTab === index ? Colors.darkBlue : '#ACABCD',
-                borderBottomWidth: selectedTab === index ? 2 : 0,
-              }}
-              onPress={() => setSelectedTab(index)}>
-              <Text
+      {roles?.driver !== userData?.vendor?.user_role && (
+        <View style={STYLES.tabView}>
+          {[
+            {title: 'Live Orders', value: configData[0]},
+            {title: 'Scheduled Orders', value: configData[1]},
+            {title: 'Save Later', value: configData[2]},
+          ].map((item, index) => {
+            return (
+              <Pressable
+                key={index}
                 style={{
-                  ...STYLES.tabText,
-                  color: selectedTab === index ? Colors.darkBlue : '#ACABCD',
-                }}>
-                {item?.title}
-              </Text>
-            </Pressable>
-          );
-        })}
-      </View>
+                  ...STYLES.common,
+                  borderColor:
+                    selectedTab === index ? Colors.darkBlue : '#ACABCD',
+                  borderBottomWidth: selectedTab === index ? 2 : 0,
+                }}
+                onPress={() => setSelectedTab(index)}>
+                <Text
+                  style={{
+                    ...STYLES.tabText,
+                    color: selectedTab === index ? Colors.darkBlue : '#ACABCD',
+                  }}>
+                  {item?.title}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </View>
+      )}
       <View style={{flex: 1}}>
         {(!!isLoading && (
           <View style={{flex: 1, marginTop: hp(25)}}>
@@ -652,10 +680,9 @@ const Home = (props) => {
         />
       </CustomModalAndroid>
       <CustomModalAndroid visible={pinModal}>
-        <View style={STYLES.modalHeaderView}>
+        <View style={[STYLES.modalHeaderView, {marginTop: 10}]}>
           <Text style={STYLES.modalHeaderText}>SET PIN</Text>
         </View>
-        <View style={{...STYLES.separatorView, width: '85%'}} />
         <View style={{width: '100%', alignItems: 'center'}}>
           <View
             style={{
@@ -778,5 +805,15 @@ const styles = StyleSheet.create({
     borderColor: Colors.silver,
     color: Colors.textLabelColor,
     fontSize: wp(6),
+  },
+  flexBoxWrapper: {
+    maxWidth: '85%',
+    marginTop: hp(2),
+    backgroundColor: '#FDFAE8',
+    borderRadius: 8,
+    padding: 10,
+    flexDirection: 'row',
+    alignSelf: 'flex-end',
+    alignItems: 'center',
   },
 });

@@ -92,6 +92,39 @@ export const signOut = () => {
   };
 };
 
+export const getDriverOrders = (url, data, page) => {
+  return (dispatch) => {
+    return new Promise((resolve, reject) => {
+      let obj = {
+        url:
+          Object.keys(data)?.length > 0
+            ? `bookings/driver/${url}?page=${page}&from=${moment(
+                data?.from,
+              ).format('yyyy/MM/DD')}&to=${moment(data?.to).format(
+                'yyyy/MM/DD',
+              )}&status=${data?.status}&service_id=${data?.service_id}`
+            : `bookings/driver/${url}?page=${page}`,
+        method: 'get',
+        headers: {
+          Authorization: 'Bearer ' + STORE.getState().Login?.loginData?.token,
+        },
+      };
+      APICall(obj)
+        .then((res) => {
+          dispatch({
+            type: ORDERS,
+            payload: res?.data?.data || {},
+          });
+          resolve(res.data);
+        })
+        .catch((err) => {
+          CustomAlert(err?.data?.message);
+          reject(err);
+        });
+    });
+  };
+};
+
 export const getOrders = (url, data, page) => {
   return (dispatch) => {
     return new Promise((resolve, reject) => {

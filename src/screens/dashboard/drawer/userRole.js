@@ -25,11 +25,10 @@ import {useSelector} from 'react-redux';
 import {APICall} from '../../../redux/actions/user';
 import {CustomAlert} from '../../../constant/commonFun';
 import {STORE} from '../../../redux';
-import moment from 'moment';
 
 const UserRole = (props) => {
   const userData = useSelector((state) => state.Login?.loginData) || {};
-  const configData =
+  const roles =
     useSelector((state) => state.Login?.configData?.enums?.vendor?.roles) || {};
   const vendorStatus =
     useSelector((state) => state.Login?.configData?.enums?.vendor?.status) ||
@@ -166,7 +165,7 @@ const UserRole = (props) => {
             STYLES.headerText,
             {
               width:
-                configData?.admin === userData?.vendor?.user_role
+                roles?.admin === userData?.vendor?.user_role
                   ? '45%'
                   : '50%',
             },
@@ -178,14 +177,14 @@ const UserRole = (props) => {
             STYLES.headerText,
             {
               width:
-                configData?.admin === userData?.vendor?.user_role
+                roles?.admin === userData?.vendor?.user_role
                   ? '35%'
                   : '50%',
             },
           ]}>
           {item?.organization?.city}
         </Text>
-        {configData?.admin === userData?.vendor?.user_role && (
+        {roles?.admin === userData?.vendor?.user_role && (
           <View style={{width: '20%', alignItems: 'center'}}>
             <Switch
               switchValue={item?.status}
@@ -273,7 +272,7 @@ const UserRole = (props) => {
                       STYLES.headerText,
                       {
                         width:
-                          configData?.admin === userData?.vendor?.user_role
+                          roles?.admin === userData?.vendor?.user_role
                             ? '45%'
                             : '50%',
                         color: Colors.white,
@@ -286,7 +285,7 @@ const UserRole = (props) => {
                       STYLES.headerText,
                       {
                         width:
-                          configData?.admin === userData?.vendor?.user_role
+                          roles?.admin === userData?.vendor?.user_role
                             ? '35%'
                             : '50%',
                         color: Colors.white,
@@ -294,7 +293,7 @@ const UserRole = (props) => {
                     ]}>
                     Branch
                   </Text>
-                  {configData?.admin === userData?.vendor?.user_role && (
+                  {roles?.admin === userData?.vendor?.user_role && (
                     <Text
                       style={[
                         STYLES.headerText,
@@ -396,8 +395,8 @@ const UserRole = (props) => {
           <View style={{flex: 1}}>
             <Text style={styles.topText}>Role</Text>
             <Text style={[styles.bottomText, {textTransform: 'capitalize'}]}>
-              {Object.keys(configData)[
-                Object.values(configData).findIndex(
+              {Object.keys(roles)[
+                Object.values(roles).findIndex(
                   (ele) => ele === detailsData?.user_role,
                 )
               ]?.replace('_', ' ')}

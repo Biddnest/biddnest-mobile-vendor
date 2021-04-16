@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   FlatList,
   Image,
@@ -9,8 +9,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import {DrawerContentScrollView} from '@react-navigation/drawer';
-import {Colors, hp, SIDE_DRAWER, wp} from '../constant/colors';
+import {Colors, hp, wp} from '../constant/colors';
 import {STYLES} from '../constant/commonStyle';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -23,10 +22,81 @@ import LinearGradient from 'react-native-linear-gradient';
 import {resetNavigator} from '../constant/commonFun';
 import {RESET_STORE} from '../redux/types';
 import {useDispatch, useSelector} from 'react-redux';
+import LegalPolicies from '../assets/svg/legal_policies.svg';
+import PrivacyPolicy from '../assets/svg/privacy_policy.svg';
 
 export function DrawerContent(props) {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.Login?.loginData?.vendor) || {};
+  const roles =
+    useSelector((state) => state.Login?.configData?.enums?.vendor?.roles) || {};
+  const [SIDE_DRAWER, setSIDE_DRAWER] = useState([
+    {
+      iconFamily: 'Ionicons',
+      icon: 'home-outline',
+      topText: 'Home',
+      bottomText: 'Search Orders',
+      navigate: 'Home',
+    },
+    {
+      iconFamily: 'Feather',
+      icon: 'users',
+      topText: 'User Roles',
+      bottomText: 'Search Orders',
+      navigate: 'UserRole',
+    },
+    {
+      image: <LegalPolicies width={wp(7.5)} height={wp(7.5)} />,
+      topText: 'Legal Policies',
+      bottomText: 'Search Orders',
+      navigate: 'LegalPolicies',
+    },
+    {
+      iconFamily: 'AntDesign',
+      icon: 'copyright',
+      topText: 'Terms and Conditions',
+      bottomText: 'Search Orders',
+      navigate: 'TermsAndConditions',
+    },
+    {
+      image: <PrivacyPolicy width={wp(7.5)} height={wp(7.5)} />,
+      topText: 'Privacy Policy',
+      bottomText: 'Search Orders',
+      navigate: 'PrivacyPolicy',
+    },
+    {
+      iconFamily: 'Ionicons',
+      icon: 'call-outline',
+      topText: 'Support',
+      bottomText: 'Raise a request to change price',
+      navigate: 'Support',
+    },
+  ]);
+
+  useEffect(() => {
+    if (roles?.driver !== userData?.user_role) {
+      let temp = [...SIDE_DRAWER];
+      temp.splice(
+        2,
+        0,
+        {
+          iconFamily: 'MaterialCommunityIcons',
+          icon: 'credit-card-outline',
+          topText: 'Payouts',
+          bottomText: 'Search Orders',
+          navigate: 'PayOuts',
+        },
+        {
+          iconFamily: 'AntDesign',
+          icon: 'filetext1',
+          topText: 'Reports',
+          bottomText: 'Search Orders',
+          navigate: 'Reports',
+        },
+      );
+      setSIDE_DRAWER(temp);
+    }
+  }, []);
   const renderIcon = (item) => {
     switch (item.iconFamily) {
       case 'FontAwesome5':

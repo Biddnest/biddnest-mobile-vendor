@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, Text} from 'react-native';
+import {Text} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {
   MainStackNavigator,
@@ -13,20 +13,13 @@ import ActiveBooking from '../assets/svg/active_booking.svg';
 import InactiveBooking from '../assets/svg/inactive_booking.svg';
 import ActiveProfile from '../assets/svg/active_profile.svg';
 import InactiveProfile from '../assets/svg/inactive_profile.svg';
+import {useSelector} from 'react-redux';
 
 const TabNavigation = (props: any) => {
   const Tab = createBottomTabNavigator();
-
-  const renderImage = (uri) => {
-    return (
-      <Image
-        source={uri}
-        style={{height: hp(5), width: hp(5)}}
-        resizeMode={'contain'}
-      />
-    );
-  };
-
+  const roles =
+    useSelector((state) => state.Login?.configData?.enums?.vendor?.roles) || {};
+  const userData = useSelector((state) => state.Login?.loginData) || {};
   return (
     <Tab.Navigator
       initialRouteName={'Home'}
@@ -65,8 +58,15 @@ const TabNavigation = (props: any) => {
         tabBarLabel: ({focused, color, size}) => {
           let tabLabel = 'Home';
           if (route.name === 'Home') {
+            tabLabel =
+              roles?.driver === userData?.vendor?.user_role
+                ? 'Scheduled'
+                : 'Home';
           } else if (route.name === 'Orders') {
-            tabLabel = 'Orders';
+            tabLabel =
+              roles?.driver === userData?.vendor?.user_role
+                ? 'History'
+                : 'Orders';
           } else if (route.name === 'Profile') {
             tabLabel = 'My Profile';
           }
