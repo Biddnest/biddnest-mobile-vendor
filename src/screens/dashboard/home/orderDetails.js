@@ -35,7 +35,7 @@ import {
   DiffMin,
   resetNavigator,
 } from '../../../constant/commonFun';
-import {APICall, getDriverAndVehicle} from '../../../redux/actions/user';
+import {APICall, getDriver, getVehicle} from '../../../redux/actions/user';
 import moment from 'moment';
 import CountDown from '../../../components/countDown';
 import {useDispatch} from 'react-redux';
@@ -56,7 +56,8 @@ const OrderDetails = (props) => {
 
   useEffect(() => {
     fetchOrderData();
-    dispatch(getDriverAndVehicle());
+    dispatch(getDriver());
+    dispatch(getVehicle());
   }, []);
 
   useEffect(() => {

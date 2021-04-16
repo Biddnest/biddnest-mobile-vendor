@@ -1,6 +1,9 @@
 export const LoginData = {
   loginData: {},
-  driverVehicleList: {},
+  driverVehicleList: {
+    drivers: [],
+    vehicles: [],
+  },
   orders: {},
   configData: {},
   notification: true,

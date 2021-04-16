@@ -3,8 +3,6 @@ import {
   heightPercentageToDP,
 } from 'react-native-responsive-screen';
 import React from 'react';
-import LegalPolicies from '../assets/svg/legal_policies.svg';
-import PrivacyPolicy from '../assets/svg/privacy_policy.svg';
 
 export const Colors = {
   white: '#FFFFFF',

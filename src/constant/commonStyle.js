@@ -239,4 +239,20 @@ export const STYLES = {
     height: '100%',
     justifyContent: 'center',
   },
+  modalHeader: {
+    fontFamily: 'Gilroy-Bold',
+    color: Colors.inputTextColor,
+    fontSize: wp(4),
+    marginTop: 25,
+    marginBottom: 10,
+    textTransform: 'uppercase',
+  },
+  simpleText: {
+    color: Colors.inputTextColor,
+    fontSize: wp(3.8),
+    marginTop: hp(3),
+    marginBottom: hp(2),
+    marginHorizontal: wp(10),
+    textAlign: 'center',
+  },
 };

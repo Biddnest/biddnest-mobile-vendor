@@ -178,11 +178,11 @@ export const checkPinStatus = (url) => {
   });
 };
 
-export const getDriverAndVehicle = () => {
+export const getDriver = () => {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
       let obj = {
-        url: 'bookings/driver/get',
+        url: 'drivers',
         method: 'get',
         headers: {
           Authorization: 'Bearer ' + STORE.getState().Login?.loginData?.token,
@@ -193,7 +193,41 @@ export const getDriverAndVehicle = () => {
           if (res?.data?.status === 'success') {
             dispatch({
               type: DRIVER_VEHICLE_LIST,
-              payload: res?.data?.data,
+              payload: {
+                ...STORE.getState().Login?.driverVehicleList,
+                drivers: res?.data?.data?.drivers,
+              },
+            });
+          }
+          resolve(res.data);
+        })
+        .catch((err) => {
+          CustomAlert(err?.data?.message);
+          reject(err);
+        });
+    });
+  };
+};
+
+export const getVehicle = () => {
+  return (dispatch) => {
+    return new Promise((resolve, reject) => {
+      let obj = {
+        url: 'vehicles',
+        method: 'get',
+        headers: {
+          Authorization: 'Bearer ' + STORE.getState().Login?.loginData?.token,
+        },
+      };
+      APICall(obj)
+        .then((res) => {
+          if (res?.data?.status === 'success') {
+            dispatch({
+              type: DRIVER_VEHICLE_LIST,
+              payload: {
+                ...STORE.getState().Login?.driverVehicleList,
+                vehicles: res?.data?.data?.vehicles,
+              },
             });
           }
           resolve(res.data);

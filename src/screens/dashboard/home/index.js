@@ -41,6 +41,7 @@ import DatePicker from 'react-native-datepicker';
 import Entypo from 'react-native-vector-icons/Entypo';
 import OneSignal from 'react-native-onesignal';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import InformationPopUp from '../../../components/informationPopUp';
 
 export const HomeHeader = (props) => {
   return (
@@ -147,6 +148,7 @@ const Home = (props) => {
   );
   const [offNotification, setOffNotification] = useState(false);
   const [isLoading, setLoading] = useState(false);
+  const [info, setInfo] = useState(false);
   const [order, setOrder] = useState({});
   const [pinModal, setPinModal] = useState(false);
   const [modalData, setModalData] = useState({
@@ -161,13 +163,13 @@ const Home = (props) => {
   let filterCategoryOptions = [];
   Object.keys(statusData?.status)?.forEach((item, index) => {
     filterStatusOptions.push({
-      label: item?.replace('_', ' '),
+      label: item?.replaceAll('_', ' '),
       value: Object.values(statusData?.status)[index],
     });
   });
   categoriesData?.forEach((item, index) => {
     filterCategoryOptions.push({
-      label: item?.name?.replace('_', ' '),
+      label: item?.name?.replaceAll('_', ' '),
       value: categoriesData[index]?.id,
     });
   });
@@ -272,7 +274,7 @@ const Home = (props) => {
     let ind = Object.values(statusData?.status).findIndex(
       (ele) => ele === item?.status,
     );
-    let status = Object.keys(statusData?.status)[ind]?.replace('_', ' ');
+    let status = Object.keys(statusData?.status)[ind]?.replaceAll('_', ' ');
     item?.movement_dates?.forEach((i) => {
       dateArray.push(moment(i.date).format('D MMM'));
     });
@@ -463,6 +465,18 @@ const Home = (props) => {
               <Text style={STYLES.rightText}>{item?.service?.name}</Text>
             </View>
           </View>
+        )}
+        {item?.status === statusData?.status?.rebiding && (
+          <Pressable
+            style={styles.flexBoxWrapper}
+            onPress={() => setInfo(true)}>
+            <EvilIcons
+              name={'exclamation'}
+              size={20}
+              color={Colors.inputTextColor}
+            />
+            <Text style={styles.warningText}>Resubmit your bid</Text>
+          </Pressable>
         )}
       </Pressable>
     );
@@ -769,6 +783,14 @@ const Home = (props) => {
           }}
         />
       </CustomModalAndroid>
+      <InformationPopUp
+        visible={info}
+        title={'REBIDDING'}
+        label={
+          'You already submitted a bid for this order but its happened that your bid amount is the same as submitted by one or more other vendors. So this order has been put up for bid once again. Please submit your bid again with a lower amount to increase your chances of winning this bid.'
+        }
+        onCloseIcon={() => setInfo(false)}
+      />
     </LinearGradient>
   );
 };
