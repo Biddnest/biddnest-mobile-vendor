@@ -26,8 +26,7 @@ import {useDispatch, useSelector} from 'react-redux';
 
 export function DrawerContent(props) {
   const dispatch = useDispatch();
-  const userData =
-    useSelector((state) => state.Login?.loginData?.vendor?.organization) || {};
+  const userData = useSelector((state) => state.Login?.loginData?.vendor) || {};
   const renderIcon = (item) => {
     switch (item.iconFamily) {
       case 'FontAwesome5':
@@ -107,7 +106,7 @@ export function DrawerContent(props) {
           </View>
           <View style={{width: wp(45), paddingLeft: wp(2)}}>
             <Text numberOfLines={1} style={styles.userText}>
-              {userData?.org_name} {userData?.org_type}
+              {userData?.fname} {userData?.lname}
             </Text>
             <Text
               numberOfLines={1}
