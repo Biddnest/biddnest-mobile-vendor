@@ -83,6 +83,9 @@ const Orders = (props) => {
         status = Object.keys(statusData)[ind]?.split('_').join(' ');
       }
     });
+    if (status === 'payment pending') {
+      status = 'customer confirmation pending';
+    }
 
     item?.status_history.forEach((ele) => {
       if (ele.status === 1) {
@@ -291,7 +294,7 @@ const Orders = (props) => {
               <Text
                 style={[
                   STYLES.rightText,
-                  {width: '50%', textTransform: 'capitalize'},
+                  {width: '70%', textTransform: 'capitalize'},
                 ]}>
                 {status}
               </Text>

@@ -275,6 +275,9 @@ const Home = (props) => {
       (ele) => ele === item?.status,
     );
     let status = Object.keys(statusData?.status)[ind]?.split('_').join(' ');
+    if (status === 'payment pending') {
+      status = 'customer confirmation pending';
+    }
     item?.movement_dates?.forEach((i) => {
       dateArray.push(moment(i.date).format('D MMM'));
     });
@@ -448,7 +451,11 @@ const Home = (props) => {
             </View>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>status</Text>
-              <Text style={[STYLES.rightText, {textTransform: 'capitalize'}]}>
+              <Text
+                style={[
+                  STYLES.rightText,
+                  {textTransform: 'capitalize', width: '70%'},
+                ]}>
                 {status}
               </Text>
             </View>
