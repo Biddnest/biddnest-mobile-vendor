@@ -163,13 +163,13 @@ const Home = (props) => {
   let filterCategoryOptions = [];
   Object.keys(statusData?.status)?.forEach((item, index) => {
     filterStatusOptions.push({
-      label: item?.replaceAll('_', ' '),
+      label: item?.split('_').join(' '),
       value: Object.values(statusData?.status)[index],
     });
   });
   categoriesData?.forEach((item, index) => {
     filterCategoryOptions.push({
-      label: item?.name?.replaceAll('_', ' '),
+      label: item?.name?.split('_').join(' '),
       value: categoriesData[index]?.id,
     });
   });
@@ -274,7 +274,7 @@ const Home = (props) => {
     let ind = Object.values(statusData?.status).findIndex(
       (ele) => ele === item?.status,
     );
-    let status = Object.keys(statusData?.status)[ind]?.replaceAll('_', ' ');
+    let status = Object.keys(statusData?.status)[ind]?.split('_').join(' ');
     item?.movement_dates?.forEach((i) => {
       dateArray.push(moment(i.date).format('D MMM'));
     });

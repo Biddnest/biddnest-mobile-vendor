@@ -49,7 +49,7 @@ const UserRole = (props) => {
   let filterStatusOptions = [];
   Object.keys(vendorStatus)?.forEach((item, index) => {
     filterStatusOptions.push({
-      label: item?.replaceAll('_', ' '),
+      label: item?.split('_').join(' '),
       value: Object.values(vendorStatus)[index],
     });
   });
@@ -72,8 +72,8 @@ const UserRole = (props) => {
               res?.data?.data?.branches?.forEach((item, index) => {
                 temp.push({
                   label:
-                    (item?.parent_org_id && item?.city?.replaceAll('_', ' ')) ||
-                    item?.city?.replaceAll('_', ' ') + ' (Main)',
+                    (item?.parent_org_id && item?.city?.split('_').join(' ')) ||
+                    item?.city?.split('_').join(' ') + ' (Main)',
                   value: item?.id,
                 });
               });
@@ -399,7 +399,7 @@ const UserRole = (props) => {
                 Object.values(roles).findIndex(
                   (ele) => ele === detailsData?.user_role,
                 )
-              ]?.replaceAll('_', ' ')}
+              ]?.split('_').join(' ')}
             </Text>
           </View>
         </View>

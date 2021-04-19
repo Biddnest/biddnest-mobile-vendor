@@ -29,7 +29,7 @@ const RaiseRequest = (props) => {
   let dropdownDefault = [];
   Object.keys(configData).forEach((item, index) => {
     dropdownDefault.push({
-      label: item.replaceAll('_', ' '),
+      label: item?.split('_').join(' '),
       value: Object.values(configData)[index],
     });
   });

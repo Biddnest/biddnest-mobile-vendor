@@ -80,7 +80,7 @@ const Orders = (props) => {
     let status;
     Object.values(statusData)?.forEach((i, ind) => {
       if (i === item?.bid?.status) {
-        status = Object.keys(statusData)[ind].replaceAll('_', ' ');
+        status = Object.keys(statusData)[ind]?.split('_').join(' ');
       }
     });
 
