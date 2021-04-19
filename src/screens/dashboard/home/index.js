@@ -443,7 +443,7 @@ const Home = (props) => {
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>bid submitted by</Text>
               <Text style={STYLES.rightText}>
-                {item?.user?.fname} {item?.user?.lname}
+                {item?.bid?.vendor?.fname} {item?.bid?.vendor?.lname}
               </Text>
             </View>
             <View style={STYLES.flexBox}>

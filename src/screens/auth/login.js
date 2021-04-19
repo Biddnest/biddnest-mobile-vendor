@@ -20,8 +20,13 @@ const Login = (props) => {
   const dispatch = useDispatch();
   const [isLoading, setLoading] = useState(false);
   const [data, setData] = useState({
-    username: 'keshav@gmail.com',
+    // username: '',
+    // password: '',
+    // username: 'keshav@gmail.com',
+    username: 'dhanashree18@gmail.com',
+    // username: 'driver@abc.com',
     password: 'admin123',
+    // password: 'admin123',
   });
   const [error, setError] = useState({});
   const handleState = (key, value) => {
@@ -96,9 +101,7 @@ const Login = (props) => {
                       if (res.status === 'success') {
                         OneSignal.setExternalUserId(
                           res?.data?.vendor?.id?.toString(),
-                          (results) => {
-                            CustomConsole('===============', results);
-                          },
+                          (results) => {},
                         );
                         resetNavigator(props, 'Dashboard');
                       } else {

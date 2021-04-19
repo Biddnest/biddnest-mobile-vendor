@@ -55,6 +55,14 @@ const OrderStatusWin = (props) => {
       </View>
     );
   };
+  let source_meta =
+    (orderDetails?.source_meta &&
+      JSON.parse(orderDetails?.source_meta?.toString())) ||
+    {};
+  let destination_meta =
+    (orderDetails?.destination_meta &&
+      JSON.parse(orderDetails?.destination_meta?.toString())) ||
+    {};
   return (
     <View>
       <View
@@ -127,7 +135,7 @@ const OrderStatusWin = (props) => {
           </Text>
         </View>
       )}
-      <View style={[STYLES.inputForm, {borderRadius: hp(1), marginTop: 0}]}>
+      <View style={[STYLES.inputForm, {borderRadius: hp(2), marginTop: 0}]}>
         <Text style={STYLES.inputTextLabel}>Customer Details</Text>
         <View
           style={{
@@ -146,26 +154,64 @@ const OrderStatusWin = (props) => {
             {orderDetails?.user?.fname} {orderDetails?.user?.lname}
           </Text>
         </View>
-        {orderDetails?.user?.address && (
-          <View
-            style={{flexDirection: 'row', alignItems: 'center', marginTop: 3}}>
-            <Text style={[STYLES.sliderText, {width: wp(20), fontSize: wp(4)}]}>
-              Address
-            </Text>
-            <Text
-              style={[
-                STYLES.modalHeaderText,
-                {
-                  width: wp(60),
-                  textAlign: 'left',
-                  marginTop: 0,
-                  marginBottom: 0,
-                },
-              ]}>
-              {orderDetails?.user?.address}
-            </Text>
-          </View>
-        )}
+        <View
+          style={{flexDirection: 'row', alignItems: 'center', marginTop: 3}}>
+          <Text
+            style={[
+              STYLES.sliderText,
+              {width: wp(20), fontSize: wp(4), fontFamily: 'Gilroy-SemiBold'},
+            ]}>
+            Address
+          </Text>
+          <Text
+            style={[
+              STYLES.modalHeaderText,
+              {
+                width: wp(60),
+                textAlign: 'left',
+                marginTop: 0,
+                marginBottom: 0,
+              },
+            ]}>
+            {orderDetails?.user?.address}
+          </Text>
+        </View>
+        <View
+          style={{flexDirection: 'row', alignItems: 'center', marginTop: 3}}>
+          <Text style={[STYLES.sliderText, {width: wp(20), fontSize: wp(4)}]}>
+            From:
+          </Text>
+          <Text
+            style={[
+              STYLES.modalHeaderText,
+              {
+                width: wp(60),
+                textAlign: 'left',
+                marginTop: 0,
+                marginBottom: 0,
+              },
+            ]}>
+            {source_meta?.address}
+          </Text>
+        </View>
+        <View
+          style={{flexDirection: 'row', alignItems: 'center', marginTop: 3}}>
+          <Text style={[STYLES.sliderText, {width: wp(20), fontSize: wp(4)}]}>
+            To:
+          </Text>
+          <Text
+            style={[
+              STYLES.modalHeaderText,
+              {
+                width: wp(60),
+                textAlign: 'left',
+                marginTop: 0,
+                marginBottom: 0,
+              },
+            ]}>
+            {destination_meta?.address}
+          </Text>
+        </View>
       </View>
       <View style={{marginHorizontal: wp(8), marginVertical: hp(2)}}>
         {stepHeader('Booked')}
@@ -176,8 +222,24 @@ const OrderStatusWin = (props) => {
           <Text style={styles.subHeaderText}>confirmed</Text>
         </View>
         <View style={{flexDirection: 'row'}}>
-          <View style={styles.dotView} />
-          <Text style={styles.stepHeaderText}>{'Assign Driver'}</Text>
+          <View
+            style={[
+              styles.dotView,
+              {
+                backgroundColor:
+                  orderDetails?.status < 6 ? '#9E9DC9' : Colors.darkBlue,
+              },
+            ]}
+          />
+          <Text
+            style={[
+              styles.stepHeaderText,
+              {
+                opacity: orderDetails?.status < 6 ? 0.8 : 1,
+              },
+            ]}>
+            {'Assign Driver'}
+          </Text>
           {orderDetails?.status !== 8 && orderDetails?.status > 4 && (
             <Text
               style={styles.driverView}
@@ -190,19 +252,45 @@ const OrderStatusWin = (props) => {
         <View
           style={{
             ...styles.stepBodyView,
+            opacity: orderDetails?.status < 6 ? 0.8 : 1,
           }}>
           <Text style={styles.subHeaderText}>
             {orderDetails?.status < 6 ? 'Pending' : 'Completed'}
           </Text>
         </View>
-        {stepHeader(orderDetails?.status === 8 ? 'Completed' : 'In Transit')}
+        <View style={{flexDirection: 'row'}}>
+          <View
+            style={[
+              styles.dotView,
+              {
+                backgroundColor:
+                  orderDetails?.status === 8 ? Colors.darkBlue : '#9E9DC9',
+              },
+            ]}
+          />
+          <Text
+            style={[
+              styles.stepHeaderText,
+              {
+                opacity: orderDetails?.status === 8 ? 1 : 0.8,
+              },
+            ]}>
+            {orderDetails?.status === 8 ? 'Completed' : 'In Transit'}
+          </Text>
+        </View>
         <View
           style={{
             ...styles.stepBodyView,
             borderLeftWidth: 0,
             paddingBottom: 0,
           }}>
-          <Text style={styles.subHeaderText}>
+          <Text
+            style={[
+              styles.subHeaderText,
+              {
+                opacity: orderDetails?.status === 8 ? 1 : 0.8,
+              },
+            ]}>
             {orderDetails?.status < 7
               ? 'Pending'
               : orderDetails?.status === 7

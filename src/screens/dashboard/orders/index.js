@@ -259,7 +259,7 @@ const Orders = (props) => {
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>bid submitted by</Text>
               <Text style={[STYLES.rightText, {width: '50%'}]}>
-                {item?.user?.fname} {item?.user?.lname}
+                {item?.bid?.vendor?.fname} {item?.bid?.vendor?.lname}
               </Text>
             </View>
           </View>
@@ -283,7 +283,7 @@ const Orders = (props) => {
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>bid submitted by</Text>
               <Text style={[STYLES.rightText, {width: '50%'}]}>
-                {item?.user?.fname} {item?.user?.lname}
+                {item?.bid?.vendor?.fname} {item?.bid?.vendor?.lname}
               </Text>
             </View>
             <View style={STYLES.flexBox}>

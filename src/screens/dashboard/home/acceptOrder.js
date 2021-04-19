@@ -41,14 +41,18 @@ const AcceptOrder = (props) => {
     moving_date: null,
     vehicle_type: 'tempo',
     man_power: {
-      min: 2,
-      max: 4,
+      min: 1,
+      max: 5,
     },
     pin: '',
   });
   const [stepData, setStepData] = useState({
     inventory: [],
     bid_amount: orderDetails?.final_estimated_quote,
+  });
+  const [manPower, setManPower] = useState({
+    min: 1,
+    max: 5,
   });
   const [errorPin, setErrorPin] = useState(false);
   const [errorDate, setErrorDate] = useState(undefined);
@@ -93,10 +97,10 @@ const AcceptOrder = (props) => {
     }
   }, [priceList]);
   const handleValueChange = useCallback((low, high) => {
-    let temp = {...applyBidData.man_power};
-    temp.min = low;
-    temp.max = high;
-    setApplyBidData({...applyBidData, man_power: temp});
+    setManPower({
+      min: low,
+      max: high,
+    });
   }, []);
   const renderStep0 = () => {
     return (
@@ -290,7 +294,12 @@ const AcceptOrder = (props) => {
               label={'Type Of Movement'}
               width={wp(90)}
               items={[{label: 'Shared', value: 'shared'}]}
-              onChangeItem={(text) => {}}
+              onChangeItem={(text) => {
+                setApplyBidData({
+                  ...applyBidData,
+                  type_of_movement: text,
+                });
+              }}
             />
           </View>
           <View
@@ -444,7 +453,12 @@ const AcceptOrder = (props) => {
               label={'Vendor Type'}
               width={wp(90)}
               items={[{label: 'Tempo', value: 'tempo'}]}
-              onChangeItem={(text) => {}}
+              onChangeItem={(text) => {
+                setApplyBidData({
+                  ...applyBidData,
+                  vehicle_type: text,
+                });
+              }}
             />
           </View>
           <View style={{marginBottom: hp(3)}}>
@@ -454,7 +468,7 @@ const AcceptOrder = (props) => {
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <View style={styles.manPowerView}>
                 <Text style={[STYLES.inputTextStyle, {height: 'auto'}]}>
-                  {applyBidData?.man_power?.min}
+                  {manPower?.min}
                 </Text>
               </View>
               <Slider
@@ -481,7 +495,7 @@ const AcceptOrder = (props) => {
               />
               <View style={styles.manPowerView}>
                 <Text style={[STYLES.inputTextStyle, {height: 'auto'}]}>
-                  {applyBidData?.man_power?.max}
+                  {manPower?.max}
                 </Text>
               </View>
             </View>
@@ -614,6 +628,10 @@ const AcceptOrder = (props) => {
               applyBidData?.moving_date &&
               applyBidData?.moving_date !== 'Invalid date'
             ) {
+              setApplyBidData({
+                ...applyBidData,
+                man_power: manPower,
+              });
               setErrorDate(true);
               setStep(2);
             } else {
