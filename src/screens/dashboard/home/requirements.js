@@ -57,7 +57,7 @@ const Requirements = (props) => {
         style={{flex: 1}}
         showsVerticalScrollIndicator={false}
         bounces={false}>
-        <View style={{marginBottom: hp(2)}}>
+        <View>
           <View
             style={{
               marginHorizontal: wp(10),
@@ -191,10 +191,14 @@ const Requirements = (props) => {
               </ScrollView>
             </View>
           )}
-          {orderDetails?.bid?.status === 0 && (
+          {!orderDetails?.final_quote && (
             <TwoButton
               leftLabel={'REJECT'}
-              rightLabel={'ACCEPT'}
+              rightLabel={
+                !orderDetails?.final_quote && orderDetails?.bid?.status === 1
+                  ? 'submit bid again'
+                  : 'ACCEPT'
+              }
               leftOnPress={() => setRejectVisible(true)}
               rightOnPress={() => setAcceptVisible(true)}
             />

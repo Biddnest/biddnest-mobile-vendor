@@ -214,12 +214,39 @@ const OrderStatusWin = (props) => {
         </View>
       </View>
       <View style={{marginHorizontal: wp(8), marginVertical: hp(2)}}>
-        {stepHeader('Booked')}
+        <View style={{flexDirection: 'row'}}>
+          <View
+            style={[
+              styles.dotView,
+              {
+                backgroundColor:
+                  orderDetails?.status < 5 ? '#9E9DC9' : Colors.darkBlue,
+              },
+            ]}
+          />
+          <Text
+            style={[
+              styles.stepHeaderText,
+              {
+                opacity: orderDetails?.status < 5 ? 0.8 : 1,
+              },
+            ]}>
+            Bid won
+          </Text>
+        </View>
         <View
           style={{
             ...styles.stepBodyView,
           }}>
-          <Text style={styles.subHeaderText}>confirmed</Text>
+          <Text
+            style={[
+              styles.subHeaderText,
+              {
+                opacity: orderDetails?.status < 5 ? 0.8 : 1,
+              },
+            ]}>
+            {orderDetails?.status < 5 ? 'pending' : 'confirmed'}
+          </Text>
         </View>
         <View style={{flexDirection: 'row'}}>
           <View

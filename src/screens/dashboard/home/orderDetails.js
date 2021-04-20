@@ -280,6 +280,17 @@ const OrderDetails = (props) => {
               </Text>
             </View>
           </View>
+          {!orderDetails?.final_quote && orderDetails?.bid?.status === 1 && (
+            <View style={styles.flexBoxWrapper}>
+              <Text style={styles.warningText}>
+                You already submitted a bid for this order but its happened that
+                your bid amount is the same as submitted by one or more other
+                vendors. So this order has been put up for bid once again.
+                Please submit your bid again with a lower amount to increase
+                your chances of winning this bid.
+              </Text>
+            </View>
+          )}
           {!orderDetails?.final_quote && (
             <View
               style={{
@@ -443,7 +454,12 @@ const OrderDetails = (props) => {
               {!orderDetails?.final_quote && (
                 <TwoButton
                   leftLabel={'REJECT'}
-                  rightLabel={'ACCEPT'}
+                  rightLabel={
+                    !orderDetails?.final_quote &&
+                    orderDetails?.bid?.status === 1
+                      ? 'submit bid again'
+                      : 'ACCEPT'
+                  }
                   leftOnPress={() => setRejectVisible(true)}
                   rightOnPress={() => setAcceptVisible(true)}
                 />
@@ -675,5 +691,24 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     overflow: 'hidden',
+  },
+  flexBoxWrapper: {
+    width: '90%',
+    marginBottom: hp(3),
+    backgroundColor: '#FDFAE8',
+    borderRadius: 8,
+    padding: 10,
+    flexDirection: 'row',
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: Colors.btnBG,
+  },
+  warningText: {
+    fontSize: wp(3.5),
+    fontFamily: 'Roboto-Italic',
+    color: Colors.inputTextColor,
+    marginLeft: 5,
   },
 });
