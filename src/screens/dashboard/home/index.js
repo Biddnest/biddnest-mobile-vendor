@@ -390,7 +390,7 @@ const Home = (props) => {
                 }}
                 numberOfLines={1}>
                 {source_meta?.city === destination_meta?.city
-                  ? source_meta?.geocode
+                  ? source_meta?.address
                   : source_meta?.city}
               </Text>
               <Text
@@ -400,7 +400,7 @@ const Home = (props) => {
                 ]}
                 numberOfLines={1}>
                 {destination_meta?.city === source_meta?.city
-                  ? destination_meta?.geocode
+                  ? destination_meta?.address
                   : destination_meta?.city}
               </Text>
             </View>

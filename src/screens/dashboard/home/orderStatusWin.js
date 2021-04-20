@@ -245,7 +245,9 @@ const OrderStatusWin = (props) => {
                 opacity: orderDetails?.status < 5 ? 0.8 : 1,
               },
             ]}>
-            {orderDetails?.status < 5 ? 'pending' : 'confirmed'}
+            {orderDetails?.status < 5
+              ? 'This order has been assigned to you'
+              : 'confirmed'}
           </Text>
         </View>
         <View style={{flexDirection: 'row'}}>

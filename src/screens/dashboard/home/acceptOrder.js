@@ -37,7 +37,7 @@ const AcceptOrder = (props) => {
     useSelector((state) => state.Login?.configData?.enums?.service) || {};
   const [applyBidData, setApplyBidData] = useState({
     public_booking_id: public_booking_id,
-    type_of_movement: 'shared',
+    type_of_movement: 'dedicated',
     moving_date: null,
     vehicle_type: 'tempo',
     man_power: {
@@ -64,6 +64,10 @@ const AcceptOrder = (props) => {
     password: undefined,
     pin: undefined,
   });
+  let source_meta =
+    (orderDetails?.source_meta &&
+      JSON.parse(orderDetails?.source_meta?.toString())) ||
+    {};
   const [isLoading, setLoading] = useState(false);
   const [dateArray, setDateArray] = useState({});
 
@@ -287,13 +291,20 @@ const AcceptOrder = (props) => {
             style={{
               marginBottom: hp(2),
               marginTop: hp(2),
-              zIndex: Platform.OS !== 'android' ? 5001 : 11,
+              // zIndex: Platform.OS !== 'android' ? 5001 : 11,
             }}>
             <DropDown
               value={applyBidData?.type_of_movement}
               label={'Type Of Movement'}
               width={wp(90)}
-              items={[{label: 'Shared', value: 'shared'}]}
+              items={
+                source_meta?.shared_service == true
+                  ? [
+                      {label: 'Shared', value: 'shared'},
+                      {label: 'Dedicated', value: 'dedicated'},
+                    ]
+                  : [{label: 'Dedicated', value: 'dedicated'}]
+              }
               onChangeItem={(text) => {
                 setApplyBidData({
                   ...applyBidData,
@@ -307,6 +318,7 @@ const AcceptOrder = (props) => {
               width: '90%',
               alignSelf: 'center',
               marginTop: -hp(2),
+              zIndex: -1,
             }}>
             <View style={{width: '100%', alignSelf: 'center'}}>
               <Pressable
@@ -429,6 +441,7 @@ const AcceptOrder = (props) => {
                   theme={{
                     dayTextColor: Colors.silver,
                     todayTextColor: Colors.silver,
+                    arrowColor: Colors.btnBG,
                   }}
                 />
                 <FlatButton

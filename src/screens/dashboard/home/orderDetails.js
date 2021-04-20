@@ -323,17 +323,14 @@ const OrderDetails = (props) => {
                   {orderDetails?.service?.name}
                 </Text>
               </View>
-              {orderDetails?.bid?.status !== 0 && (
-                <View style={STYLES.flexBox}>
-                  <Text style={STYLES.leftText}>TYPE OF MOVEMENT</Text>
-                  <Text
-                    style={[STYLES.rightText, {textTransform: 'capitalize'}]}>
-                    {orderDetails?.bid?.meta &&
-                      JSON.parse(orderDetails?.bid?.meta?.toString())
-                        .type_of_movement}
-                  </Text>
-                </View>
-              )}
+              <View style={STYLES.flexBox}>
+                <Text style={STYLES.leftText}>TYPE OF MOVEMENT</Text>
+                <Text style={[STYLES.rightText, {textTransform: 'capitalize'}]}>
+                  {source_meta?.shared_service == true
+                    ? 'Shared, Dedicated'
+                    : 'Dedicated'}
+                </Text>
+              </View>
             </View>
           )}
           <View style={STYLES.tabView}>
@@ -370,7 +367,7 @@ const OrderDetails = (props) => {
                   justifyContent: 'space-between',
                 }}>
                 <View style={{maxWidth: '80%'}}>
-                  {renderText('Pickup Address', source_meta?.geocode)}
+                  {renderText('Pickup Address', source_meta?.address)}
                 </View>
                 <Pressable
                   style={STYLES.mapPinCircle}
@@ -416,7 +413,7 @@ const OrderDetails = (props) => {
                   justifyContent: 'space-between',
                 }}>
                 <View style={{maxWidth: '80%'}}>
-                  {renderText('Drop Address', destination_meta?.geocode)}
+                  {renderText('Drop Address', destination_meta?.address)}
                 </View>
                 <Pressable
                   style={STYLES.mapPinCircle}
@@ -653,8 +650,8 @@ const OrderDetails = (props) => {
           {renderText(
             mapVisible === 'pickup' ? 'Pickup Address' : 'Drop Address',
             mapVisible === 'pickup'
-              ? source_meta?.geocode
-              : destination_meta?.geocode,
+              ? source_meta?.address
+              : destination_meta?.address,
           )}
         </View>
         <View style={{marginTop: hp(1)}}>
