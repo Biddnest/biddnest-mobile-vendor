@@ -20,13 +20,8 @@ const Login = (props) => {
   const dispatch = useDispatch();
   const [isLoading, setLoading] = useState(false);
   const [data, setData] = useState({
-    // username: '',
-    // password: '',
-    // username: 'keshav@gmail.com',
-    username: 'dhanashree18@gmail.com',
-    // username: 'driver@abc.com',
-    password: 'admin123',
-    // password: 'admin123',
+    username: '',
+    password: '',
   });
   const [error, setError] = useState({});
   const handleState = (key, value) => {
@@ -75,6 +70,40 @@ const Login = (props) => {
               secureTextEntry={true}
               onChange={(text) => handleState('password', text)}
             />
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                width: wp(80),
+              }}>
+              <Text
+                onPress={() => {
+                  setData({
+                    username: 'dhanashree18@gmail.com',
+                    password: 'admin123',
+                  });
+                }}>
+                Admin
+              </Text>
+              <Text
+                onPress={() => {
+                  setData({
+                    username: 'manager@abc.com',
+                    password: 'abc123',
+                  });
+                }}>
+                Manager
+              </Text>
+              <Text
+                onPress={() => {
+                  setData({
+                    username: 'driver@abc.com',
+                    password: 'abc123',
+                  });
+                }}>
+                Driver
+              </Text>
+            </View>
             <Button
               label={'login'}
               isLoading={isLoading}
