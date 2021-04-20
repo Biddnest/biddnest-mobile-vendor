@@ -287,32 +287,28 @@ const AcceptOrder = (props) => {
         renderStep0()
       ) : step === 1 ? (
         <View style={{width: '100%', alignItems: 'center'}}>
-          <View
+          <DropDown
             style={{
-              marginBottom: hp(2),
-              marginTop: hp(2),
-              // zIndex: Platform.OS !== 'android' ? 5001 : 11,
-            }}>
-            <DropDown
-              value={applyBidData?.type_of_movement}
-              label={'Type Of Movement'}
-              width={wp(90)}
-              items={
-                source_meta?.shared_service == true
-                  ? [
-                      {label: 'Shared', value: 'shared'},
-                      {label: 'Dedicated', value: 'dedicated'},
-                    ]
-                  : [{label: 'Dedicated', value: 'dedicated'}]
-              }
-              onChangeItem={(text) => {
-                setApplyBidData({
-                  ...applyBidData,
-                  type_of_movement: text,
-                });
-              }}
-            />
-          </View>
+              marginVertical: hp(2),
+            }}
+            value={applyBidData?.type_of_movement}
+            label={'Type Of Movement'}
+            width={wp(90)}
+            items={
+              source_meta?.shared_service == true
+                ? [
+                    {label: 'Shared', value: 'shared'},
+                    {label: 'Dedicated', value: 'dedicated'},
+                  ]
+                : [{label: 'Dedicated', value: 'dedicated'}]
+            }
+            onChangeItem={(text) => {
+              setApplyBidData({
+                ...applyBidData,
+                type_of_movement: text,
+              });
+            }}
+          />
           <View
             style={{
               width: '90%',
