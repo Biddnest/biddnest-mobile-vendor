@@ -255,4 +255,18 @@ export const STYLES = {
     marginHorizontal: wp(10),
     textAlign: 'center',
   },
+  selectionText: {
+    fontFamily: 'Gilroy-SemiBold',
+    fontSize: wp(4),
+    color: '#3B4B58',
+    marginTop: hp(1),
+    textAlign: 'center',
+  },
+  selectionView: {
+    height: 100,
+    width: 100,
+    borderRadius: 50,
+    backgroundColor: '#F2E6FF',
+    borderColor: Colors.darkBlue,
+  },
 };

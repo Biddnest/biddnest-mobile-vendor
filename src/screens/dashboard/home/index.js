@@ -4,6 +4,7 @@ import {
   ActivityIndicator,
   FlatList,
   Image,
+  Linking,
   Pressable,
   StyleSheet,
   Text,
@@ -44,6 +45,11 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import InformationPopUp from '../../../components/informationPopUp';
 
 export const HomeHeader = (props) => {
+  const configData =
+    useSelector((state) => state.Login?.configData?.contact_us?.details) || '';
+  let data = JSON.parse(configData.toString());
+  const [openModal, setOpenModal] = useState(false);
+
   return (
     <View
       style={[
@@ -103,7 +109,7 @@ export const HomeHeader = (props) => {
           )}
           <Pressable
             style={{...STYLES.common, width: wp(13)}}
-            onPress={() => props.navigation.navigate('ChatRedirect')}>
+            onPress={() => setOpenModal(true)}>
             <SimpleLineIcons
               name={'earphones-alt'}
               color={Colors.darkBlue}
@@ -112,6 +118,47 @@ export const HomeHeader = (props) => {
           </Pressable>
         </View>
       ) : null}
+      <CustomModalAndroid
+        visible={openModal}
+        onPress={() => setOpenModal(false)}>
+        <Text style={STYLES.modalHeaderText}>Support</Text>
+        <CloseIcon
+          onPress={() => {
+            setOpenModal(false);
+          }}
+        />
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-evenly',
+            marginVertical: hp(3),
+            width: wp(100),
+          }}>
+          <View style={styles.common}>
+            <Pressable
+              style={[STYLES.selectionView, STYLES.common]}
+              onPress={() => {
+                setOpenModal(false);
+                data?.contact_no?.length > 0 &&
+                  Linking.openURL(`tel:${data?.contact_no[0]}`);
+              }}>
+              {/*<MySelf width={60} height={60} />*/}
+            </Pressable>
+            <Text style={STYLES.selectionText}>Call</Text>
+          </View>
+          <View style={styles.common}>
+            <Pressable
+              onPress={() => {
+                setOpenModal(false);
+                props.navigation.navigate('ChatRedirect');
+              }}
+              style={[STYLES.selectionView, STYLES.common]}>
+              {/*<Friends width={60} height={60} />*/}
+            </Pressable>
+            <Text style={STYLES.selectionText}>Chat</Text>
+          </View>
+        </View>
+      </CustomModalAndroid>
     </View>
   );
 };
@@ -140,7 +187,7 @@ const Home = (props) => {
   const [filterData, setFilterData] = useState({
     from: new Date(),
     to: new Date(),
-    status: 0,
+    status: 4,
     service_id: 1,
   });
   const [notificationToggle, setNotificationToggle] = useState(
@@ -162,10 +209,13 @@ const Home = (props) => {
   let filterStatusOptions = [];
   let filterCategoryOptions = [];
   Object.keys(statusData?.status)?.forEach((item, index) => {
-    filterStatusOptions.push({
-      label: item?.split('_').join(' '),
-      value: Object.values(statusData?.status)[index],
-    });
+    let temp = Object.values(statusData?.status)[index];
+    if (temp > 3) {
+      filterStatusOptions.push({
+        label: item?.split('_').join(' '),
+        value: temp,
+      });
+    }
   });
   categoriesData?.forEach((item, index) => {
     filterCategoryOptions.push({
@@ -655,7 +705,7 @@ const Home = (props) => {
             }}
           />
         </View>
-        <View style={{marginBottom: hp(2)}}>
+        <View style={{marginBottom: hp(8)}}>
           <DropDownAndroid
             label={'Category'}
             value={filterData?.service_id}

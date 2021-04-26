@@ -27,11 +27,12 @@ export const APICall = (obj) => {
               routes: [{name: 'Login'}],
             }),
           );
+        } else if (err?.response?.status === 500) {
+          CustomAlert('Server Down');
         } else if (err?.response) {
           reject(err.response);
         } else {
           CustomAlert('Server Down');
-          reject(false);
         }
       });
   });

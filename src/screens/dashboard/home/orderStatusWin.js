@@ -19,6 +19,9 @@ import moment from 'moment';
 
 const OrderStatusWin = (props) => {
   const {orderDetails, fetchOrderData} = props;
+  const userData = useSelector((state) => state.Login?.loginData) || {};
+  const roles =
+    useSelector((state) => state.Login?.configData?.enums?.vendor?.roles) || {};
   const driverVehicleList =
     useSelector((state) => state.Login?.driverVehicleList) || {};
   const [driverAssignVisible, setDriverAssignVisible] = useState(false);
@@ -269,14 +272,16 @@ const OrderStatusWin = (props) => {
             ]}>
             {'Assign Driver'}
           </Text>
-          {orderDetails?.status !== 8 && orderDetails?.status > 4 && (
-            <Text
-              style={styles.driverView}
-              onPress={() => setDriverAssignVisible(true)}>
-              {(orderDetails?.driver === null && 'ASSIGN DRIVER') ||
-                'CHANGE DRIVER'}
-            </Text>
-          )}
+          {roles?.driver === userData?.vendor?.user_role &&
+            orderDetails?.status !== 8 &&
+            orderDetails?.status > 4 && (
+              <Text
+                style={styles.driverView}
+                onPress={() => setDriverAssignVisible(true)}>
+                {(orderDetails?.driver === null && 'ASSIGN DRIVER') ||
+                  'CHANGE DRIVER'}
+              </Text>
+            )}
         </View>
         <View
           style={{
