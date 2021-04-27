@@ -43,6 +43,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import OneSignal from 'react-native-onesignal';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import InformationPopUp from '../../../components/informationPopUp';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 export const HomeHeader = (props) => {
   const configData =
@@ -142,7 +143,7 @@ export const HomeHeader = (props) => {
                 data?.contact_no?.length > 0 &&
                   Linking.openURL(`tel:${data?.contact_no[0]}`);
               }}>
-              {/*<MySelf width={60} height={60} />*/}
+              <Ionicons name={'call'} color={Colors.darkBlue} size={45} />
             </Pressable>
             <Text style={STYLES.selectionText}>Call</Text>
           </View>
@@ -153,7 +154,7 @@ export const HomeHeader = (props) => {
                 props.navigation.navigate('ChatRedirect');
               }}
               style={[STYLES.selectionView, STYLES.common]}>
-              {/*<Friends width={60} height={60} />*/}
+              <Entypo name={'chat'} color={Colors.darkBlue} size={45} />
             </Pressable>
             <Text style={STYLES.selectionText}>Chat</Text>
           </View>

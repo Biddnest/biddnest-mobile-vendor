@@ -272,9 +272,18 @@ const OrderStatusWin = (props) => {
             ]}>
             {'Assign Driver'}
           </Text>
+          {orderDetails?.status !== 8 &&
+            orderDetails?.status > 4 &&
+            roles?.driver !== userData?.vendor?.user_role && (
+              <Text
+                style={styles.driverView}
+                onPress={() => setDriverAssignVisible(true)}>
+                {(orderDetails?.driver === null && 'ASSIGN DRIVER') ||
+                  'CHANGE DRIVER'}
+              </Text>
+            )}
           {roles?.driver === userData?.vendor?.user_role &&
-            orderDetails?.status !== 8 &&
-            orderDetails?.status > 4 && (
+            orderDetails?.status === 5 && (
               <Text
                 style={styles.driverView}
                 onPress={() => setDriverAssignVisible(true)}>
