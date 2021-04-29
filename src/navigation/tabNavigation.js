@@ -81,8 +81,8 @@ const TabNavigation = (props: any) => {
                 fontFamily: 'Gilroy-Bold',
                 fontSize: wp(3.5),
                 color: focused ? Colors.darkBlue : '#9D9CC5',
-                marginLeft: position === 'beside-icon' ? -wp(5) : 0,
-                marginTop: position === 'beside-icon' ? hp(6) : 0,
+                marginLeft: position === 'beside-icon' ? 20 : 0,
+                marginTop: position === 'beside-icon' ? 3 : 0,
               }}>
               {tabLabel}
             </Text>
