@@ -286,7 +286,7 @@ const AcceptOrder = (props) => {
       {step === 0 ? (
         renderStep0()
       ) : step === 1 ? (
-        <View style={{width: '100%', alignItems: 'center'}}>
+        <View style={{width: '100%', alignItems: 'center', marginTop: hp(2)}}>
           <DropDown
             style={{
               marginVertical: hp(2),

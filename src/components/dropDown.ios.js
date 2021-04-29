@@ -10,7 +10,6 @@ const DropDownAndroid = (props) => {
       style={{
         width: props.width ? props.width : wp(45),
         paddingHorizontal: 10,
-        zIndex: 5002,
       }}>
       <Text
         style={{
@@ -29,8 +28,10 @@ const DropDownAndroid = (props) => {
           }
         }>
         <DropDownPicker
+          searchable={false}
+          placeholder={'-Select'}
           items={props.items}
-          defaultValue={props.items[0]?.value}
+          defaultValue={props.value}
           customArrowUp={() => (
             <MaterialIcons
               name="arrow-drop-up"
@@ -60,12 +61,14 @@ const DropDownAndroid = (props) => {
               borderTopRightRadius: 10,
               borderBottomLeftRadius: 10,
               borderBottomRightRadius: 10,
+              ...props.customDropDown,
             },
           ]}
           labelStyle={{
             fontSize: wp(4),
             backgroundColor: Colors.textBG,
             color: Colors.inputTextColor,
+            textTransform: 'capitalize',
           }}
           itemStyle={{
             justifyContent: 'flex-start',

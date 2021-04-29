@@ -43,7 +43,6 @@
 		D3AC5CD8A8864283B97D78A5 /* Gilroy-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4F3FA56A712F4FC78665D03D /* Gilroy-Light.ttf */; };
 		E00D9655AEAB4EA68CC7DD66 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 042921FE549A44CDAC45C24D /* Roboto-Regular.ttf */; };
 		E4258A3A997A408F8466AA1E /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 597F7B0DBC284F928220B6BE /* Ionicons.ttf */; };
-		F55BEC985DDA4656BFB3D762 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7F1E6A5EA59042ABB721FE87 /* SimpleLineIcons.ttf */; };
 		FF337186065F42B4A251843B /* Gilroy-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 507B299DBC514FEC94BA0966 /* Gilroy-ExtraBold.ttf */; };
 /* End PBXBuildFile section */
 
@@ -108,7 +107,6 @@
 		7225520EFD1B05AB97E4EA07 /* libPods-cp_biddnest_mobile_vendor-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-cp_biddnest_mobile_vendor-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		745514AD60664F14932CD661 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = ../src/assets/fonts/FontAwesome5_Brands.ttf; sourceTree = "<group>"; };
 		76F2007CD78508E83D4C1CA9 /* libPods-cp_biddnest_mobile_vendor-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-cp_biddnest_mobile_vendor-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		7F1E6A5EA59042ABB721FE87 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = ../src/assets/fonts/SimpleLineIcons.ttf; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = cp_biddnest_mobile_vendor/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8275F6BD868B197952511288 /* Pods-cp_biddnest_mobile_vendor-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cp_biddnest_mobile_vendor-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-cp_biddnest_mobile_vendor-tvOSTests/Pods-cp_biddnest_mobile_vendor-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		85CC17FA40DA49E5A41FE5DC /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = ../src/assets/fonts/Feather.ttf; sourceTree = "<group>"; };
@@ -269,7 +267,6 @@
 				0EB8B075165F47CEBD060DA8 /* Fontisto.ttf */,
 				4C060F0ACF8C482BB1416B4D /* Foundation.ttf */,
 				597F7B0DBC284F928220B6BE /* Ionicons.ttf */,
-				7F1E6A5EA59042ABB721FE87 /* SimpleLineIcons.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -476,7 +473,6 @@
 				879F75572FDB40919D6820BB /* Fontisto.ttf in Resources */,
 				1E8C916910214786BF6001E2 /* Foundation.ttf in Resources */,
 				E4258A3A997A408F8466AA1E /* Ionicons.ttf in Resources */,
-				F55BEC985DDA4656BFB3D762 /* SimpleLineIcons.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -835,6 +831,7 @@
 				PRODUCT_NAME = cp_biddnest_mobile_vendor;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -856,6 +853,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.biddnest.vendor;
 				PRODUCT_NAME = cp_biddnest_mobile_vendor;
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;

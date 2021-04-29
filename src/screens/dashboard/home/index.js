@@ -44,6 +44,7 @@ import OneSignal from 'react-native-onesignal';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import InformationPopUp from '../../../components/informationPopUp';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {isAndroid} from 'react-native-calendars/src/expandableCalendar/commons';
 
 export const HomeHeader = (props) => {
   const configData =
@@ -690,7 +691,12 @@ const Home = (props) => {
             })}
           </View>
         </View>
-        <View style={{marginVertical: hp(2)}}>
+        <View
+          style={
+            isAndroid
+              ? {marginVertical: hp(2)}
+              : {marginVertical: hp(2), zIndex: 5002}
+          }>
           <DropDownAndroid
             label={'Status'}
             value={filterData?.status}

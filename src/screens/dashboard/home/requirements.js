@@ -273,6 +273,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     borderRadius: 5,
     backgroundColor: Colors.pageBG,
+    overflow: 'hidden',
+    fontSize: wp(3.5),
   },
   headerText: {
     fontFamily: 'Roboto-Bold',

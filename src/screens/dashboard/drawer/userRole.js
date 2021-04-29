@@ -418,7 +418,7 @@ const UserRole = (props) => {
         <View
           style={[
             {marginVertical: hp(2)},
-            Platform.OS !== 'android' && {zIndex: 5001},
+            Platform.OS !== 'android' && {zIndex: 5002},
           ]}>
           <DropDownAndroid
             label={'Branch'}
