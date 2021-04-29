@@ -24,6 +24,7 @@ const TabNavigation = (props: any) => {
     <Tab.Navigator
       initialRouteName={'Home'}
       tabBarOptions={{
+        allowFontScaling: false,
         activeTintColor: Colors.darkBlue,
         inactiveTintColor: '#9D9CC5',
         activeBackgroundColor: Colors.white,
@@ -33,6 +34,10 @@ const TabNavigation = (props: any) => {
           paddingBottom: hp(1),
           borderTopLeftRadius: wp(5),
           borderTopRightRadius: wp(5),
+        },
+        labelStyle: {
+          fontFamily: 'Gilroy-Bold',
+          fontSize: wp(3.5),
         },
       }}
       screenOptions={({route}) => ({
@@ -55,7 +60,7 @@ const TabNavigation = (props: any) => {
           }
           return <ActiveHome width={hp(3)} height={hp(3)} />;
         },
-        tabBarLabel: ({focused, color, size}) => {
+        tabBarLabel: ({focused, color, size, position}) => {
           let tabLabel = 'Home';
           if (route.name === 'Home') {
             tabLabel =
@@ -76,6 +81,8 @@ const TabNavigation = (props: any) => {
                 fontFamily: 'Gilroy-Bold',
                 fontSize: wp(3.5),
                 color: focused ? Colors.darkBlue : '#9D9CC5',
+                marginLeft: position === 'beside-icon' ? -wp(5) : 0,
+                marginTop: position === 'beside-icon' ? hp(6) : 0,
               }}>
               {tabLabel}
             </Text>

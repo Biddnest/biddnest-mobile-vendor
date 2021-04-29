@@ -8,6 +8,8 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import CustomModalAndroid from './customModal';
 import CloseIcon from './closeIcon';
 import {useSelector} from 'react-redux';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import Entypo from 'react-native-vector-icons/Entypo';
 
 const SimpleHeader = (props) => {
   const configData =
@@ -19,7 +21,7 @@ const SimpleHeader = (props) => {
       style={[
         boxShadow,
         {
-          height: 55,
+          height: hp(7.5),
           backgroundColor: Colors.white,
           flexDirection: 'row',
         },
@@ -33,7 +35,7 @@ const SimpleHeader = (props) => {
         onPress={() => {
           props.onBack();
         }}>
-        <BackArrow width={100} height={100} />
+        <BackArrow width={wp(20)} height={hp(20)} />
       </Pressable>
       <View
         style={{
@@ -62,7 +64,7 @@ const SimpleHeader = (props) => {
               <FontAwesome
                 name={props.heart ? 'heart' : 'heart-o'}
                 color={Colors.darkBlue}
-                size={20}
+                size={hp(2.7)}
               />
             </Pressable>
           )}
@@ -72,7 +74,7 @@ const SimpleHeader = (props) => {
             <SimpleLineIcons
               name={'earphones-alt'}
               color={Colors.darkBlue}
-              size={20}
+              size={hp(2.7)}
             />
           </Pressable>
         </View>
@@ -101,7 +103,7 @@ const SimpleHeader = (props) => {
                 data?.contact_no?.length > 0 &&
                   Linking.openURL(`tel:${data?.contact_no[0]}`);
               }}>
-              {/*<MySelf width={60} height={60} />*/}
+              <Ionicons name={'call'} color={Colors.darkBlue} size={hp(6)} />
             </Pressable>
             <Text style={STYLES.selectionText}>Call</Text>
           </View>
@@ -112,7 +114,7 @@ const SimpleHeader = (props) => {
                 props.navigation.navigate('ChatRedirect');
               }}
               style={[STYLES.selectionView, STYLES.common]}>
-              {/*<Friends width={60} height={60} />*/}
+              <Entypo name={'chat'} color={Colors.darkBlue} size={hp(6)} />
             </Pressable>
             <Text style={STYLES.selectionText}>Chat</Text>
           </View>

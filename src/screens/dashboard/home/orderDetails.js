@@ -246,7 +246,6 @@ const OrderDetails = (props) => {
                   <CountDown
                     until={DiffMin(orderDetails?.bid_result_at)}
                     onFinish={() => fetchOrderData()}
-                    size={18}
                     digitStyle={{height: '100%'}}
                     digitTxtStyle={STYLES.participatedText}
                     separatorStyle={{color: '#000'}}

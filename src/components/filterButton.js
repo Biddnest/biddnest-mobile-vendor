@@ -9,12 +9,12 @@ const FilterButton = (props) => {
       onPress={props.onPress}
       style={{
         position: 'absolute',
-        height: 70,
-        width: 70,
+        height: hp(9),
+        width: hp(9),
         bottom: hp(1),
         right: hp(1),
       }}>
-      <Filter width={70} height={70} />
+      <Filter width={hp(9)} height={hp(9)} />
     </Pressable>
   );
 };

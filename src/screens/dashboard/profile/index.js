@@ -110,7 +110,7 @@ const Profile = (props) => {
                   ? 'keyboard-arrow-up'
                   : 'keyboard-arrow-down'
               }
-              size={26}
+              size={hp(4)}
               color={openArray.includes(index) ? Colors.white : Colors.darkBlue}
             />
           </View>
@@ -158,7 +158,6 @@ const Profile = (props) => {
                 color: Colors.white,
                 fontFamily: 'Roboto-Bold',
                 fontSize: wp(4.5),
-                lineHeight: 25,
                 textTransform: 'capitalize',
               }}>
               {userData?.vendor?.fname} {userData?.vendor?.lname}
@@ -190,12 +189,12 @@ const Profile = (props) => {
             <Pressable
               style={styles.profileEdit}
               onPress={() => props.navigation.navigate('EditProfile')}>
-              <MaterialIcons name={'edit'} color={Colors.white} size={20} />
+              <MaterialIcons name={'edit'} color={Colors.white} size={wp(6)} />
             </Pressable>
             <Pressable
               style={styles.profileEdit}
               onPress={() => setChangePassVisible(true)}>
-              <EvilIcons name={'lock'} color={Colors.white} size={28} />
+              <EvilIcons name={'lock'} color={Colors.white} size={wp(8)} />
             </Pressable>
           </View>
         </ImageBackground>
@@ -433,7 +432,6 @@ const styles = StyleSheet.create({
     color: Colors.white,
     fontFamily: 'Roboto-Light',
     fontSize: wp(3.5),
-    lineHeight: 25,
   },
   inputForm: {
     marginHorizontal: wp(5),

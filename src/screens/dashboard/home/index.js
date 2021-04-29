@@ -56,7 +56,7 @@ export const HomeHeader = (props) => {
       style={[
         boxShadow,
         {
-          height: 55,
+          height: hp(7.5),
           backgroundColor: Colors.white,
           flexDirection: 'row',
         },
@@ -64,7 +64,7 @@ export const HomeHeader = (props) => {
       <Pressable
         style={{width: wp(13), height: '100%', ...STYLES.common}}
         onPress={() => props.navigation.toggleDrawer()}>
-        <MenuIcon width={20} height={20} />
+        <MenuIcon width={wp(5.5)} height={hp(2.7)} />
       </Pressable>
       <View
         style={{
@@ -114,7 +114,7 @@ export const HomeHeader = (props) => {
             <SimpleLineIcons
               name={'earphones-alt'}
               color={Colors.darkBlue}
-              size={20}
+              size={hp(2.7)}
             />
           </Pressable>
         </View>
@@ -143,7 +143,7 @@ export const HomeHeader = (props) => {
                 data?.contact_no?.length > 0 &&
                   Linking.openURL(`tel:${data?.contact_no[0]}`);
               }}>
-              <Ionicons name={'call'} color={Colors.darkBlue} size={45} />
+              <Ionicons name={'call'} color={Colors.darkBlue} size={hp(6)} />
             </Pressable>
             <Text style={STYLES.selectionText}>Call</Text>
           </View>
@@ -154,7 +154,7 @@ export const HomeHeader = (props) => {
                 props.navigation.navigate('ChatRedirect');
               }}
               style={[STYLES.selectionView, STYLES.common]}>
-              <Entypo name={'chat'} color={Colors.darkBlue} size={45} />
+              <Entypo name={'chat'} color={Colors.darkBlue} size={hp(6)} />
             </Pressable>
             <Text style={STYLES.selectionText}>Chat</Text>
           </View>
@@ -398,7 +398,6 @@ const Home = (props) => {
                   <CountDown
                     until={DiffMin(item?.bid_result_at)}
                     // onFinish={() => getOrdersList()}
-                    size={18}
                     digitStyle={{height: '100%'}}
                     digitTxtStyle={STYLES.participatedText}
                     separatorStyle={{color: '#000'}}
@@ -421,8 +420,9 @@ const Home = (props) => {
           style={{
             backgroundColor: Colors.white,
             flexDirection: 'row',
+            alignItems: 'center',
           }}>
-          <MapPin />
+          <MapPin height={hp(8)} width={wp(5)} />
           <View
             style={{
               flexDirection: 'row',
@@ -530,7 +530,7 @@ const Home = (props) => {
             onPress={() => setInfo(true)}>
             <EvilIcons
               name={'exclamation'}
-              size={20}
+              size={hp(2.7)}
               color={Colors.inputTextColor}
             />
             <Text style={styles.warningText}>Resubmit your bid</Text>
@@ -665,13 +665,11 @@ const Home = (props) => {
                       iconComponent={
                         <Entypo
                           name={'calendar'}
-                          size={25}
+                          size={hp(3)}
                           color={Colors.inputTextColor}
                           style={{
-                            position: 'absolute',
-                            right: 8,
-                            top: 7,
-                            marginLeft: 0,
+                            position: 'relative',
+                            right: hp(1),
                           }}
                         />
                       }
@@ -895,5 +893,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignSelf: 'flex-end',
     alignItems: 'center',
+  },
+  warningText: {
+    fontSize: wp(3.5),
+    fontFamily: 'Roboto-Italic',
+    color: Colors.inputTextColor,
+    marginLeft: 5,
   },
 });

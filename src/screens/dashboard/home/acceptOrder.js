@@ -112,7 +112,7 @@ const AcceptOrder = (props) => {
         <View style={styles.flexBoxWrapper}>
           <EvilIcons
             name={'exclamation'}
-            size={20}
+            size={hp(2.7)}
             color={Colors.inputTextColor}
           />
           <Text style={styles.warningText}>
@@ -265,10 +265,10 @@ const AcceptOrder = (props) => {
           onPress={() => setStep(0)}
           style={{
             position: 'absolute',
-            left: 15,
-            top: 15,
+            left: hp(2),
+            top: hp(2),
           }}>
-          <Ionicons name="arrow-back-sharp" size={25} color={'#C9CDCF'} />
+          <Ionicons name="arrow-back-sharp" size={hp(3.5)} color={'#C9CDCF'} />
         </Pressable>
       )}
       <Text style={STYLES.modalHeaderText}>APPLY FOR BID</Text>
@@ -333,7 +333,7 @@ const AcceptOrder = (props) => {
                     return (
                       <MaterialIcons
                         name="calendar-today"
-                        size={25}
+                        size={hp(3)}
                         color={Colors.grey}
                       />
                     );

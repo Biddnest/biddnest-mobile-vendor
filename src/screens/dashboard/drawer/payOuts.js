@@ -230,9 +230,9 @@ const PayOuts = (props) => {
                     ]}>
                     {item} Date
                   </Text>
-                  <View style={styles.dateView}>
+                  <View style={STYLES.dateView}>
                     <DatePicker
-                      style={styles.datePicker}
+                      style={STYLES.datePicker}
                       date={moment(
                         item === 'from' ? filterData?.from : filterData?.to,
                       ).format('D MMM yyyy')}
@@ -245,19 +245,17 @@ const PayOuts = (props) => {
                       iconComponent={
                         <Entypo
                           name={'calendar'}
-                          size={25}
+                          size={hp(3)}
                           color={Colors.inputTextColor}
                           style={{
-                            position: 'absolute',
-                            right: 8,
-                            top: 7,
-                            marginLeft: 0,
+                            position: 'relative',
+                            right: hp(1),
                           }}
                         />
                       }
                       customStyles={{
-                        dateInput: styles.dateInput,
-                        dateText: styles.dateText,
+                        dateInput: STYLES.dateInput,
+                        dateText: STYLES.dateText,
                       }}
                       onDateChange={(date) => {
                         setFilterData({

@@ -128,7 +128,7 @@ const OrderStatusWin = (props) => {
         <View style={styles.flexBoxWrapper}>
           <EvilIcons
             name={'exclamation'}
-            size={20}
+            size={hp(2.7)}
             color={Colors.inputTextColor}
           />
           <Text style={styles.warningText}>

@@ -263,9 +263,9 @@ export const STYLES = {
     textAlign: 'center',
   },
   selectionView: {
-    height: 100,
-    width: 100,
-    borderRadius: 50,
+    height: hp(12),
+    width: hp(12),
+    borderRadius: hp(6),
     backgroundColor: '#F2E6FF',
     borderColor: Colors.darkBlue,
   },

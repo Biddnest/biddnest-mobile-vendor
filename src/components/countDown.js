@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import {StyleSheet, View, Text, TouchableOpacity, AppState} from 'react-native';
 import _ from 'lodash';
 import {sprintf} from 'sprintf-js';
+import {Colors, wp} from '../constant/colors';
 
 const DEFAULT_DIGIT_STYLE = {backgroundColor: '#FAB913'};
 const DEFAULT_DIGIT_TXT_STYLE = {color: '#000'};
@@ -167,7 +168,16 @@ class CountDown extends React.Component {
     const {separatorStyle, size} = this.props;
     return (
       <View style={{alignItems: 'center'}}>
-        <Text style={[styles.separatorTxt, {fontSize: size}, separatorStyle]}>
+        <Text
+          style={[
+            styles.separatorTxt,
+            {
+              color: Colors.darkBlue,
+              fontSize: wp(4),
+              fontFamily: 'Gilroy-SemiBold',
+            },
+            separatorStyle,
+          ]}>
           {' : '}
         </Text>
       </View>

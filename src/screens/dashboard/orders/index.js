@@ -147,7 +147,6 @@ const Orders = (props) => {
                     onFinish={() => {
                       // getOrdersList()
                     }}
-                    size={18}
                     digitStyle={{height: '100%'}}
                     digitTxtStyle={STYLES.participatedText}
                     separatorStyle={{color: '#000'}}
@@ -169,8 +168,9 @@ const Orders = (props) => {
           style={{
             backgroundColor: Colors.white,
             flexDirection: 'row',
+            alignItems: 'center',
           }}>
-          <MapPin />
+          <MapPin height={hp(8)} width={wp(5)} />
           <View
             style={{
               flexDirection: 'row',

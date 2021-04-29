@@ -65,7 +65,7 @@ const FAQDetails = (props) => {
           <View>
             <MaterialCommunityIcons
               name={openArray.includes(index) ? 'minus' : 'plus'}
-              size={26}
+              size={hp(3.5)}
               color={'#9A9FA4'}
             />
           </View>

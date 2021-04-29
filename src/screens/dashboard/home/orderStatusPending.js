@@ -49,7 +49,6 @@ const OrderStatusPending = (props) => {
           }}>
           <CountDown
             until={DiffMin(orderDetails?.bid_result_at)}
-            size={18}
             digitStyle={{height: '100%'}}
             digitTxtStyle={[STYLES.participatedText, {fontSize: wp(3.8)}]}
             separatorStyle={{color: '#000'}}
