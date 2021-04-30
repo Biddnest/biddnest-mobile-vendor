@@ -7,8 +7,10 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {STORE} from '../../../../redux';
 import {APICall} from '../../../../redux/actions/user';
 import {CustomAlert, CustomConsole} from '../../../../constant/commonFun';
+import {Html5Entities} from 'html-entities';
 
 const FAQDetails = (props) => {
+  const entities = new Html5Entities();
   const category = props?.route?.params?.category || '';
   const [openArray, setOpenArray] = useState([0]);
   const [faqQue, setFaqQue] = useState([]);
@@ -60,7 +62,7 @@ const FAQDetails = (props) => {
         key={index}>
         <View style={styles.flexBox}>
           <Text style={styles.topText}>
-            {index + 1}. {item?.title} sdfsd fds sdf
+            {index + 1}. {entities.decode(item?.title)}
           </Text>
           <View>
             <MaterialCommunityIcons
@@ -73,7 +75,7 @@ const FAQDetails = (props) => {
         {openArray.includes(index) && (
           <View>
             <View style={styles.separatorView} />
-            <Text style={styles.bottomText}>{item?.desc}</Text>
+            <Text style={styles.bottomText}>{entities.decode(item?.desc)}</Text>
           </View>
         )}
       </Pressable>

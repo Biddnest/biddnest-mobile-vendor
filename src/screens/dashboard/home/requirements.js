@@ -18,8 +18,10 @@ import {useSelector} from 'react-redux';
 import {STORE} from '../../../redux';
 import {APICall} from '../../../redux/actions/user';
 import {CustomAlert, resetNavigator} from '../../../constant/commonFun';
+import {Html5Entities} from 'html-entities';
 
 const Requirements = (props) => {
+  const entities = new Html5Entities();
   const {orderDetails} = props;
   const [rejectVisible, setRejectVisible] = useState(false);
   const [acceptVisible, setAcceptVisible] = useState(false);
@@ -144,7 +146,9 @@ const Requirements = (props) => {
                     marginTop: hp(2),
                   }}>
                   {meta?.customer
-                    ? JSON.parse(meta?.customer?.toString()).remarks
+                    ? entities.decode(
+                        JSON.parse(meta?.customer?.toString()).remarks,
+                      )
                     : 'No Any comments'}
                 </Text>
               </View>

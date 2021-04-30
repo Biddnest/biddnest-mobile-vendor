@@ -47,7 +47,7 @@ const RaiseRequest = (props) => {
         bounces={false}
         showsVerticalScrollIndicator={false}
         style={{flex: 1, margin: hp(3)}}>
-        <View style={{marginBottom: hp(3)}}>
+        <View style={{marginBottom: hp(3), zIndex: 5002}}>
           <DropDownAndroid
             customDropDown={
               error?.category === false

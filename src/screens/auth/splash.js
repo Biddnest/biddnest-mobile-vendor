@@ -1,5 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {View, ImageBackground, Image, ActivityIndicator} from 'react-native';
+import {
+  View,
+  ImageBackground,
+  Image,
+  ActivityIndicator,
+  Linking,
+} from 'react-native';
 import OneSignal from 'react-native-onesignal';
 import NetInfo from '@react-native-community/netinfo';
 import {CustomAlert, resetNavigator} from '../../constant/commonFun';
@@ -9,6 +15,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {STYLES} from '../../constant/commonStyle';
 import AsyncStorage from '@react-native-community/async-storage';
 import {CustomTabs} from 'react-native-custom-tabs';
+import {isAndroid} from 'react-native-calendars/src/expandableCalendar/commons';
 
 const Splash = (props) => {
   const dispatch = useDispatch();
@@ -59,13 +66,17 @@ const Splash = (props) => {
         orderData: {public_booking_id: temp?.public_booking_id},
       });
     } else if (temp?.type === notificationData?.link) {
-      CustomTabs.openURL(temp?.url, {
-        toolbarColor: Colors.darkBlue,
-      })
-        .then(() => {})
-        .catch((err) => {
-          console.log(err);
-        });
+      if (isAndroid) {
+        CustomTabs.openURL(temp?.url, {
+          toolbarColor: Colors.darkBlue,
+        })
+          .then(() => {})
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        Linking.openURL(temp?.url);
+      }
     }
   }
   function onIds(device) {
