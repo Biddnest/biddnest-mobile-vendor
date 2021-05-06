@@ -183,6 +183,57 @@ const OrderDetails = (props) => {
       return null;
     }
   };
+  const renderRightDate = () => {
+    if (orderDetails?.bid?.status === 0) {
+      return (
+        <View
+          style={{
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            width: '50%',
+            justifyContent: 'flex-end',
+          }}>
+          {dateArray?.map((item, index) => {
+            return (
+              <View style={styles.categoryView} key={index}>
+                <Text
+                  style={{
+                    color: Colors.inputTextColor,
+                    fontSize: wp(3.8),
+                    fontFamily: 'Roboto-Bold',
+                  }}>
+                  {item}
+                </Text>
+              </View>
+            );
+          })}
+        </View>
+      );
+    }
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          width: '50%',
+          justifyContent: 'flex-end',
+        }}>
+        <View style={styles.categoryView}>
+          <Text
+            style={{
+              color: Colors.inputTextColor,
+              fontSize: wp(3.8),
+              fontFamily: 'Roboto-Bold',
+            }}>
+            {orderDetails?.bid &&
+              moment(JSON.parse(orderDetails?.bid?.meta)?.moving_date).format(
+                'D MMM yyyy',
+              )}
+          </Text>
+        </View>
+      </View>
+    );
+  };
   return (
     <View style={{flex: 1, backgroundColor: Colors.white}}>
       <SimpleHeader
@@ -305,16 +356,9 @@ const OrderDetails = (props) => {
                   </Text>
                 )}
               </View>
-              <View style={STYLES.flexBox}>
+              <View style={[STYLES.flexBox, {alignItems: 'center'}]}>
                 <Text style={STYLES.leftText}>MOVING DATE</Text>
-                <Text style={STYLES.rightText}>
-                  {orderDetails?.bid?.status === 0
-                    ? dateArray.join('\n')
-                    : orderDetails?.bid &&
-                      moment(
-                        JSON.parse(orderDetails?.bid?.meta)?.moving_date,
-                      ).format('D MMM yyyy')}
-                </Text>
+                {renderRightDate()}
               </View>
               <View style={STYLES.flexBox}>
                 <Text style={STYLES.leftText}>Category</Text>
@@ -511,16 +555,9 @@ const OrderDetails = (props) => {
                     </Text>
                   </View>
 
-                  <View style={STYLES.flexBox}>
+                  <View style={[STYLES.flexBox, {alignItems: 'center'}]}>
                     <Text style={STYLES.leftText}>MOVING DATE</Text>
-                    <Text style={STYLES.rightText}>
-                      {orderDetails?.bid?.status === 0
-                        ? dateArray.join('\n')
-                        : orderDetails?.bid &&
-                          moment(
-                            JSON.parse(orderDetails?.bid?.meta)?.moving_date,
-                          ).format('D MMM yyyy')}
-                    </Text>
+                    {renderRightDate()}
                   </View>
                 </View>
               )}
@@ -707,5 +744,15 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto-Italic',
     color: Colors.inputTextColor,
     marginLeft: 5,
+  },
+  categoryView: {
+    marginBottom: hp(0.8),
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderColor: Colors.darkBlue,
+    borderWidth: 2,
+    borderRadius: 8,
+    backgroundColor: Colors.white,
+    marginLeft: hp(1.3),
   },
 });
