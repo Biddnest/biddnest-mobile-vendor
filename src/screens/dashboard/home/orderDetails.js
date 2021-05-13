@@ -331,7 +331,7 @@ const OrderDetails = (props) => {
               </Text>
             </View>
           </View>
-          {!orderDetails?.final_quote && orderDetails?.bid?.status !== 1 && (
+          {!orderDetails?.final_quote && orderDetails?.bid?.status === 1 && (
             <View style={styles.flexBoxWrapper}>
               <Text style={styles.warningText}>
                 You already submitted a bid for this order but its happened that
