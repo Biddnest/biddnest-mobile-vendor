@@ -327,6 +327,7 @@ const Home = (props) => {
       (ele) => ele === item?.status,
     );
     let status = Object.keys(statusData?.status)[ind]?.split('_').join(' ');
+    let statusInd = Object.keys(statusData?.status)[ind];
     if (status === 'payment pending') {
       status = 'customer confirmation pending';
     }
@@ -372,8 +373,18 @@ const Home = (props) => {
             justifyContent: 'space-between',
             alignItems: 'center',
           }}>
-          <Text style={STYLES.leftText}>ORDER ID</Text>
-          <Text style={[STYLES.rightText, {width: '70%'}]}>
+          {/*<Text style={STYLES.leftText}>ORDER ID</Text>*/}
+          <Text
+            style={[
+              STYLES.statusView,
+              {
+                backgroundColor: statusData?.color[statusInd],
+                maxWidth: '45%',
+              },
+            ]}>
+            {status}
+          </Text>
+          <Text style={[STYLES.rightText, {width: '55%'}]}>
             {item?.public_booking_id}
           </Text>
         </View>
@@ -501,16 +512,16 @@ const Home = (props) => {
                 {item?.bid?.vendor?.fname} {item?.bid?.vendor?.lname}
               </Text>
             </View>
-            <View style={STYLES.flexBox}>
-              <Text style={STYLES.leftText}>status</Text>
-              <Text
-                style={[
-                  STYLES.rightText,
-                  {textTransform: 'capitalize', width: '70%'},
-                ]}>
-                {status}
-              </Text>
-            </View>
+            {/*<View style={STYLES.flexBox}>*/}
+            {/*  <Text style={STYLES.leftText}>status</Text>*/}
+            {/*  <Text*/}
+            {/*    style={[*/}
+            {/*      STYLES.rightText,*/}
+            {/*      {textTransform: 'capitalize', width: '70%'},*/}
+            {/*    ]}>*/}
+            {/*    {status}*/}
+            {/*  </Text>*/}
+            {/*</View>*/}
           </View>
         )}
         {(selectedTab === 0 || selectedTab === 2) && (

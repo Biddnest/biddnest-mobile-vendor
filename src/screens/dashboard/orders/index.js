@@ -17,6 +17,8 @@ const Orders = (props) => {
   const isFocused = useIsFocused();
   const statusData =
     useSelector((state) => state.Login?.configData?.enums?.bid?.status) || {};
+  const statusColor =
+    useSelector((state) => state.Login?.configData?.enums?.bid) || {};
   const userData = useSelector((state) => state.Login?.loginData) || {};
   const roles =
     useSelector((state) => state.Login?.configData?.enums?.vendor?.roles) || {};
@@ -78,9 +80,11 @@ const Orders = (props) => {
     let started_at = {};
     let completed_at = {};
     let status;
+    let statusInd;
     Object.values(statusData)?.forEach((i, ind) => {
       if (i === item?.bid?.status) {
         status = Object.keys(statusData)[ind]?.split('_').join(' ');
+        statusInd = Object.keys(statusData)[ind];
       }
     });
     if (status === 'payment pending') {
@@ -106,14 +110,21 @@ const Orders = (props) => {
             alignItems: 'center',
           }}>
           {selectedTab === 'participated' ? (
-            <Text style={STYLES.leftText}>ORDER ID</Text>
+            <Text
+              style={[
+                STYLES.statusView,
+                {
+                  backgroundColor: statusColor?.color[statusInd],
+                },
+              ]}>
+              {status}
+            </Text>
           ) : (
             <Text
               style={[
                 STYLES.statusView,
                 {
-                  backgroundColor:
-                    item?.status === 8 ? Colors.lightGreen : Colors.error,
+                  backgroundColor: statusColor?.color[statusInd],
                 },
               ]}>
               {item?.status === 8 ? 'Completed' : 'Cancelled'}
@@ -289,16 +300,16 @@ const Orders = (props) => {
                 {item?.bid?.vendor?.fname} {item?.bid?.vendor?.lname}
               </Text>
             </View>
-            <View style={STYLES.flexBox}>
-              <Text style={STYLES.leftText}>status</Text>
-              <Text
-                style={[
-                  STYLES.rightText,
-                  {width: '70%', textTransform: 'capitalize'},
-                ]}>
-                {status}
-              </Text>
-            </View>
+            {/*<View style={STYLES.flexBox}>*/}
+            {/*  <Text style={STYLES.leftText}>status</Text>*/}
+            {/*  <Text*/}
+            {/*    style={[*/}
+            {/*      STYLES.rightText,*/}
+            {/*      {width: '70%', textTransform: 'capitalize'},*/}
+            {/*    ]}>*/}
+            {/*    {status}*/}
+            {/*  </Text>*/}
+            {/*</View>*/}
           </View>
         )}
       </Pressable>

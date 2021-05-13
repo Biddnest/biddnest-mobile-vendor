@@ -95,8 +95,8 @@ const AcceptOrder = (props) => {
         });
       });
       setStepData({
-        ...stepData,
         inventory: temp,
+        bid_amount: priceList?.total,
       });
     }
   }, [priceList]);
@@ -252,6 +252,38 @@ const AcceptOrder = (props) => {
                   setStepData({...stepData, bid_amount: text})
                 }
               />
+            </View>
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              paddingHorizontal: hp(2),
+            }}>
+            <Text
+              style={{
+                flex: 1,
+                ...STYLES.leftText,
+              }}>
+              expected price
+            </Text>
+            <View
+              style={{
+                width: '40%',
+                borderWidth: 2,
+                paddingHorizontal: 15,
+                borderRadius: 10,
+                height: hp(6.5),
+                marginTop: hp(1),
+                borderColor: Colors.silver,
+                backgroundColor: Colors.white,
+                borderBottomWidth: 2,
+                alignItems: 'center',
+              }}>
+              <Text
+                style={[STYLES.inputTextStyle, {textAlignVertical: 'center'}]}>
+                {orderDetails?.final_estimated_quote}
+              </Text>
             </View>
           </View>
         </View>

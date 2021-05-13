@@ -195,11 +195,11 @@ const Requirements = (props) => {
               </ScrollView>
             </View>
           )}
-          {!orderDetails?.final_quote && (
+          {!orderDetails?.final_quote && orderDetails?.bid?.status !== 1 && (
             <TwoButton
               leftLabel={'REJECT'}
               rightLabel={
-                !orderDetails?.final_quote && orderDetails?.bid?.status === 1
+                !orderDetails?.final_quote && orderDetails?.status == 3
                   ? 'submit bid again'
                   : 'ACCEPT'
               }

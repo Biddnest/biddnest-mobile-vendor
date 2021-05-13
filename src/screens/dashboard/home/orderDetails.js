@@ -295,6 +295,7 @@ const OrderDetails = (props) => {
                 </View>
                 <View style={[STYLES.priceView, {width: '40%'}]}>
                   <CountDown
+                    key={new Date()}
                     until={DiffMin(orderDetails?.bid_result_at)}
                     onFinish={() => fetchOrderData()}
                     digitStyle={{height: '100%'}}
@@ -330,7 +331,7 @@ const OrderDetails = (props) => {
               </Text>
             </View>
           </View>
-          {!orderDetails?.final_quote && orderDetails?.bid?.status === 1 && (
+          {!orderDetails?.final_quote && orderDetails?.bid?.status !== 1 && (
             <View style={styles.flexBoxWrapper}>
               <Text style={styles.warningText}>
                 You already submitted a bid for this order but its happened that
@@ -491,19 +492,19 @@ const OrderDetails = (props) => {
                   )}
                 </View>
               </View>
-              {!orderDetails?.final_quote && (
-                <TwoButton
-                  leftLabel={'REJECT'}
-                  rightLabel={
-                    !orderDetails?.final_quote &&
-                    orderDetails?.bid?.status === 1
-                      ? 'submit bid again'
-                      : 'ACCEPT'
-                  }
-                  leftOnPress={() => setRejectVisible(true)}
-                  rightOnPress={() => setAcceptVisible(true)}
-                />
-              )}
+              {!orderDetails?.final_quote &&
+                orderDetails?.bid?.status !== 1 && (
+                  <TwoButton
+                    leftLabel={'REJECT'}
+                    rightLabel={
+                      !orderDetails?.final_quote && orderDetails?.status == 3
+                        ? 'submit bid again'
+                        : 'ACCEPT'
+                    }
+                    leftOnPress={() => setRejectVisible(true)}
+                    rightOnPress={() => setAcceptVisible(true)}
+                  />
+                )}
               {orderDetails?.final_quote && (
                 <View
                   style={{
