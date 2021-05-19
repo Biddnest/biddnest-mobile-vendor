@@ -199,7 +199,7 @@ const Requirements = (props) => {
             <TwoButton
               leftLabel={'REJECT'}
               rightLabel={
-                !orderDetails?.final_quote && orderDetails?.status == 3
+                !orderDetails?.final_quote && orderDetails?.bid?.status === 1
                   ? 'submit bid again'
                   : 'ACCEPT'
               }

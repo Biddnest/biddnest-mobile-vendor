@@ -26,6 +26,7 @@
     "react-native": "0.63.4",
     "react-native-calendars": "^1.1255.0",
     "react-native-chart-kit": "^6.11.0",
+    "react-native-countdown-circle-timer": "^2.5.3",
     "react-native-custom-tabs": "^0.1.7",
     "react-native-datepicker": "^1.7.2",
     "react-native-device-info": "^8.0.2",

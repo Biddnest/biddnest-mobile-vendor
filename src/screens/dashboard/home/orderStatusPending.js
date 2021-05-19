@@ -2,12 +2,23 @@ import React from 'react';
 import {Text, View} from 'react-native';
 import {Colors, hp, wp} from '../../../constant/colors';
 import {STYLES} from '../../../constant/commonStyle';
-import TimerClock from '../../../assets/svg/timer_clock.svg';
-import CountDown from '../../../components/countDown';
 import {DiffMin} from '../../../constant/commonFun';
+import {CountdownCircleTimer} from 'react-native-countdown-circle-timer';
 
 const OrderStatusPending = (props) => {
   const {orderDetails} = props;
+  const children = ({remainingTime}) => {
+    return (
+      <Text
+        style={{
+          color: Colors.darkBlue,
+          fontSize: wp(5),
+          fontFamily: 'Gilroy-Bold',
+        }}>
+        {new Date(remainingTime * 1000).toISOString().substr(11, 8)}
+      </Text>
+    );
+  };
   return (
     <View style={{backgroundColor: Colors.white, marginBottom: hp(3)}}>
       <View
@@ -35,29 +46,16 @@ const OrderStatusPending = (props) => {
             marginTop: hp(2),
             marginBottom: hp(1.5),
           }}>
-          <TimerClock width={wp(40)} height={wp(40)} />
-        </View>
-        <Text
-          style={{
-            color: Colors.darkBlue,
-            position: 'absolute',
-            top: wp(35),
-            fontFamily: 'Roboto-Medium',
-            fontSize: wp(3.8),
-            textAlign: 'center',
-            alignSelf: 'center',
-          }}>
-          <CountDown
+          <CountdownCircleTimer
             key={new Date()}
-            until={DiffMin(orderDetails?.bid_result_at)}
-            digitStyle={{height: '100%'}}
-            digitTxtStyle={[STYLES.participatedText, {fontSize: wp(3.8)}]}
-            separatorStyle={{color: '#000'}}
-            timeToShow={['H', 'M', 'S']}
-            timeLabels={{h: null, m: null, s: null}}
-            showSeparator
+            size={hp(21)}
+            isPlaying
+            duration={300}
+            initialRemainingTime={DiffMin(orderDetails?.bid_result_at)}
+            children={children}
+            colors={[[Colors.darkBlue, 0.4]]}
           />
-        </Text>
+        </View>
         <Text style={[STYLES.inputTextLabel, {textAlign: 'center'}]}>
           Time at which the Bid ends
         </Text>
