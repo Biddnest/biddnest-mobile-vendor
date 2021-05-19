@@ -11,6 +11,7 @@ import {STORE} from '../index';
 import {CommonActions} from '@react-navigation/native';
 import {navigationRef} from '../../navigation/RootNavigation';
 import moment from 'moment';
+import {Alert} from 'react-native';
 
 export const APICall = (obj) => {
   return new Promise((resolve, reject) => {
@@ -28,11 +29,19 @@ export const APICall = (obj) => {
             }),
           );
         } else if (err?.response?.status === 500) {
-          CustomAlert('Server Down');
+          Alert.alert(
+            'oops!!',
+            'Something Went wrong!! Please try again later',
+            [{text: 'Retry', onPress: () => console.log('OK Pressed')}],
+          );
         } else if (err?.response) {
           reject(err.response);
         } else {
-          CustomAlert('Server Down');
+          Alert.alert(
+            'oops!!',
+            'Something Went wrong!! Please try again later',
+            [{text: 'Retry', onPress: () => console.log('OK Pressed')}],
+          );
         }
       });
   });

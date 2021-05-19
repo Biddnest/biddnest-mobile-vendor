@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
 import React, {useEffect} from 'react';
 import {Text} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
+import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Splash from '../screens/auth/splash';
 import ForgotPassword from '../screens/auth/forgotPassword';
@@ -12,6 +12,13 @@ import ChatRedirect from '../screens/dashboard/orders/chatRedirection';
 import {navigationRef} from './RootNavigation';
 
 const Stack = createStackNavigator();
+const MyTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background: 'white',
+  },
+};
 
 const App = () => {
   useEffect(() => {
@@ -19,7 +26,7 @@ const App = () => {
     Text.defaultProps.allowFontScaling = false;
   }, []);
   return (
-    <NavigationContainer ref={navigationRef}>
+    <NavigationContainer ref={navigationRef} theme={MyTheme}>
       <Stack.Navigator initialRouteName="Splash" headerMode={false}>
         <Stack.Screen name="Splash" component={Splash} />
         <Stack.Screen name="Login" component={Login} />
