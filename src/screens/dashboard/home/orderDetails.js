@@ -53,6 +53,7 @@ const OrderDetails = (props) => {
   const [acceptVisible, setAcceptVisible] = useState(false);
   const [tab, setTab] = useState(['Order Details', 'Requirements']);
   const [priceList, setPriceList] = useState({});
+  const [isBookedMark, setBookedMark] = useState(false);
 
   useEffect(() => {
     fetchOrderData();
@@ -96,6 +97,7 @@ const OrderDetails = (props) => {
         .then((res) => {
           if (res?.data?.status === 'success') {
             setOrderDetails(res?.data?.data?.booking);
+            setBookedMark(!!res?.data?.data?.booking?.bid?.bookmarked);
             if (
               res?.data?.data?.booking?.bid?.status !== 0 &&
               res?.data?.data?.booking?.bid?.status !== 5
@@ -237,7 +239,7 @@ const OrderDetails = (props) => {
   return (
     <View style={{flex: 1, backgroundColor: Colors.white}}>
       <SimpleHeader
-        heart={!!orderDetails?.bid?.bookmarked}
+        heart={isBookedMark}
         headerText={'Order Details'}
         right={true}
         onRightPress={() => {}}
@@ -246,6 +248,7 @@ const OrderDetails = (props) => {
         }
         onheartPress={() => {
           // Add into bookmark API
+          setBookedMark(!isBookedMark);
           let obj = {
             url: 'bookings/bookmark',
             method: 'post',
@@ -370,9 +373,7 @@ const OrderDetails = (props) => {
               <View style={STYLES.flexBox}>
                 <Text style={STYLES.leftText}>TYPE OF MOVEMENT</Text>
                 <Text style={[STYLES.rightText, {textTransform: 'capitalize'}]}>
-                  {source_meta?.shared_service == true
-                    ? 'Shared, Dedicated'
-                    : 'Dedicated'}
+                  {source_meta?.shared_service == true ? 'Shared' : 'Dedicated'}
                 </Text>
               </View>
             </View>

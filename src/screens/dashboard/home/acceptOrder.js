@@ -42,7 +42,7 @@ const AcceptOrder = (props) => {
     vehicle_type: 'tempo',
     man_power: {
       min: 1,
-      max: 5,
+      max: 100,
     },
     pin: '',
   });
@@ -52,7 +52,7 @@ const AcceptOrder = (props) => {
   });
   const [manPower, setManPower] = useState({
     min: 1,
-    max: 5,
+    max: 100,
   });
   const [errorPin, setErrorPin] = useState(false);
   const [errorDate, setErrorDate] = useState(undefined);
@@ -259,29 +259,30 @@ const AcceptOrder = (props) => {
               flexDirection: 'row',
               alignItems: 'center',
               paddingHorizontal: hp(2),
+              backgroundColor: Colors.darkBlue,
+              justifyContent: 'space-between',
+              borderRadius: hp(1),
             }}>
             <Text
               style={{
                 flex: 1,
                 ...STYLES.leftText,
+                color: Colors.white,
               }}>
               expected price
             </Text>
             <View
               style={{
-                width: '40%',
-                borderWidth: 2,
-                paddingHorizontal: 15,
-                borderRadius: 10,
                 height: hp(6.5),
-                marginTop: hp(1),
-                borderColor: Colors.silver,
-                backgroundColor: Colors.white,
-                borderBottomWidth: 2,
-                alignItems: 'center',
               }}>
               <Text
-                style={[STYLES.inputTextStyle, {textAlignVertical: 'center'}]}>
+                style={{
+                  textAlignVertical: 'center',
+                  color: Colors.white,
+                  fontFamily: 'Gilroy-SemiBold',
+                  fontSize: wp(4),
+                  height: '98%',
+                }}>
                 {orderDetails?.final_estimated_quote}
               </Text>
             </View>
@@ -515,7 +516,7 @@ const AcceptOrder = (props) => {
               <Slider
                 style={styles.sliderStyle}
                 min={1}
-                max={5}
+                max={100}
                 step={1}
                 floatingLabel
                 renderThumb={() => <View style={STYLES.sliderThumb} />}
