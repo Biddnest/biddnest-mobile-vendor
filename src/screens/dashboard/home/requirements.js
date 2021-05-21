@@ -258,7 +258,10 @@ const Requirements = (props) => {
         priceList={priceList}
         orderDetails={orderDetails}
         visible={acceptVisible}
-        onCloseIcon={() => setAcceptVisible(false)}
+        onCloseIcon={() => {
+          props?.fetchOrderData();
+          setAcceptVisible(false);
+        }}
       />
     </View>
   );

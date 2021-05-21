@@ -334,17 +334,20 @@ const OrderDetails = (props) => {
               </Text>
             </View>
           </View>
-          {!orderDetails?.final_quote && orderDetails?.bid?.status === 1 && (
-            <View style={styles.flexBoxWrapper}>
-              <Text style={styles.warningText}>
-                You already submitted a bid for this order but its happened that
-                your bid amount is the same as submitted by one or more other
-                vendors. So this order has been put up for bid once again.
-                Please submit your bid again with a lower amount to increase
-                your chances of winning this bid.
-              </Text>
-            </View>
-          )}
+          {!orderDetails?.final_quote &&
+            (orderDetails?.bid?.bid_type === 1
+              ? orderDetails?.bid?.status === 1
+              : orderDetails?.bid?.status !== 1) && (
+              <View style={styles.flexBoxWrapper}>
+                <Text style={styles.warningText}>
+                  You already submitted a bid for this order but its happened
+                  that your bid amount is the same as submitted by one or more
+                  other vendors. So this order has been put up for bid once
+                  again. Please submit your bid again with a lower amount to
+                  increase your chances of winning this bid.
+                </Text>
+              </View>
+            )}
           {!orderDetails?.final_quote && (
             <View
               style={{
@@ -568,6 +571,7 @@ const OrderDetails = (props) => {
           )}
           {selectedTab === 1 && (
             <Requirements
+              fetchOrderData={fetchOrderData}
               navigation={props.navigation}
               orderDetails={orderDetails}
             />
@@ -625,7 +629,10 @@ const OrderDetails = (props) => {
         priceList={priceList}
         orderDetails={orderDetails}
         visible={acceptVisible}
-        onCloseIcon={() => setAcceptVisible(false)}
+        onCloseIcon={() => {
+          fetchOrderData();
+          setAcceptVisible(false);
+        }}
       />
       <CustomModalAndroid
         visible={placedSuccessVisible}
