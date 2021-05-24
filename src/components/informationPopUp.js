@@ -7,13 +7,10 @@ import FlatButton from './flatButton';
 
 const InformationPopUp = (props) => {
   return (
-    <CustomModalAndroid visible={props.visible} onPress={props.onCloseIcon}>
-      <Text style={STYLES.modalHeader}>{props?.title}</Text>
-      <CloseIcon
-        onPress={() => {
-          props.onCloseIcon();
-        }}
-      />
+    <CustomModalAndroid
+      visible={props.visible}
+      onPress={props.onCloseIcon}
+      title={props?.title}>
       <Text style={STYLES.simpleText}>{props?.label}</Text>
       <FlatButton label={'OKAY'} onPress={props.onCloseIcon} />
     </CustomModalAndroid>

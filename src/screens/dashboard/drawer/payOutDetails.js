@@ -53,15 +53,10 @@ const PayOutDetails = (props) => {
   return (
     <CustomModalAndroid
       visible={props.visible}
+      title={'PAYOUT DETAILS'}
       onPress={() => {
         props.onCloseIcon();
       }}>
-      <Text style={STYLES.modalHeaderText}>PAYOUT DETAILS</Text>
-      <CloseIcon
-        onPress={() => {
-          props.onCloseIcon();
-        }}
-      />
       <View
         style={{
           flex: 1,

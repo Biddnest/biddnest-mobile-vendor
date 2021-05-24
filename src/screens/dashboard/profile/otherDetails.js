@@ -28,15 +28,10 @@ const OtherDetails = (props) => {
   return (
     <CustomModalAndroid
       visible={props.visible}
+      title={'EDIT OTHER DETAILS'}
       onPress={() => {
         props.onCloseIcon();
       }}>
-      <Text style={STYLES.modalHeaderText}>EDIT OTHER DETAILS</Text>
-      <CloseIcon
-        onPress={() => {
-          props.onCloseIcon();
-        }}
-      />
       <View style={{width: '90%', marginTop: hp(2)}}>
         <TextInput
           value={data?.commission?.toString()}

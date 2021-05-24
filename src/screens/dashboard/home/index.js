@@ -122,13 +122,8 @@ export const HomeHeader = (props) => {
       ) : null}
       <CustomModalAndroid
         visible={openModal}
+        title={'Support'}
         onPress={() => setOpenModal(false)}>
-        <Text style={STYLES.modalHeaderText}>Support</Text>
-        <CloseIcon
-          onPress={() => {
-            setOpenModal(false);
-          }}
-        />
         <View
           style={{
             flexDirection: 'row',
@@ -641,9 +636,8 @@ const Home = (props) => {
       )}
       <CustomModalAndroid
         visible={filterVisible}
+        title={'FILTERS'}
         onPress={() => setFilterVisible(false)}>
-        <Text style={STYLES.modalHeaderText}>FILTERS</Text>
-        <CloseIcon onPress={() => setFilterVisible(false)} />
         <View style={{marginTop: hp(2)}}>
           <View
             style={{
@@ -745,9 +739,8 @@ const Home = (props) => {
       </CustomModalAndroid>
       <CustomModalAndroid
         visible={offNotification}
+        title={'TURN OF NOTIFICATIONS'}
         onPress={() => setOffNotification(false)}>
-        <Text style={STYLES.modalHeaderText}>TURN OF NOTIFICATIONS</Text>
-        <CloseIcon onPress={() => setOffNotification(false)} />
         <Text style={[STYLES.rejectText, {marginTop: hp(5)}]}>
           Are you sure you want to turn off notifications?
         </Text>
@@ -766,10 +759,7 @@ const Home = (props) => {
           }}
         />
       </CustomModalAndroid>
-      <CustomModalAndroid visible={pinModal}>
-        <View style={[STYLES.modalHeaderView, {marginTop: 10}]}>
-          <Text style={STYLES.modalHeaderText}>SET PIN</Text>
-        </View>
+      <CustomModalAndroid visible={pinModal} title={'SET PIN'}>
         <View style={{width: '100%', alignItems: 'center'}}>
           <View
             style={{

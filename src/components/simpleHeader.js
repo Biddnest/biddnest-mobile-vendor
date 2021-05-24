@@ -81,13 +81,8 @@ const SimpleHeader = (props) => {
       ) : null}
       <CustomModalAndroid
         visible={openModal}
+        title={'Support'}
         onPress={() => setOpenModal(false)}>
-        <Text style={STYLES.modalHeaderText}>Support</Text>
-        <CloseIcon
-          onPress={() => {
-            setOpenModal(false);
-          }}
-        />
         <View
           style={{
             flexDirection: 'row',

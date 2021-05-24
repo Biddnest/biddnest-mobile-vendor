@@ -19,6 +19,7 @@ import LocationDetails from './locationDetails';
 import {useSelector} from 'react-redux';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import ChangePassword from './changePassword';
+import HTML from 'react-native-render-html';
 
 const Profile = (props) => {
   const userData = useSelector((state) => state.Login?.loginData) || {};
@@ -233,7 +234,17 @@ const Profile = (props) => {
                   return (
                     <View style={styles.textWrapper} key={index}>
                       <Text style={styles.headerText}>{item.title}</Text>
-                      <Text style={styles.bodyText}>{item.body}</Text>
+                      <HTML
+                        baseFontStyle={{
+                          fontFamily: 'Roboto-Regular',
+                          fontSize: wp(4.5),
+                          color: Colors.inputTextColor,
+                          textTransform: 'capitalize',
+                        }}
+                        source={{html: item?.body}}
+                        contentWidth={'90%'}
+                      />
+                      {/*<Text style={styles.bodyText}>{item.body}</Text>*/}
                     </View>
                   );
                 }}
@@ -285,7 +296,9 @@ const Profile = (props) => {
                   return (
                     <View style={styles.textWrapper} key={index}>
                       <Text style={styles.headerText}>{item.title}</Text>
-                      <Text style={styles.bodyText}>{item.body}</Text>
+                      <Text style={styles.bodyText}>
+                        {item?.body || item.title}
+                      </Text>
                     </View>
                   );
                 }}
@@ -360,7 +373,7 @@ const Profile = (props) => {
                       key={index}>
                       <Text style={styles.headerText}>{item.title}</Text>
                       {(item.body !== '' && (
-                        <Text style={styles.bodyText}>{item.body}</Text>
+                        <Text style={styles.bodyText}>{item?.body || item.title}</Text>
                       )) || (
                         <View
                           style={{

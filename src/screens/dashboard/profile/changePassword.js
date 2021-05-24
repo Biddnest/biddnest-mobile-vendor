@@ -27,15 +27,10 @@ const ChangePassword = (props) => {
   return (
     <CustomModalAndroid
       visible={props.visible}
+      title={'CHANGE PASSWORD'}
       onPress={() => {
         props.onCloseIcon();
       }}>
-      <Text style={STYLES.modalHeaderText}>CHANGE PASSWORD</Text>
-      <CloseIcon
-        onPress={() => {
-          props.onCloseIcon();
-        }}
-      />
       <View style={{width: '90%', marginTop: hp(2)}}>
         <TextInput
           value={data?.current_password}

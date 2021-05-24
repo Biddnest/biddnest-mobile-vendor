@@ -34,15 +34,10 @@ const VendorInformation = (props) => {
   return (
     <CustomModalAndroid
       visible={props.visible}
+      title={'EDIT ORGANIZATION INFORMATION'}
       onPress={() => {
         props.onCloseIcon();
       }}>
-      <Text style={STYLES.modalHeaderText}>EDIT ORGANIZATION INFORMATION</Text>
-      <CloseIcon
-        onPress={() => {
-          props.onCloseIcon();
-        }}
-      />
       <View style={{width: '90%', marginTop: hp(2)}}>
         <TextInput
           label={'Organization Name'}

@@ -27,6 +27,7 @@ import {useSelector} from 'react-redux';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {Calendar} from 'react-native-calendars';
 import {Input} from 'react-native-elements';
+import BidSuccess from '../../../assets/svg/bid_success.svg';
 
 const AcceptOrder = (props) => {
   const {priceList, public_booking_id, orderDetails} = props;
@@ -296,8 +297,40 @@ const AcceptOrder = (props) => {
 
   if (success) {
     return (
-      <CustomModalAndroid visible={props.visible} maxHeight={hp(90)}>
-        <CloseIcon
+      <CustomModalAndroid
+        onPress={() => {
+          setStepData({
+            ...stepData,
+            bid_amount: orderDetails?.final_estimated_quote,
+          });
+          setStep(0);
+          setSuccess(false);
+          setForgotPin(false);
+          props.onCloseIcon();
+        }}
+        visible={props.visible}
+        maxHeight={hp(90)}>
+        <View
+          style={{
+            width: '100%',
+            alignItems: 'center',
+            marginTop: hp(4),
+          }}>
+          <BidSuccess height={wp(23)} width={wp(23)} />
+          <Text
+            style={{
+              marginHorizontal: wp(25),
+              fontSize: wp(5),
+              color: Colors.darkBlue,
+              fontFamily: 'Gilroy-Bold',
+              textAlign: 'center',
+              marginVertical: hp(2),
+            }}>
+            You have successfully placed your "BID"
+          </Text>
+        </View>
+        <FlatButton
+          label={'Okay'}
           onPress={() => {
             setStepData({
               ...stepData,
@@ -309,29 +342,6 @@ const AcceptOrder = (props) => {
             props.onCloseIcon();
           }}
         />
-        <View
-          style={{
-            width: '100%',
-            alignItems: 'center',
-            marginTop: hp(2),
-          }}>
-          <Image
-            source={require('../../../assets/images/bid_success.png')}
-            style={{height: wp(40), width: wp(40)}}
-            resizeMode={'contain'}
-          />
-          <Text
-            style={{
-              marginHorizontal: wp(25),
-              fontSize: wp(5),
-              color: Colors.darkBlue,
-              fontFamily: 'Gilroy-Bold',
-              textAlign: 'center',
-              marginBottom: hp(6),
-            }}>
-            You have successfully placed your "BID"
-          </Text>
-        </View>
       </CustomModalAndroid>
     );
   } else {
@@ -444,25 +454,10 @@ const AcceptOrder = (props) => {
                 </Pressable>
                 <CustomModalAndroid
                   visible={openCalender}
+                  title={'Choose Date'}
                   onPress={() => {
                     setCalender(false);
                   }}>
-                  <Text
-                    style={{
-                      fontFamily: 'Gilroy-Bold',
-                      color: Colors.inputTextColor,
-                      fontSize: wp(4),
-                      marginTop: 25,
-                      marginBottom: 10,
-                      textTransform: 'uppercase',
-                    }}>
-                    Choose Date
-                  </Text>
-                  <CloseIcon
-                    onPress={() => {
-                      setCalender(false);
-                    }}
-                  />
                   <Calendar
                     markingType={'custom'}
                     markedDates={dateArray}

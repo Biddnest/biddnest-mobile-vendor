@@ -6,8 +6,11 @@ import {
   SafeAreaView,
   Pressable,
   View,
+  Text,
 } from 'react-native';
 import {wp, hp} from '../constant/colors';
+import {STYLES} from '../constant/commonStyle';
+import CloseIcon from './closeIcon';
 
 const CustomModalAndroid = (props) => {
   return (
@@ -34,6 +37,10 @@ const CustomModalAndroid = (props) => {
               styles.modalView,
               {maxHeight: props.maxHeight ? props.maxHeight : hp(80)},
             ]}>
+            {props.title && (
+              <Text style={STYLES.modalHeaderText}>{props?.title}</Text>
+            )}
+            {props.onPress && <CloseIcon onPress={props.onPress} />}
             <ScrollView
               bounces={false}
               showsVerticalScrollIndicator={false}

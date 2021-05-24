@@ -157,28 +157,20 @@ const OrderStatusWin = (props) => {
             {orderDetails?.user?.fname} {orderDetails?.user?.lname}
           </Text>
         </View>
-        <View
-          style={{flexDirection: 'row', alignItems: 'center', marginTop: 3}}>
-          <Text
-            style={[
-              STYLES.sliderText,
-              {width: wp(20), fontSize: wp(4), fontFamily: 'Gilroy-SemiBold'},
-            ]}>
-            Address
-          </Text>
-          <Text
-            style={[
-              STYLES.modalHeaderText,
-              {
-                width: wp(60),
-                textAlign: 'left',
-                marginTop: 0,
-                marginBottom: 0,
-              },
-            ]}>
-            {orderDetails?.user?.address}
-          </Text>
-        </View>
+        {/*<View style={{flexDirection: 'row', alignItems: 'center'}}>*/}
+        {/*  <Text*/}
+        {/*    style={[*/}
+        {/*      STYLES.modalHeaderText,*/}
+        {/*      {*/}
+        {/*        width: wp(60),*/}
+        {/*        textAlign: 'left',*/}
+        {/*        marginTop: 0,*/}
+        {/*        marginBottom: 0,*/}
+        {/*      },*/}
+        {/*    ]}>*/}
+        {/*    {orderDetails?.user?.address}*/}
+        {/*  </Text>*/}
+        {/*</View>*/}
         <View
           style={{flexDirection: 'row', alignItems: 'center', marginTop: 3}}>
           <Text style={[STYLES.sliderText, {width: wp(20), fontSize: wp(4)}]}>
@@ -348,9 +340,8 @@ const OrderStatusWin = (props) => {
       </View>
       <CustomModalAndroid
         visible={driverAssignVisible}
+        title={'ASSIGN DRIVER'}
         onPress={() => setDriverAssignVisible(false)}>
-        <Text style={STYLES.modalHeaderText}>ASSIGN DRIVER</Text>
-        <CloseIcon onPress={() => setDriverAssignVisible(false)} />
         <View style={{marginVertical: hp(2)}}>
           <DropDownAndroid
             value={driverAssignData?.driver_id}
@@ -417,9 +408,8 @@ const OrderStatusWin = (props) => {
       </CustomModalAndroid>
       <CustomModalAndroid
         visible={pinModalVisible}
+        title={'PIN VERIFICATION'}
         onPress={() => setPinModalVisible(false)}>
-        <Text style={STYLES.modalHeaderText}>PIN VERIFICATION</Text>
-        <CloseIcon onPress={() => setPinModalVisible(false)} />
         <View
           style={{
             width: '85%',

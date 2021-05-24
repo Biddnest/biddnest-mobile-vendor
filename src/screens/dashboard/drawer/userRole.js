@@ -165,9 +165,7 @@ const UserRole = (props) => {
             STYLES.headerText,
             {
               width:
-                roles?.admin === userData?.vendor?.user_role
-                  ? '45%'
-                  : '50%',
+                roles?.admin === userData?.vendor?.user_role ? '45%' : '50%',
             },
           ]}>
           {item?.fname} {item?.lname}
@@ -177,9 +175,7 @@ const UserRole = (props) => {
             STYLES.headerText,
             {
               width:
-                roles?.admin === userData?.vendor?.user_role
-                  ? '35%'
-                  : '50%',
+                roles?.admin === userData?.vendor?.user_role ? '35%' : '50%',
             },
           ]}>
           {item?.organization?.city}
@@ -337,17 +333,10 @@ const UserRole = (props) => {
         />
       )}
       <FilterButton onPress={() => setFilterVisible(true)} />
-      <CustomModalAndroid visible={false} onPress={() => {}}>
-        <View style={STYLES.modalHeaderView}>
-          <Text style={STYLES.modalHeaderText}>DEACTIVATE USER</Text>
-          <CloseIcon
-            style={{
-              position: 'absolute',
-              right: 10,
-            }}
-            onPress={() => {}}
-          />
-        </View>
+      <CustomModalAndroid
+        visible={false}
+        onPress={() => {}}
+        title={'DEACTIVATE USER'}>
         <View style={{...STYLES.separatorView, width: '85%'}} />
         <Text style={[STYLES.rejectText, {marginTop: hp(6)}]}>
           Do you want to deactivate this user?
@@ -360,10 +349,9 @@ const UserRole = (props) => {
         />
       </CustomModalAndroid>
       <CustomModalAndroid
+        title={'USER DETAILS'}
         visible={detailsVisible}
         onPress={() => setDetailsVisible(false)}>
-        <Text style={STYLES.modalHeaderText}>USER DETAILS</Text>
-        <CloseIcon onPress={() => setDetailsVisible(false)} />
         <View style={styles.flexBox}>
           <Text style={styles.topText}>Name</Text>
           <Text style={[styles.bottomText, {textTransform: 'capitalize'}]}>
@@ -395,11 +383,13 @@ const UserRole = (props) => {
           <View style={{flex: 1}}>
             <Text style={styles.topText}>Role</Text>
             <Text style={[styles.bottomText, {textTransform: 'capitalize'}]}>
-              {Object.keys(roles)[
-                Object.values(roles).findIndex(
-                  (ele) => ele === detailsData?.user_role,
-                )
-              ]?.split('_').join(' ')}
+              {Object.keys(roles)
+                [
+                  Object.values(roles).findIndex(
+                    (ele) => ele === detailsData?.user_role,
+                  )
+                ]?.split('_')
+                .join(' ')}
             </Text>
           </View>
         </View>
@@ -412,9 +402,8 @@ const UserRole = (props) => {
       </CustomModalAndroid>
       <CustomModalAndroid
         visible={filterVisible}
+        title={'FILTERS'}
         onPress={() => setFilterVisible(false)}>
-        <Text style={STYLES.modalHeaderText}>FILTERS</Text>
-        <CloseIcon onPress={() => setFilterVisible(false)} />
         <View
           style={[
             {marginVertical: hp(2)},
@@ -461,9 +450,8 @@ const UserRole = (props) => {
       </CustomModalAndroid>
       <CustomModalAndroid
         visible={deActivateUser}
+        title={'TURN OF NOTIFICATIONS'}
         onPress={() => setDeActivateUser(false)}>
-        <Text style={STYLES.modalHeaderText}>TURN OF NOTIFICATIONS</Text>
-        <CloseIcon onPress={() => setDeActivateUser(false)} />
         <Text style={[STYLES.rejectText, {marginTop: hp(5)}]}>
           Do you want to deactivate this user?
         </Text>

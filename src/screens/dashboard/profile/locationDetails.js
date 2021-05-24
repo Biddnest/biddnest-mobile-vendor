@@ -38,15 +38,10 @@ const LocationDetails = (props) => {
   return (
     <CustomModalAndroid
       visible={props.visible}
+      title={'EDIT LOCATION DETAILS'}
       onPress={() => {
         props.onCloseIcon();
       }}>
-      <Text style={STYLES.modalHeaderText}>EDIT LOCATION DETAILS</Text>
-      <CloseIcon
-        onPress={() => {
-          props.onCloseIcon();
-        }}
-      />
       <View style={{width: '90%', marginTop: hp(2)}}>
         <TextInput
           isRight={error?.address_line1}

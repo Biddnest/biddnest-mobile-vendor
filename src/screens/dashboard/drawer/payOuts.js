@@ -209,9 +209,8 @@ const PayOuts = (props) => {
       />
       <CustomModalAndroid
         visible={filterVisible}
+        title={'FILTERS'}
         onPress={() => setFilterVisible(false)}>
-        <Text style={STYLES.modalHeaderText}>FILTERS</Text>
-        <CloseIcon onPress={() => setFilterVisible(false)} />
         <View style={{marginTop: hp(2)}}>
           <View
             style={{

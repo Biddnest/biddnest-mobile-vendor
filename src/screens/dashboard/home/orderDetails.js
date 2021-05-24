@@ -581,9 +581,8 @@ const OrderDetails = (props) => {
       </ScrollView>
       <CustomModalAndroid
         visible={rejectVisible}
+        title={'REJECT ORDER'}
         onPress={() => setRejectVisible(false)}>
-        <Text style={STYLES.modalHeaderText}>REJECT ORDER</Text>
-        <CloseIcon onPress={() => setRejectVisible(false)} />
         <Text style={STYLES.rejectText}>
           Are you sure you want to REJECT the order?
         </Text>
@@ -637,15 +636,6 @@ const OrderDetails = (props) => {
       <CustomModalAndroid
         visible={placedSuccessVisible}
         onPress={() => setPlacedSuccessVisible(false)}>
-        <View style={STYLES.modalHeaderView}>
-          <CloseIcon
-            style={{
-              position: 'absolute',
-              right: 10,
-            }}
-            onPress={() => setPlacedSuccessVisible(false)}
-          />
-        </View>
         <Image
           source={require('../../../assets/images/bid_success.png')}
           style={{
