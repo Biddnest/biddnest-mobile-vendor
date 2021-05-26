@@ -145,6 +145,7 @@ const AcceptOrder = (props) => {
               </Text>
             </View>
             <FlatList
+              scrollEnabled={false}
               bounces={false}
               keyExtractor={(item, index) => index.toString()}
               showsVerticalScrollIndicator={false}
