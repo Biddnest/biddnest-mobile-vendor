@@ -73,6 +73,57 @@ const Orders = (props) => {
       props.navigation.navigate('OrderDetails', {orderData: item});
     }
   };
+  const renderRightDate = (item, dates = []) => {
+    if (item?.bid?.status === 0) {
+      return (
+        <View
+          style={{
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            width: '50%',
+            justifyContent: 'flex-end',
+          }}>
+          {dates?.map((item, index) => {
+            return (
+              <View style={STYLES.categoryView} key={index}>
+                <Text
+                  style={{
+                    color: Colors.inputTextColor,
+                    fontSize: wp(3.8),
+                    fontFamily: 'Roboto-Bold',
+                  }}>
+                  {item}
+                </Text>
+              </View>
+            );
+          })}
+        </View>
+      );
+    }
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          width: '50%',
+          justifyContent: 'flex-end',
+        }}>
+        <View style={STYLES.categoryView}>
+          <Text
+            style={{
+              color: Colors.inputTextColor,
+              fontSize: wp(3.8),
+              fontFamily: 'Roboto-Bold',
+            }}>
+            {item?.bid &&
+              moment(JSON.parse(item?.bid?.meta)?.moving_date).format(
+                'D MMM yyyy',
+              )}
+          </Text>
+        </View>
+      </View>
+    );
+  };
   const renderItem = ({item, index}) => {
     let source_meta = JSON.parse(item?.source_meta?.toString()) || {};
     let destination_meta = JSON.parse(item?.destination_meta?.toString()) || {};
@@ -131,7 +182,9 @@ const Orders = (props) => {
             </Text>
           )}
           <Text style={[STYLES.rightText, {width: '60%'}]}>
-            {item?.public_booking_id}
+            {item?.status > 4
+              ? item?.public_booking_id
+              : item?.public_enquiry_id}
           </Text>
         </View>
         <View
@@ -282,11 +335,7 @@ const Orders = (props) => {
           <View>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>Moving Date</Text>
-              <Text style={[STYLES.rightText, {width: '50%'}]}>
-                {moment(JSON.parse(item?.bid?.meta)?.moving_date).format(
-                  'D MMM yyyy',
-                )}
-              </Text>
+              {renderRightDate(item)}
             </View>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>category</Text>

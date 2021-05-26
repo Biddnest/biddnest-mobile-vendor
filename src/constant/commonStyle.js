@@ -75,7 +75,7 @@ export const STYLES = {
   locationText: {
     fontFamily: 'Roboto-Regular',
     color: Colors.inputTextColor,
-    fontSize: wp(4.5),
+    fontSize: wp(4),
     marginTop: hp(1),
   },
   separatorView: {
@@ -97,7 +97,7 @@ export const STYLES = {
   },
   rightText: {
     fontFamily: 'Roboto-Bold',
-    fontSize: wp(4.5),
+    fontSize: wp(4),
     color: Colors.inputTextColor,
     width: '50%',
     textAlign: 'right',
@@ -268,5 +268,15 @@ export const STYLES = {
     borderRadius: hp(6),
     backgroundColor: '#F2E6FF',
     borderColor: Colors.darkBlue,
+  },
+  categoryView: {
+    marginBottom: hp(0.8),
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderColor: Colors.darkBlue,
+    borderWidth: 2,
+    borderRadius: 8,
+    backgroundColor: Colors.white,
+    marginLeft: hp(1.3),
   },
 };

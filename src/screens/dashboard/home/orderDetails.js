@@ -197,7 +197,7 @@ const OrderDetails = (props) => {
           }}>
           {dateArray?.map((item, index) => {
             return (
-              <View style={styles.categoryView} key={index}>
+              <View style={STYLES.categoryView} key={index}>
                 <Text
                   style={{
                     color: Colors.inputTextColor,
@@ -220,7 +220,7 @@ const OrderDetails = (props) => {
           width: '50%',
           justifyContent: 'flex-end',
         }}>
-        <View style={styles.categoryView}>
+        <View style={STYLES.categoryView}>
           <Text
             style={{
               color: Colors.inputTextColor,
@@ -330,7 +330,9 @@ const OrderDetails = (props) => {
               ]}>
               <Text style={STYLES.leftText}>order id</Text>
               <Text style={[STYLES.rightText, {marginBottom: hp(2)}]}>
-                {orderDetails?.public_booking_id}
+                {orderDetails?.status > 4
+                  ? orderDetails?.public_booking_id
+                  : orderDetails?.public_enquiry_id}
               </Text>
             </View>
           </View>
@@ -744,15 +746,5 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto-Italic',
     color: Colors.inputTextColor,
     marginLeft: 5,
-  },
-  categoryView: {
-    marginBottom: hp(0.8),
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderColor: Colors.darkBlue,
-    borderWidth: 2,
-    borderRadius: 8,
-    backgroundColor: Colors.white,
-    marginLeft: hp(1.3),
   },
 });

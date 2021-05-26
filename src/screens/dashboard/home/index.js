@@ -184,7 +184,7 @@ const Home = (props) => {
   const [filterData, setFilterData] = useState({
     from: new Date(),
     to: new Date(),
-    status: 4,
+    status: selectedTab === 0 ? 2 : selectedTab === 1 ? 4 : 0,
     service_id: 1,
   });
   const [notificationToggle, setNotificationToggle] = useState(
@@ -203,15 +203,37 @@ const Home = (props) => {
     password: undefined,
     pin: undefined,
   });
+  useEffect(() => {
+    setFilterData({
+      ...filterData,
+      status: selectedTab === 0 ? 2 : selectedTab === 1 ? 4 : 0,
+    });
+  }, [selectedTab]);
   let filterStatusOptions = [];
   let filterCategoryOptions = [];
   Object.keys(statusData?.status)?.forEach((item, index) => {
     let temp = Object.values(statusData?.status)[index];
-    if (temp > 3) {
-      filterStatusOptions.push({
-        label: item?.split('_').join(' '),
-        value: temp,
-      });
+    if (temp !== 10) {
+      if (selectedTab === 0) {
+        if (temp > 1 && temp < 4) {
+          filterStatusOptions.push({
+            label: item?.split('_').join(' '),
+            value: temp,
+          });
+        }
+      } else if (selectedTab === 1) {
+        if (temp > 3) {
+          filterStatusOptions.push({
+            label: item?.split('_').join(' '),
+            value: temp,
+          });
+        }
+      } else {
+        filterStatusOptions.push({
+          label: item?.split('_').join(' '),
+          value: temp,
+        });
+      }
     }
   });
   categoriesData?.forEach((item, index) => {
@@ -329,6 +351,57 @@ const Home = (props) => {
     item?.movement_dates?.forEach((i) => {
       dateArray.push(moment(i.date).format('D MMM'));
     });
+    const renderRightDate = (item, dates = []) => {
+      if (item?.bid?.status === 0) {
+        return (
+          <View
+            style={{
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+              width: '50%',
+              justifyContent: 'flex-end',
+            }}>
+            {dates?.map((item, index) => {
+              return (
+                <View style={STYLES.categoryView} key={index}>
+                  <Text
+                    style={{
+                      color: Colors.inputTextColor,
+                      fontSize: wp(3.8),
+                      fontFamily: 'Roboto-Bold',
+                    }}>
+                    {item}
+                  </Text>
+                </View>
+              );
+            })}
+          </View>
+        );
+      }
+      return (
+        <View
+          style={{
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            width: '50%',
+            justifyContent: 'flex-end',
+          }}>
+          <View style={STYLES.categoryView}>
+            <Text
+              style={{
+                color: Colors.inputTextColor,
+                fontSize: wp(3.8),
+                fontFamily: 'Roboto-Bold',
+              }}>
+              {item?.bid &&
+                moment(JSON.parse(item?.bid?.meta)?.moving_date).format(
+                  'D MMM yyyy',
+                )}
+            </Text>
+          </View>
+        </View>
+      );
+    };
     return (
       <Pressable
         style={[
@@ -338,10 +411,6 @@ const Home = (props) => {
               selectedTab === 2 && item?.bid?.status === 5
                 ? '#F8F8FA'
                 : Colors.white,
-            borderColor:
-              item?.status === statusData?.status?.rebiding
-                ? Colors.darkBlue
-                : '#DEE6ED',
           },
         ]}
         key={index}
@@ -380,7 +449,9 @@ const Home = (props) => {
             {status}
           </Text>
           <Text style={[STYLES.rightText, {width: '55%'}]}>
-            {item?.public_booking_id}
+            {item?.status > 4
+              ? item?.public_booking_id
+              : item?.public_enquiry_id}
           </Text>
         </View>
         <View
@@ -490,12 +561,7 @@ const Home = (props) => {
             </View>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>Moving Date</Text>
-              <Text style={STYLES.rightText}>
-                {item?.bid?.meta &&
-                  moment(JSON.parse(item?.bid?.meta)?.moving_date).format(
-                    'D MMM yyyy',
-                  )}
-              </Text>
+              {renderRightDate(item)}
             </View>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>category</Text>
@@ -523,7 +589,7 @@ const Home = (props) => {
           <View>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>Moving Date</Text>
-              <Text style={STYLES.rightText}>{dateArray.join('\n')}</Text>
+              {renderRightDate(item, dateArray)}
             </View>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>category</Text>
@@ -631,9 +697,7 @@ const Home = (props) => {
           />
         )}
       </View>
-      {selectedTab === 1 && (
-        <FilterButton onPress={() => setFilterVisible(true)} />
-      )}
+      <FilterButton onPress={() => setFilterVisible(true)} />
       <CustomModalAndroid
         visible={filterVisible}
         title={'FILTERS'}
@@ -654,7 +718,7 @@ const Home = (props) => {
                       STYLES.inputTextLabel,
                       {textTransform: 'capitalize'},
                     ]}>
-                    {item} Date
+                    Movement {item}
                   </Text>
                   <View style={STYLES.dateView}>
                     <DatePicker

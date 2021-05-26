@@ -385,7 +385,7 @@ const Profile = (props) => {
                             (aryData, aryIndex) => {
                               return (
                                 <View
-                                  style={styles.categoryView}
+                                  style={STYLES.categoryView}
                                   key={aryIndex}>
                                   <Text
                                     style={{
@@ -507,15 +507,5 @@ const styles = StyleSheet.create({
     borderRadius: wp(5),
     backgroundColor: '#5643A8',
     ...STYLES.common,
-  },
-  categoryView: {
-    marginBottom: 3,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderColor: Colors.darkBlue,
-    borderWidth: 2,
-    borderRadius: 8,
-    backgroundColor: Colors.white,
-    marginRight: 10,
   },
 });
