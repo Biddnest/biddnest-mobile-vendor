@@ -1,10 +1,12 @@
 import React from 'react';
-import {View, Text, Pressable, ActivityIndicator} from 'react-native';
+import {Text, ActivityIndicator} from 'react-native';
 import {Colors, hp, wp} from '../constant/colors';
+import Ripple from 'react-native-material-ripple';
 
 const Button = (props) => {
   return (
-    <Pressable
+    <Ripple
+      rippleColor={Colors.white}
       onPress={() => {
         if (!props.isLoading) {
           props.onPress();
@@ -37,7 +39,7 @@ const Button = (props) => {
           {props.label}
         </Text>
       )}
-    </Pressable>
+    </Ripple>
   );
 };
 

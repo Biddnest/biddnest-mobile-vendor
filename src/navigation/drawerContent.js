@@ -24,6 +24,7 @@ import {RESET_STORE} from '../redux/types';
 import {useDispatch, useSelector} from 'react-redux';
 import LegalPolicies from '../assets/svg/legal_policies.svg';
 import PrivacyPolicy from '../assets/svg/privacy_policy.svg';
+import Ripple from 'react-native-material-ripple';
 
 export function DrawerContent(props) {
   const dispatch = useDispatch();
@@ -129,7 +130,8 @@ export function DrawerContent(props) {
   };
   const renderItem = ({item, index}) => {
     return (
-      <Pressable
+      <Ripple
+        rippleColor={Colors.darkBlue}
         style={styles.menuView}
         key={index}
         onPress={() => {
@@ -151,7 +153,7 @@ export function DrawerContent(props) {
             size={hp(3.5)}
           />
         </View>
-      </Pressable>
+      </Ripple>
     );
   };
   return (

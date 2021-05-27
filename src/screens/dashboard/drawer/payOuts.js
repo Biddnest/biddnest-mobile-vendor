@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import {
   FlatList,
   Platform,
-  Pressable,
   ScrollView,
   Text,
   View,
@@ -26,6 +25,7 @@ import {useSelector} from 'react-redux';
 import PayOutDetails from './payOutDetails';
 import Entypo from 'react-native-vector-icons/Entypo';
 import DatePicker from 'react-native-datepicker';
+import Ripple from 'react-native-material-ripple';
 
 const PayOuts = (props) => {
   const statusData =
@@ -119,7 +119,8 @@ const PayOuts = (props) => {
   const renderItem = ({item, index}) => {
     let total_bookings = item?.meta && JSON.parse(item?.meta?.toString());
     return (
-      <Pressable
+      <Ripple
+        rippleColor={Colors.darkBlue}
         onPress={() => {
           setPayoutDetailsVisible(true);
           setPayoutDetailsData(item);
@@ -149,7 +150,7 @@ const PayOuts = (props) => {
           </Text>
           {renderStatus(item)}
         </View>
-      </Pressable>
+      </Ripple>
     );
   };
   return (

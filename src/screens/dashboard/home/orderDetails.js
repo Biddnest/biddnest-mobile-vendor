@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {
   Platform,
-  Pressable,
   ScrollView,
   Text,
   View,
@@ -39,6 +38,7 @@ import {APICall, getDriver, getVehicle} from '../../../redux/actions/user';
 import moment from 'moment';
 import CountDown from '../../../components/countDown';
 import {useDispatch} from 'react-redux';
+import Ripple from 'react-native-material-ripple';
 
 const OrderDetails = (props) => {
   const dispatch = useDispatch();
@@ -386,7 +386,8 @@ const OrderDetails = (props) => {
           <View style={STYLES.tabView}>
             {tab.map((item, index) => {
               return (
-                <Pressable
+                <Ripple
+                  rippleColor={Colors.darkBlue}
                   key={index}
                   style={{
                     ...STYLES.common,
@@ -403,7 +404,7 @@ const OrderDetails = (props) => {
                     }}>
                     {item}
                   </Text>
-                </Pressable>
+                </Ripple>
               );
             })}
           </View>
@@ -419,7 +420,8 @@ const OrderDetails = (props) => {
                 <View style={{maxWidth: '80%'}}>
                   {renderText('Pickup Address', source_meta?.address)}
                 </View>
-                <Pressable
+                <Ripple
+                  rippleColor={Colors.white}
                   style={STYLES.mapPinCircle}
                   onPress={() => setMapVisible('pickup')}>
                   <Feather
@@ -427,7 +429,7 @@ const OrderDetails = (props) => {
                     color={Colors.darkBlue}
                     size={wp(7)}
                   />
-                </Pressable>
+                </Ripple>
               </View>
               <View
                 style={{
@@ -465,7 +467,8 @@ const OrderDetails = (props) => {
                 <View style={{maxWidth: '80%'}}>
                   {renderText('Drop Address', destination_meta?.address)}
                 </View>
-                <Pressable
+                <Ripple
+                  rippleColor={Colors.white}
                   style={STYLES.mapPinCircle}
                   onPress={() => setMapVisible('drop')}>
                   <Feather
@@ -473,7 +476,7 @@ const OrderDetails = (props) => {
                     color={Colors.darkBlue}
                     size={wp(7)}
                   />
-                </Pressable>
+                </Ripple>
               </View>
               <View
                 style={{

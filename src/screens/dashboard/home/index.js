@@ -45,6 +45,7 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import InformationPopUp from '../../../components/informationPopUp';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {isAndroid} from 'react-native-calendars/src/expandableCalendar/commons';
+import Ripple from 'react-native-material-ripple';
 
 export const HomeHeader = (props) => {
   const configData =
@@ -132,7 +133,8 @@ export const HomeHeader = (props) => {
             width: wp(100),
           }}>
           <View style={styles.common}>
-            <Pressable
+            <Ripple
+              rippleColor={Colors.darkBlue}
               style={[STYLES.selectionView, STYLES.common]}
               onPress={() => {
                 setOpenModal(false);
@@ -140,18 +142,19 @@ export const HomeHeader = (props) => {
                   Linking.openURL(`tel:${data?.contact_no[0]}`);
               }}>
               <Ionicons name={'call'} color={Colors.darkBlue} size={hp(6)} />
-            </Pressable>
+            </Ripple>
             <Text style={STYLES.selectionText}>Call</Text>
           </View>
           <View style={styles.common}>
-            <Pressable
+            <Ripple
+              rippleColor={Colors.darkBlue}
               onPress={() => {
                 setOpenModal(false);
                 props.navigation.navigate('ChatRedirect');
               }}
               style={[STYLES.selectionView, STYLES.common]}>
               <Entypo name={'chat'} color={Colors.darkBlue} size={hp(6)} />
-            </Pressable>
+            </Ripple>
             <Text style={STYLES.selectionText}>Chat</Text>
           </View>
         </View>
@@ -640,7 +643,8 @@ const Home = (props) => {
             {title: 'Save Later', value: configData[2]},
           ].map((item, index) => {
             return (
-              <Pressable
+              <Ripple
+                rippleColor={Colors.darkBlue}
                 key={index}
                 style={{
                   ...STYLES.common,
@@ -656,7 +660,7 @@ const Home = (props) => {
                   }}>
                   {item?.title}
                 </Text>
-              </Pressable>
+              </Ripple>
             );
           })}
         </View>

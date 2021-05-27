@@ -11,6 +11,7 @@ import {useIsFocused} from '@react-navigation/native';
 import moment from 'moment';
 import CountDown from '../../../components/countDown';
 import MapPin from '../../../assets/svg/map_pin.svg';
+import Ripple from 'react-native-material-ripple';
 
 const Orders = (props) => {
   const dispatch = useDispatch();
@@ -381,7 +382,8 @@ const Orders = (props) => {
             {title: 'Past Orders', value: 'past'},
           ].map((item, index) => {
             return (
-              <Pressable
+              <Ripple
+                rippleColor={Colors.darkBlue}
                 key={index}
                 style={{
                   ...STYLES.common,
@@ -398,7 +400,7 @@ const Orders = (props) => {
                   }}>
                   {item?.title}
                 </Text>
-              </Pressable>
+              </Ripple>
             );
           })}
         </View>

@@ -11,6 +11,7 @@ import Button from '../../../components/button';
 import {CustomAlert, ImageSelection} from '../../../constant/commonFun';
 import {useDispatch, useSelector} from 'react-redux';
 import {updateProfile} from '../../../redux/actions/user';
+import Ripple from 'react-native-material-ripple';
 
 const EditProfile = (props) => {
   const dispatch = useDispatch();
@@ -208,7 +209,8 @@ const EditProfile = (props) => {
                   marginLeft: wp(5),
                   height: wp(18),
                 }}>
-                <Pressable
+                <Ripple
+                  rippleColor={Colors.white}
                   onPress={async () => {
                     ImageSelection()
                       .then((res) => {
@@ -225,7 +227,7 @@ const EditProfile = (props) => {
                     }}>
                     UPLOAD IMAGE
                   </Text>
-                </Pressable>
+                </Ripple>
                 <Text
                   style={{
                     color: Colors.inputTextColor,
