@@ -3,6 +3,7 @@ import {ActivityIndicator, View} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 import ImagePicker from 'react-native-image-picker';
 import Toast from 'react-native-simple-toast';
+import Snackbar from 'react-native-snackbar';
 import {IMAGE_OPTIONS, Colors} from './colors';
 import {STYLES} from './commonStyle';
 import moment from 'moment';
@@ -17,7 +18,11 @@ export const resetNavigator = (props, screenName) => {
 };
 
 export const CustomAlert = (msg = '') => {
-  return Toast.show(msg, Toast.LONG);
+  return Snackbar.show({
+    text: msg,
+    duration: Snackbar.LENGTH_LONG,
+  });
+  // return Toast.show(msg, Toast.LONG);
 };
 
 export const CustomConsole = (msg) => {

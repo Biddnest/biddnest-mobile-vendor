@@ -35,34 +35,36 @@ const Orders = (props) => {
     }
   }, [selectedTab]);
   const getOrdersList = (pageNo = 1) => {
-    if (roles?.driver === userData?.vendor?.user_role) {
-      dispatch(getDriverOrders(selectedTab, {}, pageNo))
-        .then((res) => {
-          setLoading(false);
-          if (res?.status === 'success' && res?.data) {
-            setOrder(res?.data);
-          } else {
-            CustomAlert(res?.message);
-          }
-        })
-        .catch((err) => {
-          setLoading(false);
-          CustomAlert(err?.data?.message);
-        });
-    } else {
-      dispatch(getOrders(selectedTab, {}, pageNo))
-        .then((res) => {
-          setLoading(false);
-          if (res?.status === 'success' && res?.data) {
-            setOrder(res?.data);
-          } else {
-            CustomAlert(res?.message);
-          }
-        })
-        .catch((err) => {
-          setLoading(false);
-          CustomAlert(err?.data?.message);
-        });
+    if (!isLoading) {
+      if (roles?.driver === userData?.vendor?.user_role) {
+        dispatch(getDriverOrders(selectedTab, {}, pageNo))
+          .then((res) => {
+            setLoading(false);
+            if (res?.status === 'success' && res?.data) {
+              setOrder(res?.data);
+            } else {
+              CustomAlert(res?.message);
+            }
+          })
+          .catch((err) => {
+            setLoading(false);
+            CustomAlert(err?.data?.message);
+          });
+      } else {
+        dispatch(getOrders(selectedTab, {}, pageNo))
+          .then((res) => {
+            setLoading(false);
+            if (res?.status === 'success' && res?.data) {
+              setOrder(res?.data);
+            } else {
+              CustomAlert(res?.message);
+            }
+          })
+          .catch((err) => {
+            setLoading(false);
+            CustomAlert(err?.data?.message);
+          });
+      }
     }
   };
   const handleOrderClicked = (item) => {

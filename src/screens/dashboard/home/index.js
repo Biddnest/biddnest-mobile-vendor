@@ -304,34 +304,36 @@ const Home = (props) => {
     }
   }, [selectedTab]);
   const getOrdersList = (data = {}, pageNo = 1) => {
-    if (roles?.driver === userData?.vendor?.user_role) {
-      dispatch(getDriverOrders(configData[selectedTab], data, pageNo))
-        .then((res) => {
-          setLoading(false);
-          if (res?.status === 'success' && res?.data) {
-            setOrder(res?.data);
-          } else {
-            CustomAlert(res?.message);
-          }
-        })
-        .catch((err) => {
-          setLoading(false);
-          CustomAlert(err?.data?.message);
-        });
-    } else {
-      dispatch(getOrders(configData[selectedTab], data, pageNo))
-        .then((res) => {
-          setLoading(false);
-          if (res?.status === 'success' && res?.data) {
-            setOrder(res?.data);
-          } else {
-            CustomAlert(res?.message);
-          }
-        })
-        .catch((err) => {
-          setLoading(false);
-          CustomAlert(err?.data?.message);
-        });
+    if (!isLoading) {
+      if (roles?.driver === userData?.vendor?.user_role) {
+        dispatch(getDriverOrders(configData[selectedTab], data, pageNo))
+          .then((res) => {
+            setLoading(false);
+            if (res?.status === 'success' && res?.data) {
+              setOrder(res?.data);
+            } else {
+              CustomAlert(res?.message);
+            }
+          })
+          .catch((err) => {
+            setLoading(false);
+            CustomAlert(err?.data?.message);
+          });
+      } else {
+        dispatch(getOrders(configData[selectedTab], data, pageNo))
+          .then((res) => {
+            setLoading(false);
+            if (res?.status === 'success' && res?.data) {
+              setOrder(res?.data);
+            } else {
+              CustomAlert(res?.message);
+            }
+          })
+          .catch((err) => {
+            setLoading(false);
+            CustomAlert(err?.data?.message);
+          });
+      }
     }
   };
   const renderItem = ({item, index}) => {

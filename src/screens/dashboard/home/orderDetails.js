@@ -85,7 +85,7 @@ const OrderDetails = (props) => {
   }, []);
 
   const fetchOrderData = () => {
-    if (orderDetails?.public_booking_id) {
+    if (orderDetails?.public_booking_id && !isLoading) {
       let obj = {
         url: `bookings/details?public_booking_id=${orderDetails?.public_booking_id}`,
         method: 'get',
@@ -328,7 +328,9 @@ const OrderDetails = (props) => {
                 STYLES.flexBox,
                 {marginTop: orderDetails?.status < 4 ? 0 : hp(2)},
               ]}>
-              <Text style={STYLES.leftText}>order id</Text>
+              <Text style={STYLES.leftText}>
+                {orderDetails?.status > 4 ? 'order' : 'enquiry'} id
+              </Text>
               <Text style={[STYLES.rightText, {marginBottom: hp(2)}]}>
                 {orderDetails?.status > 4
                   ? orderDetails?.public_booking_id
