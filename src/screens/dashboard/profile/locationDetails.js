@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {Text, View, StyleSheet} from 'react-native';
 import CustomModalAndroid from '../../../components/customModal';
-import CloseIcon from '../../../components/closeIcon';
 import {Colors, wp, hp} from '../../../constant/colors';
 import TextInput from '../../../components/textInput';
 import FlatButton from '../../../components/flatButton';

@@ -15,7 +15,6 @@ import {Colors, wp, boxShadow, hp} from '../../../constant/colors';
 import {STYLES} from '../../../constant/commonStyle';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import CustomModalAndroid from '../../../components/customModal';
-import CloseIcon from '../../../components/closeIcon';
 import DropDownAndroid from '../../../components/dropDown';
 import FlatButton from '../../../components/flatButton';
 import Switch from '../../../components/switch';
@@ -46,6 +45,7 @@ import InformationPopUp from '../../../components/informationPopUp';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {isAndroid} from 'react-native-calendars/src/expandableCalendar/commons';
 import Ripple from 'react-native-material-ripple';
+import BiddnestLogo from '../../../assets/svg/biddnest_logo.svg';
 
 export const HomeHeader = (props) => {
   const configData =
@@ -85,17 +85,7 @@ export const HomeHeader = (props) => {
             }}>
             {props.title}
           </Text>
-        )) || (
-          <Image
-            source={require('../../../assets/images/biddnest_logo.png')}
-            resizeMode={'contain'}
-            style={{
-              height: '65%',
-              width: '70%',
-              marginRight: props.right ? wp(0) : wp(13),
-            }}
-          />
-        )}
+        )) || <BiddnestLogo height={'55%'} width={'70%'} />}
       </View>
       {props.right ? (
         <View

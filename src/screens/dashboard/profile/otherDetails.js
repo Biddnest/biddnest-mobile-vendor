@@ -1,12 +1,10 @@
 import React, {useState} from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import {Text, View} from 'react-native';
 import CustomModalAndroid from '../../../components/customModal';
-import CloseIcon from '../../../components/closeIcon';
 import {Colors, wp, hp} from '../../../constant/colors';
 import TextInput from '../../../components/textInput';
 import DropDownAndroid from '../../../components/dropDown';
 import FlatButton from '../../../components/flatButton';
-import {STYLES} from '../../../constant/commonStyle';
 import Switch from '../../../components/switch';
 import {useDispatch, useSelector} from 'react-redux';
 import {updateProfile} from '../../../redux/actions/user';

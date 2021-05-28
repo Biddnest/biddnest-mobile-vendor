@@ -12,7 +12,6 @@ import {Colors, hp, wp} from '../../../constant/colors';
 import {STYLES} from '../../../constant/commonStyle';
 import TwoButton from '../../../components/twoButton';
 import CustomModalAndroid from '../../../components/customModal';
-import CloseIcon from '../../../components/closeIcon';
 import AcceptOrder from './acceptOrder';
 import {useSelector} from 'react-redux';
 import {STORE} from '../../../redux';

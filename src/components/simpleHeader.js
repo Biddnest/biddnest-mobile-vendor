@@ -6,7 +6,6 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import BackArrow from '../assets/svg/back_arrow.svg';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import CustomModalAndroid from './customModal';
-import CloseIcon from './closeIcon';
 import {useSelector} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';

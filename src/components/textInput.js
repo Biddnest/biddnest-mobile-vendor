@@ -48,6 +48,7 @@ const TextInput = (props) => {
         backgroundColor: Colors.white,
         borderBottomWidth: 2,
         alignItems: 'center',
+        ...props?.style,
       }}
       labelStyle={STYLES.inputTextLabel}
       inputStyle={[

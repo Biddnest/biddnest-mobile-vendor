@@ -6,7 +6,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Button from '../../../components/button';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import CustomModalAndroid from '../../../components/customModal';
-import CloseIcon from '../../../components/closeIcon';
 import DropDownAndroid from '../../../components/dropDown';
 import getDirections from 'react-native-google-maps-directions';
 import FlatButton from '../../../components/flatButton';

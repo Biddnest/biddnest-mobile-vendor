@@ -16,7 +16,6 @@ import SimpleHeader from '../../../components/simpleHeader';
 import {STYLES} from '../../../constant/commonStyle';
 import Switch from '../../../components/switch';
 import FilterButton from '../../../components/filterButton';
-import CloseIcon from '../../../components/closeIcon';
 import CustomModalAndroid from '../../../components/customModal';
 import TwoButton from '../../../components/twoButton';
 import FlatButton from '../../../components/flatButton';

@@ -13,7 +13,6 @@ import LinearGradient from 'react-native-linear-gradient';
 import SimpleHeader from '../../../components/simpleHeader';
 import {STYLES} from '../../../constant/commonStyle';
 import FilterButton from '../../../components/filterButton';
-import CloseIcon from '../../../components/closeIcon';
 import CustomModalAndroid from '../../../components/customModal';
 import FlatButton from '../../../components/flatButton';
 import DropDownAndroid from '../../../components/dropDown';

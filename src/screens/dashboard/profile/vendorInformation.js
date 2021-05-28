@@ -1,11 +1,9 @@
 import React, {useState} from 'react';
-import {Text, View} from 'react-native';
+import {View} from 'react-native';
 import CustomModalAndroid from '../../../components/customModal';
-import CloseIcon from '../../../components/closeIcon';
 import {hp} from '../../../constant/colors';
 import TextInput from '../../../components/textInput';
 import FlatButton from '../../../components/flatButton';
-import {STYLES} from '../../../constant/commonStyle';
 import {useDispatch, useSelector} from 'react-redux';
 import {updateProfile} from '../../../redux/actions/user';
 import {CustomAlert} from '../../../constant/commonFun';

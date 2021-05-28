@@ -2,8 +2,6 @@ import React from 'react';
 import {Text, View, StyleSheet} from 'react-native';
 import {Colors, hp, wp} from '../../../constant/colors';
 import LinearGradient from 'react-native-linear-gradient';
-import {STYLES} from '../../../constant/commonStyle';
-import CloseIcon from '../../../components/closeIcon';
 import CustomModalAndroid from '../../../components/customModal';
 import {useSelector} from 'react-redux';
 import moment from 'moment';
