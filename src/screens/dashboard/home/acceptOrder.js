@@ -7,6 +7,7 @@ import {
   Platform,
   Pressable,
   Image,
+  ScrollView,
 } from 'react-native';
 import {STYLES} from '../../../constant/commonStyle';
 import CloseIcon from '../../../components/closeIcon';
@@ -112,17 +113,7 @@ const AcceptOrder = (props) => {
   const renderStep0 = () => {
     return (
       <View style={{width: '100%', alignItems: 'center'}}>
-        <View style={styles.flexBoxWrapper}>
-          <EvilIcons
-            name={'exclamation'}
-            size={hp(2.7)}
-            color={Colors.inputTextColor}
-          />
-          <Text style={styles.warningText}>
-            You can directly change the quote here and set a new price.
-          </Text>
-        </View>
-        <View style={{width: '85%', marginTop: hp(2)}}>
+        <View style={{width: '90%', marginTop: hp(2)}}>
           <View style={styles.tableView}>
             <View
               style={{
@@ -232,11 +223,22 @@ const AcceptOrder = (props) => {
               )}
             />
           </View>
+          <View style={styles.flexBoxWrapper}>
+            <EvilIcons
+              name={'exclamation'}
+              size={hp(2.7)}
+              color={Colors.inputTextColor}
+            />
+            <Text style={styles.warningText}>
+              You can directly change the quote here and set a new price.
+            </Text>
+          </View>
           <View
             style={{
               flexDirection: 'row',
               alignItems: 'center',
               paddingHorizontal: hp(2),
+              marginTop: hp(2),
             }}>
             <Text
               style={{
@@ -347,7 +349,10 @@ const AcceptOrder = (props) => {
     );
   } else {
     return (
-      <CustomModalAndroid visible={props.visible} maxHeight={hp(90)}>
+      <CustomModalAndroid
+        visible={props.visible}
+        maxHeight={hp(90)}
+        scrollEnabled={false}>
         {step === 1 && (
           <Pressable
             onPress={() => setStep(0)}
@@ -375,282 +380,327 @@ const AcceptOrder = (props) => {
             props.onCloseIcon();
           }}
         />
-        {step === 0 ? (
-          renderStep0()
-        ) : step === 1 ? (
-          <View style={{width: '100%', alignItems: 'center', marginTop: hp(2)}}>
-            <DropDown
-              style={{
-                marginVertical: hp(2),
-              }}
-              value={applyBidData?.type_of_movement}
-              label={'Type Of Movement'}
-              width={wp(90)}
-              items={
-                source_meta?.shared_service == true
-                  ? [
-                      {label: 'Shared', value: 'shared'},
-                      {label: 'Dedicated', value: 'dedicated'},
-                    ]
-                  : [{label: 'Dedicated', value: 'dedicated'}]
-              }
-              onChangeItem={(text) => {
-                setApplyBidData({
-                  ...applyBidData,
-                  type_of_movement: text,
-                });
-              }}
-            />
+        <ScrollView
+          style={{flex: 1, maxHeight: hp(73)}}
+          scrollEnabled
+          showsVerticalScrollIndicator={false}
+          bounces={false}>
+          {step === 0 ? (
+            renderStep0()
+          ) : step === 1 ? (
             <View
-              style={{
-                width: '90%',
-                alignSelf: 'center',
-                marginTop: -hp(2),
-                zIndex: -1,
-              }}>
-              <View style={{width: '100%', alignSelf: 'center'}}>
-                <Pressable
-                  style={{marginTop: hp(3)}}
-                  onPress={() => setCalender(true)}>
-                  <Input
-                    placeholder={'Moving Date'}
-                    disabled={true}
-                    label={'Moving Date'}
-                    value={
-                      applyBidData?.moving_date &&
-                      applyBidData?.moving_date !== 'Invalid date' &&
-                      moment(applyBidData?.moving_date).format('D MMM yyyy')
-                    }
-                    rightIcon={() => {
-                      return (
-                        <MaterialIcons
-                          name="calendar-today"
-                          size={hp(3)}
-                          color={Colors.grey}
-                        />
-                      );
-                    }}
-                    inputContainerStyle={{
-                      borderWidth: 2,
-                      paddingHorizontal: 15,
-                      borderRadius: 10,
-                      height: hp(6.5),
-                      marginTop: hp(1),
-                      borderColor:
-                        errorDate === false ? Colors.red : Colors.silver,
-                      borderBottomWidth: 2,
-                    }}
-                    labelStyle={{
-                      fontFamily: 'Roboto-Bold',
-                      color: Colors.textLabelColor,
-                      fontSize: wp(4),
-                    }}
-                    inputStyle={{
-                      fontSize: wp(4),
-                      backgroundColor: Colors.textBG,
-                      color: Colors.inputTextColor,
-                      height: '99%',
-                    }}
-                  />
-                </Pressable>
-                <CustomModalAndroid
-                  visible={openCalender}
-                  title={'Choose Date'}
-                  onPress={() => {
-                    setCalender(false);
-                  }}>
-                  <Calendar
-                    markingType={'custom'}
-                    markedDates={dateArray}
-                    style={{width: wp(90), height: hp(50)}}
-                    current={new Date()}
-                    // minDate={new Date()}
-                    onDayPress={(day) => {
-                      let ind = Object.keys(dateArray).findIndex(
-                        (item) => item === day?.dateString,
-                      );
-                      if (ind >= 0) {
-                        let temp = {...dateArray};
-
-                        Object.keys(temp).forEach((i, index) => {
-                          if (i === day?.dateString) {
-                            temp[day?.dateString] = temp[day?.dateString]
-                              ?.customStyles?.text?.color
-                              ? {
-                                  selected: true,
-                                  selectedColor: Colors.btnBG,
-                                }
-                              : {
-                                  customStyles: {
-                                    text: {
-                                      color: Colors.inputTextColor,
-                                    },
-                                  },
-                                };
-                          } else {
-                            temp[i] = {
-                              customStyles: {
-                                text: {
-                                  color: Colors.inputTextColor,
-                                },
-                              },
-                            };
-                          }
-                        });
-                        setDateArray(temp);
-                        setCalenderDate(
-                          day?.dateString === calenderDate
-                            ? null
-                            : day?.dateString,
-                        );
-                      }
-                    }}
-                    monthFormat={'MMM yyyy'}
-                    showWeekNumbers={true}
-                    onPressArrowLeft={(subtractMonth) => subtractMonth()}
-                    onPressArrowRight={(addMonth) => addMonth()}
-                    disableAllTouchEventsForDisabledDays={true}
-                    enableSwipeMonths={true}
-                    theme={{
-                      dayTextColor: Colors.silver,
-                      todayTextColor: Colors.silver,
-                      arrowColor: Colors.btnBG,
-                    }}
-                  />
-                  <FlatButton
-                    label={'OKAY'}
-                    onPress={() => {
-                      setApplyBidData({
-                        ...applyBidData,
-                        moving_date: moment(calenderDate).format('yyyy-MM-DD'),
-                      });
-                      setCalender(false);
-                    }}
-                  />
-                </CustomModalAndroid>
-              </View>
-              <Text style={styles.dateBottomText}>
-                Select preferred moving date.
-              </Text>
-            </View>
-            <View style={{marginBottom: hp(2), marginTop: hp(2)}}>
+              style={{width: '100%', alignItems: 'center', marginTop: hp(2)}}>
               <DropDown
-                value={applyBidData?.vehicle_type}
-                label={'Vendor Type'}
+                style={{
+                  marginVertical: hp(2),
+                }}
+                value={applyBidData?.type_of_movement}
+                label={'Type Of Movement'}
                 width={wp(90)}
-                items={[{label: 'Tempo', value: 'tempo'}]}
+                items={
+                  source_meta?.shared_service == true
+                    ? [
+                        {label: 'Shared', value: 'shared'},
+                        {label: 'Dedicated', value: 'dedicated'},
+                      ]
+                    : [{label: 'Dedicated', value: 'dedicated'}]
+                }
                 onChangeItem={(text) => {
                   setApplyBidData({
                     ...applyBidData,
-                    vehicle_type: text,
+                    type_of_movement: text,
                   });
                 }}
               />
-            </View>
-            <View style={{marginBottom: hp(3)}}>
-              <Text style={STYLES.inputTextLabel}>
-                Minimun and Maximum Number of Man Power
-              </Text>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <View style={styles.manPowerView}>
-                  <Text style={[STYLES.inputTextStyle, {height: 'auto'}]}>
-                    {manPower?.min}
-                  </Text>
-                </View>
-                <Slider
-                  style={styles.sliderStyle}
-                  min={1}
-                  max={100}
-                  step={1}
-                  floatingLabel
-                  renderThumb={() => <View style={STYLES.sliderThumb} />}
-                  renderRail={() => (
-                    <View
-                      style={{
-                        ...STYLES.sliderRail,
-                        width: '100%',
-                        borderColor: '#EEE5FC',
+              <View
+                style={{
+                  width: '100%',
+                  alignSelf: 'center',
+                  marginTop: -hp(2),
+                  zIndex: -1,
+                }}>
+                <View style={{width: '100%', alignSelf: 'center'}}>
+                  <Pressable
+                    style={{marginTop: hp(3)}}
+                    onPress={() => setCalender(true)}>
+                    <Input
+                      placeholder={'Moving Date'}
+                      disabled={true}
+                      label={'Moving Date'}
+                      value={
+                        applyBidData?.moving_date &&
+                        applyBidData?.moving_date !== 'Invalid date' &&
+                        moment(applyBidData?.moving_date).format('D MMM yyyy')
+                      }
+                      rightIcon={() => {
+                        return (
+                          <MaterialIcons
+                            name="calendar-today"
+                            size={hp(3)}
+                            color={Colors.grey}
+                          />
+                        );
+                      }}
+                      inputContainerStyle={{
+                        borderWidth: 2,
+                        paddingHorizontal: 15,
+                        borderRadius: 10,
+                        height: hp(6.5),
+                        marginTop: hp(1),
+                        borderColor:
+                          errorDate === false ? Colors.red : Colors.silver,
+                        borderBottomWidth: 2,
+                      }}
+                      labelStyle={{
+                        fontFamily: 'Roboto-Bold',
+                        color: Colors.textLabelColor,
+                        fontSize: wp(4),
+                      }}
+                      inputStyle={{
+                        fontSize: wp(4),
+                        backgroundColor: Colors.textBG,
+                        color: Colors.inputTextColor,
+                        height: '99%',
                       }}
                     />
-                  )}
-                  renderRailSelected={() => <View style={STYLES.sliderRail} />}
-                  renderLabel={(value) => (
-                    <Text style={STYLES.sliderLabel}>{value}</Text>
-                  )}
-                  onValueChanged={handleValueChange}
+                  </Pressable>
+                  <CustomModalAndroid
+                    visible={openCalender}
+                    title={'Choose Date'}
+                    onPress={() => {
+                      setCalender(false);
+                    }}>
+                    <Calendar
+                      markingType={'custom'}
+                      markedDates={dateArray}
+                      style={{width: wp(90), height: hp(50)}}
+                      current={new Date()}
+                      // minDate={new Date()}
+                      onDayPress={(day) => {
+                        let ind = Object.keys(dateArray).findIndex(
+                          (item) => item === day?.dateString,
+                        );
+                        if (ind >= 0) {
+                          let temp = {...dateArray};
+
+                          Object.keys(temp).forEach((i, index) => {
+                            if (i === day?.dateString) {
+                              temp[day?.dateString] = temp[day?.dateString]
+                                ?.customStyles?.text?.color
+                                ? {
+                                    selected: true,
+                                    selectedColor: Colors.btnBG,
+                                  }
+                                : {
+                                    customStyles: {
+                                      text: {
+                                        color: Colors.inputTextColor,
+                                      },
+                                    },
+                                  };
+                            } else {
+                              temp[i] = {
+                                customStyles: {
+                                  text: {
+                                    color: Colors.inputTextColor,
+                                  },
+                                },
+                              };
+                            }
+                          });
+                          setDateArray(temp);
+                          setCalenderDate(
+                            day?.dateString === calenderDate
+                              ? null
+                              : day?.dateString,
+                          );
+                        }
+                      }}
+                      monthFormat={'MMM yyyy'}
+                      showWeekNumbers={true}
+                      onPressArrowLeft={(subtractMonth) => subtractMonth()}
+                      onPressArrowRight={(addMonth) => addMonth()}
+                      disableAllTouchEventsForDisabledDays={true}
+                      enableSwipeMonths={true}
+                      theme={{
+                        dayTextColor: Colors.silver,
+                        todayTextColor: Colors.silver,
+                        arrowColor: Colors.btnBG,
+                      }}
+                    />
+                    <FlatButton
+                      label={'OKAY'}
+                      onPress={() => {
+                        setApplyBidData({
+                          ...applyBidData,
+                          moving_date: moment(calenderDate).format(
+                            'yyyy-MM-DD',
+                          ),
+                        });
+                        setCalender(false);
+                      }}
+                    />
+                  </CustomModalAndroid>
+                </View>
+                <Text style={styles.dateBottomText}>
+                  Select preferred moving date.
+                </Text>
+              </View>
+              <View style={{marginBottom: hp(2), marginTop: hp(2)}}>
+                <DropDown
+                  value={applyBidData?.vehicle_type}
+                  label={'Vendor Type'}
+                  width={wp(90)}
+                  items={[{label: 'Tempo', value: 'tempo'}]}
+                  onChangeItem={(text) => {
+                    setApplyBidData({
+                      ...applyBidData,
+                      vehicle_type: text,
+                    });
+                  }}
                 />
-                <View style={styles.manPowerView}>
-                  <Text style={[STYLES.inputTextStyle, {height: 'auto'}]}>
-                    {manPower?.max}
+              </View>
+              <View style={{marginBottom: hp(3)}}>
+                <Text style={STYLES.inputTextLabel}>
+                  Minimun and Maximum Number of Man Power
+                </Text>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <View style={styles.manPowerView}>
+                    <Text style={[STYLES.inputTextStyle, {height: 'auto'}]}>
+                      {manPower?.min}
+                    </Text>
+                  </View>
+                  <Slider
+                    style={styles.sliderStyle}
+                    min={1}
+                    max={100}
+                    step={1}
+                    floatingLabel
+                    renderThumb={() => <View style={STYLES.sliderThumb} />}
+                    renderRail={() => (
+                      <View
+                        style={{
+                          ...STYLES.sliderRail,
+                          width: '100%',
+                          borderColor: '#EEE5FC',
+                        }}
+                      />
+                    )}
+                    renderRailSelected={() => (
+                      <View style={STYLES.sliderRail} />
+                    )}
+                    renderLabel={(value) => (
+                      <Text style={STYLES.sliderLabel}>{value}</Text>
+                    )}
+                    onValueChanged={handleValueChange}
+                  />
+                  <View style={styles.manPowerView}>
+                    <Text style={[STYLES.inputTextStyle, {height: 'auto'}]}>
+                      {manPower?.max}
+                    </Text>
+                  </View>
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    marginTop: 0,
+                  }}>
+                  <Text
+                    style={[
+                      styles.dateBottomText,
+                      {
+                        fontFamily: 'Roboto-Regular',
+                        marginTop: 0,
+                      },
+                    ]}>
+                    Min
+                  </Text>
+                  <Text
+                    style={[
+                      styles.dateBottomText,
+                      {
+                        fontFamily: 'Roboto-Regular',
+                        marginTop: 0,
+                        marginLeft: 0,
+                        marginRight: wp(3),
+                      },
+                    ]}>
+                    Max
                   </Text>
                 </View>
               </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  marginTop: 0,
-                }}>
-                <Text
-                  style={[
-                    styles.dateBottomText,
-                    {
-                      fontFamily: 'Roboto-Regular',
-                      marginTop: 0,
-                    },
-                  ]}>
-                  Min
-                </Text>
-                <Text
-                  style={[
-                    styles.dateBottomText,
-                    {
-                      fontFamily: 'Roboto-Regular',
-                      marginTop: 0,
-                      marginLeft: 0,
-                      marginRight: wp(3),
-                    },
-                  ]}>
-                  Max
-                </Text>
-              </View>
             </View>
-          </View>
-        ) : (
-          <View style={{width: '100%', alignItems: 'center'}}>
-            {(forgotPin && (
-              <View
-                style={{
-                  width: '85%',
-                  marginVertical: hp(2),
-                }}>
-                <TextInput
-                  label={'Password'}
-                  secureTextEntry={true}
-                  placeHolder={'**********'}
-                  isRight={error.password}
-                  onChange={(text) =>
-                    setModalData({...modalData, password: text})
-                  }
-                />
-                <View style={{marginLeft: wp(2)}}>
-                  <Text style={STYLES.inputTextLabel}>New 4 digit PIN</Text>
+          ) : (
+            <View style={{width: wp(90), alignItems: 'center'}}>
+              {(forgotPin && (
+                <View
+                  style={{
+                    width: '100%',
+                    marginVertical: hp(2),
+                  }}>
+                  <TextInput
+                    label={'Password'}
+                    secureTextEntry={true}
+                    placeHolder={'**********'}
+                    isRight={error.password}
+                    onChange={(text) =>
+                      setModalData({...modalData, password: text})
+                    }
+                  />
+                  <View style={{marginLeft: wp(2)}}>
+                    <Text style={STYLES.inputTextLabel}>New 4 digit PIN</Text>
+                    <View
+                      style={{
+                        height: hp(9),
+                        width: hp(28),
+                      }}>
+                      <OTPInputView
+                        pinCount={4}
+                        onCodeChanged={(code) =>
+                          setModalData({...modalData, pin: code})
+                        }
+                        codeInputFieldStyle={[
+                          styles.textInput,
+                          {
+                            borderColor:
+                              error.pin === false ? Colors.red : Colors.silver,
+                          },
+                        ]}
+                        codeInputHighlightStyle={[
+                          styles.textInput,
+                          {borderColor: '#243C99'},
+                        ]}
+                      />
+                    </View>
+                  </View>
+                </View>
+              )) || (
+                <View
+                  style={{
+                    width: '100%',
+                    marginVertical: hp(2),
+                    alignItems: 'center',
+                  }}>
+                  <Text style={STYLES.inputTextLabel}>
+                    Enter your 4 digit pin below
+                  </Text>
                   <View
                     style={{
-                      height: hp(9),
+                      height: hp(13),
                       width: hp(28),
                     }}>
                     <OTPInputView
                       pinCount={4}
-                      onCodeChanged={(code) =>
-                        setModalData({...modalData, pin: code})
+                      onCodeChanged={(text) =>
+                        setApplyBidData({...applyBidData, pin: parseInt(text)})
                       }
                       codeInputFieldStyle={[
                         styles.textInput,
                         {
                           borderColor:
-                            error.pin === false ? Colors.red : Colors.silver,
+                            errorPin === true ? Colors.red : Colors.silver,
                         },
                       ]}
                       codeInputHighlightStyle={[
@@ -659,50 +709,16 @@ const AcceptOrder = (props) => {
                       ]}
                     />
                   </View>
+                  <Text
+                    style={[STYLES.inputTextLabel, {color: Colors.darkBlue}]}
+                    onPress={() => setForgotPin(true)}>
+                    Forgot PIN?
+                  </Text>
                 </View>
-              </View>
-            )) || (
-              <View
-                style={{
-                  width: '85%',
-                  marginVertical: hp(2),
-                  alignItems: 'center',
-                }}>
-                <Text style={STYLES.inputTextLabel}>
-                  Enter your 4 digit pin below
-                </Text>
-                <View
-                  style={{
-                    height: hp(13),
-                    width: hp(28),
-                  }}>
-                  <OTPInputView
-                    pinCount={4}
-                    onCodeChanged={(text) =>
-                      setApplyBidData({...applyBidData, pin: parseInt(text)})
-                    }
-                    codeInputFieldStyle={[
-                      styles.textInput,
-                      {
-                        borderColor:
-                          errorPin === true ? Colors.red : Colors.silver,
-                      },
-                    ]}
-                    codeInputHighlightStyle={[
-                      styles.textInput,
-                      {borderColor: '#243C99'},
-                    ]}
-                  />
-                </View>
-                <Text
-                  style={[STYLES.inputTextLabel, {color: Colors.darkBlue}]}
-                  onPress={() => setForgotPin(true)}>
-                  Forgot PIN?
-                </Text>
-              </View>
-            )}
-          </View>
-        )}
+              )}
+            </View>
+          )}
+        </ScrollView>
         {!success && (
           <FlatButton
             isLaoding={isLoading}
@@ -796,6 +812,11 @@ const AcceptOrder = (props) => {
                           setForgotPin(false);
                         } else {
                           CustomAlert(res?.data?.message);
+                          setTimeout(() => {
+                            setStep(0);
+                            setForgotPin(false);
+                            props.onCloseIcon();
+                          }, 1500);
                         }
                       })
                       .catch((err) => {
@@ -824,7 +845,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   flexBoxWrapper: {
-    width: '85%',
+    width: '100%',
     marginTop: hp(2),
     backgroundColor: '#FDFAE8',
     borderRadius: 8,

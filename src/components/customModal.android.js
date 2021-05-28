@@ -42,6 +42,7 @@ const CustomModalAndroid = (props) => {
             )}
             {props.onPress && <CloseIcon onPress={props.onPress} />}
             <ScrollView
+              scrollEnabled={props.scrollEnabled}
               bounces={false}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{alignItems: 'center'}}>
