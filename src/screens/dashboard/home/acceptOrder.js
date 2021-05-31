@@ -359,12 +359,12 @@ const AcceptOrder = (props) => {
             style={{
               position: 'absolute',
               left: hp(2),
-              top: hp(2),
+              top: hp(2.5),
             }}>
             <Ionicons
               name="arrow-back-sharp"
               size={hp(3.5)}
-              color={'#C9CDCF'}
+              color={Colors.black}
             />
           </Pressable>
         )}
@@ -564,7 +564,7 @@ const AcceptOrder = (props) => {
               </View>
               <View style={{marginBottom: hp(3)}}>
                 <Text style={STYLES.inputTextLabel}>
-                  Minimun and Maximum Number of Man Power
+                  Minimum and Maximum Number of Man Power
                 </Text>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                   <View style={styles.manPowerView}>
