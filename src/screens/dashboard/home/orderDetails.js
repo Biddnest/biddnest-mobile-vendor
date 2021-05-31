@@ -293,7 +293,9 @@ const OrderDetails = (props) => {
               <View style={STYLES.flexBoxOrders}>
                 <View style={[STYLES.priceView, {width: '40%'}]}>
                   <Text style={STYLES.participatedText}>
-                    Rs. {orderDetails?.final_estimated_quote}
+                    ₹{' '}
+                    {orderDetails?.bid?.bid_amount ||
+                      orderDetails?.final_estimated_quote}
                   </Text>
                 </View>
                 <View style={[STYLES.priceView, {width: '40%'}]}>
@@ -339,9 +341,8 @@ const OrderDetails = (props) => {
             </View>
           </View>
           {!orderDetails?.final_quote &&
-            (orderDetails?.bid?.bid_type === 1
-              ? orderDetails?.bid?.status === 1
-              : orderDetails?.bid?.status !== 1) && (
+            orderDetails?.bid?.bid_type === 1 &&
+            orderDetails?.bid?.status === 0 && (
               <View style={styles.flexBoxWrapper}>
                 <Text style={styles.warningText}>
                   You already submitted a bid for this order but its happened
@@ -437,15 +438,11 @@ const OrderDetails = (props) => {
                 style={{
                   marginHorizontal: wp(5),
                   marginTop: hp(2),
-                }}>
-                {renderText('Pincode', source_meta?.pincode)}
-              </View>
-              <View
-                style={{
-                  marginHorizontal: wp(5),
-                  marginTop: hp(2),
                   flexDirection: 'row',
                 }}>
+                <View style={{flex: 1}}>
+                  {renderText('Pincode', source_meta?.pincode)}
+                </View>
                 <View style={{flex: 1}}>
                   {renderText('Floor', source_meta?.floor)}
                 </View>
@@ -484,15 +481,11 @@ const OrderDetails = (props) => {
                 style={{
                   marginHorizontal: wp(5),
                   marginTop: hp(2),
-                }}>
-                {renderText('Pincode', destination_meta?.pincode)}
-              </View>
-              <View
-                style={{
-                  marginHorizontal: wp(5),
-                  marginTop: hp(2),
                   flexDirection: 'row',
                 }}>
+                <View style={{flex: 1}}>
+                  {renderText('Pincode', destination_meta?.pincode)}
+                </View>
                 <View style={{flex: 1}}>
                   {renderText('Floor', destination_meta?.floor)}
                 </View>
@@ -564,7 +557,7 @@ const OrderDetails = (props) => {
                   <View style={STYLES.flexBox}>
                     <Text style={STYLES.leftText}>BID PRICE</Text>
                     <Text style={STYLES.rightText}>
-                      Rs. {orderDetails?.final_quote}
+                      ₹ {orderDetails?.final_quote}
                     </Text>
                   </View>
 

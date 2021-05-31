@@ -80,7 +80,7 @@ const PayOutDetails = (props) => {
               Total Amount
             </Text>
             <Text style={[styles.bottomText, {maxWidth: '35%'}]}>
-              Rs. {data?.amount}
+              ₹ {data?.amount}
             </Text>
           </View>
           <View style={styles.flexBox}>
@@ -88,7 +88,7 @@ const PayOutDetails = (props) => {
               Commission(10%)
             </Text>
             <Text style={[styles.bottomText, {maxWidth: '35%'}]}>
-              Rs. {data?.commission}
+              ₹ {data?.commission}
             </Text>
           </View>
           {/*<View style={styles.flexBox}>*/}
@@ -130,7 +130,7 @@ const PayOutDetails = (props) => {
                 fontFamily: 'Roboto-Bold',
                 color: Colors.white,
               }}>
-              Rs. {data?.final_payout}
+              ₹ {data?.final_payout}
             </Text>
           </LinearGradient>
         </View>

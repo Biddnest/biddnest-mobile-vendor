@@ -50,7 +50,7 @@ const PrivacyPolicy = (props) => {
       />
       {isLoading && <LoadingScreen />}
       <ScrollView
-        style={{flex: 1}}
+        style={{flex: 1, marginBottom: wp(5)}}
         showsVerticalScrollIndicator={false}
         bounces={false}>
         <View style={styles.inputForm}>

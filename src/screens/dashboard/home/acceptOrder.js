@@ -94,7 +94,7 @@ const AcceptOrder = (props) => {
       let temp = [];
       priceList?.inventories.forEach((item) => {
         temp.push({
-          booking_inventory_id: item?.bid_inventory_id || 0,
+          booking_inventory_id: item?.bid_inventory_id,
           amount: item?.price || 0,
         });
       });
@@ -188,7 +188,7 @@ const AcceptOrder = (props) => {
                             textTransform: 'capitalize',
                           },
                         ]}>
-                        Size: {item?.size}
+                        {item?.size} / {item?.material}
                       </Text>
                     </View>
                     <View style={{width: '40%'}}>
@@ -368,7 +368,9 @@ const AcceptOrder = (props) => {
             />
           </Pressable>
         )}
-        <Text style={STYLES.modalHeaderText}>APPLY FOR BID</Text>
+        <Text style={STYLES.modalHeaderText}>
+          {forgotPin ? 'FORGOT PASSWORD' : 'APPLY FOR BID'}
+        </Text>
         <CloseIcon
           onPress={() => {
             setStepData({
@@ -474,7 +476,7 @@ const AcceptOrder = (props) => {
                       markingType={'custom'}
                       markedDates={dateArray}
                       style={{width: wp(90), height: hp(50)}}
-                      current={new Date()}
+                      current={Object.keys(dateArray)[0]}
                       // minDate={new Date()}
                       onDayPress={(day) => {
                         let ind = Object.keys(dateArray).findIndex(
@@ -654,7 +656,9 @@ const AcceptOrder = (props) => {
                     <View
                       style={{
                         height: hp(9),
-                        width: hp(28),
+                        width: hp(40),
+                        alignSelf: 'center',
+                        // backgroundColor: 'pink'
                       }}>
                       <OTPInputView
                         pinCount={4}

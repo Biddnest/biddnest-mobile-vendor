@@ -18,6 +18,7 @@ import {STORE} from '../../../redux';
 import {APICall} from '../../../redux/actions/user';
 import {CustomAlert, resetNavigator} from '../../../constant/commonFun';
 import {Html5Entities} from 'html-entities';
+import Lightbox from 'react-native-lightbox';
 
 const Requirements = (props) => {
   const entities = new Html5Entities();
@@ -183,11 +184,13 @@ const Requirements = (props) => {
                         backgroundColor: Colors.silver,
                         marginRight: wp(3),
                       }}>
-                      <Image
-                        source={{uri: item}}
-                        style={{height: '100%', width: '100%'}}
-                        resizeMode={'contain'}
-                      />
+                      <Lightbox>
+                        <Image
+                          source={{uri: item}}
+                          style={{height: '100%', width: '100%'}}
+                          resizeMode={'contain'}
+                        />
+                      </Lightbox>
                     </Pressable>
                   );
                 })}

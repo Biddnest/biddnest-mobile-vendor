@@ -137,7 +137,7 @@ const PayOuts = (props) => {
             {moment(item?.dispatch_at).format('Do MMM YYYY')}
           </Text>
           <Text style={[styles.topText, {color: Colors.darkBlue}]}>
-            Rs. {item?.final_payout}
+              ₹ {item?.final_payout}
           </Text>
         </View>
         <Text style={[styles.bottomText, {width: '100%', marginTop: hp(1)}]}>

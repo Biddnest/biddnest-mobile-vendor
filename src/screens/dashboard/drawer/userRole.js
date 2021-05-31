@@ -37,6 +37,7 @@ const UserRole = (props) => {
   const [detailsVisible, setDetailsVisible] = useState(false);
   const [detailsData, setDetailsData] = useState({});
   const [filterVisible, setFilterVisible] = useState(false);
+  const [filterApplied, setFilterApplied] = useState(false);
   const [filterData, setFilterData] = useState({
     status: 1,
     branch: 15,
@@ -249,9 +250,13 @@ const UserRole = (props) => {
             margin: hp(2),
           }}
           data={userRoles?.user_role}
-          onRefresh={() =>
-            getUserRoleList({}, userRoles?.paging?.next_page || 1)
-          }
+          onRefresh={() => {
+            if (filterApplied) {
+              getUserRoleList(filterData);
+            } else {
+              getUserRoleList({}, userRoles?.paging?.next_page || 1);
+            }
+          }}
           ListHeaderComponent={() => {
             if (userRoles?.user_role?.length > 0) {
               return (
@@ -308,9 +313,13 @@ const UserRole = (props) => {
           refreshing={isLoading}
           extraData={userRoles?.user_role}
           onEndReachedThreshold={0.5}
-          // onEndReached={() =>
-          //   getUserRoleList({}, userRoles?.paging?.next_page || 1)
-          // }
+          onEndReached={() => {
+            if (filterApplied) {
+              getUserRoleList(filterData);
+            } else {
+              getUserRoleList({}, userRoles?.paging?.next_page || 1);
+            }
+          }}
           renderItem={renderItem}
           ItemSeparatorComponent={() => (
             <View style={[STYLES.separatorView, {marginTop: 0}]} />
@@ -439,10 +448,17 @@ const UserRole = (props) => {
             }}
           />
         </View>
-        <FlatButton
-          label={'apply'}
-          onPress={() => {
+        <TwoButton
+          leftLabel={'clear filter'}
+          rightLabel={'apply'}
+          leftOnPress={() => {
+            getUserRoleList({});
+            setFilterApplied(false);
+            setFilterVisible(false);
+          }}
+          rightOnPress={() => {
             getUserRoleList(filterData);
+            setFilterApplied(true);
             setFilterVisible(false);
           }}
         />

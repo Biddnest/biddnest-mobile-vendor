@@ -205,7 +205,10 @@ const Orders = (props) => {
               <View style={STYLES.flexBoxOrders}>
                 <View style={STYLES.priceView}>
                   <Text style={STYLES.participatedText}>
-                    Rs. {item?.final_quote || item?.final_estimated_quote}
+                    ₹{' '}
+                    {item?.final_quote ||
+                      item?.bid?.bid_amount ||
+                      item?.final_estimated_quote}
                   </Text>
                 </View>
                 <View style={STYLES.priceView}>
@@ -311,7 +314,7 @@ const Orders = (props) => {
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>bid price</Text>
               <Text style={[STYLES.rightText, {width: '50%'}]}>
-                Rs. {item?.final_quote}
+                ₹ {item?.final_quote}
               </Text>
             </View>
             <View style={STYLES.flexBox}>

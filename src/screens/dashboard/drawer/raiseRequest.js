@@ -10,6 +10,8 @@ import {APICall} from '../../../redux/actions/user';
 import {CustomAlert} from '../../../constant/commonFun';
 import {useSelector} from 'react-redux';
 import DropDownAndroid from '../../../components/dropDown';
+import {Picker} from '@react-native-picker/picker';
+import {STYLES} from '../../../constant/commonStyle';
 
 const RaiseRequest = (props) => {
   const public_booking_id = props?.route?.params?.public_booking_id || null;
@@ -33,9 +35,15 @@ const RaiseRequest = (props) => {
       value: Object.values(configData)[index],
     });
   });
+  if (dropdownDefault.findIndex((item) => item.value === null) === -1) {
+    dropdownDefault.unshift({
+      label: '-Select-',
+      value: null,
+    });
+  }
 
   return (
-    <LinearGradient colors={[Colors.pageBG, Colors.white]} style={{flex: 1}}>
+    <View style={{flex: 1}}>
       <SimpleHeader
         headerText={'Raise a Request'}
         navigation={props.navigation}
@@ -46,93 +54,140 @@ const RaiseRequest = (props) => {
       <ScrollView
         bounces={false}
         showsVerticalScrollIndicator={false}
-        style={{flex: 1, margin: hp(3)}}>
-        <View style={{marginBottom: hp(3), zIndex: 5002}}>
-          <DropDownAndroid
-            customDropDown={
-              error?.category === false
-                ? {
-                    borderColor: 'red',
-                    borderWidth: 2,
-                  }
-                : {}
+        style={{flex: 1}}>
+        <LinearGradient
+          colors={[Colors.pageBG, Colors.white]}
+          style={{flex: 1, padding: hp(3)}}>
+          <View
+            style={{
+              width: wp(90),
+              paddingHorizontal: 10,
+              marginBottom: hp(2),
+            }}>
+            <Text
+              style={{
+                fontFamily: 'Roboto-Bold',
+                color: Colors.textLabelColor,
+                fontSize: wp(4),
+                marginBottom: hp(1),
+              }}>
+              {'Category'}
+            </Text>
+            <View
+              style={{
+                borderWidth: 2,
+                borderRadius: 10,
+                height: hp(6),
+                borderColor: error?.category === false ? 'red' : Colors.silver,
+                backgroundColor: Colors.white,
+                borderBottomWidth: 2,
+                ...STYLES.common,
+              }}>
+              <Picker
+                style={{
+                  height: '99%',
+                  width: '100%',
+                }}
+                // selectedValue={editItem ? editData?.name : addData?.name}
+                onValueChange={(text) => setData({...data, category: text})}>
+                {dropdownDefault.map((item, index) => {
+                  return (
+                    <Picker.Item label={item?.label} value={item?.value} />
+                  );
+                })}
+              </Picker>
+            </View>
+          </View>
+          {/*<View style={{marginBottom: hp(3)}}>*/}
+          {/*  <DropDownAndroid*/}
+          {/*    customDropDown={*/}
+          {/*      error?.category === false*/}
+          {/*        ? {*/}
+          {/*            borderColor: 'red',*/}
+          {/*            borderWidth: 2,*/}
+          {/*          }*/}
+          {/*        : {}*/}
+          {/*    }*/}
+          {/*    width={wp(90)}*/}
+          {/*    label={'Category'}*/}
+          {/*    items={dropdownDefault}*/}
+          {/*    onChangeItem={(text) => setData({...data, category: text})}*/}
+          {/*  />*/}
+          {/*</View>*/}
+          <TextInput
+            isRight={error?.heading}
+            value={data?.heading}
+            label={'Subject'}
+            placeHolder={'Abc'}
+            onChange={(text) => setData({...data, heading: text})}
+          />
+          {error?.heading === false && (
+            <Text style={styles.errorText}>Minimun 6 character required</Text>
+          )}
+          <TextInput
+            isRight={error?.desc}
+            value={data?.desc}
+            label={'Message'}
+            placeHolder={
+              'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.'
             }
-            width={wp(90)}
-            label={'Category'}
-            items={dropdownDefault}
-            onChangeItem={(text) => setData({...data, category: text})}
+            numberOfLines={4}
+            height={hp(20)}
+            onChange={(text) => setData({...data, desc: text})}
           />
-        </View>
-        <TextInput
-          isRight={error?.heading}
-          value={data?.heading}
-          label={'Subject'}
-          placeHolder={'Abc'}
-          onChange={(text) => setData({...data, heading: text})}
-        />
-        {error?.heading === false && (
-          <Text style={styles.errorText}>Minimun 6 character required</Text>
-        )}
-        <TextInput
-          isRight={error?.desc}
-          value={data?.desc}
-          label={'Message'}
-          placeHolder={
-            'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.'
-          }
-          numberOfLines={4}
-          height={hp(20)}
-          onChange={(text) => setData({...data, desc: text})}
-        />
-        {error?.desc === false && (
-          <Text style={styles.errorText}>Minimun 15 character required</Text>
-        )}
-        <View style={{alignSelf: 'center'}}>
-          <Button
-            label={'submit'}
-            isLoading={isLoading}
-            onPress={() => {
-              // API call
-              setLoading(true);
-              let tempError = {};
-              tempError.category = !!(data?.category !== '');
-              tempError.heading = !(!data?.heading || data?.heading.length < 6);
-              tempError.desc = !(!data?.desc || data?.desc.length < 15);
-              setError(tempError);
-              if (
-                Object.values(tempError).findIndex((item) => item === false) ===
-                -1
-              ) {
-                let obj = {
-                  url: 'tickets/create',
-                  method: 'post',
-                  headers: {
-                    Authorization:
-                      'Bearer ' + STORE.getState().Login?.loginData?.token,
-                  },
-                  data: data,
-                };
-                APICall(obj)
-                  .then((res) => {
-                    if (res?.data?.status === 'success') {
-                      CustomAlert('Ticket Raised Successfully');
-                      props.navigation.goBack();
-                    } else {
-                      CustomAlert(res?.data?.message);
-                    }
-                  })
-                  .catch((err) => {
-                    CustomAlert(err);
-                  });
-              } else {
-                setLoading(false);
-              }
-            }}
-            spaceTop={hp(2)}
-          />
-        </View>
+          {error?.desc === false && (
+            <Text style={styles.errorText}>Minimum 15 character required</Text>
+          )}
+          <View style={{alignSelf: 'center'}}>
+            <Button
+              label={'submit'}
+              isLoading={isLoading}
+              onPress={() => {
+                // API call
+                setLoading(true);
+                let tempError = {};
+                tempError.category = !!(data?.category !== '');
+                tempError.heading = !(
+                  !data?.heading || data?.heading.length < 6
+                );
+                tempError.desc = !(!data?.desc || data?.desc.length < 15);
+                setError(tempError);
+                if (
+                  Object.values(tempError).findIndex(
+                    (item) => item === false,
+                  ) === -1
+                ) {
+                  let obj = {
+                    url: 'tickets/create',
+                    method: 'post',
+                    headers: {
+                      Authorization:
+                        'Bearer ' + STORE.getState().Login?.loginData?.token,
+                    },
+                    data: data,
+                  };
+                  APICall(obj)
+                    .then((res) => {
+                      if (res?.data?.status === 'success') {
+                        CustomAlert('Ticket Raised Successfully');
+                        props.navigation.goBack();
+                      } else {
+                        CustomAlert(res?.data?.message);
+                      }
+                    })
+                    .catch((err) => {
+                      CustomAlert(err);
+                    });
+                } else {
+                  setLoading(false);
+                }
+              }}
+              spaceTop={hp(2)}
+            />
+          </View>
+        </LinearGradient>
       </ScrollView>
-    </LinearGradient>
+    </View>
   );
 };
 

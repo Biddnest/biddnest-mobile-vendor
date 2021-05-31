@@ -54,7 +54,70 @@ const EditProfile = (props) => {
             width: wp(100),
             padding: hp(2),
           }}>
-          <View style={{flexDirection: 'row'}}>
+          <View style={{marginHorizontal: wp(3)}}>
+            <Text
+              style={{
+                fontFamily: 'Roboto-Bold',
+                color: Colors.textLabelColor,
+                fontSize: wp(4),
+              }}>
+              Image
+            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                height: wp(18),
+                marginTop: hp(1),
+              }}>
+              <View style={styles.profilePhoto}>
+                <Image
+                  source={{
+                    uri: data?.image?.includes('data:image/jpeg;base64,')
+                      ? data?.image
+                      : data?.image + '?' + new Date(),
+                  }}
+                  style={{height: '100%', width: '100%'}}
+                  resizeMode={'contain'}
+                />
+              </View>
+              <View
+                style={{
+                  justifyContent: 'center',
+                  marginLeft: wp(5),
+                  height: wp(18),
+                }}>
+                <Ripple
+                  rippleColor={Colors.white}
+                  onPress={async () => {
+                    ImageSelection()
+                      .then((res) => {
+                        handleState('image', res);
+                      })
+                      .catch((err) => {});
+                  }}
+                  style={styles.imageUploadBtn}>
+                  <Text
+                    style={{
+                      fontFamily: 'Roboto-Bold',
+                      fontSize: wp(3.8),
+                      color: Colors.white,
+                    }}>
+                    UPLOAD IMAGE
+                  </Text>
+                </Ripple>
+                {/*<Text*/}
+                {/*  style={{*/}
+                {/*    color: Colors.inputTextColor,*/}
+                {/*    fontSize: wp(3.4),*/}
+                {/*    fontFamily: 'Roboto-Light',*/}
+                {/*  }}>*/}
+                {/*  Max File size: 1MB*/}
+                {/*</Text>*/}
+              </View>
+            </View>
+          </View>
+          <View style={{flexDirection: 'row', marginTop: hp(3)}}>
             <View style={{width: wp(45)}}>
               <TextInput
                 value={data?.fname}
@@ -177,67 +240,6 @@ const EditProfile = (props) => {
           {/*  </View>*/}
           {/*</View>*/}
           <View style={{marginHorizontal: wp(3)}}>
-            <Text
-              style={{
-                fontFamily: 'Roboto-Bold',
-                color: Colors.textLabelColor,
-                fontSize: wp(4),
-              }}>
-              Image
-            </Text>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                height: wp(18),
-                marginTop: hp(1),
-              }}>
-              <View style={styles.profilePhoto}>
-                <Image
-                  source={{
-                    uri: data?.image?.includes('data:image/jpeg;base64,')
-                      ? data?.image
-                      : data?.image + '?' + new Date(),
-                  }}
-                  style={{height: '100%', width: '100%'}}
-                  resizeMode={'contain'}
-                />
-              </View>
-              <View
-                style={{
-                  justifyContent: 'space-between',
-                  marginLeft: wp(5),
-                  height: wp(18),
-                }}>
-                <Ripple
-                  rippleColor={Colors.white}
-                  onPress={async () => {
-                    ImageSelection()
-                      .then((res) => {
-                        handleState('image', res);
-                      })
-                      .catch((err) => {});
-                  }}
-                  style={styles.imageUploadBtn}>
-                  <Text
-                    style={{
-                      fontFamily: 'Roboto-Bold',
-                      fontSize: wp(3.8),
-                      color: Colors.white,
-                    }}>
-                    UPLOAD IMAGE
-                  </Text>
-                </Ripple>
-                <Text
-                  style={{
-                    color: Colors.inputTextColor,
-                    fontSize: wp(3.4),
-                    fontFamily: 'Roboto-Light',
-                  }}>
-                  Max File size: 1MB
-                </Text>
-              </View>
-            </View>
             <Button
               isLoading={isLoading}
               spaceBottom={wp(0.1)}

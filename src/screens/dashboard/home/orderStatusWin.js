@@ -37,7 +37,7 @@ const OrderStatusWin = (props) => {
   driverVehicleList?.drivers?.forEach((item, index) => {
     driverList.push({
       ...item,
-      label: item?.fname,
+      label: item?.fname + ' ' + item?.lname,
       value: item?.id,
     });
   });
@@ -67,51 +67,57 @@ const OrderStatusWin = (props) => {
     {};
   return (
     <View>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-evenly',
-          alignItems: 'center',
-          marginTop: hp(3),
-        }}>
-        <View style={{alignItems: 'center'}}>
-          <Pressable
-            style={STYLES.circleBtnView}
-            onPress={() => Linking.openURL(`tel:${orderDetails?.user?.phone}`)}>
-            <Ionicons
-              name={'call-outline'}
-              color={Colors.darkBlue}
-              size={wp(7)}
-            />
-          </Pressable>
-          <Text style={STYLES.circleBottomText}>Call Customer</Text>
-        </View>
-        <View style={{alignItems: 'center'}}>
-          <Pressable
-            style={STYLES.circleBtnView}
-            onPress={() => {
-              const directionData = {
-                source: {
-                  latitude: parseFloat(orderDetails?.source_lat),
-                  longitude: parseFloat(orderDetails?.source_lng),
-                },
-                destination: {
-                  latitude: parseFloat(orderDetails?.destination_lat),
-                  longitude: parseFloat(orderDetails?.destination_lng),
-                },
-              };
-              getDirections(directionData);
+      {orderDetails?.status !== 4 && (
+        <View>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-evenly',
+              alignItems: 'center',
+              marginTop: hp(3),
             }}>
-            <Ionicons
-              name={'navigate-outline'}
-              color={Colors.darkBlue}
-              size={wp(7)}
-            />
-          </Pressable>
-          <Text style={STYLES.circleBottomText}>Direction</Text>
+            <View style={{alignItems: 'center'}}>
+              <Pressable
+                style={STYLES.circleBtnView}
+                onPress={() =>
+                  Linking.openURL(`tel:${orderDetails?.user?.phone}`)
+                }>
+                <Ionicons
+                  name={'call-outline'}
+                  color={Colors.darkBlue}
+                  size={wp(7)}
+                />
+              </Pressable>
+              <Text style={STYLES.circleBottomText}>Call Customer</Text>
+            </View>
+            <View style={{alignItems: 'center'}}>
+              <Pressable
+                style={STYLES.circleBtnView}
+                onPress={() => {
+                  const directionData = {
+                    source: {
+                      latitude: parseFloat(orderDetails?.source_lat),
+                      longitude: parseFloat(orderDetails?.source_lng),
+                    },
+                    destination: {
+                      latitude: parseFloat(orderDetails?.destination_lat),
+                      longitude: parseFloat(orderDetails?.destination_lng),
+                    },
+                  };
+                  getDirections(directionData);
+                }}>
+                <Ionicons
+                  name={'navigate-outline'}
+                  color={Colors.darkBlue}
+                  size={wp(7)}
+                />
+              </Pressable>
+              <Text style={STYLES.circleBottomText}>Direction</Text>
+            </View>
+          </View>
+          <View style={[STYLES.separatorView, {marginBottom: wp(5)}]} />
         </View>
-      </View>
-      <View style={[STYLES.separatorView, {marginBottom: wp(5)}]} />
+      )}
       {((orderDetails?.status === 6 || orderDetails?.status === 7) && (
         <View style={{alignItems: 'center'}}>
           <Button
@@ -124,7 +130,13 @@ const OrderStatusWin = (props) => {
       )) ||
         null}
       {orderDetails?.driver === null && (
-        <View style={styles.flexBoxWrapper}>
+        <View
+          style={[
+            styles.flexBoxWrapper,
+            {
+              marginTop: orderDetails?.status !== 4 ? 0 : hp(2),
+            },
+          ]}>
           <EvilIcons
             name={'exclamation'}
             size={hp(2.7)}

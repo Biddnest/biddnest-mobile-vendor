@@ -174,6 +174,7 @@ const Home = (props) => {
     roles?.driver === userData?.vendor?.user_role ? 1 : 0,
   );
   const [filterVisible, setFilterVisible] = useState(false);
+  const [filterApplied, setFilterApplied] = useState(false);
   const [filterData, setFilterData] = useState({
     from: new Date(),
     to: new Date(),
@@ -268,21 +269,23 @@ const Home = (props) => {
           APICall(obj);
         }
       });
-      checkPinStatus()
-        .then((res) => {
-          // setLoading(false);
-          if (res?.status === 'success' && res?.data) {
-            if (!res?.data?.pin?.set) {
-              setPinModal(true);
+      if (roles?.driver !== userData?.vendor?.user_role) {
+        checkPinStatus()
+          .then((res) => {
+            // setLoading(false);
+            if (res?.status === 'success' && res?.data) {
+              if (!res?.data?.pin?.set) {
+                setPinModal(true);
+              }
+            } else {
+              CustomAlert(res?.message);
             }
-          } else {
-            CustomAlert(res?.message);
-          }
-        })
-        .catch((err) => {
-          // setLoading(false);
-          CustomAlert(err?.data?.message);
-        });
+          })
+          .catch((err) => {
+            // setLoading(false);
+            CustomAlert(err?.data?.message);
+          });
+      }
       getOrdersList();
     }
   }, [isFocused]);
@@ -464,7 +467,7 @@ const Home = (props) => {
               <View style={STYLES.flexBoxOrders}>
                 <View style={STYLES.priceView}>
                   <Text style={STYLES.participatedText}>
-                    Rs. {item?.final_estimated_quote}
+                    ₹ {item?.bid?.bid_amount || item?.final_estimated_quote}
                   </Text>
                 </View>
                 <View style={STYLES.priceView}>
@@ -551,7 +554,7 @@ const Home = (props) => {
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>bid price</Text>
               <Text style={STYLES.rightText}>
-                Rs. {item?.final_quote || item?.final_estimated_quote}
+                ₹ {item?.final_quote || item?.final_estimated_quote}
               </Text>
             </View>
             <View style={STYLES.flexBox}>
@@ -672,11 +675,19 @@ const Home = (props) => {
             extraData={order?.bookings}
             renderItem={renderItem}
             onEndReachedThreshold={0.5}
-            onRefresh={() => getOrdersList({}, order?.paging?.next_page || 1)}
+            onRefresh={() =>
+              filterApplied
+                ? getOrdersList(filterData)
+                : getOrdersList({}, order?.paging?.next_page || 1)
+            }
             refreshing={isLoading}
-            // onEndReached={() =>
-            //   getOrdersList({}, order?.paging?.next_page || 1)
-            // }
+            onEndReached={() => {
+              if (filterApplied) {
+                getOrdersList(filterData, order?.paging?.next_page || 1);
+              } else {
+                getOrdersList({}, order?.paging?.next_page || 1);
+              }
+            }}
             ListEmptyComponent={() => (
               <Text
                 style={{
@@ -725,7 +736,6 @@ const Home = (props) => {
                       mode="date"
                       placeholder="Select date"
                       format="D MMM yyyy"
-                      maxDate={new Date()}
                       confirmBtnText="Confirm"
                       cancelBtnText="Cancel"
                       iconComponent={
@@ -789,13 +799,27 @@ const Home = (props) => {
             }}
           />
         </View>
-        <FlatButton
-          label={'apply'}
-          onPress={() => {
+        <TwoButton
+          leftLabel={'Remove filter'}
+          rightLabel={'apply'}
+          leftOnPress={() => {
+            getOrdersList();
+            setFilterApplied(false);
+            setFilterVisible(false);
+          }}
+          rightOnPress={() => {
             getOrdersList(filterData);
+            setFilterApplied(true);
             setFilterVisible(false);
           }}
         />
+        {/*<FlatButton*/}
+        {/*  label={'apply'}*/}
+        {/*  onPress={() => {*/}
+        {/*    getOrdersList(filterData);*/}
+        {/*    setFilterVisible(false);*/}
+        {/*  }}*/}
+        {/*/>*/}
       </CustomModalAndroid>
       <CustomModalAndroid
         visible={offNotification}

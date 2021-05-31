@@ -1,10 +1,9 @@
 import React from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
-import ImagePicker from 'react-native-image-picker';
-import Toast from 'react-native-simple-toast';
+import ImagePicker from 'react-native-image-crop-picker';
 import Snackbar from 'react-native-snackbar';
-import {IMAGE_OPTIONS, Colors} from './colors';
+import {Colors} from './colors';
 import {STYLES} from './commonStyle';
 import moment from 'moment';
 
@@ -57,19 +56,18 @@ export const LoadingScreen = () => {
 
 export const ImageSelection = () => {
   return new Promise((resolve, reject) => {
-    ImagePicker.showImagePicker(IMAGE_OPTIONS, (response) => {
-      console.log('Response = ', response);
-
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-      } else {
+    ImagePicker.openPicker({
+      width: 400,
+      height: 400,
+      cropping: true,
+      includeBase64: true,
+    })
+      .then((response) => {
         resolve('data:image/jpeg;base64,' + response.data);
-      }
-      reject(false);
-    });
+        reject(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   });
 };
