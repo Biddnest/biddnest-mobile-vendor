@@ -15,7 +15,6 @@ import {Colors, wp, boxShadow, hp} from '../../../constant/colors';
 import {STYLES} from '../../../constant/commonStyle';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import CustomModalAndroid from '../../../components/customModal';
-import DropDownAndroid from '../../../components/dropDown';
 import FlatButton from '../../../components/flatButton';
 import Switch from '../../../components/switch';
 import FilterButton from '../../../components/filterButton';
@@ -43,9 +42,9 @@ import OneSignal from 'react-native-onesignal';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import InformationPopUp from '../../../components/informationPopUp';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {isAndroid} from 'react-native-calendars/src/expandableCalendar/commons';
 import Ripple from 'react-native-material-ripple';
 import BiddnestLogo from '../../../assets/svg/biddnest_logo.svg';
+import SelectionModal from '../../../components/selectionModal';
 
 export const HomeHeader = (props) => {
   const configData =
@@ -766,16 +765,11 @@ const Home = (props) => {
             })}
           </View>
         </View>
-        <View
-          style={
-            isAndroid
-              ? {marginVertical: hp(2)}
-              : {marginVertical: hp(2), zIndex: 5002}
-          }>
-          <DropDownAndroid
-            label={'Status'}
+        <View style={{marginVertical: hp(2)}}>
+          <SelectionModal
             value={filterData?.status}
             width={wp(90)}
+            label={'Status'}
             items={filterStatusOptions}
             onChangeItem={(text) => {
               setFilterData({
@@ -785,20 +779,18 @@ const Home = (props) => {
             }}
           />
         </View>
-        <View style={{marginBottom: hp(8)}}>
-          <DropDownAndroid
-            label={'Category'}
-            value={filterData?.service_id}
-            width={wp(90)}
-            items={filterCategoryOptions}
-            onChangeItem={(text) => {
-              setFilterData({
-                ...filterData,
-                service_id: text,
-              });
-            }}
-          />
-        </View>
+        <SelectionModal
+          label={'Category'}
+          value={filterData?.service_id}
+          width={wp(90)}
+          items={filterCategoryOptions}
+          onChangeItem={(text) => {
+            setFilterData({
+              ...filterData,
+              service_id: text,
+            });
+          }}
+        />
         <TwoButton
           leftLabel={'Remove filter'}
           rightLabel={'apply'}

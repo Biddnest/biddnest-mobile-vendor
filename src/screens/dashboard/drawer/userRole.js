@@ -19,11 +19,11 @@ import FilterButton from '../../../components/filterButton';
 import CustomModalAndroid from '../../../components/customModal';
 import TwoButton from '../../../components/twoButton';
 import FlatButton from '../../../components/flatButton';
-import DropDownAndroid from '../../../components/dropDown';
 import {useSelector} from 'react-redux';
 import {APICall} from '../../../redux/actions/user';
 import {CustomAlert} from '../../../constant/commonFun';
 import {STORE} from '../../../redux';
+import SelectionModal from '../../../components/selectionModal';
 
 const UserRole = (props) => {
   const userData = useSelector((state) => state.Login?.loginData) || {};
@@ -417,7 +417,7 @@ const UserRole = (props) => {
             {marginVertical: hp(2)},
             Platform.OS !== 'android' && {zIndex: 5002},
           ]}>
-          <DropDownAndroid
+          <SelectionModal
             label={'Branch'}
             value={filterData?.branch}
             width={wp(90)}
@@ -435,7 +435,7 @@ const UserRole = (props) => {
             {marginBottom: hp(2)},
             Platform.OS !== 'android' && {zIndex: 5001},
           ]}>
-          <DropDownAndroid
+          <SelectionModal
             value={filterData?.status}
             label={'Status'}
             width={wp(90)}

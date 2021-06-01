@@ -6,7 +6,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Button from '../../../components/button';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import CustomModalAndroid from '../../../components/customModal';
-import DropDownAndroid from '../../../components/dropDown';
 import getDirections from 'react-native-google-maps-directions';
 import FlatButton from '../../../components/flatButton';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
@@ -15,6 +14,7 @@ import {APICall} from '../../../redux/actions/user';
 import {CustomAlert} from '../../../constant/commonFun';
 import {useSelector} from 'react-redux';
 import moment from 'moment';
+import SelectionModal from '../../../components/selectionModal';
 
 const OrderStatusWin = (props) => {
   const {orderDetails, fetchOrderData} = props;
@@ -41,6 +41,12 @@ const OrderStatusWin = (props) => {
       value: item?.id,
     });
   });
+  if (driverList.findIndex((item) => item.value === null) === -1) {
+    driverList.unshift({
+      label: '-Select-',
+      value: null,
+    });
+  }
   driverVehicleList?.vehicles?.forEach((item, index) => {
     vehicleList.push({
       ...item,
@@ -48,15 +54,13 @@ const OrderStatusWin = (props) => {
       value: item?.id,
     });
   });
+  if (vehicleList.findIndex((item) => item.value === null) === -1) {
+    vehicleList.unshift({
+      label: '-Select-',
+      value: null,
+    });
+  }
 
-  const stepHeader = (title) => {
-    return (
-      <View style={{flexDirection: 'row'}}>
-        <View style={styles.dotView} />
-        <Text style={styles.stepHeaderText}>{title}</Text>
-      </View>
-    );
-  };
   let source_meta =
     (orderDetails?.source_meta &&
       JSON.parse(orderDetails?.source_meta?.toString())) ||
@@ -354,7 +358,7 @@ const OrderStatusWin = (props) => {
         title={'ASSIGN DRIVER'}
         onPress={() => setDriverAssignVisible(false)}>
         <View style={{marginVertical: hp(2)}}>
-          <DropDownAndroid
+          <SelectionModal
             value={driverAssignData?.driver_id}
             label={'Driver'}
             width={wp(90)}
@@ -365,7 +369,7 @@ const OrderStatusWin = (props) => {
           />
         </View>
         <View style={{marginVertical: hp(2)}}>
-          <DropDownAndroid
+          <SelectionModal
             value={driverAssignData?.vehicle_id}
             label={'Vehicle'}
             width={wp(90)}

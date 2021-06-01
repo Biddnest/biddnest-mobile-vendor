@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, Image, ScrollView} from 'react-native';
+import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import {Colors, hp, wp} from '../../../constant/colors';
 import SimpleHeader from '../../../components/simpleHeader';
 import LinearGradient from 'react-native-linear-gradient';
@@ -9,9 +9,7 @@ import {STORE} from '../../../redux';
 import {APICall} from '../../../redux/actions/user';
 import {CustomAlert} from '../../../constant/commonFun';
 import {useSelector} from 'react-redux';
-import DropDownAndroid from '../../../components/dropDown';
-import {Picker} from '@react-native-picker/picker';
-import {STYLES} from '../../../constant/commonStyle';
+import SelectionModal from '../../../components/selectionModal';
 
 const RaiseRequest = (props) => {
   const public_booking_id = props?.route?.params?.public_booking_id || null;
@@ -58,62 +56,22 @@ const RaiseRequest = (props) => {
         <LinearGradient
           colors={[Colors.pageBG, Colors.white]}
           style={{flex: 1, padding: hp(3)}}>
-          <View
-            style={{
-              width: wp(90),
-              paddingHorizontal: 10,
-              marginBottom: hp(2),
-            }}>
-            <Text
-              style={{
-                fontFamily: 'Roboto-Bold',
-                color: Colors.textLabelColor,
-                fontSize: wp(4),
-                marginBottom: hp(1),
-              }}>
-              {'Category'}
-            </Text>
-            <View
-              style={{
-                borderWidth: 2,
-                borderRadius: 10,
-                height: hp(6),
-                borderColor: error?.category === false ? 'red' : Colors.silver,
-                backgroundColor: Colors.white,
-                borderBottomWidth: 2,
-                ...STYLES.common,
-              }}>
-              <Picker
-                style={{
-                  height: '99%',
-                  width: '100%',
-                }}
-                // selectedValue={editItem ? editData?.name : addData?.name}
-                onValueChange={(text) => setData({...data, category: text})}>
-                {dropdownDefault.map((item, index) => {
-                  return (
-                    <Picker.Item label={item?.label} value={item?.value} />
-                  );
-                })}
-              </Picker>
-            </View>
+          <View style={{marginBottom: hp(3)}}>
+            <SelectionModal
+              style={
+                error?.category === false
+                  ? {
+                      borderColor: 'red',
+                      borderWidth: 2,
+                    }
+                  : {}
+              }
+              width={wp(90)}
+              label={'Category'}
+              items={dropdownDefault}
+              onChangeItem={(text) => setData({...data, category: text})}
+            />
           </View>
-          {/*<View style={{marginBottom: hp(3)}}>*/}
-          {/*  <DropDownAndroid*/}
-          {/*    customDropDown={*/}
-          {/*      error?.category === false*/}
-          {/*        ? {*/}
-          {/*            borderColor: 'red',*/}
-          {/*            borderWidth: 2,*/}
-          {/*          }*/}
-          {/*        : {}*/}
-          {/*    }*/}
-          {/*    width={wp(90)}*/}
-          {/*    label={'Category'}*/}
-          {/*    items={dropdownDefault}*/}
-          {/*    onChangeItem={(text) => setData({...data, category: text})}*/}
-          {/*  />*/}
-          {/*</View>*/}
           <TextInput
             isRight={error?.heading}
             value={data?.heading}

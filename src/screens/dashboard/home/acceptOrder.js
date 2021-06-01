@@ -4,9 +4,7 @@ import {
   Text,
   View,
   StyleSheet,
-  Platform,
   Pressable,
-  Image,
   ScrollView,
 } from 'react-native';
 import {STYLES} from '../../../constant/commonStyle';
@@ -16,19 +14,19 @@ import CustomModalAndroid from '../../../components/customModal';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import TextInput from '../../../components/textInput';
 import FlatButton from '../../../components/flatButton';
-import DropDown from '../../../components/dropDown';
 import Slider from 'rn-range-slider';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
 import {STORE} from '../../../redux';
 import {APICall} from '../../../redux/actions/user';
-import {CustomAlert, resetNavigator} from '../../../constant/commonFun';
+import {CustomAlert} from '../../../constant/commonFun';
 import {useSelector} from 'react-redux';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {Calendar} from 'react-native-calendars';
 import {Input} from 'react-native-elements';
 import BidSuccess from '../../../assets/svg/bid_success.svg';
+import SelectionModal from '../../../components/selectionModal';
 
 const AcceptOrder = (props) => {
   const {priceList, public_booking_id, orderDetails} = props;
@@ -392,7 +390,7 @@ const AcceptOrder = (props) => {
           ) : step === 1 ? (
             <View
               style={{width: '100%', alignItems: 'center', marginTop: hp(2)}}>
-              <DropDown
+              <SelectionModal
                 style={{
                   marginVertical: hp(2),
                 }}
@@ -549,7 +547,7 @@ const AcceptOrder = (props) => {
                 </Text>
               </View>
               <View style={{marginBottom: hp(2), marginTop: hp(2)}}>
-                <DropDown
+                <SelectionModal
                   value={applyBidData?.vehicle_type}
                   label={'Vendor Type'}
                   width={wp(90)}

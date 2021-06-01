@@ -15,7 +15,6 @@ import {STYLES} from '../../../constant/commonStyle';
 import FilterButton from '../../../components/filterButton';
 import CustomModalAndroid from '../../../components/customModal';
 import FlatButton from '../../../components/flatButton';
-import DropDownAndroid from '../../../components/dropDown';
 import {STORE} from '../../../redux';
 import {APICall} from '../../../redux/actions/user';
 import {CustomAlert} from '../../../constant/commonFun';
@@ -25,6 +24,7 @@ import PayOutDetails from './payOutDetails';
 import Entypo from 'react-native-vector-icons/Entypo';
 import DatePicker from 'react-native-datepicker';
 import Ripple from 'react-native-material-ripple';
+import SelectionModal from '../../../components/selectionModal';
 
 const PayOuts = (props) => {
   const statusData =
@@ -274,7 +274,7 @@ const PayOuts = (props) => {
             {marginVertical: hp(2)},
             Platform.OS !== 'android' && {zIndex: 5001},
           ]}>
-          <DropDownAndroid
+          <SelectionModal
             label={'Status'}
             value={filterData?.status}
             width={wp(90)}
