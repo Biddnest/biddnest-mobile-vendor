@@ -192,7 +192,7 @@ const OrderDetails = (props) => {
           style={{
             flexDirection: 'row',
             flexWrap: 'wrap',
-            width: '50%',
+            maxWidth: '65%',
             justifyContent: 'flex-end',
           }}>
           {dateArray?.map((item, index) => {

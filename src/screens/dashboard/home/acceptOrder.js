@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Pressable,
   ScrollView,
+  TextInput as TextInputReal,
 } from 'react-native';
 import {STYLES} from '../../../constant/commonStyle';
 import CloseIcon from '../../../components/closeIcon';
@@ -53,6 +54,14 @@ const AcceptOrder = (props) => {
     bid_amount: orderDetails?.final_estimated_quote,
   });
   const [manPower, setManPower] = useState({
+    min: 1,
+    max: 100,
+  });
+  const [manPowerRange, setManPowerRange] = useState({
+    min: 1,
+    max: 100,
+  });
+  const [manPowerTempRange, setManPowerTempRange] = useState({
     min: 1,
     max: 100,
   });
@@ -564,16 +573,54 @@ const AcceptOrder = (props) => {
                 <Text style={STYLES.inputTextLabel}>
                   Minimum and Maximum Number of Man Power
                 </Text>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    overflow: 'hidden',
+                  }}>
                   <View style={styles.manPowerView}>
-                    <Text style={[STYLES.inputTextStyle, {height: 'auto'}]}>
-                      {manPower?.min}
-                    </Text>
+                    <TextInputReal
+                      style={[
+                        STYLES.inputTextStyle,
+                        {
+                          height: 'auto',
+                          width: '100%',
+                          textAlign: 'center',
+                          borderRadius: 10,
+                        },
+                      ]}
+                      onChangeText={(text) => {
+                        setManPowerTempRange({
+                          ...manPowerTempRange,
+                          min: text,
+                        });
+                      }}
+                      onBlur={() => {
+                        if (
+                          manPowerTempRange?.min > 0 &&
+                          manPowerTempRange?.min < manPowerTempRange?.max
+                        ) {
+                          setManPowerRange({
+                            ...manPowerRange,
+                            min: manPowerTempRange?.min,
+                          });
+                        } else {
+                          setManPowerTempRange(manPowerRange);
+                        }
+                      }}
+                      value={manPowerTempRange?.min?.toString()}
+                      keyboardType="numeric"
+                    />
                   </View>
                   <Slider
                     style={styles.sliderStyle}
-                    min={1}
-                    max={100}
+                    min={
+                      parseInt(manPowerRange?.min) || parseInt(manPower?.min)
+                    }
+                    max={
+                      parseInt(manPowerRange?.max) || parseInt(manPower?.max)
+                    }
                     step={1}
                     floatingLabel
                     renderThumb={() => <View style={STYLES.sliderThumb} />}
@@ -595,9 +642,38 @@ const AcceptOrder = (props) => {
                     onValueChanged={handleValueChange}
                   />
                   <View style={styles.manPowerView}>
-                    <Text style={[STYLES.inputTextStyle, {height: 'auto'}]}>
-                      {manPower?.max}
-                    </Text>
+                    <TextInputReal
+                      style={[
+                        STYLES.inputTextStyle,
+                        {
+                          height: 'auto',
+                          width: '100%',
+                          textAlign: 'center',
+                          borderRadius: 10,
+                        },
+                      ]}
+                      onChangeText={(text) => {
+                        setManPowerTempRange({
+                          ...manPowerTempRange,
+                          max: text,
+                        });
+                      }}
+                      value={manPowerTempRange?.max?.toString()}
+                      onBlur={() => {
+                        if (
+                          manPowerTempRange?.max > 0 &&
+                          manPowerTempRange?.min < manPowerTempRange?.max
+                        ) {
+                          setManPowerRange({
+                            ...manPowerRange,
+                            max: manPowerTempRange?.max,
+                          });
+                        } else {
+                          setManPowerTempRange(manPowerRange);
+                        }
+                      }}
+                      keyboardType="numeric"
+                    />
                   </View>
                 </View>
                 <View
