@@ -805,7 +805,11 @@ const AcceptOrder = (props) => {
             }
             onPress={() => {
               if (step === 0) {
-                setStep(1);
+                if (parseInt(stepData?.bid_amount) > 0) {
+                  setStep(1);
+                } else {
+                  CustomAlert('Total price shoule not be zero');
+                }
               } else if (step === 1) {
                 if (
                   applyBidData?.moving_date &&
@@ -890,11 +894,11 @@ const AcceptOrder = (props) => {
                           setForgotPin(false);
                         } else {
                           CustomAlert(res?.data?.message);
-                          setTimeout(() => {
-                            setStep(0);
-                            setForgotPin(false);
-                            props.onCloseIcon();
-                          }, 1500);
+                          // setTimeout(() => {
+                          //   setStep(0);
+                          //   setForgotPin(false);
+                          //   props.onCloseIcon();
+                          // }, 1500);
                         }
                       })
                       .catch((err) => {

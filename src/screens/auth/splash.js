@@ -19,29 +19,20 @@ import {isAndroid} from 'react-native-calendars/src/expandableCalendar/commons';
 
 const Splash = (props) => {
   const dispatch = useDispatch();
-  const oneSignalData =
-    useSelector(
-      (state) => state.Login?.configData?.onesignal?.vendor_app_creds,
-    ) || '';
   const notificationData =
     useSelector(
       (state) => state.Login?.configData?.enums?.notification?.type,
     ) || {};
   const notificationValue = useSelector((state) => state.Login?.notification);
-  let key =
-    (oneSignalData && JSON.parse(oneSignalData).toString().split(',')) || '';
   const [isLoading, setLoading] = useState(false);
   const userData = useSelector((state) => state.Login?.loginData);
   useEffect(() => {
     OneSignal.setLogLevel(6, 0);
-    OneSignal.init(
-      (key.length > 0 && key[0]) || '42d0f367-a40c-41e2-a9e3-95d62e38ad99',
-      {
-        kOSSettingsKeyAutoPrompt: false,
-        kOSSettingsKeyInAppLaunchURL: false,
-        kOSSettingsKeyInFocusDisplayOption: 2,
-      },
-    );
+    OneSignal.init('42d0f367-a40c-41e2-a9e3-95d62e38ad99', {
+      kOSSettingsKeyAutoPrompt: false,
+      kOSSettingsKeyInAppLaunchURL: false,
+      kOSSettingsKeyInFocusDisplayOption: 2,
+    });
     OneSignal.inFocusDisplaying(2); // Controls what should happen if a notification is received while the app is open. 2 means that the notification will go directly to the device's notification center.
 
     // The promptForPushNotifications function code will show the iOS push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission (See step below)
@@ -91,10 +82,14 @@ const Splash = (props) => {
       .then((res) => {
         setLoading(false);
         if (res.status === 'success') {
-          if (userData?.token) {
-            resetNavigator(props, 'Dashboard');
+          if (res?.data?.config?.app?.version_code == 1) {
+            if (userData?.token) {
+              resetNavigator(props, 'Dashboard');
+            } else {
+              resetNavigator(props, 'Login');
+            }
           } else {
-            resetNavigator(props, 'Login');
+            Linking.openURL('https://play.google.com/store/apps');
           }
         }
       })

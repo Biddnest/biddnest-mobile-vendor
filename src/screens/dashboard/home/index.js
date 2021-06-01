@@ -364,7 +364,7 @@ const Home = (props) => {
                   <Text
                     style={{
                       color: Colors.inputTextColor,
-                      fontSize: wp(3.8),
+                      fontSize: wp(3),
                       fontFamily: 'Roboto-Bold',
                     }}>
                     {item}
