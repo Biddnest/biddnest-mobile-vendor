@@ -31,11 +31,12 @@ const PayOuts = (props) => {
     useSelector((state) => state.Login?.configData?.enums?.payout?.status) ||
     {};
   const [isLoading, setLoading] = useState(false);
+  const [isRefresh, setRefresh] = useState(false);
   const [payoutList, setPayOutList] = useState({});
   const [filterVisible, setFilterVisible] = useState(false);
   const [filterData, setFilterData] = useState({
-    from: new Date(),
-    to: new Date(),
+    from: moment().subtract(1, 'M'),
+    to: moment(),
     status: 0,
   });
   const [payoutDetailsVisible, setPayoutDetailsVisible] = useState(false);
@@ -52,6 +53,7 @@ const PayOuts = (props) => {
     fetchData();
   }, []);
   const fetchData = (data = {}, pageNo = 1) => {
+    setRefresh(true);
     let obj = {
       url:
         Object.keys(data)?.length > 0
@@ -68,14 +70,24 @@ const PayOuts = (props) => {
     };
     APICall(obj)
       .then((res) => {
+        setRefresh(false);
         setLoading(false);
         if (res?.data?.status === 'success') {
-          setPayOutList(res?.data?.data);
+          if (pageNo === 1) {
+            setPayOutList(res?.data?.data);
+          } else if (pageNo !== payoutList?.paging?.current_page) {
+            let temp = [...payoutList?.payouts, ...res?.data?.data?.payouts];
+            setPayOutList({
+              payouts: temp,
+              paging: res?.data?.data?.paging,
+            });
+          }
         } else {
           CustomAlert(res?.data?.message);
         }
       })
       .catch((err) => {
+        setRefresh(false);
         setLoading(false);
         CustomAlert(err?.message);
       });
@@ -137,7 +149,7 @@ const PayOuts = (props) => {
             {moment(item?.dispatch_at).format('Do MMM YYYY')}
           </Text>
           <Text style={[styles.topText, {color: Colors.darkBlue}]}>
-              ₹ {item?.final_payout}
+            ₹ {item?.final_payout}
           </Text>
         </View>
         <Text style={[styles.bottomText, {width: '100%', marginTop: hp(1)}]}>
@@ -174,11 +186,13 @@ const PayOuts = (props) => {
             data={payoutList?.payouts}
             extraData={payoutList?.payouts}
             onEndReachedThreshold={0.5}
-            onRefresh={() => fetchData({}, payoutList?.paging?.next_page || 1)}
-            refreshing={isLoading}
-            onEndReached={() =>
-              fetchData({}, payoutList?.paging?.next_page || 1)
-            }
+            onRefresh={() => fetchData()}
+            refreshing={isRefresh}
+            onEndReached={() => {
+              if (payoutList?.payouts?.length > 10) {
+                fetchData({}, payoutList?.paging?.current_page || 1);
+              }
+            }}
             renderItem={renderItem}
             ItemSeparatorComponent={() => (
               <View style={[STYLES.separatorView, {marginTop: 0}]} />

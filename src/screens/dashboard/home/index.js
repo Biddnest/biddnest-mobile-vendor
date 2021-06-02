@@ -175,8 +175,8 @@ const Home = (props) => {
   const [filterVisible, setFilterVisible] = useState(false);
   const [filterApplied, setFilterApplied] = useState(false);
   const [filterData, setFilterData] = useState({
-    from: new Date(),
-    to: new Date(),
+    from: moment().subtract(1, 'M'),
+    to: moment(),
     status: selectedTab === 0 ? 2 : selectedTab === 1 ? 4 : 0,
     service_id: 1,
   });
@@ -185,6 +185,7 @@ const Home = (props) => {
   );
   const [offNotification, setOffNotification] = useState(false);
   const [isLoading, setLoading] = useState(false);
+  const [isRefresh, setRefresh] = useState(false);
   const [info, setInfo] = useState(false);
   const [order, setOrder] = useState({});
   const [pinModal, setPinModal] = useState(false);
@@ -268,6 +269,7 @@ const Home = (props) => {
           APICall(obj);
         }
       });
+      getOrdersList();
       if (roles?.driver !== userData?.vendor?.user_role) {
         checkPinStatus()
           .then((res) => {
@@ -285,45 +287,72 @@ const Home = (props) => {
             CustomAlert(err?.data?.message);
           });
       }
-      getOrdersList();
     }
   }, [isFocused]);
 
   useEffect(() => {
     if (isFocused && userData?.token) {
       setLoading(true);
-      getOrdersList();
+      getOrdersList({}, 1, true);
     }
   }, [selectedTab]);
-  const getOrdersList = (data = {}, pageNo = 1) => {
+  const getOrdersList = (data = {}, pageNo = 1, tabChanged = false) => {
     if (!isLoading) {
-      setLoading(true);
+      setRefresh(true);
       if (roles?.driver === userData?.vendor?.user_role) {
         dispatch(getDriverOrders(configData[selectedTab], data, pageNo))
           .then((res) => {
             setLoading(false);
+            setRefresh(false);
             if (res?.status === 'success' && res?.data) {
-              setOrder(res?.data);
+              if (tabChanged) {
+                setOrder(res?.data);
+              } else {
+                if (pageNo === 1) {
+                  setOrder(res?.data);
+                } else if (pageNo !== order?.paging?.current_page) {
+                  let temp = [...order?.bookings, ...res?.data?.bookings];
+                  setOrder({
+                    bookings: temp,
+                    paging: res?.data?.paging,
+                  });
+                }
+              }
             } else {
               CustomAlert(res?.message);
             }
           })
           .catch((err) => {
             setLoading(false);
+            setRefresh(false);
             CustomAlert(err?.data?.message);
           });
       } else {
         dispatch(getOrders(configData[selectedTab], data, pageNo))
           .then((res) => {
             setLoading(false);
+            setRefresh(false);
             if (res?.status === 'success' && res?.data) {
-              setOrder(res?.data);
+              if (tabChanged) {
+                setOrder(res?.data);
+              } else {
+                if (pageNo === 1) {
+                  setOrder(res?.data);
+                } else if (pageNo !== order?.paging?.current_page) {
+                  let temp = [...order?.bookings, ...res?.data?.bookings];
+                  setOrder({
+                    bookings: temp,
+                    paging: res?.data?.paging,
+                  });
+                }
+              }
             } else {
               CustomAlert(res?.message);
             }
           })
           .catch((err) => {
             setLoading(false);
+            setRefresh(false);
             CustomAlert(err?.data?.message);
           });
       }
@@ -683,16 +712,16 @@ const Home = (props) => {
             renderItem={renderItem}
             onEndReachedThreshold={0.5}
             onRefresh={() =>
-              filterApplied
-                ? getOrdersList(filterData)
-                : getOrdersList({}, order?.paging?.next_page || 1)
+              filterApplied ? getOrdersList(filterData) : getOrdersList()
             }
-            refreshing={isLoading}
+            refreshing={isRefresh}
             onEndReached={() => {
-              if (filterApplied) {
-                getOrdersList(filterData, order?.paging?.next_page || 1);
-              } else {
-                getOrdersList({}, order?.paging?.next_page || 1);
+              if (order?.bookings?.length > 5) {
+                if (filterApplied) {
+                  getOrdersList(filterData, order?.paging?.current_page || 1);
+                } else {
+                  getOrdersList({}, order?.paging?.current_page || 1);
+                }
               }
             }}
             ListEmptyComponent={() => (
@@ -800,10 +829,16 @@ const Home = (props) => {
           }}
         />
         <TwoButton
-          leftLabel={'Remove filter'}
+          leftLabel={'clear filter'}
           rightLabel={'apply'}
           leftOnPress={() => {
             getOrdersList();
+            setFilterData({
+              from: moment().subtract(1, 'M'),
+              to: moment(),
+              status: selectedTab === 0 ? 2 : selectedTab === 1 ? 4 : 0,
+              service_id: 1,
+            });
             setFilterApplied(false);
             setFilterVisible(false);
           }}

@@ -28,39 +28,69 @@ const Orders = (props) => {
   );
   const [order, setOrder] = useState({});
   const [isLoading, setLoading] = useState(false);
+  const [isRefresh, setRefresh] = useState(false);
   useEffect(() => {
     if (isFocused && userData?.token) {
       setLoading(true);
-      getOrdersList();
+      getOrdersList(1, true);
     }
   }, [selectedTab]);
-  const getOrdersList = (pageNo = 1) => {
+  const getOrdersList = (pageNo = 1, tabChanged = false) => {
     if (!isLoading) {
+      setRefresh(true);
       if (roles?.driver === userData?.vendor?.user_role) {
         dispatch(getDriverOrders(selectedTab, {}, pageNo))
           .then((res) => {
+            setRefresh(false);
             setLoading(false);
             if (res?.status === 'success' && res?.data) {
-              setOrder(res?.data);
+              if (tabChanged) {
+                setOrder(res?.data);
+              } else {
+                if (pageNo === 1) {
+                  setOrder(res?.data);
+                } else if (pageNo !== order?.paging?.current_page) {
+                  let temp = [...order?.bookings, ...res?.data?.bookings];
+                  setOrder({
+                    bookings: temp,
+                    paging: res?.data?.paging,
+                  });
+                }
+              }
             } else {
               CustomAlert(res?.message);
             }
           })
           .catch((err) => {
+            setRefresh(false);
             setLoading(false);
             CustomAlert(err?.data?.message);
           });
       } else {
         dispatch(getOrders(selectedTab, {}, pageNo))
           .then((res) => {
+            setRefresh(false);
             setLoading(false);
             if (res?.status === 'success' && res?.data) {
-              setOrder(res?.data);
+              if (tabChanged) {
+                setOrder(res?.data);
+              } else {
+                if (pageNo === 1) {
+                  setOrder(res?.data);
+                } else if (pageNo !== order?.paging?.current_page) {
+                  let temp = [...order?.bookings, ...res?.data?.bookings];
+                  setOrder({
+                    bookings: temp,
+                    paging: res?.data?.paging,
+                  });
+                }
+              }
             } else {
               CustomAlert(res?.message);
             }
           })
           .catch((err) => {
+            setRefresh(false);
             setLoading(false);
             CustomAlert(err?.data?.message);
           });
@@ -432,9 +462,13 @@ const Orders = (props) => {
             extraData={order?.bookings}
             renderItem={renderItem}
             onEndReachedThreshold={0.5}
-            onRefresh={() => getOrdersList(order?.paging?.next_page || 1)}
-            refreshing={isLoading}
-            onEndReached={() => getOrdersList(order?.paging?.next_page || 1)}
+            onRefresh={() => getOrdersList(1)}
+            refreshing={isRefresh}
+            onEndReached={() => {
+              if (order?.bookings?.length > 5) {
+                getOrdersList(order?.paging?.current_page || 1);
+              }
+            }}
             ListEmptyComponent={() => (
               <Text
                 style={{

@@ -33,6 +33,7 @@ const UserRole = (props) => {
     useSelector((state) => state.Login?.configData?.enums?.vendor?.status) ||
     {};
   const [isLoading, setLoading] = useState(false);
+  const [isRefresh, setRefresh] = useState(false);
   const [selectedTab, setSelectedTab] = useState('manager');
   const [detailsVisible, setDetailsVisible] = useState(false);
   const [detailsData, setDetailsData] = useState({});
@@ -90,11 +91,11 @@ const UserRole = (props) => {
         .catch((err) => {
           CustomAlert(err?.message);
         });
-      getUserRoleList();
+      getUserRoleList({}, 1, true);
     }
   }, [selectedTab]);
 
-  const getUserRoleList = (data = {}, pageNo = 1) => {
+  const getUserRoleList = (data = {}, pageNo = 1, tabChanged = false) => {
     let obj = {
       url:
         Object.keys(data)?.length > 0
@@ -109,7 +110,22 @@ const UserRole = (props) => {
       .then((res) => {
         setLoading(false);
         if (res?.data?.status === 'success') {
-          setUserRoles(res?.data?.data);
+          if (tabChanged) {
+            setUserRoles(res?.data?.data);
+          } else {
+            if (pageNo === 1) {
+              setUserRoles(res?.data?.data);
+            } else if (pageNo !== userRoles?.paging?.current_page) {
+              let temp = [
+                ...userRoles?.user_role,
+                ...res?.data?.data?.user_role,
+              ];
+              setUserRoles({
+                user_role: temp,
+                paging: res?.data?.data?.paging,
+              });
+            }
+          }
         } else {
           CustomAlert(res?.data?.message);
         }
@@ -254,7 +270,7 @@ const UserRole = (props) => {
             if (filterApplied) {
               getUserRoleList(filterData);
             } else {
-              getUserRoleList({}, userRoles?.paging?.next_page || 1);
+              getUserRoleList({}, 1);
             }
           }}
           ListHeaderComponent={() => {
@@ -310,14 +326,16 @@ const UserRole = (props) => {
             }
             return null;
           }}
-          refreshing={isLoading}
+          refreshing={isRefresh}
           extraData={userRoles?.user_role}
           onEndReachedThreshold={0.5}
           onEndReached={() => {
-            if (filterApplied) {
-              getUserRoleList(filterData);
-            } else {
-              getUserRoleList({}, userRoles?.paging?.next_page || 1);
+            if (userRoles?.user_role?.length > 14) {
+              if (filterApplied) {
+                getUserRoleList(filterData);
+              } else {
+                getUserRoleList({}, userRoles?.paging?.current_page || 1);
+              }
             }
           }}
           renderItem={renderItem}
