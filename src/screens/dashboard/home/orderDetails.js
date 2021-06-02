@@ -95,7 +95,9 @@ const OrderDetails = (props) => {
       };
       APICall(obj)
         .then((res) => {
-          if (res?.data?.status === 'success') {
+          if (res?.status == 400) {
+            resetNavigator(props, 'Dashboard');
+          } else if (res?.data?.status === 'success') {
             setOrderDetails(res?.data?.data?.booking);
             setBookedMark(!!res?.data?.data?.booking?.bid?.bookmarked);
             if (

@@ -373,7 +373,9 @@ const Profile = (props) => {
                       key={index}>
                       <Text style={styles.headerText}>{item.title}</Text>
                       {(item.body !== '' && (
-                        <Text style={styles.bodyText}>{item?.body || item.title}</Text>
+                        <Text style={styles.bodyText}>
+                          {item?.body || item.title}
+                        </Text>
                       )) || (
                         <View
                           style={{
@@ -385,7 +387,13 @@ const Profile = (props) => {
                             (aryData, aryIndex) => {
                               return (
                                 <View
-                                  style={STYLES.categoryView}
+                                  style={[
+                                    STYLES.categoryView,
+                                    {
+                                      width: 'auto',
+                                      paddingHorizontal: wp(2),
+                                    },
+                                  ]}
                                   key={aryIndex}>
                                   <Text
                                     style={{
