@@ -220,7 +220,14 @@ const OrderDetails = (props) => {
           width: '50%',
           justifyContent: 'flex-end',
         }}>
-        <View style={STYLES.categoryView}>
+        <View
+          style={[
+            STYLES.categoryView,
+            {
+              width: 'auto',
+              paddingHorizontal: wp(2),
+            },
+          ]}>
           <Text
             style={{
               color: Colors.inputTextColor,
@@ -263,6 +270,11 @@ const OrderDetails = (props) => {
           APICall(obj)
             .then((res) => {
               if (res?.data?.status === 'success') {
+                CustomAlert(
+                  res?.data?.data?.bookmark?.bookmarked == 1
+                    ? 'Added into Bookmarked'
+                    : 'Remove from Bookmarked',
+                );
                 fetchOrderData();
               } else {
                 CustomAlert(res?.data?.message);
@@ -342,7 +354,8 @@ const OrderDetails = (props) => {
           </View>
           {!orderDetails?.final_quote &&
             orderDetails?.bid?.bid_type === 1 &&
-            orderDetails?.bid?.status === 0 && (
+            orderDetails?.bid?.status === 0 &&
+            orderDetails?.status === 3 && (
               <View style={styles.flexBoxWrapper}>
                 <Text style={styles.warningText}>
                   You already submitted a bid for this order but its happened
@@ -412,7 +425,15 @@ const OrderDetails = (props) => {
             })}
           </View>
           {selectedTab === 0 && (
-            <View>
+            <View
+              style={{
+                paddingBottom:
+                  !orderDetails?.final_quote &&
+                  orderDetails?.bid?.status !== 1 &&
+                  orderDetails?.status < 4
+                    ? 0
+                    : hp(2),
+              }}>
               <View
                 style={{
                   marginHorizontal: wp(5),
@@ -497,7 +518,8 @@ const OrderDetails = (props) => {
                 </View>
               </View>
               {!orderDetails?.final_quote &&
-                orderDetails?.bid?.status !== 1 && (
+                orderDetails?.bid?.status !== 1 &&
+                orderDetails?.status < 4 && (
                   <TwoButton
                     leftLabel={'REJECT'}
                     rightLabel={

@@ -297,6 +297,7 @@ const Home = (props) => {
   }, [selectedTab]);
   const getOrdersList = (data = {}, pageNo = 1) => {
     if (!isLoading) {
+      setLoading(true);
       if (roles?.driver === userData?.vendor?.user_role) {
         dispatch(getDriverOrders(configData[selectedTab], data, pageNo))
           .then((res) => {
@@ -383,7 +384,14 @@ const Home = (props) => {
             width: '50%',
             justifyContent: 'flex-end',
           }}>
-          <View style={STYLES.categoryView}>
+          <View
+            style={[
+              STYLES.categoryView,
+              {
+                width: 'auto',
+                paddingHorizontal: wp(2),
+              },
+            ]}>
             <Text
               style={{
                 color: Colors.inputTextColor,
@@ -497,7 +505,7 @@ const Home = (props) => {
             flexDirection: 'row',
             alignItems: 'center',
           }}>
-          <MapPin height={hp(8)} width={wp(5)} />
+          <MapPin height={hp(6.5)} width={wp(5)} />
           <View
             style={{
               flexDirection: 'row',

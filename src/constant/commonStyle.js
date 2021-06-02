@@ -110,7 +110,7 @@ export const STYLES = {
     borderRadius: 5,
     textTransform: 'uppercase',
     fontFamily: 'Gilroy-Semibold',
-    fontSize: wp(4),
+    fontSize: wp(3.3),
   },
   priceView: {
     backgroundColor: Colors.pageBG,

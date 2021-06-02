@@ -56,7 +56,7 @@ const Requirements = (props) => {
   return (
     <View style={{flex: 1, backgroundColor: Colors.white}}>
       <ScrollView
-        style={{flex: 1}}
+        style={{flex: 1, paddingBottom: hp(2)}}
         showsVerticalScrollIndicator={false}
         bounces={false}>
         <View>
@@ -197,18 +197,20 @@ const Requirements = (props) => {
               </ScrollView>
             </View>
           )}
-          {!orderDetails?.final_quote && orderDetails?.bid?.status !== 1 && (
-            <TwoButton
-              leftLabel={'REJECT'}
-              rightLabel={
-                !orderDetails?.final_quote && orderDetails?.bid?.status === 1
-                  ? 'submit bid again'
-                  : 'ACCEPT'
-              }
-              leftOnPress={() => setRejectVisible(true)}
-              rightOnPress={() => setAcceptVisible(true)}
-            />
-          )}
+          {!orderDetails?.final_quote &&
+            orderDetails?.bid?.status !== 1 &&
+            orderDetails?.status < 4 && (
+              <TwoButton
+                leftLabel={'REJECT'}
+                rightLabel={
+                  !orderDetails?.final_quote && orderDetails?.bid?.status === 1
+                    ? 'submit bid again'
+                    : 'ACCEPT'
+                }
+                leftOnPress={() => setRejectVisible(true)}
+                rightOnPress={() => setAcceptVisible(true)}
+              />
+            )}
         </View>
       </ScrollView>
       <CustomModalAndroid

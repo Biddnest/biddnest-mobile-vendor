@@ -111,7 +111,14 @@ const Orders = (props) => {
           width: '50%',
           justifyContent: 'flex-end',
         }}>
-        <View style={STYLES.categoryView}>
+        <View
+          style={[
+            STYLES.categoryView,
+            {
+              width: 'auto',
+              paddingHorizontal: wp(2),
+            },
+          ]}>
           <Text
             style={{
               color: Colors.inputTextColor,
@@ -240,7 +247,7 @@ const Orders = (props) => {
             flexDirection: 'row',
             alignItems: 'center',
           }}>
-          <MapPin height={hp(8)} width={wp(5)} />
+          <MapPin height={hp(6.5)} width={wp(5)} />
           <View
             style={{
               flexDirection: 'row',
