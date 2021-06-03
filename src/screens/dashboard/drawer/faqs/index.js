@@ -7,6 +7,7 @@ import RightArrow from '../../../../assets/svg/right_arrow.svg';
 import {STORE} from '../../../../redux';
 import {APICall} from '../../../../redux/actions/user';
 import {CustomAlert, CustomConsole} from '../../../../constant/commonFun';
+import {SvgCssUri} from 'react-native-svg';
 
 const FAQS = (props) => {
   const [faqs, setFaqs] = useState([]);
@@ -56,29 +57,27 @@ const FAQS = (props) => {
           contentContainerStyle={{justifyContent: 'space-evenly'}}
           renderItem={({item, index}) => {
             return (
-              <View style={styles.movementLinear} key={index}>
-                <Pressable
-                  onPress={() =>
-                    props.navigation.navigate('FAQDetails', {
-                      category: item?.value,
-                    })
-                  }
+              <Pressable
+                onPress={() =>
+                  props.navigation.navigate('FAQDetails', {
+                    category: item?.value,
+                  })
+                }
+                style={styles.movementLinear}
+                key={index}>
+                <View
                   style={{
                     justifyContent: 'center',
                     alignItems: 'center',
                     height: wp(30),
                   }}>
-                  <Image
-                    source={{uri: item?.image}}
-                    resizeMode={'contain'}
-                    style={{height: 50, width: 50}}
-                  />
-                </Pressable>
+                  <SvgCssUri width="60%" height="60%" uri={item?.image} />
+                </View>
                 <View style={styles.bottomView}>
                   <Text style={styles.bottomText}>{item.name}</Text>
                   <RightArrow width={hp(2.7)} height={hp(2.7)} />
                 </View>
-              </View>
+              </Pressable>
             );
           }}
         />
@@ -93,10 +92,10 @@ const styles = StyleSheet.create({
   movementLinear: {
     flex: 1,
     flexDirection: 'column',
-    margin: 5,
+    margin: 7,
     overflow: 'hidden',
     borderWidth: 2,
-    borderRadius: hp(1.6),
+    borderRadius: 10,
     borderColor: Colors.silver,
     backgroundColor: '#FDFDFD',
   },
