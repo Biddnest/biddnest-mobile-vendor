@@ -12,9 +12,13 @@ import {CustomAlert, ImageSelection} from '../../../constant/commonFun';
 import {useDispatch, useSelector} from 'react-redux';
 import {updateProfile} from '../../../redux/actions/user';
 import Ripple from 'react-native-material-ripple';
+import CustomModalAndroid from '../../../components/customModal';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const EditProfile = (props) => {
   const dispatch = useDispatch();
+  const [imageSelect, setImageSelect] = useState(false);
   const configData =
     useSelector((state) => state.Login?.loginData?.vendor) || {};
   const [isLoading, setLoading] = useState(false);
@@ -36,6 +40,13 @@ const EditProfile = (props) => {
       ...data,
       [key]: value,
     });
+  };
+  const setImage = (type) => {
+    ImageSelection(type)
+      .then((res) => {
+        handleState('image', res);
+      })
+      .catch((err) => {});
   };
   return (
     <LinearGradient colors={[Colors.pageBG, Colors.white]} style={{flex: 1}}>
@@ -90,11 +101,7 @@ const EditProfile = (props) => {
                 <Ripple
                   rippleColor={Colors.white}
                   onPress={async () => {
-                    ImageSelection()
-                      .then((res) => {
-                        handleState('image', res);
-                      })
-                      .catch((err) => {});
+                    setImageSelect(true);
                   }}
                   style={styles.imageUploadBtn}>
                   <Text
@@ -125,6 +132,7 @@ const EditProfile = (props) => {
                 label={'First Name'}
                 placeHolder={'David'}
                 onChange={(text) => handleState('fname', text)}
+                style={{marginBottom: -hp(1)}}
               />
             </View>
             <View style={{width: wp(45)}}>
@@ -134,29 +142,32 @@ const EditProfile = (props) => {
                 label={'Last Name'}
                 placeHolder={'Jerome'}
                 onChange={(text) => handleState('lname', text)}
+                style={{marginBottom: -hp(1)}}
               />
             </View>
           </View>
-          <View style={{flexDirection: 'row'}}>
-            <View style={{width: wp(45)}}>
-              <TextInput
-                value={data?.email}
-                isRight={error.email}
-                label={'Email ID'}
-                placeHolder={'davidje@gmail.com'}
-                onChange={(text) => handleState('email', text)}
-              />
-            </View>
-            <View style={{width: wp(45)}}>
-              <TextInput
-                disable={true}
-                value={data?.phone}
-                label={'Phone Number'}
-                placeHolder={'9739912345'}
-                onChange={(text) => handleState('phone', text)}
-              />
-            </View>
+          {/*<View style={{flexDirection: 'row'}}>*/}
+          <View style={{width: wp(90)}}>
+            <TextInput
+              value={data?.email}
+              isRight={error.email}
+              label={'Email ID'}
+              placeHolder={'davidje@gmail.com'}
+              onChange={(text) => handleState('email', text)}
+              style={{marginBottom: -hp(1)}}
+            />
           </View>
+          <View style={{width: wp(90)}}>
+            <TextInput
+              disable={true}
+              value={data?.phone}
+              label={'Phone Number'}
+              placeHolder={'9739912345'}
+              onChange={(text) => handleState('phone', text)}
+              style={{marginBottom: -hp(1)}}
+            />
+          </View>
+          {/*</View>*/}
           {/*<View*/}
           {/*  style={[*/}
           {/*    {marginBottom: hp(3)},*/}
@@ -296,6 +307,63 @@ const EditProfile = (props) => {
             />
           </View>
         </KeyboardAwareScrollView>
+        <CustomModalAndroid
+          visible={imageSelect}
+          title={'Upload From'}
+          onPress={() => {
+            setImageSelect(false);
+          }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-evenly',
+              marginVertical: hp(3),
+              width: wp(100),
+            }}>
+            <View style={styles.common}>
+              <Ripple
+                rippleColor={Colors.white}
+                style={[STYLES.selectionView, STYLES.common]}
+                onPress={() => setImage('camera')}>
+                <Ionicons
+                  name={'camera'}
+                  color={Colors.darkBlue}
+                  size={hp(6)}
+                />
+              </Ripple>
+              <Text
+                style={[
+                  STYLES.selectionText,
+                  {
+                    textAlign: 'center',
+                  },
+                ]}>
+                Camera
+              </Text>
+            </View>
+            <View style={styles.common}>
+              <Ripple
+                rippleColor={Colors.white}
+                onPress={() => setImage('gallery')}
+                style={[STYLES.selectionView, STYLES.common]}>
+                <AntDesign
+                  name={'picture'}
+                  color={Colors.darkBlue}
+                  size={hp(6)}
+                />
+              </Ripple>
+              <Text
+                style={[
+                  STYLES.selectionText,
+                  {
+                    textAlign: 'center',
+                  },
+                ]}>
+                Gallery
+              </Text>
+            </View>
+          </View>
+        </CustomModalAndroid>
       </View>
     </LinearGradient>
   );

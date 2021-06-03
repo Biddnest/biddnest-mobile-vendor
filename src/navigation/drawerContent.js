@@ -33,13 +33,13 @@ export function DrawerContent(props) {
   const roles =
     useSelector((state) => state.Login?.configData?.enums?.vendor?.roles) || {};
   const [SIDE_DRAWER, setSIDE_DRAWER] = useState([
-    {
-      iconFamily: 'Ionicons',
-      icon: 'home-outline',
-      topText: 'Home',
-      bottomText: 'Search Orders',
-      navigate: 'Home',
-    },
+    // {
+    //   iconFamily: 'Ionicons',
+    //   icon: 'home-outline',
+    //   topText: 'Home',
+    //   bottomText: 'Search Orders',
+    //   navigate: 'Home',
+    // },
     {
       iconFamily: 'Feather',
       icon: 'users',
@@ -72,6 +72,13 @@ export function DrawerContent(props) {
       topText: 'Support',
       bottomText: 'Raise a request to change price',
       navigate: 'Support',
+    },
+    {
+      iconFamily: 'MaterialIcons',
+      icon: 'logout',
+      topText: 'Logout',
+      bottomText: 'Redirect to login screen',
+      navigate: 'test',
     },
     // {
     //   iconFamily: 'MaterialCommunityIcons',
@@ -132,6 +139,14 @@ export function DrawerContent(props) {
         return (
           <Ionicons name={item.icon} color={Colors.darkBlue} size={wp(7)} />
         );
+      case 'MaterialIcons':
+        return (
+          <MaterialIcons
+            name={item.icon}
+            color={Colors.darkBlue}
+            size={wp(7)}
+          />
+        );
       default:
         return item.image;
     }
@@ -184,6 +199,11 @@ export function DrawerContent(props) {
                 // Check table for errors and code number that can return in catch.
                 console.log(error);
               });
+          } else if (item?.navigate === 'test') {
+            dispatch({
+              type: RESET_STORE,
+            });
+            resetNavigator(props, 'Login');
           } else {
             props.navigation.navigate(item.navigate);
           }
@@ -227,7 +247,7 @@ export function DrawerContent(props) {
               resizeMode={'contain'}
             />
           </View>
-          <View style={{width: wp(45), paddingLeft: wp(2)}}>
+          <View style={{width: wp(55), paddingLeft: wp(2)}}>
             <Text numberOfLines={1} style={styles.userText}>
               {userData?.fname} {userData?.lname}
             </Text>
@@ -242,22 +262,22 @@ export function DrawerContent(props) {
               +91 {userData?.phone}
             </Text>
           </View>
-          <View style={{width: wp(10)}}>
-            <Pressable
-              style={styles.logoutWrapper}
-              onPress={() => {
-                dispatch({
-                  type: RESET_STORE,
-                });
-                resetNavigator(props, 'Login');
-              }}>
-              <MaterialIcons
-                name={'logout'}
-                color={Colors.white}
-                size={wp(6)}
-              />
-            </Pressable>
-          </View>
+          {/*<View style={{width: wp(10)}}>*/}
+          {/*  <Pressable*/}
+          {/*    style={styles.logoutWrapper}*/}
+          {/*    onPress={() => {*/}
+          {/*      dispatch({*/}
+          {/*        type: RESET_STORE,*/}
+          {/*      });*/}
+          {/*      resetNavigator(props, 'Login');*/}
+          {/*    }}>*/}
+          {/*    <MaterialIcons*/}
+          {/*      name={'logout'}*/}
+          {/*      color={Colors.white}*/}
+          {/*      size={wp(6)}*/}
+          {/*    />*/}
+          {/*  </Pressable>*/}
+          {/*</View>*/}
         </View>
       </ImageBackground>
       <View style={styles.bottomView}>

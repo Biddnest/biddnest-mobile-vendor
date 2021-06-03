@@ -50,7 +50,7 @@ const OrderStatusWin = (props) => {
   driverVehicleList?.vehicles?.forEach((item, index) => {
     vehicleList.push({
       ...item,
-      label: item?.name,
+      label: item?.name + ', ' + item?.number,
       value: item?.id,
     });
   });

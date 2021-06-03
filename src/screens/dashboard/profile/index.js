@@ -74,7 +74,8 @@ const Profile = (props) => {
               ? Colors.darkBlue
               : Colors.white,
             padding: 0,
-            height: wp(15),
+            height: wp(12),
+            borderRadius: hp(1.5),
             justifyContent: 'center',
             paddingHorizontal: wp(4),
           },
@@ -467,7 +468,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.8,
     borderColor: Colors.silver,
     width: '100%',
-    marginVertical: hp(1.5),
+    marginVertical: hp(1),
   },
   topText: {
     fontFamily: 'Roboto-Bold',

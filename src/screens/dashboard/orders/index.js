@@ -18,6 +18,8 @@ const Orders = (props) => {
   const isFocused = useIsFocused();
   const statusData =
     useSelector((state) => state.Login?.configData?.enums?.bid?.status) || {};
+  const bookingStatusData =
+    useSelector((state) => state.Login?.configData?.enums?.booking) || {};
   const statusColor =
     useSelector((state) => state.Login?.configData?.enums?.bid) || {};
   const userData = useSelector((state) => state.Login?.loginData) || {};
@@ -372,6 +374,14 @@ const Orders = (props) => {
                 {item?.bid?.vendor?.fname} {item?.bid?.vendor?.lname}
               </Text>
             </View>
+            <View style={STYLES.flexBox}>
+              <Text style={STYLES.leftText}>Booking Type</Text>
+              <Text style={STYLES.rightText}>
+                {bookingStatusData?.booking_type?.economic == item?.booking_type
+                  ? 'Economic'
+                  : 'Premium'}
+              </Text>
+            </View>
           </View>
         )}
         {selectedTab === 'participated' && (
@@ -390,6 +400,14 @@ const Orders = (props) => {
               <Text style={STYLES.leftText}>bid submitted by</Text>
               <Text style={[STYLES.rightText, {width: '50%'}]}>
                 {item?.bid?.vendor?.fname} {item?.bid?.vendor?.lname}
+              </Text>
+            </View>
+            <View style={STYLES.flexBox}>
+              <Text style={STYLES.leftText}>Booking Type</Text>
+              <Text style={STYLES.rightText}>
+                {bookingStatusData?.booking_type?.economic == item?.booking_type
+                  ? 'Economic'
+                  : 'Premium'}
               </Text>
             </View>
             {/*<View style={STYLES.flexBox}>*/}

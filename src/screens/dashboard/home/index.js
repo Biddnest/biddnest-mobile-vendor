@@ -607,6 +607,14 @@ const Home = (props) => {
                 {item?.bid?.vendor?.fname} {item?.bid?.vendor?.lname}
               </Text>
             </View>
+            <View style={STYLES.flexBox}>
+              <Text style={STYLES.leftText}>Booking Type</Text>
+              <Text style={STYLES.rightText}>
+                {statusData?.booking_type?.economic == item?.booking_type
+                  ? 'Economic'
+                  : 'Premium'}
+              </Text>
+            </View>
             {/*<View style={STYLES.flexBox}>*/}
             {/*  <Text style={STYLES.leftText}>status</Text>*/}
             {/*  <Text*/}
@@ -628,6 +636,14 @@ const Home = (props) => {
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>category</Text>
               <Text style={STYLES.rightText}>{item?.service?.name}</Text>
+            </View>
+            <View style={STYLES.flexBox}>
+              <Text style={STYLES.leftText}>Booking Type</Text>
+              <Text style={STYLES.rightText}>
+                {statusData?.booking_type?.economic == item?.booking_type
+                  ? 'Economic'
+                  : 'Premium'}
+              </Text>
             </View>
           </View>
         )}
