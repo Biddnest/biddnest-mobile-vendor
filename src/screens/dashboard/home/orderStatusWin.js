@@ -15,6 +15,7 @@ import {CustomAlert} from '../../../constant/commonFun';
 import {useSelector} from 'react-redux';
 import moment from 'moment';
 import SelectionModal from '../../../components/selectionModal';
+import * as Animatable from 'react-native-animatable';
 
 const OrderStatusWin = (props) => {
   const {orderDetails, fetchOrderData} = props;
@@ -225,7 +226,11 @@ const OrderStatusWin = (props) => {
       </View>
       <View style={{marginHorizontal: wp(8), marginVertical: hp(2)}}>
         <View style={{flexDirection: 'row'}}>
-          <View
+          <Animatable.View
+            key={new Date()}
+            animation={'fadeIn'}
+            iterationCount={orderDetails?.status < 5 ? 'infinite' : 0}
+            direction="alternate"
             style={[
               styles.dotView,
               {
@@ -261,7 +266,11 @@ const OrderStatusWin = (props) => {
           </Text>
         </View>
         <View style={{flexDirection: 'row'}}>
-          <View
+          <Animatable.View
+            key={new Date()}
+            animation={'fadeIn'}
+            iterationCount={orderDetails?.status === 5 ? 'infinite' : 0}
+            direction="alternate"
             style={[
               styles.dotView,
               {
@@ -309,7 +318,15 @@ const OrderStatusWin = (props) => {
           </Text>
         </View>
         <View style={{flexDirection: 'row'}}>
-          <View
+          <Animatable.View
+            key={new Date()}
+            animation={'fadeIn'}
+            iterationCount={
+              orderDetails?.status === 6 || orderDetails?.status === 7
+                ? 'infinite'
+                : 0
+            }
+            direction="alternate"
             style={[
               styles.dotView,
               {
