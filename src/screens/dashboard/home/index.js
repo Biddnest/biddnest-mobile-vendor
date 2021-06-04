@@ -902,7 +902,7 @@ const Home = (props) => {
               marginVertical: hp(2),
             }}>
             <TextInput
-              label={'Password'}
+              label={'Password *'}
               secureTextEntry={true}
               placeHolder={'**********'}
               isRight={error.password}

@@ -129,7 +129,7 @@ const EditProfile = (props) => {
               <TextInput
                 value={data?.fname}
                 isRight={error.fname}
-                label={'First Name'}
+                label={'First Name *'}
                 placeHolder={'David'}
                 onChange={(text) => handleState('fname', text)}
                 style={{marginBottom: -hp(1)}}
@@ -139,7 +139,7 @@ const EditProfile = (props) => {
               <TextInput
                 value={data?.lname}
                 isRight={error.lname}
-                label={'Last Name'}
+                label={'Last Name *'}
                 placeHolder={'Jerome'}
                 onChange={(text) => handleState('lname', text)}
                 style={{marginBottom: -hp(1)}}
@@ -151,7 +151,7 @@ const EditProfile = (props) => {
             <TextInput
               value={data?.email}
               isRight={error.email}
-              label={'Email ID'}
+              label={'Email ID *'}
               placeHolder={'davidje@gmail.com'}
               onChange={(text) => handleState('email', text)}
               style={{marginBottom: -hp(1)}}
@@ -161,7 +161,7 @@ const EditProfile = (props) => {
             <TextInput
               disable={true}
               value={data?.phone}
-              label={'Phone Number'}
+              label={'Phone Number *'}
               placeHolder={'9739912345'}
               onChange={(text) => handleState('phone', text)}
               style={{marginBottom: -hp(1)}}

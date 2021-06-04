@@ -38,7 +38,7 @@ const VendorInformation = (props) => {
       }}>
       <View style={{width: '90%', marginTop: hp(2)}}>
         <TextInput
-          label={'Organization Name'}
+          label={'Organization Name *'}
           placeHolder={'Abc'}
           value={data?.organization_name}
           isRight={error?.organization_name}
@@ -52,7 +52,7 @@ const VendorInformation = (props) => {
         <TextInput
           value={data?.organization_desc}
           isRight={error?.organization_desc}
-          label={'Organization Description'}
+          label={'Organization Description *'}
           numberOfLines={4}
           placeHolder={
             'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.'
@@ -66,7 +66,7 @@ const VendorInformation = (props) => {
         />
         <TextInput
           keyboard={'decimal-pad'}
-          label={'Secondary Contact Number'}
+          label={'Secondary Contact Number *'}
           placeHolder={'7567144324'}
           isRight={error?.secondory_cont_no}
           value={data?.secondory_cont_no}
@@ -80,7 +80,7 @@ const VendorInformation = (props) => {
         <TextInput
           value={data?.gstin_no}
           isRight={error?.gstin_no}
-          label={'GSTIN Number'}
+          label={'GSTIN Number *'}
           placeHolder={'XXXXXXXXXXXX'}
           onChange={(text) =>
             setData({

@@ -45,7 +45,7 @@ const LocationDetails = (props) => {
         <TextInput
           isRight={error?.address_line1}
           value={data?.address_line1}
-          label={'Address Line 1'}
+          label={'Address Line 1 *'}
           placeHolder={'Lorem ipsum dolor sit amet'}
           onChange={(text) =>
             setData({
@@ -57,7 +57,7 @@ const LocationDetails = (props) => {
         <TextInput
           isRight={error?.address_line2}
           value={data?.address_line2}
-          label={'Address Line 2'}
+          label={'Address Line 2 *'}
           placeHolder={'Consetetur sadipscing elitr'}
           onChange={(text) =>
             setData({
@@ -69,7 +69,7 @@ const LocationDetails = (props) => {
         <TextInput
           isRight={error?.landmark}
           value={data?.landmark}
-          label={'Landmark'}
+          label={'Landmark *'}
           placeHolder={'Sed diam nonumy'}
           onChange={(text) =>
             setData({
@@ -81,7 +81,7 @@ const LocationDetails = (props) => {
         <TextInput
           isRight={error?.city}
           value={data?.city}
-          label={'City'}
+          label={'City *'}
           placeHolder={'Bengaluru'}
           onChange={(text) =>
             setData({
@@ -99,7 +99,7 @@ const LocationDetails = (props) => {
         <TextInput
           isRight={error?.pincode}
           value={data?.pincode?.toString()}
-          label={'Pincode'}
+          label={'Pincode *'}
           placeHolder={'123456'}
           keyboard={'decimal-pad'}
           onChange={(text) =>
@@ -112,7 +112,7 @@ const LocationDetails = (props) => {
         <TextInput
           isRight={error?.state}
           value={data?.state}
-          label={'State'}
+          label={'State *'}
           placeHolder={'Karnataka'}
           onChange={(text) =>
             setData({

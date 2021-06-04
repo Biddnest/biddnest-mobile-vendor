@@ -55,7 +55,7 @@ const Login = (props) => {
           <View style={styles.bottomView}>
             <Text style={STYLES.authScreenHeader}>Login</Text>
             <TextInput
-              label={'Email/Username'}
+              label={'Email/Username *'}
               placeHolder={'Email'}
               value={data?.username}
               isRight={error.username}
@@ -63,7 +63,7 @@ const Login = (props) => {
               onChange={(text) => handleState('username', text)}
             />
             <TextInput
-              label={'Password'}
+              label={'Password *'}
               placeHolder={'Password'}
               value={data?.password}
               isRight={error.password}

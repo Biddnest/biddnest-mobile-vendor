@@ -51,7 +51,7 @@ const ChangePassword = (props) => {
           <View style={styles.bottomView}>
             <Text style={STYLES.authScreenHeader}>Change Password</Text>
             <TextInput
-              label={'New Password'}
+              label={'New Password *'}
               value={data?.new_password}
               placeHolder={'New Password'}
               isRight={error.new_password}
@@ -59,7 +59,7 @@ const ChangePassword = (props) => {
               onChange={(text) => handleState('new_password', text)}
             />
             <TextInput
-              label={'Confirm New Password'}
+              label={'Confirm New Password *'}
               value={data?.confirm_password}
               placeHolder={'Confirm New Password'}
               isRight={error.confirm_password}

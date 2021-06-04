@@ -32,7 +32,7 @@ const ChangePassword = (props) => {
       <View style={{width: '90%', marginTop: hp(2)}}>
         <TextInput
           value={data?.current_password}
-          label={'Current Password'}
+          label={'Current Password *'}
           placeHolder={'Current Password'}
           isRight={error.current_password}
           secureTextEntry={true}
@@ -45,7 +45,7 @@ const ChangePassword = (props) => {
         />
         <TextInput
           value={data?.new_password}
-          label={'New Password'}
+          label={'New Password *'}
           placeHolder={'New Password'}
           isRight={error.new_password}
           secureTextEntry={true}
@@ -58,7 +58,7 @@ const ChangePassword = (props) => {
         />
         <TextInput
           value={data?.confirm_password}
-          label={'Confirm Password'}
+          label={'Confirm Password *'}
           placeHolder={'Confirm Password'}
           isRight={error.confirm_password}
           secureTextEntry={true}

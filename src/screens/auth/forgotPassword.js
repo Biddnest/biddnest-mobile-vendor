@@ -72,7 +72,7 @@ const ForgotPassword = (props) => {
             <Text style={STYLES.authScreenHeader}>Forgot Password</Text>
             <TextInput
               isRight={phoneValidate}
-              label={'Phone Number'}
+              label={'Phone Number *'}
               placeHolder={'Phone Number'}
               keyboard={'decimal-pad'}
               onChange={(text) => {

@@ -75,7 +75,7 @@ const RaiseRequest = (props) => {
           <TextInput
             isRight={error?.heading}
             value={data?.heading}
-            label={'Subject'}
+            label={'Subject *'}
             placeHolder={'Abc'}
             onChange={(text) => setData({...data, heading: text})}
           />
@@ -85,7 +85,7 @@ const RaiseRequest = (props) => {
           <TextInput
             isRight={error?.desc}
             value={data?.desc}
-            label={'Message'}
+            label={'Message *'}
             placeHolder={
               'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.'
             }
