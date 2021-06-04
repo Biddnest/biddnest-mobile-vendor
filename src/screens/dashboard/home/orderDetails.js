@@ -39,6 +39,7 @@ import moment from 'moment';
 import CountDown from '../../../components/countDown';
 import {useDispatch} from 'react-redux';
 import Ripple from 'react-native-material-ripple';
+import BookedConfirm from '../../../assets/svg/booked_confirm.svg';
 
 const OrderDetails = (props) => {
   const dispatch = useDispatch();
@@ -659,13 +660,10 @@ const OrderDetails = (props) => {
       <CustomModalAndroid
         visible={placedSuccessVisible}
         onPress={() => setPlacedSuccessVisible(false)}>
-        <Image
-          source={require('../../../assets/images/bid_success.png')}
-          style={{
-            width: wp(30),
-            height: wp(30),
-          }}
-          resizeMode={'contain'}
+        <BookedConfirm
+          height={wp(30)}
+          width={wp(30)}
+          style={{marginTop: hp(5)}}
         />
         <Text style={styles.bidText}>
           You have successfully placed your "BID"
