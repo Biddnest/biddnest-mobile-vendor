@@ -662,6 +662,10 @@ const Home = (props) => {
                   : 'Premium'}
               </Text>
             </View>
+            <View style={STYLES.flexBox}>
+              <Text style={STYLES.leftText}>BookMarked By</Text>
+              <Text style={STYLES.rightText}>{item?.bookmarked_by}</Text>
+            </View>
           </View>
         )}
         {item?.status === statusData?.status?.rebiding && (
