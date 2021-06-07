@@ -247,7 +247,7 @@ export function DrawerContent(props) {
               resizeMode={'contain'}
             />
           </View>
-          <View style={{width: wp(55), paddingLeft: wp(2)}}>
+          <View style={{width: wp(45), paddingLeft: wp(2)}}>
             <Text numberOfLines={1} style={styles.userText}>
               {userData?.fname} {userData?.lname}
             </Text>
@@ -262,22 +262,17 @@ export function DrawerContent(props) {
               +91 {userData?.phone}
             </Text>
           </View>
-          {/*<View style={{width: wp(10)}}>*/}
-          {/*  <Pressable*/}
-          {/*    style={styles.logoutWrapper}*/}
-          {/*    onPress={() => {*/}
-          {/*      dispatch({*/}
-          {/*        type: RESET_STORE,*/}
-          {/*      });*/}
-          {/*      resetNavigator(props, 'Login');*/}
-          {/*    }}>*/}
-          {/*    <MaterialIcons*/}
-          {/*      name={'logout'}*/}
-          {/*      color={Colors.white}*/}
-          {/*      size={wp(6)}*/}
-          {/*    />*/}
-          {/*  </Pressable>*/}
-          {/*</View>*/}
+          <View style={{width: wp(10)}}>
+            <Pressable
+              style={styles.logoutWrapper}
+              onPress={() => props.navigation.navigate('Profile')}>
+              <MaterialIcons
+                name={'person'}
+                color={Colors.white}
+                size={wp(6)}
+              />
+            </Pressable>
+          </View>
         </View>
       </ImageBackground>
       <View style={styles.bottomView}>
