@@ -35,7 +35,7 @@ import TextInput from '../../../components/textInput';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import {STORE} from '../../../redux';
 import CountDown from '../../../components/countDown';
-import {NOTIFICATION} from '../../../redux/types';
+import {NOTIFICATION, NOTIFICATION_TOUR} from '../../../redux/types';
 import DatePicker from 'react-native-datepicker';
 import Entypo from 'react-native-vector-icons/Entypo';
 import OneSignal from 'react-native-onesignal';
@@ -45,12 +45,14 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Ripple from 'react-native-material-ripple';
 import BiddnestLogo from '../../../assets/svg/biddnest_logo.svg';
 import SelectionModal from '../../../components/selectionModal';
+import SwitchButton from '../../../components/appTourSwitch/switchButton';
 
 export const HomeHeader = (props) => {
   const configData =
     useSelector((state) => state.Login?.configData?.contact_us?.details) || '';
   let data = JSON.parse(configData.toString());
   const [openModal, setOpenModal] = useState(false);
+  const appTour = useSelector((state) => state.Login?.notificationTour);
 
   return (
     <View
@@ -90,14 +92,20 @@ export const HomeHeader = (props) => {
         <View
           style={[STYLES.common, {alignItems: 'center', flexDirection: 'row'}]}>
           {!props.title && (
-            <Pressable
-              style={{...STYLES.common, width: wp(12)}}
-              onPress={props.onRightPress}>
-              <Switch
-                switchValue={props.notificationToggle}
+            <View
+              style={{
+                width: wp(12),
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '100%',
+              }}>
+              <SwitchButton
+                onRightPress={props.onRightPress}
+                notificationToggle={props.notificationToggle}
                 onChange={props.onChange}
+                appTour={appTour}
               />
-            </Pressable>
+            </View>
           )}
           <Pressable
             style={{...STYLES.common, width: wp(13)}}
@@ -236,6 +244,15 @@ const Home = (props) => {
       value: categoriesData[index]?.id,
     });
   });
+
+  useEffect(() => {
+    setTimeout(() => {
+      dispatch({
+        type: NOTIFICATION_TOUR,
+        payload: false,
+      });
+    }, 2000);
+  }, []);
 
   useEffect(() => {
     if (isFocused && userData?.token) {
@@ -674,6 +691,7 @@ const Home = (props) => {
               type: NOTIFICATION,
               payload: !notificationToggle,
             });
+            CustomAlert('Notification has been turned on');
             OneSignal.setSubscription(!notificationToggle);
             setNotificationToggle(!notificationToggle);
           }
@@ -890,7 +908,10 @@ const Home = (props) => {
             });
             OneSignal.setSubscription(false);
             setNotificationToggle(false);
-            setOffNotification(false);
+            setTimeout(() => {
+              setOffNotification(false);
+            }, 1500);
+            CustomAlert('Notification has been turned off');
           }}
         />
       </CustomModalAndroid>

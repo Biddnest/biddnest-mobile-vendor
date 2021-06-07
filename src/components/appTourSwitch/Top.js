@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, Pressable} from 'react-native';
 import {AppTourView} from 'react-native-app-tour';
-import {Colors, wp, hp} from '../constant/colors';
-import {STYLES} from '../constant/commonStyle';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import {Colors, wp, hp} from '../../constant/colors';
+import {STYLES} from '../../constant/commonStyle';
+import Switch from '../switch';
 
 class Top extends Component {
   render() {
@@ -16,21 +16,20 @@ class Top extends Component {
             }
             let props = {
               order: 11,
-              title: 'Save for later',
-              description: 'You can bookmark this booking to bid later.',
+              title: 'Control Notifications',
+              description: 'You can turn off notifications here when away.',
               backgroundPromptColor: Colors.darkBlue,
               outerCircleColor: Colors.btnBG,
-              targetRadius: 20,
+              targetRadius: 30,
             };
             this.props.addAppTourTarget &&
               this.props.addAppTourTarget(AppTourView.for(ref, {...props}));
           }}
-          style={{...STYLES.common, width: wp(8), height: '100%'}}
-          onPress={this?.props?.onheartPress}>
-          <FontAwesome
-            name={this?.props?.heart ? 'heart' : 'heart-o'}
-            color={Colors.darkBlue}
-            size={hp(2.7)}
+          style={{...STYLES.common, width: wp(12), height: '100%'}}
+          onPress={this?.props?.onPress}>
+          <Switch
+            switchValue={this?.props.switchValue}
+            onChange={this?.props.onChange}
           />
         </Pressable>
       </View>

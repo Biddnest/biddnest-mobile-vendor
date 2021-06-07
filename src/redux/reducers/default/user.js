@@ -8,4 +8,5 @@ export const LoginData = {
   configData: {},
   notification: true,
   appTour: true,
+  notificationTour: true,
 };
