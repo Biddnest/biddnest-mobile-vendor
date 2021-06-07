@@ -37,7 +37,6 @@ const Reports = (props) => {
         CustomAlert(err);
       });
   }, []);
-  console.log(data);
   return (
     <LinearGradient colors={[Colors.pageBG, Colors.white]} style={{flex: 1}}>
       <SimpleHeader

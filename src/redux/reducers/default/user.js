@@ -7,4 +7,5 @@ export const LoginData = {
   orders: {},
   configData: {},
   notification: true,
+  appTour: true,
 };

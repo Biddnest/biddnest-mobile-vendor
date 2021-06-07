@@ -4,15 +4,17 @@ import {boxShadow, Colors, wp, hp} from '../constant/colors';
 import {STYLES} from '../constant/commonStyle';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import BackArrow from '../assets/svg/back_arrow.svg';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import CustomModalAndroid from './customModal';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
+import BookMarkedButton from './bookMarkedButton';
 
 const SimpleHeader = (props) => {
+  const dispatch = useDispatch();
   const configData =
     useSelector((state) => state.Login?.configData?.contact_us?.details) || '';
+  const appTour = useSelector((state) => state.Login?.appTour);
   let data = JSON.parse(configData.toString());
   const [openModal, setOpenModal] = useState(false);
   return (
@@ -57,15 +59,20 @@ const SimpleHeader = (props) => {
         <View
           style={[STYLES.common, {alignItems: 'center', flexDirection: 'row'}]}>
           {props.isBookmark && (
-            <Pressable
-              style={{...STYLES.common, width: wp(8)}}
-              onPress={props.onheartPress}>
-              <FontAwesome
-                name={props.heart ? 'heart' : 'heart-o'}
-                color={Colors.darkBlue}
-                size={hp(2.7)}
+            <View
+              style={{
+                width: wp(8),
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '100%',
+              }}>
+              <BookMarkedButton
+                onheartPress={props?.onheartPress}
+                heart={props?.heart}
+                dispatch={dispatch}
+                appTour={appTour}
               />
-            </Pressable>
+            </View>
           )}
           <Pressable
             style={{...STYLES.common, width: wp(13)}}

@@ -3,7 +3,7 @@ import {
   DRIVER_VEHICLE_LIST,
   LOGIN_USER_DATA,
   ORDERS,
-  NOTIFICATION,
+  NOTIFICATION, APP_TOUR,
 } from '../types';
 import {appDefaultReducer} from './default';
 const INITIAL_STATE = appDefaultReducer.Login;
@@ -24,6 +24,9 @@ export default (state = INITIAL_STATE, action) => {
     }
     case NOTIFICATION: {
       return {...state, notification: action.payload};
+    }
+    case APP_TOUR: {
+      return {...state, appTour: action.payload};
     }
     default:
       return state;
