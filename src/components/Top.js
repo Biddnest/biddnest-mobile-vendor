@@ -19,7 +19,7 @@ class Top extends Component {
               title: 'Save for later',
               description: 'You can bookmark this booking to bid later.',
               backgroundPromptColor: Colors.darkBlue,
-              outerCircleColor: Colors.btnBG,
+              outerCircleColor: Colors.darkBlue,
               targetRadius: 20,
             };
             this.props.addAppTourTarget &&

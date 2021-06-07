@@ -19,7 +19,7 @@ class Top extends Component {
               title: 'Control Notifications',
               description: 'You can turn off notifications here when away.',
               backgroundPromptColor: Colors.darkBlue,
-              outerCircleColor: Colors.btnBG,
+              outerCircleColor: Colors.darkBlue,
               targetRadius: 30,
             };
             this.props.addAppTourTarget &&

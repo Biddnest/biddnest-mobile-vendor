@@ -28,6 +28,7 @@ import {Calendar} from 'react-native-calendars';
 import {Input} from 'react-native-elements';
 import BidSuccess from '../../../assets/svg/bid_success.svg';
 import SelectionModal from '../../../components/selectionModal';
+import TwoButton from '../../../components/twoButton';
 
 const AcceptOrder = (props) => {
   const {priceList, public_booking_id, orderDetails} = props;
@@ -36,6 +37,7 @@ const AcceptOrder = (props) => {
   const [forgotPin, setForgotPin] = useState(false);
   const [calenderDate, setCalenderDate] = useState();
   const [success, setSuccess] = useState(false);
+  const [priceWarning, setPriceWarning] = useState(false);
   const configData =
     useSelector((state) => state.Login?.configData?.enums?.service) || {};
   const [applyBidData, setApplyBidData] = useState({
@@ -806,7 +808,16 @@ const AcceptOrder = (props) => {
             onPress={() => {
               if (step === 0) {
                 if (parseInt(stepData?.bid_amount) > 0) {
-                  setStep(1);
+                  if (
+                    parseInt(stepData?.bid_amount) >=
+                      orderDetails?.final_estimated_quote / 2 &&
+                    parseInt(stepData?.bid_amount) <=
+                      orderDetails?.final_estimated_quote * 2
+                  ) {
+                    setStep(1);
+                  } else {
+                    setPriceWarning(true);
+                  }
                 } else {
                   CustomAlert('Total price shoule not be zero');
                 }
@@ -911,6 +922,39 @@ const AcceptOrder = (props) => {
             }}
           />
         )}
+        <CustomModalAndroid
+          visible={!!priceWarning}
+          title={'Warning'}
+          onPress={() => setPriceWarning(false)}>
+          <View
+            style={{
+              marginTop: hp(4),
+              marginBottom: hp(2),
+              marginHorizontal: wp(15),
+            }}>
+            <Text
+              style={{
+                fontFamily: 'Roboto-Regular',
+                fontSize: wp(4),
+                color: Colors.inputTextColor,
+                marginBottom: hp(2),
+                textAlign: 'center',
+              }}>
+              Your bid amount is too low/high than the expected price. are you
+              sure want to proceed with this?
+            </Text>
+          </View>
+          <TwoButton
+            leftLabel={'no'}
+            rightLabel={'Yes'}
+            isLoading={isLoading}
+            leftOnPress={() => setPriceWarning(false)}
+            rightOnPress={() => {
+              setPriceWarning(false);
+              setStep(1);
+            }}
+          />
+        </CustomModalAndroid>
       </CustomModalAndroid>
     );
   }

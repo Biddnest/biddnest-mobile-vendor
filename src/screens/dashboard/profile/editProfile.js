@@ -45,6 +45,7 @@ const EditProfile = (props) => {
     ImageSelection(type)
       .then((res) => {
         handleState('image', res);
+        setImageSelect(false);
       })
       .catch((err) => {});
   };

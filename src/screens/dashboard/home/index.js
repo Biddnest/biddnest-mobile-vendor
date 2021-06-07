@@ -224,7 +224,7 @@ const Home = (props) => {
           });
         }
       } else if (selectedTab === 1) {
-        if (temp > 3) {
+        if (temp > 3 && temp < 8) {
           filterStatusOptions.push({
             label: item?.split('_').join(' '),
             value: temp,
@@ -238,6 +238,12 @@ const Home = (props) => {
       }
     }
   });
+  if (filterStatusOptions.findIndex((item) => item.value === 'all') === -1) {
+    filterStatusOptions.unshift({
+      label: '-All-',
+      value: 'all',
+    });
+  }
   categoriesData?.forEach((item, index) => {
     filterCategoryOptions.push({
       label: item?.name?.split('_').join(' '),
