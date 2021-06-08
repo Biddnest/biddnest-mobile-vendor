@@ -89,34 +89,14 @@ export const HomeHeader = (props) => {
         )) || <BiddnestLogo height={'55%'} width={'70%'} />}
       </View>
       {props.right ? (
-        <View
-          style={[STYLES.common, {alignItems: 'center', flexDirection: 'row'}]}>
-          {!props.title && (
-            <View
-              style={{
-                width: wp(12),
-                alignItems: 'center',
-                justifyContent: 'center',
-                height: '100%',
-              }}>
-              <SwitchButton
-                onRightPress={props.onRightPress}
-                notificationToggle={props.notificationToggle}
-                onChange={props.onChange}
-                appTour={appTour}
-              />
-            </View>
-          )}
-          <Pressable
-            style={{...STYLES.common, width: wp(13)}}
-            onPress={() => setOpenModal(true)}>
-            <SimpleLineIcons
-              name={'earphones-alt'}
-              color={Colors.darkBlue}
-              size={hp(2.7)}
-            />
-          </Pressable>
-        </View>
+        <SwitchButton
+          title={props.title}
+          onRightPress={props.onRightPress}
+          notificationToggle={props.notificationToggle}
+          onChange={props.onChange}
+          appTour={appTour}
+          onPressSupport={() => setOpenModal(true)}
+        />
       ) : null}
       <CustomModalAndroid
         visible={openModal}
