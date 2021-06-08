@@ -143,6 +143,7 @@ export const HomeHeader = (props) => {
 const Home = (props) => {
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
+  const appTour = useSelector((state) => state.Login?.notificationTour);
   const configData =
     useSelector(
       (state) => state.Login?.configData?.enums?.booking?.fetch_type,
@@ -237,7 +238,7 @@ const Home = (props) => {
         type: NOTIFICATION_TOUR,
         payload: false,
       });
-    }, 2000);
+    }, 5000);
   }, []);
 
   useEffect(() => {
@@ -764,7 +765,10 @@ const Home = (props) => {
           />
         )}
       </View>
-      <FilterButton onPress={() => setFilterVisible(true)} />
+      <SwitchButton
+        onPressFilter={() => setFilterVisible(true)}
+        appTour={appTour}
+      />
       <CustomModalAndroid
         visible={filterVisible}
         title={'FILTERS'}

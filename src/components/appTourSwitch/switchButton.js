@@ -59,26 +59,6 @@ export default class SwitchButton extends Component<{}> {
             STYLES.common,
             {alignItems: 'center', flexDirection: 'row', height: '100%'},
           ]}>
-          {this.props.onPressFilter && (
-            <View
-              style={{
-                height: '100%',
-                position: 'absolute',
-                right: 0,
-                bottom: 0,
-              }}>
-              <FilterTop
-                key={new Date()}
-                style={styles.top}
-                addAppTourTarget={(appTourTarget) => {
-                  if (this?.props?.appTour) {
-                    this.appTourTargets.push(appTourTarget);
-                  }
-                }}
-                onPressFilter={this?.props.onPressFilter}
-              />
-            </View>
-          )}
           {!this?.props?.title && !this.props.onPressFilter && (
             <View
               style={{
@@ -116,6 +96,27 @@ export default class SwitchButton extends Component<{}> {
                   }
                 }}
                 onPress={this?.props.onPressSupport}
+              />
+            </View>
+          )}
+          {this.props.onPressFilter && (
+            <View
+              style={{
+                position: 'absolute',
+                height: hp(9),
+                width: hp(9),
+                bottom: hp(1),
+                right: hp(1),
+              }}>
+              <FilterTop
+                key={new Date()}
+                style={styles.top}
+                addAppTourTarget={(appTourTarget) => {
+                  if (this?.props?.appTour) {
+                    this.appTourTargets.push(appTourTarget);
+                  }
+                }}
+                onPressFilter={this?.props.onPressFilter}
               />
             </View>
           )}
@@ -240,16 +241,10 @@ class FilterTop extends Component {
               backgroundPromptColor: Colors.darkBlue,
               outerCircleColor: Colors.darkBlue,
               targetRadius: 30,
+              outerCircleAlpha: 0.5,
             };
             this.props.addAppTourTarget &&
               this.props.addAppTourTarget(AppTourView.for(ref, {...props}));
-          }}
-          style={{
-            position: 'absolute',
-            height: hp(9),
-            width: hp(9),
-            bottom: hp(1),
-            right: hp(1),
           }}>
           <Filter width={hp(9)} height={hp(9)} />
         </Pressable>
