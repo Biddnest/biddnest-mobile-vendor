@@ -5,7 +5,6 @@ import {Colors, hp, wp} from '../../constant/colors';
 import {STYLES} from '../../constant/commonStyle';
 import Switch from '../switch';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import FilterButton from '../filterButton';
 import Filter from '../../assets/svg/filter.svg';
 
 export default class SwitchButton extends Component<{}> {
@@ -227,28 +226,27 @@ class SupportTop extends Component {
 class FilterTop extends Component {
   render() {
     return (
-      <View style={styles.container}>
-        <Pressable
-          onPress={() => this.props.onPressFilter()}
-          ref={(ref) => {
-            if (!ref) {
-              return;
-            }
-            let props = {
-              order: 1,
-              title: 'Filter',
-              description: 'Filter by various status, dates and more',
-              backgroundPromptColor: Colors.darkBlue,
-              outerCircleColor: Colors.darkBlue,
-              targetRadius: 30,
-              outerCircleAlpha: 0.5,
-            };
-            this.props.addAppTourTarget &&
-              this.props.addAppTourTarget(AppTourView.for(ref, {...props}));
-          }}>
-          <Filter width={hp(9)} height={hp(9)} />
-        </Pressable>
-      </View>
+      <Pressable
+        style={{flex: 1}}
+        onPress={() => this.props.onPressFilter()}
+        ref={(ref) => {
+          if (!ref) {
+            return;
+          }
+          let props = {
+            order: 1,
+            title: 'Filter',
+            description: 'Filter by various status, dates and more',
+            backgroundPromptColor: Colors.darkBlue,
+            outerCircleColor: Colors.darkBlue,
+            targetRadius: 30,
+            outerCircleAlpha: 0.5,
+          };
+          this.props.addAppTourTarget &&
+            this.props.addAppTourTarget(AppTourView.for(ref, {...props}));
+        }}>
+        <Filter width={hp(9)} height={hp(9)} />
+      </Pressable>
     );
   }
 }

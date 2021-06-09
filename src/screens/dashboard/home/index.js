@@ -765,10 +765,12 @@ const Home = (props) => {
           />
         )}
       </View>
-      <SwitchButton
-        onPressFilter={() => setFilterVisible(true)}
-        appTour={appTour}
-      />
+      <View style={{position: 'absolute', bottom: 0, right: 0}}>
+        <SwitchButton
+          onPressFilter={() => setFilterVisible(true)}
+          appTour={appTour}
+        />
+      </View>
       <CustomModalAndroid
         visible={filterVisible}
         title={'FILTERS'}
