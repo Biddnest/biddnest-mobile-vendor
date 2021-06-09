@@ -82,7 +82,7 @@ const Reports = (props) => {
                   style={{
                     color: Colors.white,
                     fontFamily: 'Roboto-Regular',
-                    fontSize: wp(3.8),
+                    fontSize: hp(1.9),
                   }}>
                   {item.title}
                 </Text>
@@ -90,7 +90,7 @@ const Reports = (props) => {
                   style={{
                     color: Colors.white,
                     fontFamily: 'Roboto-Medium',
-                    fontSize: wp(8),
+                    fontSize: hp(4),
                     marginTop: hp(1),
                   }}>
                   {item.count}

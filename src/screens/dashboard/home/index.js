@@ -13,11 +13,8 @@ import {
 import AsyncStorage from '@react-native-community/async-storage';
 import {Colors, wp, boxShadow, hp} from '../../../constant/colors';
 import {STYLES} from '../../../constant/commonStyle';
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import CustomModalAndroid from '../../../components/customModal';
 import FlatButton from '../../../components/flatButton';
-import Switch from '../../../components/switch';
-import FilterButton from '../../../components/filterButton';
 import MenuIcon from '../../../assets/svg/menu_icon.svg';
 import MapPin from '../../../assets/svg/map_pin.svg';
 import TwoButton from '../../../components/twoButton';
@@ -80,7 +77,7 @@ export const HomeHeader = (props) => {
             style={{
               fontFamily: 'Gilroy-Bold',
               color: Colors.inputTextColor,
-              fontSize: wp(5),
+              fontSize: hp(2.8),
               marginRight: props.right ? wp(0) : wp(13),
               textTransform: 'capitalize',
             }}>
@@ -398,7 +395,7 @@ const Home = (props) => {
                   <Text
                     style={{
                       color: Colors.inputTextColor,
-                      fontSize: wp(3),
+                      fontSize: hp(1.5),
                       fontFamily: 'Roboto-Bold',
                     }}>
                     {item}
@@ -428,7 +425,7 @@ const Home = (props) => {
             <Text
               style={{
                 color: Colors.inputTextColor,
-                fontSize: wp(3.8),
+                fontSize: hp(1.9),
                 fontFamily: 'Roboto-Bold',
               }}>
               {item?.bid &&
@@ -753,7 +750,7 @@ const Home = (props) => {
               <Text
                 style={{
                   fontFamily: 'Roboto-Italic',
-                  fontSize: wp(3.5),
+                  fontSize: hp(1.9),
                   color: '#99A0A5',
                   textAlign: 'center',
                   marginHorizontal: 20,
@@ -1030,7 +1027,7 @@ const styles = StyleSheet.create({
   dateBottomText: {
     fontFamily: 'Roboto-Regular',
     marginTop: 0,
-    fontSize: wp(3.5),
+    fontSize: hp(1.9),
     color: '#99A0A5',
     marginLeft: wp(4),
   },
@@ -1041,7 +1038,7 @@ const styles = StyleSheet.create({
     width: hp(6.5),
     borderColor: Colors.silver,
     color: Colors.textLabelColor,
-    fontSize: wp(6),
+    fontSize: hp(3),
   },
   flexBoxWrapper: {
     maxWidth: '85%',
@@ -1054,7 +1051,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   warningText: {
-    fontSize: wp(3.5),
+    fontSize: hp(1.9),
     fontFamily: 'Roboto-Italic',
     color: Colors.inputTextColor,
     marginLeft: 5,

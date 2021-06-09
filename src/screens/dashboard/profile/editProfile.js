@@ -71,7 +71,7 @@ const EditProfile = (props) => {
               style={{
                 fontFamily: 'Roboto-Bold',
                 color: Colors.textLabelColor,
-                fontSize: wp(4),
+                fontSize: hp(2.2),
               }}>
               Image
             </Text>
@@ -108,20 +108,12 @@ const EditProfile = (props) => {
                   <Text
                     style={{
                       fontFamily: 'Roboto-Bold',
-                      fontSize: wp(3.8),
+                      fontSize: hp(1.9),
                       color: Colors.white,
                     }}>
                     UPLOAD IMAGE
                   </Text>
                 </Ripple>
-                {/*<Text*/}
-                {/*  style={{*/}
-                {/*    color: Colors.inputTextColor,*/}
-                {/*    fontSize: wp(3.4),*/}
-                {/*    fontFamily: 'Roboto-Light',*/}
-                {/*  }}>*/}
-                {/*  Max File size: 1MB*/}
-                {/*</Text>*/}
               </View>
             </View>
           </View>
@@ -187,7 +179,7 @@ const EditProfile = (props) => {
           {/*    style={{*/}
           {/*      fontFamily: 'Roboto-Bold',*/}
           {/*      color: Colors.textLabelColor,*/}
-          {/*      fontSize: wp(4),*/}
+          {/*      fontSize: hp(2.2),*/}
           {/*    }}>*/}
           {/*    Date Of Birth*/}
           {/*  </Text>*/}
@@ -239,7 +231,7 @@ const EditProfile = (props) => {
           {/*          paddingHorizontal: 15,*/}
           {/*        },*/}
           {/*        dateText: {*/}
-          {/*          fontSize: wp(4),*/}
+          {/*          fontSize: hp(2.2),*/}
           {/*          backgroundColor: Colors.textBG,*/}
           {/*          color: Colors.inputTextColor,*/}
           {/*          justifyContent: 'flex-start',*/}

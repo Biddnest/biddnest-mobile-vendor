@@ -162,7 +162,7 @@ const OrderStatusWin = (props) => {
             alignItems: 'center',
             marginTop: hp(1),
           }}>
-          <Text style={[STYLES.sliderText, {width: wp(20), fontSize: wp(4)}]}>
+          <Text style={[STYLES.sliderText, {width: wp(20), fontSize: hp(2.2)}]}>
             Name
           </Text>
           <Text
@@ -189,7 +189,7 @@ const OrderStatusWin = (props) => {
         {/*</View>*/}
         <View
           style={{flexDirection: 'row', alignItems: 'center', marginTop: 3}}>
-          <Text style={[STYLES.sliderText, {width: wp(20), fontSize: wp(4)}]}>
+          <Text style={[STYLES.sliderText, {width: wp(20), fontSize: hp(2.2)}]}>
             From:
           </Text>
           <Text
@@ -207,7 +207,7 @@ const OrderStatusWin = (props) => {
         </View>
         <View
           style={{flexDirection: 'row', alignItems: 'center', marginTop: 3}}>
-          <Text style={[STYLES.sliderText, {width: wp(20), fontSize: wp(4)}]}>
+          <Text style={[STYLES.sliderText, {width: wp(20), fontSize: hp(2.2)}]}>
             To:
           </Text>
           <Text
@@ -530,7 +530,7 @@ export default OrderStatusWin;
 
 const styles = StyleSheet.create({
   warningText: {
-    fontSize: wp(3.5),
+    fontSize: hp(1.9),
     fontFamily: 'Roboto-Italic',
     color: Colors.inputTextColor,
     marginLeft: 5,
@@ -557,7 +557,7 @@ const styles = StyleSheet.create({
   stepHeaderText: {
     fontFamily: 'Roboto-Regular',
     color: Colors.darkBlue,
-    fontSize: wp(4),
+    fontSize: hp(2.2),
     marginLeft: 10,
     textTransform: 'uppercase',
   },
@@ -585,7 +585,7 @@ const styles = StyleSheet.create({
   },
   subHeaderText: {
     fontFamily: 'Roboto-Regular',
-    fontSize: wp(3),
+    fontSize: hp(1.5),
     color: Colors.darkBlue,
     textTransform: 'capitalize',
   },
@@ -606,6 +606,6 @@ const styles = StyleSheet.create({
     width: hp(6.5),
     borderColor: Colors.silver,
     color: Colors.textLabelColor,
-    fontSize: wp(6),
+    fontSize: hp(3),
   },
 });

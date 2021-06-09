@@ -23,7 +23,7 @@ const FlatButton = (props) => {
           style={{
             fontFamily: 'Roboto-Bold',
             color: Colors.white,
-            fontSize: wp(5),
+            fontSize: hp(2.8),
             textTransform: 'uppercase',
           }}>
           {props.label}

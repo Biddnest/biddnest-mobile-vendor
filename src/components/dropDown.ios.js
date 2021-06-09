@@ -15,7 +15,7 @@ const DropDownAndroid = (props) => {
         style={{
           fontFamily: 'Roboto-Bold',
           color: Colors.textLabelColor,
-          fontSize: wp(4),
+          fontSize: hp(2.2),
           marginBottom: hp(1),
         }}>
         {props.label}
@@ -65,7 +65,7 @@ const DropDownAndroid = (props) => {
             },
           ]}
           labelStyle={{
-            fontSize: wp(4),
+            fontSize: hp(2.2),
             backgroundColor: Colors.textBG,
             color: Colors.inputTextColor,
             textTransform: 'capitalize',

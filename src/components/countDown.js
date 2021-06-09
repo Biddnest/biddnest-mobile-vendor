@@ -2,9 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import {StyleSheet, View, Text, TouchableOpacity, AppState} from 'react-native';
-import _ from 'lodash';
 import {sprintf} from 'sprintf-js';
-import {Colors, wp} from '../constant/colors';
+import {Colors, hp} from '../constant/colors';
 
 const DEFAULT_DIGIT_STYLE = {backgroundColor: '#FAB913'};
 const DEFAULT_DIGIT_TXT_STYLE = {color: '#000'};
@@ -173,7 +172,7 @@ class CountDown extends React.Component {
             styles.separatorTxt,
             {
               color: Colors.darkBlue,
-              fontSize: wp(4),
+              fontSize: hp(2.2),
               fontFamily: 'Gilroy-SemiBold',
             },
             separatorStyle,

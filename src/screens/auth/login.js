@@ -11,7 +11,6 @@ import {useDispatch} from 'react-redux';
 import {signIn, signOut} from '../../redux/actions/user';
 import {
   CustomAlert,
-  CustomConsole,
   resetNavigator,
 } from '../../constant/commonFun';
 import OneSignal from 'react-native-onesignal';
@@ -151,7 +150,7 @@ const Login = (props) => {
               style={{
                 color: Colors.darkBlue,
                 fontFamily: 'Roboto-Bold',
-                fontSize: wp(3.8),
+                fontSize: hp(1.9),
               }}>
               Forgot Password?
             </Text>
@@ -176,7 +175,7 @@ const styles = StyleSheet.create({
     marginTop: hp(1),
     borderColor: Colors.silver,
     color: Colors.textLabelColor,
-    fontSize: wp(6),
+    fontSize: hp(3),
   },
   bottomView: {
     height: hp(70),

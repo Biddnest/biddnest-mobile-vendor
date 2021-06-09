@@ -10,6 +10,12 @@ import ChangePassword from '../screens/auth/changePassword';
 import DrawerNavigation from './drawerNavigation';
 import ChatRedirect from '../screens/dashboard/orders/chatRedirection';
 import {navigationRef} from './RootNavigation';
+import {
+  OrientationLocker,
+  PORTRAIT,
+  UNLOCK,
+} from 'react-native-orientation-locker';
+import {isTablet} from 'react-native-device-info';
 
 const Stack = createStackNavigator();
 const MyTheme = {
@@ -27,6 +33,7 @@ const App = () => {
   }, []);
   return (
     <NavigationContainer ref={navigationRef} theme={MyTheme}>
+      {/*<OrientationLocker orientation={isTablet() ? UNLOCK : UNLOCK} />*/}
       <Stack.Navigator initialRouteName="Splash" headerMode={false}>
         <Stack.Screen name="Splash" component={Splash} />
         <Stack.Screen name="Login" component={Login} />

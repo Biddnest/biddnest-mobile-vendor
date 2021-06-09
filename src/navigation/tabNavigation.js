@@ -37,7 +37,7 @@ const TabNavigation = (props: any) => {
         },
         labelStyle: {
           fontFamily: 'Gilroy-Bold',
-          fontSize: wp(3.5),
+          fontSize: hp(1.9),
         },
       }}
       screenOptions={({route}) => ({
@@ -79,7 +79,7 @@ const TabNavigation = (props: any) => {
             <Text
               style={{
                 fontFamily: 'Gilroy-Bold',
-                fontSize: wp(3.5),
+                fontSize: hp(1.9),
                 color: focused ? Colors.darkBlue : '#9D9CC5',
                 marginLeft: position === 'beside-icon' ? 20 : 0,
                 marginTop: position === 'beside-icon' ? 3 : 0,

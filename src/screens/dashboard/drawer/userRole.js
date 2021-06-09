@@ -346,7 +346,7 @@ const UserRole = (props) => {
             <Text
               style={{
                 fontFamily: 'Roboto-Italic',
-                fontSize: wp(3.5),
+                fontSize: hp(1.9),
                 color: '#99A0A5',
                 textAlign: 'center',
                 marginHorizontal: 20,
@@ -515,12 +515,12 @@ const styles = StyleSheet.create({
   topText: {
     fontFamily: 'Gilroy-SemiBold',
     color: Colors.inputTextColor,
-    fontSize: wp(3.5),
+    fontSize: hp(1.9),
   },
   bottomText: {
     fontFamily: 'Roboto-Bold',
     color: Colors.inputTextColor,
-    fontSize: wp(4),
+    fontSize: hp(2.2),
   },
   flexBox: {marginTop: hp(2), alignItems: 'flex-start', width: '85%'},
 });

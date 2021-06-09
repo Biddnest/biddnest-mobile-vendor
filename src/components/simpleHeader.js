@@ -47,7 +47,7 @@ const SimpleHeader = (props) => {
         <Text
           style={{
             fontFamily: 'Gilroy-Bold',
-            fontSize: wp(5),
+            fontSize: hp(2.8),
             color: Colors.inputTextColor,
             marginRight: props.right ? wp(0) : wp(13),
             textTransform: 'capitalize',

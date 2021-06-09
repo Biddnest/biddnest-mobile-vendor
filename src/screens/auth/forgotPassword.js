@@ -100,7 +100,7 @@ const ForgotPassword = (props) => {
                     style={{
                       fontFamily: 'Roboto-Bold',
                       color: Colors.textLabelColor,
-                      fontSize: wp(4),
+                      fontSize: hp(2.2),
                     }}>
                     Verify OTP
                   </Text>
@@ -122,7 +122,7 @@ const ForgotPassword = (props) => {
                 <Text
                   style={{
                     color: Colors.grey,
-                    fontSize: wp(3.8),
+                    fontSize: hp(1.9),
                     marginTop: hp(1),
                   }}>
                   Waiting for OTP
@@ -157,7 +157,7 @@ const ForgotPassword = (props) => {
                 <Text
                   style={{
                     color: Colors.grey,
-                    fontSize: wp(3.8),
+                    fontSize: hp(1.9),
                   }}>
                   Did not receive OTP?{' '}
                   <Text
@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
     marginTop: hp(1),
     borderColor: Colors.silver,
     color: Colors.textLabelColor,
-    fontSize: wp(6),
+    fontSize: hp(3),
   },
   checkBoxView: {
     height: 20,

@@ -204,7 +204,7 @@ const OrderDetails = (props) => {
                 <Text
                   style={{
                     color: Colors.inputTextColor,
-                    fontSize: wp(3),
+                    fontSize: hp(1.5),
                     fontFamily: 'Roboto-Bold',
                   }}>
                   {item}
@@ -234,7 +234,7 @@ const OrderDetails = (props) => {
           <Text
             style={{
               color: Colors.inputTextColor,
-              fontSize: wp(3.8),
+              fontSize: hp(1.9),
               fontFamily: 'Roboto-Bold',
             }}>
             {orderDetails?.bid &&
@@ -736,7 +736,7 @@ const styles = StyleSheet.create({
     marginBottom: hp(5),
     color: Colors.darkBlue,
     fontFamily: 'Roboto-Regular',
-    fontSize: wp(5),
+    fontSize: hp(2.8),
     marginHorizontal: wp(20),
     textAlign: 'center',
   },
@@ -761,7 +761,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.btnBG,
   },
   warningText: {
-    fontSize: wp(3.5),
+    fontSize: hp(1.9),
     fontFamily: 'Roboto-Italic',
     color: Colors.inputTextColor,
     marginLeft: 5,

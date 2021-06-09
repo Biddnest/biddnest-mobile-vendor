@@ -124,7 +124,7 @@ const Orders = (props) => {
                 <Text
                   style={{
                     color: Colors.inputTextColor,
-                    fontSize: wp(3.8),
+                    fontSize: hp(1.9),
                     fontFamily: 'Roboto-Bold',
                   }}>
                   {item}
@@ -154,7 +154,7 @@ const Orders = (props) => {
           <Text
             style={{
               color: Colors.inputTextColor,
-              fontSize: wp(3.8),
+              fontSize: hp(1.9),
               fontFamily: 'Roboto-Bold',
             }}>
             {item?.bid &&
@@ -491,7 +491,7 @@ const Orders = (props) => {
               <Text
                 style={{
                   fontFamily: 'Roboto-Italic',
-                  fontSize: wp(3.5),
+                  fontSize: hp(1.9),
                   color: '#99A0A5',
                   textAlign: 'center',
                   marginHorizontal: 20,

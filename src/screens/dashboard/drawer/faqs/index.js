@@ -112,6 +112,6 @@ const styles = StyleSheet.create({
   bottomText: {
     fontFamily: 'Roboto-Regular',
     color: Colors.inputTextColor,
-    fontSize: wp(3.5),
+    fontSize: hp(1.9),
   },
 });

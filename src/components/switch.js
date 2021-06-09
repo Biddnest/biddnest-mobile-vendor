@@ -9,7 +9,7 @@ const Switch = (props) => {
         style={{
           fontFamily: 'Roboto-Regular',
           color: !props.switchValue ? '#3B4B58' : '#99A0A5',
-          fontSize: wp(3.8),
+          fontSize: hp(1.9),
         }}>
         {props.left}
       </Text>
@@ -42,7 +42,7 @@ const Switch = (props) => {
         style={{
           fontFamily: 'Roboto-Regular',
           color: props.switchValue ? '#3B4B58' : '#99A0A5',
-          fontSize: wp(3.8),
+          fontSize: hp(1.9),
         }}>
         {props.right}
       </Text>

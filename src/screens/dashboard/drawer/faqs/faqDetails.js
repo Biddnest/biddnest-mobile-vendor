@@ -101,7 +101,7 @@ const FAQDetails = (props) => {
             <Text
               style={{
                 fontFamily: 'Roboto-Italic',
-                fontSize: wp(3.5),
+                fontSize: hp(1.9),
                 color: '#99A0A5',
                 textAlign: 'center',
                 marginHorizontal: 20,
@@ -136,14 +136,14 @@ const styles = StyleSheet.create({
   },
   topText: {
     fontFamily: 'Roboto-Bold',
-    fontSize: wp(4),
+    fontSize: hp(2.2),
     color: Colors.inputTextColor,
     width: '90%',
   },
   bottomText: {
     fontFamily: 'Roboto-Regular',
     color: Colors.inputTextColor,
-    fontSize: wp(3.6),
+    fontSize: hp(1.9),
   },
   flexBox: {
     flexDirection: 'row',

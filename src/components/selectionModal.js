@@ -14,7 +14,7 @@ const SelectionModal = (props) => {
         style={{
           fontFamily: 'Roboto-Bold',
           color: Colors.textLabelColor,
-          fontSize: wp(4),
+          fontSize: hp(2.2),
           marginBottom: hp(1),
         }}>
         {props.label}

@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
   bottomText: {
     fontFamily: 'Roboto-Regular',
     color: Colors.inputTextColor,
-    fontSize: wp(3.6),
+    fontSize: hp(1.9),
     width: wp(71),
   },
   flexBox: {
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     right: wp(5),
     color: Colors.red,
-    fontSize: wp(3.5),
+    fontSize: hp(1.9),
     fontFamily: 'Roboto-Regular',
   },
 });

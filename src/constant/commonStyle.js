@@ -1,25 +1,19 @@
 import {Colors, hp, wp} from './colors';
 
 export const STYLES = {
-  textHeader: {
-    fontFamily: 'Gilroy-Light',
-    fontSize: wp(3.5),
-    color: Colors.inputTextColor,
-    textAlign: 'center',
-  },
   common: {
     alignItems: 'center',
     justifyContent: 'center',
   },
   emptyText: {
     fontFamily: 'Roboto-Italic',
-    fontSize: wp(3.6),
+    fontSize: hp(1.9),
     color: Colors.darkBlue,
   },
   authScreenHeader: {
     fontFamily: 'Gilroy-Bold',
     color: Colors.inputTextColor,
-    fontSize: wp(4),
+    fontSize: hp(2.2),
     marginBottom: hp(4),
     textTransform: 'uppercase',
   },
@@ -35,13 +29,13 @@ export const STYLES = {
     textAlign: 'center',
     fontFamily: 'Gilroy-Bold',
     color: Colors.inputTextColor,
-    fontSize: wp(4),
+    fontSize: hp(2.2),
     marginTop: 25,
     marginBottom: 10,
   },
   headerText: {
     color: Colors.inputTextColor,
-    fontSize: wp(4),
+    fontSize: hp(2.2),
     textAlign: 'left',
     fontFamily: 'Roboto-Bold',
     textTransform: 'capitalize',
@@ -59,7 +53,7 @@ export const STYLES = {
     backgroundColor: Colors.pageBG,
   },
   tabText: {
-    fontSize: wp(4),
+    fontSize: hp(2.2),
     fontFamily: 'Gilroy-Bold',
   },
   inputForm: {
@@ -75,7 +69,7 @@ export const STYLES = {
   locationText: {
     fontFamily: 'Roboto-Regular',
     color: Colors.inputTextColor,
-    fontSize: wp(4),
+    fontSize: hp(2.2),
     marginTop: hp(1),
   },
   separatorView: {
@@ -91,13 +85,13 @@ export const STYLES = {
   },
   leftText: {
     fontFamily: 'Gilroy-SemiBold',
-    fontSize: wp(4.3),
+    fontSize: hp(2.2),
     color: Colors.inputTextColor,
     textTransform: 'uppercase',
   },
   rightText: {
     fontFamily: 'Roboto-Bold',
-    fontSize: wp(4),
+    fontSize: hp(2.2),
     color: Colors.inputTextColor,
     width: '50%',
     textAlign: 'right',
@@ -110,7 +104,7 @@ export const STYLES = {
     borderRadius: 5,
     textTransform: 'uppercase',
     fontFamily: 'Gilroy-Semibold',
-    fontSize: wp(3.3),
+    fontSize: hp(1.8),
   },
   priceView: {
     backgroundColor: Colors.pageBG,
@@ -122,7 +116,7 @@ export const STYLES = {
   },
   participatedText: {
     color: Colors.darkBlue,
-    fontSize: wp(5),
+    fontSize: hp(2.8),
     fontFamily: 'Gilroy-SemiBold',
   },
   flexBoxOrders: {
@@ -133,24 +127,24 @@ export const STYLES = {
   labelText: {
     width: '45%',
     color: Colors.inputTextColor,
-    fontSize: wp(3.6),
+    fontSize: hp(1.8),
     fontFamily: 'Roboto-Light',
     textAlign: 'center',
     marginTop: 3,
   },
   staticLabel: {
     fontFamily: 'Gilroy-Bold',
-    fontSize: wp(4),
+    fontSize: hp(2.2),
     color: Colors.inputTextColor,
   },
   inputTextLabel: {
     fontFamily: 'Roboto-Bold',
     color: Colors.inputTextColor,
-    fontSize: wp(4),
+    fontSize: hp(2.2),
   },
   inputTextStyle: {
     fontFamily: 'Gilroy-SemiBold',
-    fontSize: wp(4),
+    fontSize: hp(2.2),
     backgroundColor: Colors.textBG,
     color: Colors.inputTextColor,
     height: '98%',
@@ -178,7 +172,7 @@ export const STYLES = {
   },
   sliderText: {
     fontFamily: 'Roboto-Light',
-    fontSize: wp(3.5),
+    fontSize: hp(1.9),
     color: Colors.inputTextColor,
   },
   sliderLabel: {
@@ -199,7 +193,7 @@ export const STYLES = {
   },
   circleBottomText: {
     fontFamily: 'Roboto-Light',
-    fontSize: wp(3.8),
+    fontSize: hp(2),
     color: Colors.inputTextColor,
     marginTop: 3,
   },
@@ -207,7 +201,7 @@ export const STYLES = {
     marginVertical: hp(3),
     fontFamily: 'Roboto-Regular',
     color: Colors.inputTextColor,
-    fontSize: wp(4),
+    fontSize: hp(2.2),
     marginHorizontal: wp(5),
     textAlign: 'center',
   },
@@ -229,7 +223,7 @@ export const STYLES = {
     paddingHorizontal: 15,
   },
   dateText: {
-    fontSize: wp(4),
+    fontSize: hp(2.2),
     backgroundColor: Colors.textBG,
     color: Colors.inputTextColor,
     justifyContent: 'flex-start',
@@ -242,14 +236,14 @@ export const STYLES = {
   modalHeader: {
     fontFamily: 'Gilroy-Bold',
     color: Colors.inputTextColor,
-    fontSize: wp(4),
+    fontSize: hp(2.2),
     marginTop: 25,
     marginBottom: 10,
     textTransform: 'uppercase',
   },
   simpleText: {
     color: Colors.inputTextColor,
-    fontSize: wp(3.8),
+    fontSize: hp(2.1),
     marginTop: hp(3),
     marginBottom: hp(2),
     marginHorizontal: wp(10),
@@ -257,7 +251,7 @@ export const STYLES = {
   },
   selectionText: {
     fontFamily: 'Gilroy-SemiBold',
-    fontSize: wp(4),
+    fontSize: hp(2.2),
     color: '#3B4B58',
     marginTop: hp(1),
     textAlign: 'center',

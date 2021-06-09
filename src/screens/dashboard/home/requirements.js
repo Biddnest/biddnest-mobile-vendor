@@ -76,7 +76,7 @@ const Requirements = (props) => {
             <Text
               style={{
                 fontFamily: 'Gilroy-SemiBold',
-                fontSize: wp(4),
+                fontSize: hp(2.2),
                 color: Colors.inputTextColor,
                 textAlign: 'center',
                 marginVertical: hp(1.5),
@@ -101,7 +101,7 @@ const Requirements = (props) => {
                           {
                             fontFamily: 'Roboto-Regular',
                             marginTop: 5,
-                            fontSize: wp(3.5),
+                            fontSize: hp(1.9),
                             textTransform: 'capitalize',
                           },
                         ]}>
@@ -131,7 +131,7 @@ const Requirements = (props) => {
                 <Text
                   style={{
                     fontFamily: 'Roboto-Regular',
-                    fontSize: wp(4),
+                    fontSize: hp(2.2),
                     color: Colors.inputTextColor,
                     textAlign: 'center',
                     textTransform: 'uppercase',
@@ -141,7 +141,7 @@ const Requirements = (props) => {
                 <Text
                   style={{
                     fontFamily: 'Roboto-Italic',
-                    fontSize: wp(3.6),
+                    fontSize: hp(1.9),
                     color: Colors.inputTextColor,
                     marginTop: hp(2),
                   }}>
@@ -158,7 +158,7 @@ const Requirements = (props) => {
               <Text
                 style={{
                   fontFamily: 'Roboto-Regular',
-                  fontSize: wp(4),
+                  fontSize: hp(2.2),
                   color: Colors.inputTextColor,
                   textAlign: 'center',
                   textTransform: 'uppercase',
@@ -284,11 +284,11 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: Colors.pageBG,
     overflow: 'hidden',
-    fontSize: wp(3.5),
+    fontSize: hp(1.9),
   },
   headerText: {
     fontFamily: 'Roboto-Bold',
-    fontSize: wp(4),
+    fontSize: hp(2.2),
     color: Colors.inputTextColor,
   },
 });

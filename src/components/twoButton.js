@@ -30,7 +30,7 @@ const TwoButton = (props) => {
           style={{
             fontFamily: 'Roboto-Bold',
             color: Colors.btnBG,
-            fontSize: wp(3.5),
+            fontSize: hp(1.9),
             textTransform: 'uppercase',
           }}>
           {props.leftLabel}
@@ -44,7 +44,7 @@ const TwoButton = (props) => {
           style={{
             fontFamily: 'Roboto-Bold',
             color: Colors.white,
-            fontSize: wp(3.5),
+            fontSize: hp(1.9),
             textTransform: 'uppercase',
           }}>
           {props.rightLabel}

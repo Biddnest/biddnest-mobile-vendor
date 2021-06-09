@@ -256,7 +256,7 @@ export function DrawerContent(props) {
               style={{
                 fontFamily: 'Gilroy-SemiBold',
                 color: Colors.white,
-                fontSize: wp(3.6),
+                fontSize: hp(1.9),
                 marginTop: 5,
               }}>
               +91 {userData?.phone}
@@ -289,7 +289,7 @@ export function DrawerContent(props) {
               color: Colors.inputTextColor,
               marginLeft: wp(3),
               marginVertical: wp(3),
-              fontSize: wp(3.1),
+              fontSize: hp(1.5),
               fontFamily: 'Gilroy-Regular',
               textAlign: 'center',
               letterSpacing: 1,
@@ -315,11 +315,6 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...STYLES.common,
   },
-  profileText: {
-    fontFamily: 'Roboto-Regular',
-    color: Colors.darkBlue,
-    fontSize: wp(6),
-  },
   logoutWrapper: {
     height: wp(10),
     width: wp(10),
@@ -330,7 +325,7 @@ const styles = StyleSheet.create({
   userText: {
     color: Colors.white,
     fontFamily: 'Gilroy-SemiBold',
-    fontSize: wp(4),
+    fontSize: hp(2.2),
   },
   bottomView: {
     borderTopLeftRadius: wp(8),
@@ -351,12 +346,12 @@ const styles = StyleSheet.create({
   topText: {
     fontFamily: 'Gilroy-SemiBold',
     color: Colors.darkBlue,
-    fontSize: wp(4),
+    fontSize: hp(2.2),
   },
   bottomText: {
     fontFamily: 'Roboto-Regular',
     color: Colors.inputTextColor,
-    fontSize: wp(3.3),
+    fontSize: hp(1.8),
     marginTop: 3,
   },
 });

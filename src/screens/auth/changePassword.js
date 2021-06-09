@@ -117,7 +117,7 @@ const ChangePassword = (props) => {
               style={{
                 color: Colors.darkBlue,
                 fontFamily: 'Roboto-Bold',
-                fontSize: wp(3.8),
+                fontSize: hp(1.9),
               }}>
               Login Now
             </Text>
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     marginTop: hp(1),
     borderColor: Colors.silver,
     color: Colors.textLabelColor,
-    fontSize: wp(6),
+    fontSize: hp(3),
   },
   bottomView: {
     height: hp(70),

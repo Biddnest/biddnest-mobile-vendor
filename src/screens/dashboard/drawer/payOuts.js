@@ -325,12 +325,12 @@ const styles = StyleSheet.create({
   topText: {
     fontFamily: 'Roboto-Bold',
     color: Colors.inputTextColor,
-    fontSize: wp(4),
+    fontSize: hp(2.2),
   },
   bottomText: {
     fontFamily: 'Roboto-Light',
     color: Colors.inputTextColor,
-    fontSize: wp(3.8),
+    fontSize: hp(1.9),
   },
   transferView: {
     paddingHorizontal: 10,
@@ -339,7 +339,7 @@ const styles = StyleSheet.create({
     // borderWidth: 0.5,
     // borderColor: Colors.inputTextColor,
     borderRadius: 5,
-    fontSize: wp(3.8),
+    fontSize: hp(1.9),
     maxWidth: '35%',
     textTransform: 'uppercase',
     color: Colors.white,
@@ -367,7 +367,7 @@ const styles = StyleSheet.create({
   dateBottomText: {
     fontFamily: 'Roboto-Regular',
     marginTop: 0,
-    fontSize: wp(3.5),
+    fontSize: hp(1.9),
     color: '#99A0A5',
     marginLeft: wp(2),
   },

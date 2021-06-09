@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.pageBG,
     color: Colors.darkBlue,
     fontFamily: 'Roboto-Regular',
-    fontSize: wp(4),
+    fontSize: hp(2.2),
     borderRadius: 10,
     overflow: 'hidden',
   },
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontFamily: 'Roboto-Italic',
-    fontSize: wp(3.8),
+    fontSize: hp(1.9),
     color: Colors.darkBlue,
     marginHorizontal: wp(10),
     textAlign: 'center',

@@ -159,7 +159,7 @@ const Profile = (props) => {
               style={{
                 color: Colors.white,
                 fontFamily: 'Roboto-Bold',
-                fontSize: wp(4.5),
+                fontSize: hp(2.3),
                 textTransform: 'capitalize',
               }}>
               {userData?.vendor?.fname} {userData?.vendor?.lname}
@@ -176,7 +176,7 @@ const Profile = (props) => {
                 {
                   textTransform: 'capitalize',
                   fontFamily: 'Gilroy-Bold',
-                  fontSize: wp(4),
+                  fontSize: hp(2.2),
                 },
               ]}>
               {Object.keys(roles)[user_role_index]}
@@ -238,7 +238,7 @@ const Profile = (props) => {
                       <HTML
                         baseFontStyle={{
                           fontFamily: 'Roboto-Regular',
-                          fontSize: wp(4.5),
+                          fontSize: hp(2.3),
                           color: Colors.inputTextColor,
                           textTransform: 'capitalize',
                         }}
@@ -399,7 +399,7 @@ const Profile = (props) => {
                                   <Text
                                     style={{
                                       color: Colors.inputTextColor,
-                                      fontSize: wp(3.8),
+                                      fontSize: hp(1.9),
                                       fontFamily: 'Roboto-Bold',
                                       textTransform: 'capitalize',
                                     }}>
@@ -453,7 +453,7 @@ const styles = StyleSheet.create({
   profileDetailText: {
     color: Colors.white,
     fontFamily: 'Roboto-Light',
-    fontSize: wp(3.5),
+    fontSize: hp(1.9),
   },
   inputForm: {
     marginHorizontal: wp(5),
@@ -472,13 +472,13 @@ const styles = StyleSheet.create({
   },
   topText: {
     fontFamily: 'Roboto-Bold',
-    fontSize: wp(4),
+    fontSize: hp(2.2),
     color: Colors.darkBlue,
   },
   bottomText: {
     fontFamily: 'Roboto-Regular',
     color: Colors.inputTextColor,
-    fontSize: wp(3.6),
+    fontSize: hp(1.9),
   },
   flexBox: {
     flexDirection: 'row',
@@ -487,14 +487,14 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontFamily: 'Roboto-Regular',
-    fontSize: wp(3.8),
+    fontSize: hp(2),
     color: Colors.inputTextColor,
     marginBottom: 10,
     marginTop: 5,
   },
   bodyText: {
     fontFamily: 'Roboto-Regular',
-    fontSize: wp(4.5),
+    fontSize: hp(2.3),
     color: Colors.inputTextColor,
     marginBottom: 10,
     textTransform: 'capitalize',

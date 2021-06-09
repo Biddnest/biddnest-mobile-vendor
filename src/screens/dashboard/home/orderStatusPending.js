@@ -12,7 +12,7 @@ const OrderStatusPending = (props) => {
       <Text
         style={{
           color: Colors.darkBlue,
-          fontSize: wp(5),
+          fontSize: hp(2.8),
           fontFamily: 'Gilroy-Bold',
         }}>
         {new Date(remainingTime * 1000).toISOString().substr(11, 8)}
@@ -29,7 +29,7 @@ const OrderStatusPending = (props) => {
         <Text
           style={{
             fontFamily: 'Roboto-Italic',
-            fontSize: wp(3.8),
+            fontSize: hp(1.9),
             color: Colors.darkBlue,
             marginHorizontal: wp(10),
             textAlign: 'center',

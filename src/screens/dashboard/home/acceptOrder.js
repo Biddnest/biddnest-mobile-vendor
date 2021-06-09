@@ -295,7 +295,7 @@ const AcceptOrder = (props) => {
                   textAlignVertical: 'center',
                   color: Colors.white,
                   fontFamily: 'Gilroy-SemiBold',
-                  fontSize: wp(4),
+                  fontSize: hp(2.2),
                   height: '98%',
                 }}>
                 {orderDetails?.final_estimated_quote}
@@ -332,7 +332,7 @@ const AcceptOrder = (props) => {
           <Text
             style={{
               marginHorizontal: wp(25),
-              fontSize: wp(5),
+              fontSize: hp(2.8),
               color: Colors.darkBlue,
               fontFamily: 'Gilroy-Bold',
               textAlign: 'center',
@@ -465,10 +465,10 @@ const AcceptOrder = (props) => {
                       labelStyle={{
                         fontFamily: 'Roboto-Bold',
                         color: Colors.textLabelColor,
-                        fontSize: wp(4),
+                        fontSize: hp(2.2),
                       }}
                       inputStyle={{
-                        fontSize: wp(4),
+                        fontSize: hp(2.2),
                         backgroundColor: Colors.textBG,
                         color: Colors.inputTextColor,
                         height: '99%',
@@ -935,7 +935,7 @@ const AcceptOrder = (props) => {
             <Text
               style={{
                 fontFamily: 'Roboto-Regular',
-                fontSize: wp(4),
+                fontSize: hp(2.2),
                 color: Colors.inputTextColor,
                 marginBottom: hp(2),
                 textAlign: 'center',
@@ -979,14 +979,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   warningText: {
-    fontSize: wp(3.5),
+    fontSize: hp(1.9),
     fontFamily: 'Roboto-Italic',
     color: Colors.inputTextColor,
     marginLeft: 5,
   },
   dateBottomText: {
     fontFamily: 'Roboto-Italic',
-    fontSize: wp(3.5),
+    fontSize: hp(1.9),
     color: '#99A0A5',
     marginLeft: wp(5),
     marginTop: -hp(2),
@@ -1012,6 +1012,6 @@ const styles = StyleSheet.create({
     width: hp(6.5),
     borderColor: Colors.silver,
     color: Colors.textLabelColor,
-    fontSize: wp(6),
+    fontSize: hp(3),
   },
 });

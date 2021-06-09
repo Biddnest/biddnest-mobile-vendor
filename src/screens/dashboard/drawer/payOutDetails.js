@@ -119,14 +119,14 @@ const PayOutDetails = (props) => {
             <Text
               style={{
                 color: Colors.white,
-                fontSize: wp(4),
+                fontSize: hp(2.2),
                 fontFamily: 'Roboto-Regular',
               }}>
               Grand Total
             </Text>
             <Text
               style={{
-                fontSize: wp(5.5),
+                fontSize: hp(3),
                 fontFamily: 'Roboto-Bold',
                 color: Colors.white,
               }}>
@@ -154,12 +154,12 @@ const styles = StyleSheet.create({
   topText: {
     fontFamily: 'Roboto-Bold',
     color: Colors.inputTextColor,
-    fontSize: wp(4),
+    fontSize: hp(2.2),
   },
   bottomText: {
     fontFamily: 'Roboto-Light',
     color: Colors.inputTextColor,
-    fontSize: wp(3.8),
+    fontSize: hp(1.9),
   },
   transferView: {
     paddingHorizontal: 10,
@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     // borderColor: Colors.inputTextColor,
     borderRadius: 5,
     fontFamily: 'Gilroy-SemiBold',
-    fontSize: wp(3.8),
+    fontSize: hp(1.9),
     maxWidth: '35%',
     textTransform: 'uppercase',
     color: Colors.white,
