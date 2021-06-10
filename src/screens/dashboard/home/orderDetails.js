@@ -37,15 +37,21 @@ import {
 import {APICall, getDriver, getVehicle} from '../../../redux/actions/user';
 import moment from 'moment';
 import CountDown from '../../../components/countDown';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import Ripple from 'react-native-material-ripple';
 import BookedConfirm from '../../../assets/svg/booked_confirm.svg';
+import {io} from 'socket.io-client';
 
 const OrderDetails = (props) => {
   const dispatch = useDispatch();
   const [orderDetails, setOrderDetails] = useState(
     props?.route?.params?.orderData || {},
   );
+  const userData = useSelector((state) => state.Login?.loginData) || {};
+  const socketURL =
+    useSelector(
+      (state) => state.Login?.configData?.config?.api?.socket_server_url,
+    ) || '';
   const [selectedTab, setSelectedTab] = useState(0);
   const [rejectVisible, setRejectVisible] = useState(false);
   const [placedSuccessVisible, setPlacedSuccessVisible] = useState(false);
@@ -55,6 +61,51 @@ const OrderDetails = (props) => {
   const [tab, setTab] = useState(['Order Details', 'Requirements']);
   const [priceList, setPriceList] = useState({});
   const [isBookedMark, setBookedMark] = useState(false);
+
+  const socket = io(socketURL);
+  if (orderDetails?.status === 2 || orderDetails?.status === 3) {
+    socket.once('connect', function (data) {
+      console.log(data);
+      socket.emit('booking.listen.start', {
+        token: STORE.getState().Login?.loginData?.token,
+        data: {public_booking_id: orderDetails?.public_booking_id},
+      });
+      socket.on('booking.watch.start', (watchData) => {
+        console.log('booking watch start listener', watchData);
+        fetchOrderData();
+      });
+      socket.on('booking.watch.stop', (watchData) => {
+        console.log('booking watch stop listener', watchData);
+        fetchOrderData();
+        CustomAlert(
+          `${watchData?.data?.bookings?.bid?.watched_by?.fname} Has stopped watch on this booking. You can proceed further `,
+        );
+      });
+      socket.on('booking.bid.submitted', (watchData) => {
+        fetchOrderData();
+      });
+      socket.on('booking.rejected', (watchData) => {
+        fetchOrderData();
+      });
+    });
+  }
+  useEffect(() => {
+    if (orderDetails?.status === 2 || orderDetails?.status === 3) {
+      return () => {
+        socket.removeAllListeners();
+        socket.emit('booking.watch.stop', {
+          token: STORE.getState().Login?.loginData?.token,
+          data: {public_booking_id: orderDetails?.public_booking_id},
+        });
+        socket.emit('booking.listen.stop', {
+          token: STORE.getState().Login?.loginData?.token,
+          data: {public_booking_id: orderDetails?.public_booking_id},
+        });
+        console.log("test")
+        socket.on('disconnect');
+      };
+    }
+  }, []);
 
   useEffect(() => {
     fetchOrderData();
@@ -99,6 +150,15 @@ const OrderDetails = (props) => {
           if (res?.status == 400) {
             resetNavigator(props, 'Dashboard');
           } else if (res?.data?.status === 'success') {
+            if (
+              !res?.data?.data?.booking?.bid?.watched_by &&
+              (orderDetails?.status === 2 || orderDetails?.status === 3)
+            ) {
+              socket.emit('booking.watch.start', {
+                token: STORE.getState().Login?.loginData?.token,
+                data: {public_booking_id: orderDetails?.public_booking_id},
+              });
+            }
             setOrderDetails(res?.data?.data?.booking);
             setBookedMark(!!res?.data?.data?.booking?.bid?.bookmarked);
             if (
@@ -355,6 +415,17 @@ const OrderDetails = (props) => {
               </Text>
             </View>
           </View>
+          {orderDetails?.bid?.watchedBy &&
+            orderDetails?.bid?.watchedBy?.id !== userData?.vendor?.id && (
+              <View style={styles.flexBoxWrapper}>
+                <Text style={styles.warningText}>
+                  This order is being watched by{' '}
+                  {orderDetails?.bid?.watchedBy?.fname +
+                    ' ' +
+                    orderDetails?.bid?.watchedBy?.lname}
+                </Text>
+              </View>
+            )}
           {!orderDetails?.final_quote &&
             orderDetails?.bid?.bid_type === 1 &&
             orderDetails?.bid?.status === 0 &&
@@ -522,12 +593,15 @@ const OrderDetails = (props) => {
               </View>
               {!orderDetails?.final_quote &&
                 orderDetails?.bid?.status !== 1 &&
-                orderDetails?.status < 4 && (
+                orderDetails?.status < 4 &&
+                (!orderDetails?.bid?.watchedBy ||
+                  orderDetails?.bid?.watchedBy?.id ===
+                    userData?.vendor?.id) && (
                   <TwoButton
                     leftLabel={'REJECT'}
                     rightLabel={
                       !orderDetails?.final_quote && orderDetails?.status === 3
-                        ? 'Rebidding'
+                        ? 'Quote again'
                         : 'ACCEPT'
                     }
                     leftOnPress={() => setRejectVisible(true)}
@@ -595,6 +669,7 @@ const OrderDetails = (props) => {
           )}
           {selectedTab === 1 && (
             <Requirements
+              socket={socket}
               fetchOrderData={fetchOrderData}
               navigation={props.navigation}
               orderDetails={orderDetails}
@@ -632,6 +707,12 @@ const OrderDetails = (props) => {
               .then((res) => {
                 setLoading(false);
                 if (res?.data?.status === 'success') {
+                  socket.emit('booking.rejected', {
+                    token: STORE.getState().Login?.loginData?.token,
+                    data: {
+                      public_booking_id: orderDetails?.public_booking_id,
+                    },
+                  });
                   fetchOrderData();
                   setRejectVisible(false);
                   resetNavigator(props, 'Dashboard');
@@ -647,6 +728,7 @@ const OrderDetails = (props) => {
         />
       </CustomModalAndroid>
       <AcceptOrder
+        socket={socket}
         navigator={props}
         public_booking_id={orderDetails?.public_booking_id}
         priceList={priceList}

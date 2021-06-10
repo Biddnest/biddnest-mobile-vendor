@@ -544,9 +544,8 @@ const AcceptOrder = (props) => {
                       onPress={() => {
                         setApplyBidData({
                           ...applyBidData,
-                          moving_date: moment(calenderDate).format(
-                            'yyyy-MM-DD',
-                          ),
+                          moving_date:
+                            moment(calenderDate).format('yyyy-MM-DD'),
                         });
                         setCalender(false);
                       }}
@@ -900,6 +899,20 @@ const AcceptOrder = (props) => {
                       .then((res) => {
                         setLoading(false);
                         if (res?.data?.status === 'success') {
+                          props?.socket.emit('booking.bid.submitted', {
+                            token: STORE.getState().Login?.loginData?.token,
+                            data: {
+                              public_booking_id:
+                                orderDetails?.public_booking_id,
+                            },
+                          });
+                          props?.socket.emit('booking.watch.stop', {
+                            token: STORE.getState().Login?.loginData?.token,
+                            data: {
+                              public_booking_id:
+                                orderDetails?.public_booking_id,
+                            },
+                          });
                           setSuccess(true);
                           setStep(0);
                           setForgotPin(false);

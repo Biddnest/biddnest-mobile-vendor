@@ -19,6 +19,7 @@ import {APICall} from '../../../redux/actions/user';
 import {CustomAlert, resetNavigator} from '../../../constant/commonFun';
 import {Html5Entities} from 'html-entities';
 import Lightbox from 'react-native-lightbox';
+import {io} from 'socket.io-client';
 
 const Requirements = (props) => {
   const entities = new Html5Entities();
@@ -28,9 +29,11 @@ const Requirements = (props) => {
   const [isLoading, setLoading] = useState(false);
   const configData =
     useSelector((state) => state.Login?.configData?.enums?.service) || {};
+  const userData = useSelector((state) => state.Login?.loginData) || {};
   let meta =
     (orderDetails?.meta && JSON.parse(orderDetails?.meta?.toString())) || {};
   const [priceList, setPriceList] = useState({});
+  const socket = io('http://139.59.27.112:6001');
 
   useEffect(() => {
     let obj = {
@@ -199,12 +202,14 @@ const Requirements = (props) => {
           )}
           {!orderDetails?.final_quote &&
             orderDetails?.bid?.status !== 1 &&
-            orderDetails?.status < 4 && (
+            orderDetails?.status < 4 &&
+            (!orderDetails?.bid?.watchedBy ||
+              orderDetails?.bid?.watchedBy?.id === userData?.vendor?.id) && (
               <TwoButton
                 leftLabel={'REJECT'}
                 rightLabel={
                   !orderDetails?.final_quote && orderDetails?.status === 3
-                    ? 'Rebidding'
+                    ? 'Quote again'
                     : 'ACCEPT'
                 }
                 leftOnPress={() => setRejectVisible(true)}
@@ -242,6 +247,12 @@ const Requirements = (props) => {
               .then((res) => {
                 setLoading(false);
                 if (res?.data?.status === 'success') {
+                  props?.socket.emit('booking.rejected', {
+                    token: STORE.getState().Login?.loginData?.token,
+                    data: {
+                      public_booking_id: orderDetails?.public_booking_id,
+                    },
+                  });
                   setRejectVisible(false);
                   resetNavigator(props.navigation, 'Dashboard');
                 } else {
@@ -256,6 +267,7 @@ const Requirements = (props) => {
         />
       </CustomModalAndroid>
       <AcceptOrder
+        socket={socket}
         navigator={props}
         public_booking_id={orderDetails?.public_booking_id}
         priceList={priceList}

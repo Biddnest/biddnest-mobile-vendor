@@ -62,7 +62,9 @@
     "redux-logger": "^3.0.6",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.3.0",
-    "rn-range-slider": "^2.0.4"
+    "rn-range-slider": "^2.0.4",
+    "socket.io-client": "^4.1.2",
+    "symbol-observable": "^4.0.0"
   },
   "devDependencies": {
     "@babel/core": "7.12.16",

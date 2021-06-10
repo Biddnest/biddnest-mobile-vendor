@@ -648,7 +648,7 @@ const Home = (props) => {
             </View>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>BookMarked By</Text>
-              <Text style={STYLES.rightText}>{item?.bookmarked_by}</Text>
+              <Text style={STYLES.rightText}>{item?.bid?.bookmarked_by && item?.bid?.bookmarked_by?.fname + ' ' + item?.bid?.bookmarked_by?.lname}</Text>
             </View>
           </View>
         )}
