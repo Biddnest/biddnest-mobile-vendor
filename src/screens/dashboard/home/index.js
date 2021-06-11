@@ -298,7 +298,7 @@ const Home = (props) => {
     }
   }, [selectedTab]);
   const getOrdersList = (data = {}, pageNo = 1, tabChanged = false) => {
-    if (!isLoading) {
+    if (!isRefresh) {
       setRefresh(true);
       if (roles?.driver === userData?.vendor?.user_role) {
         dispatch(getDriverOrders(configData[selectedTab], data, pageNo))
@@ -646,10 +646,16 @@ const Home = (props) => {
                   : 'Premium'}
               </Text>
             </View>
-            <View style={STYLES.flexBox}>
-              <Text style={STYLES.leftText}>BookMarked By</Text>
-              <Text style={STYLES.rightText}>{item?.bid?.bookmarked_by && item?.bid?.bookmarked_by?.fname + ' ' + item?.bid?.bookmarked_by?.lname}</Text>
-            </View>
+            {item?.bid?.bookmarked_by && (
+              <View style={STYLES.flexBox}>
+                <Text style={STYLES.leftText}>BookMarked By</Text>
+                <Text style={STYLES.rightText}>
+                  {item?.bid?.bookmarked_by?.fname +
+                    ' ' +
+                    item?.bid?.bookmarked_by?.lname}
+                </Text>
+              </View>
+            )}
           </View>
         )}
         {item?.status === statusData?.status?.rebiding && (

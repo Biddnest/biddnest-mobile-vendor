@@ -65,7 +65,6 @@ const OrderDetails = (props) => {
   const socket = io(socketURL);
   if (orderDetails?.status === 2 || orderDetails?.status === 3) {
     socket.once('connect', function (data) {
-      console.log(data);
       socket.emit('booking.listen.start', {
         token: STORE.getState().Login?.loginData?.token,
         data: {public_booking_id: orderDetails?.public_booking_id},
@@ -73,13 +72,14 @@ const OrderDetails = (props) => {
       socket.on('booking.watch.start', (watchData) => {
         console.log('booking watch start listener', watchData);
         fetchOrderData();
+        CustomAlert(
+          `${watchData?.data?.bookings?.bid?.watched_by?.fname} Has stopped watch on this booking. You can proceed further `,
+        );
       });
       socket.on('booking.watch.stop', (watchData) => {
         console.log('booking watch stop listener', watchData);
         fetchOrderData();
-        CustomAlert(
-          `${watchData?.data?.bookings?.bid?.watched_by?.fname} Has stopped watch on this booking. You can proceed further `,
-        );
+        CustomAlert('You are now watching this booking');
       });
       socket.on('booking.bid.submitted', (watchData) => {
         fetchOrderData();
@@ -93,16 +93,14 @@ const OrderDetails = (props) => {
     if (orderDetails?.status === 2 || orderDetails?.status === 3) {
       return () => {
         socket.removeAllListeners();
-        socket.emit('booking.watch.stop', {
-          token: STORE.getState().Login?.loginData?.token,
-          data: {public_booking_id: orderDetails?.public_booking_id},
-        });
         socket.emit('booking.listen.stop', {
           token: STORE.getState().Login?.loginData?.token,
           data: {public_booking_id: orderDetails?.public_booking_id},
         });
-        console.log("test")
-        socket.on('disconnect');
+        socket.emit('booking.watch.stop', {
+          token: STORE.getState().Login?.loginData?.token,
+          data: {public_booking_id: orderDetails?.public_booking_id},
+        });
       };
     }
   }, []);
