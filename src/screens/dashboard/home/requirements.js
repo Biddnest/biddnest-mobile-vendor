@@ -32,8 +32,14 @@ const Requirements = (props) => {
   const userData = useSelector((state) => state.Login?.loginData) || {};
   let meta =
     (orderDetails?.meta && JSON.parse(orderDetails?.meta?.toString())) || {};
+  const socketURL =
+    useSelector(
+      (state) => state.Login?.configData?.config?.api?.socket_server_url,
+    ) || '';
   const [priceList, setPriceList] = useState({});
-  const socket = io('http://139.59.27.112:6001');
+  const socket = io(socketURL, {
+    transports: 'websocket',
+  });
 
   useEffect(() => {
     let obj = {

@@ -63,33 +63,35 @@ const OrderDetails = (props) => {
   const [isBookedMark, setBookedMark] = useState(false);
 
   const socket = io(socketURL);
+  if (orderDetails?.status === 2 || orderDetails?.status === 3) {
+    socket.once('connect', function (data) {
+      socket.emit('booking.listen.start', {
+        token: STORE.getState().Login?.loginData?.token,
+        data: {public_booking_id: orderDetails?.public_booking_id},
+      });
+      socket.on('booking.watch.start', (watchData) => {
+        console.log('booking watch start listener', watchData);
+        fetchOrderData();
+        CustomAlert(
+          `${watchData?.data?.bookings?.bid?.watched_by?.fname} Has stopped watch on this booking. You can proceed further `,
+        );
+      });
+      socket.on('booking.watch.stop', (watchData) => {
+        console.log('booking watch stop listener', watchData);
+        fetchOrderData();
+        CustomAlert('You are now watching this booking');
+      });
+      socket.on('booking.bid.submitted', (watchData) => {
+        fetchOrderData();
+      });
+      socket.on('booking.rejected', (watchData) => {
+        fetchOrderData();
+      });
+    });
+  }
 
   useEffect(() => {
     if (orderDetails?.status === 2 || orderDetails?.status === 3) {
-      socket.once('connect', function (data) {
-        socket.emit('booking.listen.start', {
-          token: STORE.getState().Login?.loginData?.token,
-          data: {public_booking_id: orderDetails?.public_booking_id},
-        });
-        socket.on('booking.watch.start', (watchData) => {
-          console.log('booking watch start listener', watchData);
-          fetchOrderData();
-          CustomAlert(
-            `${watchData?.data?.bookings?.bid?.watched_by?.fname} Has stopped watch on this booking. You can proceed further `,
-          );
-        });
-        socket.on('booking.watch.stop', (watchData) => {
-          console.log('booking watch stop listener', watchData);
-          fetchOrderData();
-          CustomAlert('You are now watching this booking');
-        });
-        socket.on('booking.bid.submitted', (watchData) => {
-          fetchOrderData();
-        });
-        socket.on('booking.rejected', (watchData) => {
-          fetchOrderData();
-        });
-      });
       return () => {
         socket.removeAllListeners();
         socket.emit('booking.listen.stop', {
