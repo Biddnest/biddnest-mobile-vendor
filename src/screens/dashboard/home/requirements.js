@@ -19,7 +19,7 @@ import {APICall} from '../../../redux/actions/user';
 import {CustomAlert, resetNavigator} from '../../../constant/commonFun';
 import {Html5Entities} from 'html-entities';
 import Lightbox from 'react-native-lightbox';
-import {io} from 'socket.io-client';
+import {SocketURL} from '../../../constant/socketService';
 
 const Requirements = (props) => {
   const entities = new Html5Entities();
@@ -37,9 +37,6 @@ const Requirements = (props) => {
       (state) => state.Login?.configData?.config?.api?.socket_server_url,
     ) || '';
   const [priceList, setPriceList] = useState({});
-  const socket = io(socketURL, {
-    transports: 'websocket',
-  });
 
   useEffect(() => {
     let obj = {
@@ -209,8 +206,8 @@ const Requirements = (props) => {
           {!orderDetails?.final_quote &&
             orderDetails?.bid?.status !== 1 &&
             orderDetails?.status < 4 &&
-            (!orderDetails?.bid?.watchedBy ||
-              orderDetails?.bid?.watchedBy?.id === userData?.vendor?.id) && (
+            (!orderDetails?.bid?.watched_by ||
+              orderDetails?.bid?.watched_by?.id === userData?.vendor?.id) && (
               <TwoButton
                 leftLabel={'REJECT'}
                 rightLabel={
@@ -273,7 +270,7 @@ const Requirements = (props) => {
         />
       </CustomModalAndroid>
       <AcceptOrder
-        socket={socket}
+        socket={SocketURL}
         navigator={props}
         public_booking_id={orderDetails?.public_booking_id}
         priceList={priceList}

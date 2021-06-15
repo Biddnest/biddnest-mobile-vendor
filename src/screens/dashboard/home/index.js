@@ -277,7 +277,9 @@ const Home = (props) => {
             // setLoading(false);
             if (res?.status === 'success' && res?.data) {
               if (!res?.data?.pin?.set) {
-                setPinModal(true);
+                setTimeout(() => {
+                  setPinModal(true);
+                }, 1500);
               }
             } else {
               CustomAlert(res?.message);

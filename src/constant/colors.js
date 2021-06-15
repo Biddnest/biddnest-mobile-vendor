@@ -56,8 +56,7 @@ export const VENDOR_INFORMATION = [
   },
   {
     title: 'Organization Description',
-    body:
-      'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.',
+    body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.',
   },
   {
     title: 'Secondary Contact Number',
