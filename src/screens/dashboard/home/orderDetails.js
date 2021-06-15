@@ -101,7 +101,7 @@ const OrderDetails = (props) => {
       console.log('booking watch start listener', watchData);
       fetchOrderData();
       CustomAlert(
-        `${watchData?.data?.bookings?.bid?.watched_by?.fname} Has stopped watch on this booking. You can proceed further `,
+        'You are now watching this booking. You may proceed with placing a bid.',
       );
     });
     SocketURL.on('booking.watch.stop', (watchData) => {
@@ -120,7 +120,10 @@ const OrderDetails = (props) => {
       fetchOrderData();
     });
     SocketURL.on('booking.rejected', (watchData) => {
-      fetchOrderData();
+      CustomAlert('This booking has been rejected.');
+      setTimeout(() => {
+        props.navigation.goBack();
+      }, 1000);
     });
   };
 
@@ -167,30 +170,41 @@ const OrderDetails = (props) => {
           if (res?.status == 400) {
             resetNavigator(props, 'Dashboard');
           } else if (res?.data?.status === 'success') {
-            if (
-              (res?.data?.data?.booking?.bid?.watched_by === null ||
-                orderDetails?.bid?.watched_by?.id !== userData?.vendor?.id) &&
-              (orderDetails?.status === 2 || orderDetails?.status === 3)
-            ) {
-              SocketURL.emit('booking.watch.start', {
-                token: STORE.getState().Login?.loginData?.token,
-                data: {
-                  public_booking_id: orderDetails?.public_booking_id,
-                  organization_id: userData?.vendor?.organization?.id,
-                },
-              });
-              callListener = true;
-            }
-            setOrderDetails(res?.data?.data?.booking);
-            setBookedMark(!!res?.data?.data?.booking?.bid?.bookmarked);
-            if (
-              res?.data?.data?.booking?.bid?.status !== 0 &&
-              res?.data?.data?.booking?.bid?.status !== 5
-            ) {
-              if (orderDetails?.final_quote) {
-                setSelectedTab(2);
+            if (res?.data?.data?.booking?.bid?.status === 2) {
+              CustomAlert('This booking has been rejected.');
+              setTimeout(() => {
+                props.navigation.goBack();
+              }, 1000);
+            } else {
+              if (
+                res?.data?.data?.booking?.bid?.watched_by === null &&
+                (orderDetails?.status === 2 || orderDetails?.status === 3)
+              ) {
+                callListener = true;
+                SocketURL.emit('booking.watch.start', {
+                  token: STORE.getState().Login?.loginData?.token,
+                  data: {
+                    public_booking_id: orderDetails?.public_booking_id,
+                    organization_id: userData?.vendor?.organization?.id,
+                  },
+                });
+              } else if (
+                res?.data?.data?.booking?.bid?.watched_by?.id ===
+                userData?.vendor?.id
+              ) {
+                callListener = true;
               }
-              setTab(['Order Details', 'Requirements', 'My Bid']);
+              setOrderDetails(res?.data?.data?.booking);
+              setBookedMark(!!res?.data?.data?.booking?.bid?.bookmarked);
+              if (
+                res?.data?.data?.booking?.bid?.status !== 0 &&
+                res?.data?.data?.booking?.bid?.status !== 5
+              ) {
+                if (orderDetails?.final_quote) {
+                  setSelectedTab(2);
+                }
+                setTab(['Order Details', 'Requirements', 'My Bid']);
+              }
             }
           } else {
             CustomAlert(res?.data?.message);
