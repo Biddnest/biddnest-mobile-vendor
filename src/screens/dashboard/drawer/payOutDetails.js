@@ -172,6 +172,7 @@ const styles = StyleSheet.create({
     maxWidth: '35%',
     textTransform: 'uppercase',
     color: Colors.white,
+    overflow: 'hidden'
   },
   flexBox: {
     flexDirection: 'row',

@@ -41,7 +41,7 @@ import InformationPopUp from '../../../components/informationPopUp';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Ripple from 'react-native-material-ripple';
 import BiddnestLogo from '../../../assets/svg/biddnest_logo.svg';
-import SelectionModal from '../../../components/selectionModal';
+import SelectionModalAndroid from '../../../components/selectionModal';
 import SwitchButton from '../../../components/appTourSwitch/switchButton';
 
 export const HomeHeader = (props) => {
@@ -481,6 +481,7 @@ const Home = (props) => {
               {
                 backgroundColor: statusData?.color[statusInd],
                 maxWidth: '45%',
+                overflow: 'hidden',
               },
             ]}>
             {status}
@@ -838,7 +839,7 @@ const Home = (props) => {
           </View>
         </View>
         <View style={{marginVertical: hp(2)}}>
-          <SelectionModal
+          <SelectionModalAndroid
             value={filterData?.status}
             width={wp(90)}
             label={'Status'}
@@ -851,7 +852,7 @@ const Home = (props) => {
             }}
           />
         </View>
-        <SelectionModal
+        <SelectionModalAndroid
           label={'Category'}
           value={filterData?.service_id}
           width={wp(90)}

@@ -26,16 +26,12 @@
 		49A0C122F2794B789E948070 /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4EF8DA57219B4D038C8745E0 /* FontAwesome5_Solid.ttf */; };
 		581C0CFB7E554FDA92E806D5 /* Roboto-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F638BAB0CC5B43E5B0F49042 /* Roboto-Light.ttf */; };
 		5ED02C15E05E48C1A31AFCBC /* Roboto-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 10D5E242B3DD4E888179B8BB /* Roboto-Italic.ttf */; };
-		65AA1AF2267B1AA20030801D /* libYoga.a in Resources */ = {isa = PBXBuildFile; fileRef = 65C8CC7C26786D9200C06094 /* libYoga.a */; };
-		65C8CA6C2678623B00C06094 /* libMaterialShowcase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 65C8CA6B2678623B00C06094 /* libMaterialShowcase.a */; };
-		65C8CC7D26786D9200C06094 /* libYoga.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 65C8CC7C26786D9200C06094 /* libYoga.a */; };
 		681734DFDCA04000A48766F6 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0A83E30A3AF7410C90F156E7 /* FontAwesome.ttf */; };
 		716482D79A79489DB2CE5F4A /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EA9E7CC309994EE8B5F9A198 /* MaterialIcons.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		879F75572FDB40919D6820BB /* Fontisto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0EB8B075165F47CEBD060DA8 /* Fontisto.ttf */; };
 		8C01CB950FDF48248CD2AB3B /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 284B6C935D774C5BAFE16273 /* FontAwesome5_Regular.ttf */; };
 		8C1894BFA7FFD52C965C5F31 /* libPods-cp_biddnest_mobile_vendor-cp_biddnest_mobile_vendorTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ABD4C66716A6C96D2B68E5BE /* libPods-cp_biddnest_mobile_vendor-cp_biddnest_mobile_vendorTests.a */; };
-		8F7AD1958DD84380846A58A9 /* Gilroy-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A9614C9B1AD34A3383DAFD96 /* Gilroy-Medium.ttf */; };
 		925AB7D04AE74FF4BB131549 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4264C2D35B6F4B2C9721F50C /* Entypo.ttf */; };
 		94C6EDB4867B4A7A833F6915 /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 403C5E820A934714A36BC93A /* Roboto-Medium.ttf */; };
 		9A72BE7FB9694C85BA97F203 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C08E8371F1EB4D3FB4CDDA21 /* MaterialCommunityIcons.ttf */; };
@@ -43,10 +39,8 @@
 		A764F86729956EE77A6DCCE9 /* libPods-cp_biddnest_mobile_vendor.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB6FEA73D12CFD3E25F2CAC /* libPods-cp_biddnest_mobile_vendor.a */; };
 		B1A72620E1D54A67845FDA7C /* Gilroy-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 86D1A216E14944C8A9FA91C5 /* Gilroy-Regular.ttf */; };
 		BBA3024CEB07476BA55D5DA3 /* Gilroy-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F6AD417C511A4A4289DB9460 /* Gilroy-SemiBold.ttf */; };
-		D3AC5CD8A8864283B97D78A5 /* Gilroy-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4F3FA56A712F4FC78665D03D /* Gilroy-Light.ttf */; };
 		E00D9655AEAB4EA68CC7DD66 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 042921FE549A44CDAC45C24D /* Roboto-Regular.ttf */; };
 		E4258A3A997A408F8466AA1E /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 597F7B0DBC284F928220B6BE /* Ionicons.ttf */; };
-		FF337186065F42B4A251843B /* Gilroy-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 507B299DBC514FEC94BA0966 /* Gilroy-ExtraBold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -149,8 +143,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				65C8CC7D26786D9200C06094 /* libYoga.a in Frameworks */,
-				65C8CA6C2678623B00C06094 /* libMaterialShowcase.a in Frameworks */,
 				A764F86729956EE77A6DCCE9 /* libPods-cp_biddnest_mobile_vendor.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -456,7 +448,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				65AA1AF2267B1AA20030801D /* libYoga.a in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				263D733AB7FB469EBE3F3D0E /* AntDesign.ttf in Resources */,
@@ -464,9 +455,6 @@
 				3DAB57441C0B4FFDA771DB2E /* EvilIcons.ttf in Resources */,
 				0E7FCA1C416648DCB68CE72F /* Feather.ttf in Resources */,
 				0FFCCFCEA54240CF816CF957 /* Gilroy-Bold.ttf in Resources */,
-				FF337186065F42B4A251843B /* Gilroy-ExtraBold.ttf in Resources */,
-				D3AC5CD8A8864283B97D78A5 /* Gilroy-Light.ttf in Resources */,
-				8F7AD1958DD84380846A58A9 /* Gilroy-Medium.ttf in Resources */,
 				B1A72620E1D54A67845FDA7C /* Gilroy-Regular.ttf in Resources */,
 				BBA3024CEB07476BA55D5DA3 /* Gilroy-SemiBold.ttf in Resources */,
 				9A72BE7FB9694C85BA97F203 /* MaterialCommunityIcons.ttf in Resources */,

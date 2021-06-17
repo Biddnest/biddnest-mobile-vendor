@@ -29,7 +29,7 @@ export const STYLES = {
     textAlign: 'center',
     fontFamily: 'Gilroy-Bold',
     color: Colors.inputTextColor,
-    fontSize: hp(2.2),
+    fontSize: hp(2),
     marginTop: 25,
     marginBottom: 10,
   },
@@ -85,13 +85,13 @@ export const STYLES = {
   },
   leftText: {
     fontFamily: 'Gilroy-SemiBold',
-    fontSize: hp(2.2),
+    fontSize: hp(2),
     color: Colors.inputTextColor,
     textTransform: 'uppercase',
   },
   rightText: {
     fontFamily: 'Roboto-Bold',
-    fontSize: hp(2.2),
+    fontSize: hp(1.9),
     color: Colors.inputTextColor,
     width: '50%',
     textAlign: 'right',
@@ -104,7 +104,7 @@ export const STYLES = {
     borderRadius: 5,
     textTransform: 'uppercase',
     fontFamily: 'Gilroy-Semibold',
-    fontSize: hp(1.8),
+    fontSize: hp(1.5),
   },
   priceView: {
     backgroundColor: Colors.pageBG,
@@ -140,7 +140,7 @@ export const STYLES = {
   inputTextLabel: {
     fontFamily: 'Roboto-Bold',
     color: Colors.inputTextColor,
-    fontSize: hp(2.2),
+    fontSize: hp(2),
   },
   inputTextStyle: {
     fontFamily: 'Gilroy-SemiBold',
@@ -223,7 +223,7 @@ export const STYLES = {
     paddingHorizontal: 15,
   },
   dateText: {
-    fontSize: hp(2.2),
+    fontSize: hp(2),
     backgroundColor: Colors.textBG,
     color: Colors.inputTextColor,
     justifyContent: 'flex-start',

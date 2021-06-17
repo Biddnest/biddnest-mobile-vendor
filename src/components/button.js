@@ -31,7 +31,7 @@ const Button = (props) => {
       )) || (
         <Text
           style={{
-            fontSize: hp(2.2),
+            fontSize: hp(2),
             color: props.backgroundColor ? Colors.btnBG : Colors.white,
             fontFamily: 'Roboto-Bold',
             textTransform: 'uppercase',

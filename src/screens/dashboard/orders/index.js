@@ -208,6 +208,7 @@ const Orders = (props) => {
                 STYLES.statusView,
                 {
                   backgroundColor: statusColor?.color[statusInd],
+                  overflow: 'hidden',
                 },
               ]}>
               {status}
@@ -218,6 +219,7 @@ const Orders = (props) => {
                 STYLES.statusView,
                 {
                   backgroundColor: statusColor?.color[statusInd],
+                  overflow: 'hidden',
                 },
               ]}>
               {item?.status === 8 ? 'Completed' : 'Cancelled'}

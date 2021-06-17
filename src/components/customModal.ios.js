@@ -1,7 +1,16 @@
 import React from 'react';
-import {Modal, View, StyleSheet, ScrollView} from 'react-native';
-import {wp, hp} from '../constant/colors';
+import {
+  Modal,
+  View,
+  StyleSheet,
+  ScrollView,
+  Text,
+  Pressable,
+} from 'react-native';
+import {wp, hp, Colors} from '../constant/colors';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {STYLES} from '../constant/commonStyle';
+import CloseIcon from './closeIcon';
 
 const CustomModalAndroid = (props) => {
   return (
@@ -18,14 +27,44 @@ const CustomModalAndroid = (props) => {
         enableOnAndroid={false}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.centeredView}>
-        <ScrollView
-          bounces={false}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{alignItems: 'center'}}
-          style={styles.modalView}>
-          {props.children}
-        </ScrollView>
+        contentContainerStyle={{flex: 1, backgroundColor: 'rgba(0,0,0,0.5)'}}>
+        <Pressable
+          style={styles.centeredView}
+          onPress={() => {
+            if (props.onPress) {
+              props.onPress();
+            }
+          }}>
+          <View
+            onStartShouldSetResponder={() => true}
+            style={[
+              styles.modalView,
+              {maxHeight: props.maxHeight ? props.maxHeight : hp(80)},
+            ]}>
+            {props.title && (
+              <Text
+                style={{
+                  fontFamily: 'Gilroy-Bold',
+                  color: Colors.inputTextColor,
+                  fontSize: wp(4),
+                  marginTop: 25,
+                  marginBottom: 10,
+                  textTransform: 'uppercase',
+                  textAlign: 'center',
+                }}>
+                {props?.title}
+              </Text>
+            )}
+            {props.onPress && <CloseIcon onPress={props.onPress} />}
+            <ScrollView
+              scrollEnabled={props.scrollEnabled}
+              bounces={false}
+              showsVerticalScrollIndicator={props?.showsVerticalScrollIndicator}
+              contentContainerStyle={{alignItems: 'center'}}>
+              {props.children}
+            </ScrollView>
+          </View>
+        </Pressable>
       </KeyboardAwareScrollView>
     </Modal>
   );
@@ -39,7 +78,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: '100%',
     width: wp(100),
-    backgroundColor: 'rgba(0,0,0,0.5)',
   },
   modalView: {
     backgroundColor: 'white',

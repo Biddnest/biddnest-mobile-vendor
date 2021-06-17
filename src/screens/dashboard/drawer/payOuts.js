@@ -24,7 +24,7 @@ import PayOutDetails from './payOutDetails';
 import Entypo from 'react-native-vector-icons/Entypo';
 import DatePicker from 'react-native-datepicker';
 import Ripple from 'react-native-material-ripple';
-import SelectionModal from '../../../components/selectionModal';
+import SelectionModalAndroid from '../../../components/selectionModal';
 
 const PayOuts = (props) => {
   const statusData =
@@ -288,7 +288,7 @@ const PayOuts = (props) => {
             {marginVertical: hp(2)},
             Platform.OS !== 'android' && {zIndex: 5001},
           ]}>
-          <SelectionModal
+          <SelectionModalAndroid
             label={'Status'}
             value={filterData?.status}
             width={wp(90)}
@@ -343,6 +343,7 @@ const styles = StyleSheet.create({
     maxWidth: '35%',
     textTransform: 'uppercase',
     color: Colors.white,
+    overflow: 'hidden'
   },
   flexBox: {
     flexDirection: 'row',

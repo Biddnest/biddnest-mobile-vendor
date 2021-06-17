@@ -3,7 +3,7 @@ import {Platform, StyleSheet, Text, View} from 'react-native';
 import {Colors, hp, wp} from '../constant/colors';
 import {Picker} from '@react-native-picker/picker';
 
-const SelectionModal = (props) => {
+const SelectionModalAndroid = (props) => {
   return (
     <View
       style={{
@@ -43,7 +43,7 @@ const SelectionModal = (props) => {
   );
 };
 
-export default SelectionModal;
+export default SelectionModalAndroid;
 
 const styles = StyleSheet.create({
   common: {

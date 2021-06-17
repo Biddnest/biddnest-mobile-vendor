@@ -9,7 +9,7 @@ import {STORE} from '../../../redux';
 import {APICall} from '../../../redux/actions/user';
 import {CustomAlert} from '../../../constant/commonFun';
 import {useSelector} from 'react-redux';
-import SelectionModal from '../../../components/selectionModal';
+import SelectionModalAndroid from '../../../components/selectionModal';
 
 const RaiseRequest = (props) => {
   const public_booking_id = props?.route?.params?.public_booking_id || null;
@@ -57,7 +57,7 @@ const RaiseRequest = (props) => {
           colors={[Colors.pageBG, Colors.white]}
           style={{flex: 1, padding: hp(3)}}>
           <View style={{marginBottom: hp(3)}}>
-            <SelectionModal
+            <SelectionModalAndroid
               style={
                 error?.category === false
                   ? {

@@ -90,7 +90,10 @@ export function DrawerContent(props) {
   ]);
 
   useEffect(() => {
-    if (roles?.driver !== userData?.user_role) {
+    if (
+      roles?.driver !== userData?.user_role &&
+      SIDE_DRAWER.findIndex((item) => item.topText === 'Payouts') === -1
+    ) {
       let temp = [...SIDE_DRAWER];
       temp.splice(
         2,

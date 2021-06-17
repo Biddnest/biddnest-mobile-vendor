@@ -14,7 +14,7 @@ import {APICall} from '../../../redux/actions/user';
 import {CustomAlert} from '../../../constant/commonFun';
 import {useSelector} from 'react-redux';
 import moment from 'moment';
-import SelectionModal from '../../../components/selectionModal';
+import SelectionModalAndroid from '../../../components/selectionModal';
 import * as Animatable from 'react-native-animatable';
 
 const OrderStatusWin = (props) => {
@@ -375,7 +375,7 @@ const OrderStatusWin = (props) => {
         title={'ASSIGN DRIVER'}
         onPress={() => setDriverAssignVisible(false)}>
         <View style={{marginVertical: hp(2)}}>
-          <SelectionModal
+          <SelectionModalAndroid
             value={driverAssignData?.driver_id}
             label={'Driver'}
             width={wp(90)}
@@ -386,7 +386,7 @@ const OrderStatusWin = (props) => {
           />
         </View>
         <View style={{marginVertical: hp(2)}}>
-          <SelectionModal
+          <SelectionModalAndroid
             value={driverAssignData?.vehicle_id}
             label={'Vehicle'}
             width={wp(90)}
@@ -598,6 +598,7 @@ const styles = StyleSheet.create({
     color: Colors.white,
     borderRadius: 10,
     right: 0,
+    overflow: 'hidden',
   },
   textInput: {
     borderWidth: 2,

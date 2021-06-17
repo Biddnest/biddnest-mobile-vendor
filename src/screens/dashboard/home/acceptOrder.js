@@ -27,7 +27,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {Calendar} from 'react-native-calendars';
 import {Input} from 'react-native-elements';
 import BidSuccess from '../../../assets/svg/bid_success.svg';
-import SelectionModal from '../../../components/selectionModal';
+import SelectionModalAndroid from '../../../components/selectionModal';
 import TwoButton from '../../../components/twoButton';
 
 const AcceptOrder = (props) => {
@@ -401,7 +401,7 @@ const AcceptOrder = (props) => {
           ) : step === 1 ? (
             <View
               style={{width: '100%', alignItems: 'center', marginTop: hp(2)}}>
-              <SelectionModal
+              <SelectionModalAndroid
                 style={{
                   marginVertical: hp(2),
                 }}
@@ -557,7 +557,7 @@ const AcceptOrder = (props) => {
                 </Text>
               </View>
               <View style={{marginBottom: hp(2), marginTop: hp(2)}}>
-                <SelectionModal
+                <SelectionModalAndroid
                   value={applyBidData?.vehicle_type}
                   label={'Vendor Type'}
                   width={wp(90)}
