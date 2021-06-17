@@ -462,14 +462,16 @@ const OrderDetails = (props) => {
                   . Hence You won't be able to submit a bid
                 </Text>
               </View>
-            )) || (
-            <View style={styles.flexBoxWrapper}>
-              <Text style={styles.warningText}>
-                Nobody is watching this order from your organization. You may
-                proceed with placing a bid.
-              </Text>
-            </View>
-          )}
+            )) ||
+            orderDetails?.status === 2 ||
+            (orderDetails?.status === 3 && (
+              <View style={styles.flexBoxWrapper}>
+                <Text style={styles.warningText}>
+                  Nobody is watching this order from your organization. You may
+                  proceed with placing a bid.
+                </Text>
+              </View>
+            ))}
           {!orderDetails?.final_quote &&
             orderDetails?.bid?.bid_type === 1 &&
             orderDetails?.bid?.status === 0 &&
