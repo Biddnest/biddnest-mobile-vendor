@@ -10,7 +10,6 @@ target 'cp_biddnest_mobile_vendor' do
 
   pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
   pod 'RNAppTour', :path => '../node_modules/react-native-app-tour/ios'
-  pod 'Yoga', :path => '../node_modules/react-native/ReactCommon/yoga'
 
   target 'cp_biddnest_mobile_vendorTests' do
     inherit! :complete
@@ -21,24 +20,10 @@ target 'cp_biddnest_mobile_vendor' do
   #
   # Note that if you have use_frameworks! enabled, Flipper will not work and
   # you should disable these next few lines.
-  use_frameworks!
-    pod 'MaterialShowcase', :git => 'https://github.com/aromajoin/material-showcase-ios', :tag => '0.7.1'
-
-    $static_framework = ['FlipperKit', 'Flipper', 'Flipper-Folly',
-        'CocoaAsyncSocket', 'ComponentKit', 'Flipper-DoubleConversion',
-        'Flipper-Glog', 'Flipper-PeerTalk', 'Flipper-RSocket', 'Yoga', 'YogaKit',
-        'CocoaLibEvent', 'OpenSSL-Universal', 'boost-for-react-native']
-
-      pre_install do |installer|
-        Pod::Installer::Xcode::TargetValidator.send(:define_method, :verify_no_static_framework_transitive_dependencies) {}
-        installer.pod_targets.each do |pod|
-            if $static_framework.include?(pod.name)
-              def pod.build_type;
-                Pod::BuildType.static_library
-              end
-            end
-          end
-      end
+   use_flipper!({ 'Flipper-Folly' => '2.3.0' })
+  post_install do |installer|
+    flipper_post_install(installer)
+  end
 end
 
 target 'cp_biddnest_mobile_vendor-tvOS' do
