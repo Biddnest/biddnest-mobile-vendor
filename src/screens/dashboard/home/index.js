@@ -43,6 +43,7 @@ import Ripple from 'react-native-material-ripple';
 import BiddnestLogo from '../../../assets/svg/biddnest_logo.svg';
 import SelectionModal from '../../../components/selectionModal';
 import SwitchButton from '../../../components/appTourSwitch/switchButton';
+import _ from 'lodash';
 
 export const HomeHeader = (props) => {
   const configData =
@@ -381,6 +382,17 @@ const Home = (props) => {
     item?.movement_dates?.forEach((i) => {
       dateArray.push(moment(i.date).format('D MMM'));
     });
+    let t = _.orderBy(
+      dateArray,
+      (o: any) => {
+        return moment(o);
+      },
+      ['asc'],
+    );
+    let dateDisplay = [];
+    t.forEach((item) => {
+      dateDisplay.push(moment(item).format('Do MMM'));
+    });
     const renderRightDate = (item, dates = []) => {
       if (item?.bid?.status === 0) {
         return (
@@ -480,12 +492,12 @@ const Home = (props) => {
               STYLES.statusView,
               {
                 backgroundColor: statusData?.color[statusInd],
-                maxWidth: '45%',
+                maxWidth: '40%',
               },
             ]}>
             {status}
           </Text>
-          <Text style={[STYLES.rightText, {width: '55%'}]}>
+          <Text style={[STYLES.rightText, {width: '58%'}]}>
             {item?.status > 4
               ? item?.public_booking_id
               : item?.public_enquiry_id}
@@ -634,7 +646,7 @@ const Home = (props) => {
           <View>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>Moving Date</Text>
-              {renderRightDate(item, dateArray)}
+              {renderRightDate(item, dateDisplay)}
             </View>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>category</Text>

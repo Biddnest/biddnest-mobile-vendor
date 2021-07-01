@@ -409,7 +409,10 @@ const AcceptOrder = (props) => {
                 label={'Type Of Movement'}
                 width={wp(90)}
                 items={
-                  source_meta?.shared_service == true
+                  source_meta?.shared_service == true ||
+                  source_meta?.shared_service == 'true' ||
+                  source_meta?.shared_service == 1 ||
+                  source_meta?.shared_service == '1'
                     ? [
                         {label: 'Shared', value: 'shared'},
                         {label: 'Dedicated', value: 'dedicated'},
@@ -579,6 +582,7 @@ const AcceptOrder = (props) => {
                     flexDirection: 'row',
                     alignItems: 'center',
                     overflow: 'hidden',
+                    marginTop: hp(0.5),
                   }}>
                   <View style={styles.manPowerView}>
                     <TextInputReal

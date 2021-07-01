@@ -155,7 +155,7 @@ export const STYLES = {
     borderRadius: wp(6),
     backgroundColor: Colors.pageBG,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   sliderRail: {
     borderWidth: 2,
@@ -177,7 +177,7 @@ export const STYLES = {
   },
   sliderLabel: {
     backgroundColor: Colors.darkBlue,
-    paddingVertical: 4,
+    paddingVertical: 1,
     paddingHorizontal: 10,
     color: Colors.white,
     borderRadius: 3,
@@ -189,7 +189,7 @@ export const STYLES = {
     borderRadius: wp(7.5),
     backgroundColor: Colors.pageBG,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   circleBottomText: {
     fontFamily: 'Roboto-Light',

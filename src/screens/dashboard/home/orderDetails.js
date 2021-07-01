@@ -514,7 +514,12 @@ const OrderDetails = (props) => {
               <View style={STYLES.flexBox}>
                 <Text style={STYLES.leftText}>TYPE OF MOVEMENT</Text>
                 <Text style={[STYLES.rightText, {textTransform: 'capitalize'}]}>
-                  {source_meta?.shared_service == true ? 'Shared' : 'Dedicated'}
+                  {source_meta?.shared_service == true ||
+                  source_meta?.shared_service == 'true' ||
+                  source_meta?.shared_service == 1 ||
+                  source_meta?.shared_service == '1'
+                    ? 'Shared'
+                    : 'Dedicated'}
                 </Text>
               </View>
             </View>
