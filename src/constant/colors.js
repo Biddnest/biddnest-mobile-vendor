@@ -29,18 +29,7 @@ export const boxShadow = {
   shadowColor: '#3B4B5833',
 };
 
-export const IMAGE_OPTIONS = {
-  title: 'Biddnest',
-  takePhotoButtonTitle: 'Camera...',
-  customButtons: [],
-  storageOptions: {
-    skipBackup: true,
-    path: 'images',
-  },
-  maxWidth: 400,
-  maxHeight: 400,
-  quality: 0.5,
-};
+export const GoogleMapKey = 'AIzaSyA1ML4vr8f_MlPZ19y8Gl79km4R1sGpLKo';
 
 export const wp = widthPercentageToDP;
 export const hp = heightPercentageToDP;
