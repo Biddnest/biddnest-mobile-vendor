@@ -380,19 +380,15 @@ const Home = (props) => {
       status = 'customer confirmation pending';
     }
     item?.movement_dates?.forEach((i) => {
-      dateArray.push(moment(i.date).format('D MMM'));
+      dateArray.push(moment(i.date).format('Do MMM'));
     });
-    let t = _.orderBy(
+    let dateDisplay = _.orderBy(
       dateArray,
       (o: any) => {
         return moment(o);
       },
       ['asc'],
     );
-    let dateDisplay = [];
-    t.forEach((item) => {
-      dateDisplay.push(moment(item).format('Do MMM'));
-    });
     const renderRightDate = (item, dates = []) => {
       if (item?.bid?.status === 0) {
         return (
