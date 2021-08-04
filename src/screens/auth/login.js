@@ -189,7 +189,4 @@ const styles = StyleSheet.create({
     paddingTop: hp(5),
     alignItems: 'center',
   },
-  customDropDown: {
-    backgroundColor: Colors.textBG,
-  },
 });

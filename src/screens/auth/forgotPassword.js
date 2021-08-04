@@ -210,11 +210,4 @@ const styles = StyleSheet.create({
     color: Colors.textLabelColor,
     fontSize: hp(3),
   },
-  checkBoxView: {
-    height: 20,
-    width: 20,
-    borderWidth: 2,
-    borderRadius: 3,
-    marginRight: wp(2),
-  },
 });

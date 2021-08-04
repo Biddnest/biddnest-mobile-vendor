@@ -511,6 +511,12 @@ const OrderDetails = (props) => {
                   {orderDetails?.service?.name}
                 </Text>
               </View>
+              {meta?.subcategory && (
+                <View style={STYLES.flexBox}>
+                  <Text style={STYLES.leftText}>sub Category</Text>
+                  <Text style={STYLES.rightText}>{meta?.subcategory}</Text>
+                </View>
+              )}
               <View style={STYLES.flexBox}>
                 <Text style={STYLES.leftText}>TYPE OF MOVEMENT</Text>
                 <Text style={[STYLES.rightText, {textTransform: 'capitalize'}]}>
@@ -693,6 +699,12 @@ const OrderDetails = (props) => {
                       {orderDetails?.service?.name}
                     </Text>
                   </View>
+                  {meta?.subcategory && (
+                    <View style={STYLES.flexBox}>
+                      <Text style={STYLES.leftText}>sub Category</Text>
+                      <Text style={STYLES.rightText}>{meta?.subcategory}</Text>
+                    </View>
+                  )}
                 </View>
               )}
               {orderDetails?.final_quote && (
