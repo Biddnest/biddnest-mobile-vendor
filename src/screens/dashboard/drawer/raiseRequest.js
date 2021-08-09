@@ -93,7 +93,7 @@ const RaiseRequest = (props) => {
         <LinearGradient
           colors={[Colors.pageBG, Colors.white]}
           style={{flex: 1, padding: hp(3)}}>
-          <SelectionModal
+          <SelectionModalAndroid
             style={{
               marginBottom: hp(3),
               borderColor:

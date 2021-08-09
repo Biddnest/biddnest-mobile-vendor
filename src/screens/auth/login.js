@@ -9,10 +9,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import {STYLES} from '../../constant/commonStyle';
 import {useDispatch} from 'react-redux';
 import {signIn, signOut} from '../../redux/actions/user';
-import {
-  CustomAlert,
-  resetNavigator,
-} from '../../constant/commonFun';
+import {CustomAlert, resetNavigator} from '../../constant/commonFun';
 import OneSignal from 'react-native-onesignal';
 
 const Login = (props) => {
@@ -33,23 +30,23 @@ const Login = (props) => {
     dispatch(signOut());
   }, []);
   return (
-    <View style={[styles.container, {...styles.common}]}>
-      <Header />
-      <LinearGradient
-        colors={[Colors.darkBlue, '#333092']}
-        start={{x: 0, y: 0}}
-        end={{x: 1, y: 0}}
-        style={{
-          height: hp(70),
-          width: wp(100),
-        }}>
-        <KeyboardAwareScrollView
-          bounces={false}
-          enableOnAndroid={false}
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            flex: 1,
+    <KeyboardAwareScrollView
+      bounces={false}
+      enableOnAndroid={false}
+      keyboardShouldPersistTaps="handled"
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{
+        flex: 1,
+      }}>
+      <View style={[styles.container, {...styles.common}]}>
+        <Header />
+        <LinearGradient
+          colors={[Colors.darkBlue, '#333092']}
+          start={{x: 0, y: 0}}
+          end={{x: 1, y: 0}}
+          style={{
+            height: hp(70),
+            width: wp(100),
           }}>
           <View style={styles.bottomView}>
             <Text style={STYLES.authScreenHeader}>Login</Text>
@@ -155,9 +152,9 @@ const Login = (props) => {
               Forgot Password?
             </Text>
           </View>
-        </KeyboardAwareScrollView>
-      </LinearGradient>
-    </View>
+        </LinearGradient>
+      </View>
+    </KeyboardAwareScrollView>
   );
 };
 

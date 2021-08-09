@@ -489,6 +489,7 @@ const Home = (props) => {
               {
                 backgroundColor: statusData?.color[statusInd],
                 maxWidth: '40%',
+                overflow: 'hidden',
               },
             ]}>
             {status}
