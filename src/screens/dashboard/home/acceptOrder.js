@@ -409,7 +409,10 @@ const AcceptOrder = (props) => {
                 label={'Type Of Movement'}
                 width={wp(90)}
                 items={
-                  source_meta?.shared_service == true
+                  source_meta?.shared_service == true ||
+                  source_meta?.shared_service == 'true' ||
+                  source_meta?.shared_service == 1 ||
+                  source_meta?.shared_service == '1'
                     ? [
                         {label: 'Shared', value: 'shared'},
                         {label: 'Dedicated', value: 'dedicated'},
@@ -559,7 +562,7 @@ const AcceptOrder = (props) => {
               <View style={{marginBottom: hp(2), marginTop: hp(2)}}>
                 <SelectionModalAndroid
                   value={applyBidData?.vehicle_type}
-                  label={'Vendor Type'}
+                  label={'Vehicle Type'}
                   width={wp(90)}
                   items={[{label: 'Tempo', value: 'tempo'}]}
                   onChangeItem={(text) => {
@@ -579,6 +582,7 @@ const AcceptOrder = (props) => {
                     flexDirection: 'row',
                     alignItems: 'center',
                     overflow: 'hidden',
+                    marginTop: hp(0.5),
                   }}>
                   <View style={styles.manPowerView}>
                     <TextInputReal
@@ -808,10 +812,16 @@ const AcceptOrder = (props) => {
               if (step === 0) {
                 if (parseInt(stepData?.bid_amount) > 0) {
                   if (
-                    parseInt(stepData?.bid_amount) >=
-                      orderDetails?.final_estimated_quote / 2 &&
-                    parseInt(stepData?.bid_amount) <=
-                      orderDetails?.final_estimated_quote * 2
+                    parseFloat(stepData?.bid_amount) >=
+                      parseFloat(
+                        orderDetails?.final_estimated_quote.replace(/,/g, ''),
+                      ) /
+                        2 &&
+                    parseFloat(stepData?.bid_amount) <=
+                      parseFloat(
+                        orderDetails?.final_estimated_quote.replace(/,/g, ''),
+                      ) *
+                        2
                   ) {
                     setStep(1);
                   } else {
@@ -996,6 +1006,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto-Italic',
     color: Colors.inputTextColor,
     marginLeft: 5,
+    width: '93%',
   },
   dateBottomText: {
     fontFamily: 'Roboto-Italic',

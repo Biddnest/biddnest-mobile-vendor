@@ -41,8 +41,9 @@ import InformationPopUp from '../../../components/informationPopUp';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Ripple from 'react-native-material-ripple';
 import BiddnestLogo from '../../../assets/svg/biddnest_logo.svg';
-import SelectionModalAndroid from '../../../components/selectionModal';
+import SelectionModal from '../../../components/selectionModal';
 import SwitchButton from '../../../components/appTourSwitch/switchButton';
+import _ from 'lodash';
 
 export const HomeHeader = (props) => {
   const configData =
@@ -379,8 +380,15 @@ const Home = (props) => {
       status = 'customer confirmation pending';
     }
     item?.movement_dates?.forEach((i) => {
-      dateArray.push(moment(i.date).format('D MMM'));
+      dateArray.push(moment(i.date).format('Do MMM'));
     });
+    let dateDisplay = _.orderBy(
+      dateArray,
+      (o: any) => {
+        return moment(o);
+      },
+      ['asc'],
+    );
     const renderRightDate = (item, dates = []) => {
       if (item?.bid?.status === 0) {
         return (
@@ -480,13 +488,12 @@ const Home = (props) => {
               STYLES.statusView,
               {
                 backgroundColor: statusData?.color[statusInd],
-                maxWidth: '45%',
-                overflow: 'hidden',
+                maxWidth: '40%',
               },
             ]}>
             {status}
           </Text>
-          <Text style={[STYLES.rightText, {width: '55%'}]}>
+          <Text style={[STYLES.rightText, {width: '58%'}]}>
             {item?.status > 4
               ? item?.public_booking_id
               : item?.public_enquiry_id}
@@ -635,7 +642,7 @@ const Home = (props) => {
           <View>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>Moving Date</Text>
-              {renderRightDate(item, dateArray)}
+              {renderRightDate(item, dateDisplay)}
             </View>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>category</Text>
@@ -839,7 +846,7 @@ const Home = (props) => {
           </View>
         </View>
         <View style={{marginVertical: hp(2)}}>
-          <SelectionModalAndroid
+          <SelectionModal
             value={filterData?.status}
             width={wp(90)}
             label={'Status'}
@@ -852,7 +859,7 @@ const Home = (props) => {
             }}
           />
         </View>
-        <SelectionModalAndroid
+        <SelectionModal
           label={'Category'}
           value={filterData?.service_id}
           width={wp(90)}
@@ -1019,27 +1026,6 @@ const Home = (props) => {
 export default Home;
 
 const styles = StyleSheet.create({
-  sliderStyle: {
-    width: wp(48),
-    alignSelf: 'center',
-    marginHorizontal: wp(2),
-  },
-  manPowerView: {
-    borderWidth: 2,
-    borderRadius: 10,
-    height: wp(12),
-    width: wp(16),
-    marginVertical: hp(1),
-    borderColor: Colors.silver,
-    ...STYLES.common,
-  },
-  dateBottomText: {
-    fontFamily: 'Roboto-Regular',
-    marginTop: 0,
-    fontSize: hp(1.9),
-    color: '#99A0A5',
-    marginLeft: wp(4),
-  },
   textInput: {
     borderWidth: 2,
     borderRadius: 10,

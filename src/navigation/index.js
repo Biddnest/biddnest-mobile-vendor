@@ -10,12 +10,7 @@ import ChangePassword from '../screens/auth/changePassword';
 import DrawerNavigation from './drawerNavigation';
 import ChatRedirect from '../screens/dashboard/orders/chatRedirection';
 import {navigationRef} from './RootNavigation';
-import {
-  OrientationLocker,
-  PORTRAIT,
-  UNLOCK,
-} from 'react-native-orientation-locker';
-import {isTablet} from 'react-native-device-info';
+import SingleTicket from '../screens/dashboard/drawer/singleTicket';
 
 const Stack = createStackNavigator();
 const MyTheme = {
@@ -41,6 +36,7 @@ const App = () => {
         <Stack.Screen name="ChangePasswordAuth" component={ChangePassword} />
         <Stack.Screen name="Dashboard" component={DrawerNavigation} />
         <Stack.Screen name="ChatRedirect" component={ChatRedirect} />
+        <Stack.Screen name="SingleTicket" component={SingleTicket} />
       </Stack.Navigator>
     </NavigationContainer>
   );

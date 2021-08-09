@@ -48,7 +48,7 @@ export function DrawerContent(props) {
       navigate: 'UserRole',
     },
     {
-      image: <LegalPolicies width={wp(7.5)} height={wp(7.5)} />,
+      image: <LegalPolicies width={wp(8)} height={wp(8)} />,
       topText: 'Legal Policies',
       bottomText: 'Search Orders',
       navigate: 'LegalPolicies',
@@ -61,7 +61,7 @@ export function DrawerContent(props) {
       navigate: 'TermsAndConditions',
     },
     {
-      image: <PrivacyPolicy width={wp(7.5)} height={wp(7.5)} />,
+      image: <PrivacyPolicy width={wp(8)} height={wp(8)} />,
       topText: 'Privacy Policy',
       bottomText: 'Search Orders',
       navigate: 'PrivacyPolicy',
@@ -127,7 +127,7 @@ export function DrawerContent(props) {
           <MaterialCommunityIcons
             name={item.icon}
             color={Colors.darkBlue}
-            size={wp(6)}
+            size={wp(7)}
           />
         );
       case 'Feather':

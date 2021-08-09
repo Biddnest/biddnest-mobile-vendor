@@ -351,25 +351,4 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '100%',
   },
-  sliderStyle: {
-    width: wp(48),
-    alignSelf: 'center',
-    marginHorizontal: wp(2),
-  },
-  manPowerView: {
-    borderWidth: 2,
-    borderRadius: 10,
-    height: wp(12),
-    width: wp(16),
-    marginVertical: hp(1),
-    borderColor: Colors.silver,
-    ...STYLES.common,
-  },
-  dateBottomText: {
-    fontFamily: 'Roboto-Regular',
-    marginTop: 0,
-    fontSize: hp(1.9),
-    color: '#99A0A5',
-    marginLeft: wp(2),
-  },
 });

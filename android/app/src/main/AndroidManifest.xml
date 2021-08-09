@@ -16,7 +16,7 @@
       android:theme="@style/AppTheme">
       <meta-data
         android:name="com.google.android.geo.API_KEY"
-        android:value="AIzaSyCvVaeoUidYMQ8cdIJ_cEvrZNJeBeMpC-4"/>
+        android:value="AIzaSyA1ML4vr8f_MlPZ19y8Gl79km4R1sGpLKo"/>
       <meta-data android:name="com.onesignal.NotificationAccentColor.DEFAULT" android:value="#0F0C75" />
       <activity
         android:name=".MainActivity"

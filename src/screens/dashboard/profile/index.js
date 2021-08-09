@@ -475,11 +475,6 @@ const styles = StyleSheet.create({
     fontSize: hp(2.2),
     color: Colors.darkBlue,
   },
-  bottomText: {
-    fontFamily: 'Roboto-Regular',
-    color: Colors.inputTextColor,
-    fontSize: hp(1.9),
-  },
   flexBox: {
     flexDirection: 'row',
     justifyContent: 'space-between',

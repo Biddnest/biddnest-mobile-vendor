@@ -505,13 +505,6 @@ const UserRole = (props) => {
 export default UserRole;
 
 const styles = StyleSheet.create({
-  tableView: {
-    borderWidth: 1,
-    borderColor: Colors.silver,
-    backgroundColor: Colors.darkBlue,
-    overflow: 'hidden',
-    flex: 1,
-  },
   topText: {
     fontFamily: 'Gilroy-SemiBold',
     color: Colors.inputTextColor,

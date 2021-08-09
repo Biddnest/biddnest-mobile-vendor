@@ -1,10 +1,9 @@
 import React, {useState} from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import {View} from 'react-native';
 import CustomModalAndroid from '../../../components/customModal';
-import {Colors, wp, hp} from '../../../constant/colors';
+import {hp} from '../../../constant/colors';
 import TextInput from '../../../components/textInput';
 import FlatButton from '../../../components/flatButton';
-import {STYLES} from '../../../constant/commonStyle';
 import {useDispatch, useSelector} from 'react-redux';
 import {updateProfile} from '../../../redux/actions/user';
 import {CustomAlert} from '../../../constant/commonFun';
@@ -167,13 +166,3 @@ const LocationDetails = (props) => {
 };
 
 export default LocationDetails;
-
-const styles = StyleSheet.create({
-  separatorView: {
-    borderWidth: 0.8,
-    borderColor: Colors.silver,
-    width: '100%',
-    marginTop: hp(1),
-    marginBottom: hp(2),
-  },
-});
