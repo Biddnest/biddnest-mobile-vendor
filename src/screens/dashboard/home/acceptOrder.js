@@ -122,7 +122,7 @@ const AcceptOrder = (props) => {
   const renderStep0 = () => {
     return (
       <View style={{width: '100%', alignItems: 'center'}}>
-        <View style={{width: '90%', marginTop: hp(2)}}>
+        <View style={{width: '90%', marginTop: hp(2), marginBottom: hp(15)}}>
           <View style={styles.tableView}>
             <View
               style={{
