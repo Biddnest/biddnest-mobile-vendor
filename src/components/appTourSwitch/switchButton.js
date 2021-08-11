@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Pressable} from 'react-native';
+import {StyleSheet, View, DeviceEventEmitter, Pressable} from 'react-native';
+import {AppTour, AppTourSequence, AppTourView} from 'react-native-app-tour';
 import {Colors, hp, wp} from '../../constant/colors';
 import {STYLES} from '../../constant/commonStyle';
 import Switch from '../switch';
@@ -7,6 +8,48 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Filter from '../../assets/svg/filter.svg';
 
 export default class SwitchButton extends Component<{}> {
+  constructor(props) {
+    super(props);
+
+    this.appTourTargets = [];
+  }
+
+  componentWillMount() {
+    this.registerSequenceStepEvent();
+    this.registerFinishSequenceEvent();
+  }
+
+  componentDidMount() {
+    setTimeout(() => {
+      let appTourSequence = new AppTourSequence();
+      this.appTourTargets.forEach((appTourTarget) => {
+        appTourSequence.add(appTourTarget);
+      });
+
+      AppTour.ShowSequence(appTourSequence);
+    }, 1000);
+  }
+
+  registerSequenceStepEvent = () => {
+    if (this.sequenceStepListener) {
+      this.sequenceStepListener.remove();
+    }
+    this.sequenceStepListener = DeviceEventEmitter.addListener(
+      'onShowSequenceStepEvent',
+      (e: Event) => {},
+    );
+  };
+
+  registerFinishSequenceEvent = () => {
+    if (this.finishSequenceListener) {
+      this.finishSequenceListener.remove();
+    }
+    this.finishSequenceListener = DeviceEventEmitter.addListener(
+      'onFinishSequenceEvent',
+      (e: Event) => {},
+    );
+  };
+
   render() {
     return (
       <View style={styles.container}>
@@ -25,6 +68,11 @@ export default class SwitchButton extends Component<{}> {
               }}>
               <SwitchTop
                 style={styles.top}
+                addAppTourTarget={(appTourTarget) => {
+                  if (this?.props?.appTour) {
+                    this.appTourTargets.push(appTourTarget);
+                  }
+                }}
                 onPress={this?.props.onRightPress}
                 switchValue={this?.props.notificationToggle}
                 onChange={this?.props.onChange}
@@ -41,6 +89,11 @@ export default class SwitchButton extends Component<{}> {
               }}>
               <SupportTop
                 style={styles.top}
+                addAppTourTarget={(appTourTarget) => {
+                  if (this?.props?.appTour) {
+                    this.appTourTargets.push(appTourTarget);
+                  }
+                }}
                 onPress={this?.props.onPressSupport}
               />
             </View>
@@ -57,6 +110,11 @@ export default class SwitchButton extends Component<{}> {
               <FilterTop
                 key={new Date()}
                 style={styles.top}
+                addAppTourTarget={(appTourTarget) => {
+                  if (this?.props?.appTour) {
+                    this.appTourTargets.push(appTourTarget);
+                  }
+                }}
                 onPressFilter={this?.props.onPressFilter}
               />
             </View>
@@ -72,9 +130,39 @@ class SwitchTop extends Component {
     return (
       <View style={styles.container}>
         <Pressable
+          ref={(ref) => {
+            if (!ref) {
+              return;
+            }
+            this.button1 = ref;
+            let props = {
+              order: 2,
+              title: 'Control Notifications',
+              description: 'You can turn off notifications here when away.',
+              backgroundPromptColor: Colors.darkBlue,
+              outerCircleColor: Colors.darkBlue,
+              targetRadius: 30,
+            };
+            this.props.addAppTourTarget &&
+              this.props.addAppTourTarget(AppTourView.for(ref, {...props}));
+          }}
           style={{...STYLES.common, width: wp(12), height: '100%'}}
           onPress={() => {
             this?.props?.onPress();
+            let props = {
+              order: 3,
+              title: 'Control Notifications',
+              description: 'You can turn off notifications here when away',
+              backgroundPromptColor: Colors.darkBlue,
+              outerCircleColor: Colors.darkBlue,
+              targetRadius: 30,
+            };
+
+            let targetView = AppTourView.for(this.button1, {
+              ...props,
+            });
+
+            AppTour.ShowFor(targetView);
           }}>
           <Switch
             switchValue={this?.props.switchValue}
@@ -91,9 +179,38 @@ class SupportTop extends Component {
     return (
       <View style={styles.container}>
         <Pressable
+          ref={(ref) => {
+            if (!ref) {
+              return;
+            }
+            this.button2 = ref;
+            let props = {
+              order: 3,
+              title: 'Support',
+              description: 'Contact through Chat or Call',
+              backgroundPromptColor: Colors.darkBlue,
+              outerCircleColor: Colors.darkBlue,
+              targetRadius: 30,
+            };
+            this.props.addAppTourTarget &&
+              this.props.addAppTourTarget(AppTourView.for(ref, {...props}));
+          }}
           style={{...STYLES.common, width: wp(12), height: '100%'}}
           onPress={() => {
             this?.props?.onPress();
+            let props = {
+              order: 1,
+              title: 'Support',
+              description: 'Contact through Chat or Call',
+              backgroundPromptColor: Colors.darkBlue,
+              outerCircleColor: Colors.darkBlue,
+              targetRadius: 30,
+            };
+
+            let targetView = AppTourView.for(this.button2, {
+              ...props,
+            });
+            AppTour.ShowFor(targetView);
           }}>
           <SimpleLineIcons
             name={'earphones-alt'}
@@ -109,7 +226,25 @@ class SupportTop extends Component {
 class FilterTop extends Component {
   render() {
     return (
-      <Pressable style={{flex: 1}} onPress={() => this.props.onPressFilter()}>
+      <Pressable
+        style={{flex: 1}}
+        onPress={() => this.props.onPressFilter()}
+        ref={(ref) => {
+          if (!ref) {
+            return;
+          }
+          let props = {
+            order: 1,
+            title: 'Filter',
+            description: 'Filter by various status, dates and more',
+            backgroundPromptColor: Colors.darkBlue,
+            outerCircleColor: Colors.darkBlue,
+            targetRadius: 30,
+            outerCircleAlpha: 0.5,
+          };
+          this.props.addAppTourTarget &&
+            this.props.addAppTourTarget(AppTourView.for(ref, {...props}));
+        }}>
         <Filter width={hp(9)} height={hp(9)} />
       </Pressable>
     );
