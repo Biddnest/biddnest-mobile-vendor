@@ -85,7 +85,6 @@ const Requirements = (props) => {
                 fontSize: hp(2.2),
                 color: Colors.inputTextColor,
                 textAlign: 'center',
-                marginVertical: hp(1.5),
               }}>
               ITEM LIST
             </Text>
@@ -106,7 +105,7 @@ const Requirements = (props) => {
                           styles.headerText,
                           {
                             fontFamily: 'Roboto-Regular',
-                            marginTop: 5,
+                            marginTop: hp(0.1),
                             fontSize: hp(1.9),
                             textTransform: 'capitalize',
                           },
@@ -127,7 +126,12 @@ const Requirements = (props) => {
                 );
               }}
               ItemSeparatorComponent={() => (
-                <View style={[STYLES.separatorView, {marginBottom: hp(2)}]} />
+                <View
+                  style={[
+                    STYLES.separatorView,
+                    {marginBottom: hp(1), marginTop: hp(1)},
+                  ]}
+                />
               )}
             />
           </View>
@@ -294,8 +298,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   rightText: {
-    paddingVertical: 8,
-    paddingHorizontal: 12,
+    paddingVertical: hp(1),
+    paddingHorizontal: wp(3),
     borderRadius: 5,
     backgroundColor: Colors.pageBG,
     overflow: 'hidden',

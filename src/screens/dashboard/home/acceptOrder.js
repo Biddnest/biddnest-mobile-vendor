@@ -164,7 +164,10 @@ const AcceptOrder = (props) => {
                     }}>
                     <View style={{flex: 1}}>
                       <Text
-                        style={[STYLES.modalHeaderText, {textAlign: 'left'}]}>
+                        style={[
+                          STYLES.modalHeaderText,
+                          {textAlign: 'left', marginTop: hp(1)},
+                        ]}>
                         {item?.name}
                       </Text>
                       <Text
@@ -247,7 +250,7 @@ const AcceptOrder = (props) => {
               flexDirection: 'row',
               alignItems: 'center',
               paddingHorizontal: hp(2),
-              marginTop: hp(2),
+              marginTop: hp(1),
             }}>
             <Text
               style={{
