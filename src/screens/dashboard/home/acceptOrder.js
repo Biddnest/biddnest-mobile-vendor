@@ -83,6 +83,8 @@ const AcceptOrder = (props) => {
     {};
   const [isLoading, setLoading] = useState(false);
   const [dateArray, setDateArray] = useState({});
+  const [disableFieldsModal, setDisableFieldsModal] = useState('');
+  const [disableFields, setDisableFields] = useState('');
 
   useEffect(() => {
     let temp = {...dateArray};
@@ -210,10 +212,15 @@ const AcceptOrder = (props) => {
                         inputStyle={{textAlign: 'center'}}
                         placeHolder={'4200'}
                         keyboard={'decimal-pad'}
+                        disable={disableFields === 'totalPrice'}
                         onChange={(text) => {
-                          let temp = [...stepData.inventory];
-                          temp[index].amount = text;
-                          setStepData({...stepData, inventory: temp});
+                          if (disableFields !== 'singlePrice') {
+                            setDisableFieldsModal('singlePrice');
+                          } else {
+                            let temp = [...stepData.inventory];
+                            temp[index].amount = text;
+                            setStepData({...stepData, inventory: temp});
+                          }
                         }}
                         onBlur={() => {
                           let temp = [...stepData?.inventory];
@@ -265,10 +272,15 @@ const AcceptOrder = (props) => {
                 label={''}
                 value={stepData?.bid_amount?.toString()}
                 placeHolder={'4200'}
+                disable={disableFields === 'singlePrice'}
                 keyboard={'decimal-pad'}
-                onChange={(text) =>
-                  setStepData({...stepData, bid_amount: text})
-                }
+                onChange={(text) => {
+                  if (disableFields !== 'totalPrice') {
+                    setDisableFieldsModal('totalPrice');
+                  } else {
+                    setStepData({...stepData, bid_amount: text}); 
+                  }
+                }}
               />
             </View>
           </View>
@@ -389,6 +401,8 @@ const AcceptOrder = (props) => {
               ...stepData,
               bid_amount: orderDetails?.final_estimated_quote,
             });
+            setDisableFieldsModal('');
+            setDisableFields('');
             setStep(0);
             setForgotPin(false);
             props.onCloseIcon();
@@ -948,6 +962,40 @@ const AcceptOrder = (props) => {
             }}
           />
         )}
+        <CustomModalAndroid
+          visible={disableFieldsModal !== ''}
+          title={'Warning'}
+          onPress={() => setDisableFieldsModal('')}>
+          <View
+            style={{
+              marginTop: hp(4),
+              marginBottom: hp(2),
+              marginHorizontal: wp(15),
+            }}>
+            <Text
+              style={{
+                fontFamily: 'Roboto-Regular',
+                fontSize: hp(2.2),
+                color: Colors.inputTextColor,
+                marginBottom: hp(2),
+                textAlign: 'center',
+              }}>
+              Are you sure? You want to change {disableFieldsModal === 'singlePrice' ? 'Single item' : 'Total'} price. You will not be able to edit {disableFieldsModal === 'singlePrice' ? 'Total' : 'Single item'} price.
+            </Text>
+          </View>
+          <TwoButton
+            leftLabel={'Cancel'}
+            rightLabel={'Okay'}
+            isLoading={isLoading}
+            leftOnPress={() => {
+              setDisableFieldsModal('');
+            }}
+            rightOnPress={() => {
+              setDisableFields(disableFieldsModal);
+              setDisableFieldsModal('');
+            }}
+          />
+        </CustomModalAndroid>
         <CustomModalAndroid
           visible={!!priceWarning}
           title={'Warning'}
