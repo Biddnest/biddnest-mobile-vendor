@@ -147,7 +147,7 @@ const AcceptOrder = (props) => {
               </Text>
             </View>
             <FlatList
-              scrollEnabled={false}
+              // scrollEnabled={false}
               bounces={false}
               keyExtractor={(item, index) => index.toString()}
               showsVerticalScrollIndicator={false}
@@ -278,7 +278,7 @@ const AcceptOrder = (props) => {
                   if (disableFields !== 'totalPrice') {
                     setDisableFieldsModal('totalPrice');
                   } else {
-                    setStepData({...stepData, bid_amount: text}); 
+                    setStepData({...stepData, bid_amount: text});
                   }
                 }}
               />
