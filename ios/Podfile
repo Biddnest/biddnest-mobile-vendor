@@ -26,6 +26,10 @@ target 'cp_biddnest_mobile_vendor' do
   end
 end
 
+target 'OneSignalNotificationServiceExtension' do
+  pod 'OneSignal'
+end
+
 target 'cp_biddnest_mobile_vendor-tvOS' do
   # Pods for cp_biddnest_mobile_vendor-tvOS
 
