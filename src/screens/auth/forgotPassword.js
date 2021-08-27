@@ -17,7 +17,6 @@ const ForgotPassword = (props) => {
   const [otp, setOTP] = React.useState();
   const [phoneValidate, setPhoneValidate] = useState(undefined);
   const [otpSend, setOtpSend] = useState(false);
-  const [isAgree, setAgree] = useState(true);
   const [otpResponse, setOtpResponse] = useState({});
 
   const sendOTPFun = () => {
@@ -25,10 +24,6 @@ const ForgotPassword = (props) => {
     if (!phone?.length || phone?.length !== 10 || /\D/.test(phone)) {
       setPhoneValidate(false);
       setLoading(false);
-    } else if (!isAgree) {
-      setPhoneValidate(true);
-      setLoading(false);
-      CustomAlert('Agree to the Terms & Conditions');
     } else {
       setPhoneValidate(true);
       // Send OTP
