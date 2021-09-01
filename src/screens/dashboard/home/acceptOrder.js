@@ -123,7 +123,10 @@ const AcceptOrder = (props) => {
   }, []);
   const renderStep0 = () => {
     return (
-      <View style={{width: '100%', alignItems: 'center'}}>
+      <ScrollView
+        contentContainerStyle={{width: '100%', alignItems: 'center'}}
+        bounces={false}
+        showsVerticalScrollIndicator={false}>
         <View style={{width: '90%', marginTop: hp(2), marginBottom: hp(15)}}>
           <View style={styles.tableView}>
             <View
@@ -147,7 +150,7 @@ const AcceptOrder = (props) => {
               </Text>
             </View>
             <FlatList
-              scrollEnabled={false}
+              // scrollEnabled={false}
               bounces={false}
               keyExtractor={(item, index) => index.toString()}
               showsVerticalScrollIndicator={false}
@@ -278,7 +281,7 @@ const AcceptOrder = (props) => {
                   if (disableFields !== 'totalPrice') {
                     setDisableFieldsModal('totalPrice');
                   } else {
-                    setStepData({...stepData, bid_amount: text}); 
+                    setStepData({...stepData, bid_amount: text});
                   }
                 }}
               />
@@ -318,7 +321,7 @@ const AcceptOrder = (props) => {
             </View>
           </View>
         </View>
-      </View>
+      </ScrollView>
     );
   };
 
@@ -373,10 +376,7 @@ const AcceptOrder = (props) => {
     );
   } else {
     return (
-      <CustomModalAndroid
-        visible={props.visible}
-        maxHeight={hp(90)}
-        scrollEnabled={false}>
+      <CustomModalAndroid visible={props.visible} maxHeight={hp(90)}>
         {step === 1 && (
           <Pressable
             onPress={() => setStep(0)}
@@ -408,16 +408,18 @@ const AcceptOrder = (props) => {
             props.onCloseIcon();
           }}
         />
-        <ScrollView
-          style={{flex: 1, maxHeight: hp(73)}}
-          scrollEnabled
-          showsVerticalScrollIndicator={false}
-          bounces={false}>
+        <View style={{flex: 1, maxHeight: hp(73), width: '90%'}}>
           {step === 0 ? (
             renderStep0()
           ) : step === 1 ? (
-            <View
-              style={{width: '100%', alignItems: 'center', marginTop: hp(2)}}>
+            <ScrollView
+              bounces={false}
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{
+                width: '100%',
+                alignItems: 'center',
+                marginTop: hp(2),
+              }}>
               <SelectionModalAndroid
                 style={{
                   marginVertical: hp(2),
@@ -729,7 +731,7 @@ const AcceptOrder = (props) => {
                   </Text>
                 </View>
               </View>
-            </View>
+            </ScrollView>
           ) : (
             <View style={{width: wp(90), alignItems: 'center'}}>
               {(forgotPin && (
@@ -818,7 +820,7 @@ const AcceptOrder = (props) => {
               )}
             </View>
           )}
-        </ScrollView>
+        </View>
         {!success && (
           <FlatButton
             isLaoding={isLoading}
@@ -980,7 +982,11 @@ const AcceptOrder = (props) => {
                 marginBottom: hp(2),
                 textAlign: 'center',
               }}>
-              Are you sure? You want to change {disableFieldsModal === 'singlePrice' ? 'Single item' : 'Total'} price. You will not be able to edit {disableFieldsModal === 'singlePrice' ? 'Total' : 'Single item'} price.
+              Are you sure? You want to change{' '}
+              {disableFieldsModal === 'singlePrice' ? 'Single item' : 'Total'}{' '}
+              price. You will not be able to edit{' '}
+              {disableFieldsModal === 'singlePrice' ? 'Total' : 'Single item'}{' '}
+              price.
             </Text>
           </View>
           <TwoButton

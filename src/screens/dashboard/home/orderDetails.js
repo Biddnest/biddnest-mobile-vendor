@@ -244,8 +244,12 @@ const OrderDetails = (props) => {
     {};
   let meta =
     (orderDetails?.meta && JSON.parse(orderDetails?.meta?.toString())) || {};
-  orderDetails?.movement_dates?.forEach((i) => {
-    dateArray.push(moment(i.date).format('D MMM'));
+  let yourArray = [...orderDetails?.movement_dates];
+  yourArray.sort(function (a, b) {
+    return new Date(a.date) - new Date(b.date);
+  });
+  yourArray?.forEach((i) => {
+    dateArray.push(moment(i.date).format('Do MMM'));
   });
   let coordinates =
     mapVisible === 'pickup'

@@ -369,7 +369,6 @@ const Home = (props) => {
       (item?.destination_meta &&
         JSON.parse(item?.destination_meta?.toString())) ||
       {};
-    let dateArray = [];
     let meta = (item?.meta && JSON.parse(item?.meta?.toString())) || {};
     let ind = Object.values(statusData?.status).findIndex(
       (ele) => ele === item?.status,
@@ -379,16 +378,14 @@ const Home = (props) => {
     if (status === 'payment pending') {
       status = 'customer confirmation pending';
     }
-    item?.movement_dates?.forEach((i) => {
-      dateArray.push(moment(i.date).format('Do MMM'));
+    let yourArray = [...item?.movement_dates];
+    yourArray.sort(function (a, b) {
+      return new Date(a.date) - new Date(b.date);
     });
-    let dateDisplay = _.orderBy(
-      dateArray,
-      (o: any) => {
-        return moment(o);
-      },
-      ['asc'],
-    );
+    let dateDisplay = [];
+    yourArray?.forEach((i) => {
+      dateDisplay.push(moment(i.date).format('Do MMM'));
+    });
     const renderRightDate = (item, dates = []) => {
       if (item?.bid?.status === 0) {
         return (
