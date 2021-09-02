@@ -485,8 +485,11 @@ const Orders = (props) => {
             onRefresh={() => getOrdersList(1)}
             refreshing={isRefresh}
             onEndReached={() => {
-              if (order?.bookings?.length > 5) {
-                getOrdersList(order?.paging?.current_page || 1);
+              if (
+                order?.bookings?.length > 5 &&
+                order?.paging?.current_page < order?.paging?.total_pages
+              ) {
+                getOrdersList(order?.paging?.current_page + 1 || 1);
               }
             }}
             ListEmptyComponent={() => (

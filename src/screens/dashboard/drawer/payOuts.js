@@ -189,8 +189,12 @@ const PayOuts = (props) => {
             onRefresh={() => fetchData()}
             refreshing={isRefresh}
             onEndReached={() => {
-              if (payoutList?.payouts?.length > 10) {
-                fetchData({}, payoutList?.paging?.current_page || 1);
+              if (
+                payoutList?.payouts?.length > 10 &&
+                payoutList?.paging?.current_page <
+                  payoutList?.paging?.total_page
+              ) {
+                fetchData({}, payoutList?.paging?.current_page + 1 || 1);
               }
             }}
             renderItem={renderItem}
@@ -343,7 +347,7 @@ const styles = StyleSheet.create({
     maxWidth: '35%',
     textTransform: 'uppercase',
     color: Colors.white,
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   flexBox: {
     flexDirection: 'row',

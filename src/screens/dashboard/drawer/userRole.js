@@ -330,11 +330,14 @@ const UserRole = (props) => {
           extraData={userRoles?.user_role}
           onEndReachedThreshold={0.5}
           onEndReached={() => {
-            if (userRoles?.user_role?.length > 14) {
+            if (
+              userRoles?.user_role?.length > 14 &&
+              userRoles?.paging?.current_page < userRoles?.paging?.total_page
+            ) {
               if (filterApplied) {
                 getUserRoleList(filterData);
               } else {
-                getUserRoleList({}, userRoles?.paging?.current_page || 1);
+                getUserRoleList({}, userRoles?.paging?.current_page + 1 || 1);
               }
             }
           }}

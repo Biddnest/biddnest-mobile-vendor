@@ -752,11 +752,17 @@ const Home = (props) => {
             }
             refreshing={isRefresh}
             onEndReached={() => {
-              if (order?.bookings?.length > 5) {
+              if (
+                order?.bookings?.length > 5 &&
+                order?.paging?.current_page < order?.paging?.total_pages
+              ) {
                 if (filterApplied) {
-                  getOrdersList(filterData, order?.paging?.current_page || 1);
+                  getOrdersList(
+                    filterData,
+                    order?.paging?.current_page + 1 || 1,
+                  );
                 } else {
-                  getOrdersList({}, order?.paging?.current_page || 1);
+                  getOrdersList({}, order?.paging?.current_page + 1 || 1);
                 }
               }
             }}

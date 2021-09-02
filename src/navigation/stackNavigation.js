@@ -15,6 +15,7 @@ import FAQS from '../screens/dashboard/drawer/faqs';
 import FAQDetails from '../screens/dashboard/drawer/faqs/faqDetails';
 import PayOuts from '../screens/dashboard/drawer/payOuts';
 import EditProfile from '../screens/dashboard/profile/editProfile';
+import Notification from '../screens/dashboard/drawer/notification';
 
 const Stack = createStackNavigator();
 
@@ -41,6 +42,7 @@ const MainStackNavigator = () => {
       <Stack.Screen name="FAQs" component={FAQS} />
       <Stack.Screen name="FAQDetails" component={FAQDetails} />
       <Stack.Screen name="PayOuts" component={PayOuts} />
+      <Stack.Screen name="Notification" component={Notification} />
     </Stack.Navigator>
   );
 };

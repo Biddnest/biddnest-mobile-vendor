@@ -48,6 +48,13 @@ export function DrawerContent(props) {
       navigate: 'UserRole',
     },
     {
+      iconFamily: 'Ionicons',
+      icon: 'ios-notifications-outline',
+      topText: 'Notifications',
+      bottomText: 'Notification',
+      navigate: 'Notification',
+    },
+    {
       image: <LegalPolicies width={wp(8)} height={wp(8)} />,
       topText: 'Legal Policies',
       bottomText: 'Search Orders',
