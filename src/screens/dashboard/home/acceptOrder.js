@@ -35,7 +35,7 @@ const AcceptOrder = (props) => {
   const [step, setStep] = useState(0);
   const [openCalender, setCalender] = useState(false);
   const [forgotPin, setForgotPin] = useState(false);
-  const [calenderDate, setCalenderDate] = useState();
+  const [calenderDate, setCalenderDate] = useState([]);
   const [success, setSuccess] = useState(false);
   const [priceWarning, setPriceWarning] = useState(false);
   const configData =
@@ -43,7 +43,7 @@ const AcceptOrder = (props) => {
   const [applyBidData, setApplyBidData] = useState({
     public_booking_id: public_booking_id,
     type_of_movement: 'dedicated',
-    moving_date: null,
+    moving_date: [],
     vehicle_type: 'tempo',
     man_power: {
       min: 1,
@@ -85,19 +85,32 @@ const AcceptOrder = (props) => {
   const [dateArray, setDateArray] = useState({});
   const [disableFieldsModal, setDisableFieldsModal] = useState('');
   const [disableFields, setDisableFields] = useState('');
+  const [dateArrayDisplay, setDateArrayDisplay] = useState([]);
 
   useEffect(() => {
     let temp = {...dateArray};
     orderDetails?.movement_dates?.forEach((item, index) => {
-      temp[item?.date] = {
-        customStyles: {
-          text: {
-            color: Colors.inputTextColor,
-          },
-        },
-      };
+      let checkIndex = applyBidData?.moving_date?.findIndex(
+        (i) => i === item?.date,
+      );
+      if (checkIndex) {
+        if (checkIndex === -1) {
+          temp[item?.date] = {
+            customStyles: {
+              text: {
+                color: Colors.inputTextColor,
+              },
+            },
+          };
+        } else if (checkIndex >= 0) {
+          temp[item?.date] = {
+            selected: true,
+            selectedColor: Colors.btnBG,
+          };
+        }
+        setDateArray(temp);
+      }
     });
-    setDateArray(temp);
   }, [orderDetails]);
 
   useEffect(() => {
@@ -121,6 +134,15 @@ const AcceptOrder = (props) => {
       max: high,
     });
   }, []);
+
+  useEffect(() => {
+    let temp = [];
+    applyBidData?.moving_date?.forEach((item) => {
+      temp.push(moment(item).format('Do MMM'));
+    });
+    setDateArrayDisplay(temp);
+  }, [applyBidData]);
+
   const renderStep0 = () => {
     return (
       <ScrollView
@@ -460,11 +482,7 @@ const AcceptOrder = (props) => {
                       placeholder={'Moving Date'}
                       disabled={true}
                       label={'Moving Date'}
-                      value={
-                        applyBidData?.moving_date &&
-                        applyBidData?.moving_date !== 'Invalid date' &&
-                        moment(applyBidData?.moving_date).format('D MMM yyyy')
-                      }
+                      value={dateArrayDisplay.join(', ')}
                       rightIcon={() => {
                         return (
                           <MaterialIcons
@@ -507,46 +525,40 @@ const AcceptOrder = (props) => {
                       markingType={'custom'}
                       markedDates={dateArray}
                       style={{width: wp(90), height: hp(50)}}
-                      current={Object.keys(dateArray)[0]}
-                      // minDate={new Date()}
                       onDayPress={(day) => {
                         let ind = Object.keys(dateArray).findIndex(
                           (item) => item === day?.dateString,
                         );
-                        if (ind >= 0) {
+                        if (ind !== -1) {
                           let temp = {...dateArray};
-
-                          Object.keys(temp).forEach((i, index) => {
-                            if (i === day?.dateString) {
-                              temp[day?.dateString] = temp[day?.dateString]
-                                ?.customStyles?.text?.color
-                                ? {
-                                    selected: true,
-                                    selectedColor: Colors.btnBG,
-                                  }
-                                : {
-                                    customStyles: {
-                                      text: {
-                                        color: Colors.inputTextColor,
-                                      },
-                                    },
-                                  };
-                            } else {
-                              temp[i] = {
-                                customStyles: {
-                                  text: {
-                                    color: Colors.inputTextColor,
-                                  },
-                                },
-                              };
-                            }
-                          });
-                          setDateArray(temp);
-                          setCalenderDate(
-                            day?.dateString === calenderDate
-                              ? null
-                              : day?.dateString,
+                          let checkIndex = calenderDate.findIndex(
+                            (item) => item === day?.dateString,
                           );
+                          if (checkIndex === -1) {
+                            temp[day?.dateString] = {
+                              selected: true,
+                              selectedColor: Colors.btnBG,
+                            };
+                          } else {
+                            temp[day?.dateString] = {
+                              customStyles: {
+                                text: {
+                                  color: Colors.inputTextColor,
+                                },
+                              },
+                            };
+                          }
+                          setDateArray(temp);
+                          let findIndex = calenderDate.findIndex(
+                            (i) => i === day?.dateString,
+                          );
+                          let array = [...calenderDate];
+                          if (findIndex === -1) {
+                            array.push(day?.dateString);
+                          } else {
+                            array.splice(findIndex, 1);
+                          }
+                          setCalenderDate(array);
                         }
                       }}
                       monthFormat={'MMM yyyy'}
@@ -566,8 +578,10 @@ const AcceptOrder = (props) => {
                       onPress={() => {
                         setApplyBidData({
                           ...applyBidData,
-                          moving_date:
-                            moment(calenderDate).format('yyyy-MM-DD'),
+                          moving_date: calenderDate.map(
+                            (item) =>
+                              (item = moment(item).format('yyyy-MM-DD')),
+                          ),
                         });
                         setCalender(false);
                       }}
@@ -947,11 +961,11 @@ const AcceptOrder = (props) => {
                           setForgotPin(false);
                         } else {
                           CustomAlert(res?.data?.message);
-                          // setTimeout(() => {
-                          //   setStep(0);
-                          //   setForgotPin(false);
-                          //   props.onCloseIcon();
-                          // }, 1500);
+                          setTimeout(() => {
+                            setStep(0);
+                            setForgotPin(false);
+                            props.onCloseIcon();
+                          }, 1500);
                         }
                       })
                       .catch((err) => {

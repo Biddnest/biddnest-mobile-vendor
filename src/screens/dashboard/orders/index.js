@@ -109,7 +109,7 @@ const Orders = (props) => {
     }
   };
   const renderRightDate = (item, dates = []) => {
-    if (item?.bid?.status === 0) {
+    if (dates?.length !== 0) {
       return (
         <View
           style={{
@@ -183,6 +183,17 @@ const Orders = (props) => {
     if (status === 'payment pending') {
       status = 'customer confirmation pending';
     }
+    let temp = item?.bid?.moving_dates
+      ? JSON.parse(item?.bid?.moving_dates?.toString())
+      : [];
+    let yourArray = [...temp];
+    yourArray.sort(function (a, b) {
+      return new Date(a.date) - new Date(b.date);
+    });
+    let dateDisplay = [];
+    yourArray?.forEach((i) => {
+      dateDisplay.push(moment(i).format('Do MMM'));
+    });
 
     item?.status_history.forEach((ele) => {
       if (ele.status === 1) {
@@ -390,7 +401,7 @@ const Orders = (props) => {
           <View>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>Moving Date</Text>
-              {renderRightDate(item)}
+              {renderRightDate(item, dateDisplay)}
             </View>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>category</Text>

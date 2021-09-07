@@ -378,16 +378,25 @@ const Home = (props) => {
     if (status === 'payment pending') {
       status = 'customer confirmation pending';
     }
-    let yourArray = [...item?.movement_dates];
+    let temp = item?.bid?.moving_dates
+      ? JSON.parse(item?.bid?.moving_dates?.toString())
+      : [];
+    let yourArray = item?.status >= 4 ? [...temp] : [...item?.movement_dates];
     yourArray.sort(function (a, b) {
       return new Date(a.date) - new Date(b.date);
     });
     let dateDisplay = [];
-    yourArray?.forEach((i) => {
-      dateDisplay.push(moment(i.date).format('Do MMM'));
-    });
+    if (item?.status < 4) {
+      yourArray?.forEach((i) => {
+        dateDisplay.push(moment(i?.date).format('Do MMM'));
+      });
+    } else {
+      yourArray?.forEach((i) => {
+        dateDisplay.push(moment(i).format('Do MMM'));
+      });
+    }
     const renderRightDate = (item, dates = []) => {
-      if (item?.bid?.status === 0) {
+      if (dates?.length !== 0) {
         return (
           <View
             style={{
@@ -604,7 +613,9 @@ const Home = (props) => {
             </View>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>Moving Date</Text>
-              {renderRightDate(item)}
+              {item?.status <= 4
+                ? renderRightDate(item, dateDisplay)
+                : renderRightDate(item)}
             </View>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>category</Text>

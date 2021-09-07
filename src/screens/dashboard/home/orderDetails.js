@@ -244,13 +244,24 @@ const OrderDetails = (props) => {
     {};
   let meta =
     (orderDetails?.meta && JSON.parse(orderDetails?.meta?.toString())) || {};
-  let yourArray = [...orderDetails?.movement_dates];
+  let temp = orderDetails?.bid?.moving_dates
+    ? JSON.parse(orderDetails?.bid?.moving_dates?.toString())
+    : [];
+  let yourArray = orderDetails?.bid?.moving_dates
+    ? [...temp]
+    : [...orderDetails?.movement_dates];
   yourArray.sort(function (a, b) {
     return new Date(a.date) - new Date(b.date);
   });
-  yourArray?.forEach((i) => {
-    dateArray.push(moment(i.date).format('Do MMM'));
-  });
+  if (!orderDetails?.bid?.moving_dates) {
+    yourArray?.forEach((i) => {
+      dateArray.push(moment(i.date).format('Do MMM'));
+    });
+  } else {
+    yourArray?.forEach((i) => {
+      dateArray.push(moment(i).format('Do MMM'));
+    });
+  }
   let coordinates =
     mapVisible === 'pickup'
       ? {
@@ -289,7 +300,7 @@ const OrderDetails = (props) => {
     }
   };
   const renderRightDate = () => {
-    if (orderDetails?.bid?.status === 0) {
+    if (orderDetails?.bid?.status <= 4) {
       return (
         <View
           style={{
