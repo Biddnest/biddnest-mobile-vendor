@@ -291,7 +291,7 @@ const AcceptOrder = (props) => {
               }}>
               total price
             </Text>
-            <View style={{width: '40%'}}>
+            <View style={{width: '60%'}}>
               <TextInput
                 inputStyle={{textAlign: 'center'}}
                 label={''}
