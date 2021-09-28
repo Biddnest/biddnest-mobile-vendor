@@ -1,5 +1,13 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  FlatList,
+  Pressable,
+  Image,
+} from 'react-native';
 import {Colors, hp, wp} from '../../../constant/colors';
 import SimpleHeader from '../../../components/simpleHeader';
 import LinearGradient from 'react-native-linear-gradient';
@@ -7,9 +15,21 @@ import Button from '../../../components/button';
 import TextInput from '../../../components/textInput';
 import {STORE} from '../../../redux';
 import {APICall} from '../../../redux/actions/user';
-import {CustomAlert} from '../../../constant/commonFun';
+import {
+  ArrayUnique,
+  CustomAlert,
+  CustomConsole,
+  ImageSelection,
+} from '../../../constant/commonFun';
 import {useSelector} from 'react-redux';
 import SelectionModalAndroid from '../../../components/selectionModal';
+import {STYLES} from '../../../constant/commonStyle';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import CustomModalAndroid from '../../../components/customModal';
+import Ripple from 'react-native-material-ripple';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import ImageCross from '../../../assets/svg/image_cross.svg';
 
 const RaiseRequest = (props) => {
   const [isLoading, setLoading] = useState(false);
@@ -20,7 +40,9 @@ const RaiseRequest = (props) => {
     category: '',
     heading: '',
     desc: '',
+    images: [],
   });
+  const [imageSelect, setImageSelect] = useState(false);
   const [bookingList, setBookingList] = useState([]);
   const [error, setError] = useState({
     public_booking_id: undefined,
@@ -76,6 +98,20 @@ const RaiseRequest = (props) => {
       value: null,
     });
   }
+  const setImage = (type) => {
+    let imageData = [...data?.images];
+    ImageSelection(type, true)
+      .then((res) => {
+        let array3 = ArrayUnique(imageData.concat(res));
+        setData({
+          ...data,
+          images: array3,
+        });
+      })
+      .catch((err) => {});
+  };
+  let imageData = ArrayUnique([...data?.images]);
+  imageData.push('Plus');
 
   return (
     <View style={{flex: 1}}>
@@ -145,12 +181,78 @@ const RaiseRequest = (props) => {
           {error?.desc === false && (
             <Text style={styles.errorText}>Minimum 15 character required</Text>
           )}
+          <View style={styles.inputForm}>
+            <Text style={STYLES.textHeader}>UPLOAD PHOTOS</Text>
+            <View style={{marginTop: hp(3)}}>
+              <FlatList
+                bounces={false}
+                numColumns={4}
+                showsHorizontalScrollIndicator={false}
+                data={imageData}
+                extraData={imageData}
+                keyExtractor={(item, index) => index.toString()}
+                style={{
+                  paddingHorizontal: wp(5),
+                  paddingBottom: hp(1),
+                }}
+                contentContainerStyle={{justifyContent: 'space-evenly'}}
+                renderItem={({item, index}) => {
+                  if (item === 'Plus') {
+                    return (
+                      <Pressable
+                        onPress={() => setImageSelect(true)}
+                        style={[STYLES.common, STYLES.imageWrapper]}>
+                        <MaterialCommunityIcons
+                          name={'plus'}
+                          size={hp(5)}
+                          color={Colors.white}
+                        />
+                      </Pressable>
+                    );
+                  }
+                  return (
+                    <Pressable
+                      key={index}
+                      style={[
+                        STYLES.imageWrapper,
+                        {
+                          backgroundColor: Colors.silver,
+                        },
+                      ]}>
+                      <Image
+                        source={{uri: item}}
+                        resizeMode={'contain'}
+                        style={{
+                          height: '100%',
+                          width: '100%',
+                          borderRadius: wp(3),
+                        }}
+                      />
+                      <Pressable
+                        onPress={() => {
+                          let t1 = [...data.images];
+                          t1.splice(index, 1);
+                          setData({
+                            ...data,
+                            images: t1,
+                          });
+                        }}
+                        style={STYLES.crossView}>
+                        <ImageCross width={18} height={18} />
+                      </Pressable>
+                    </Pressable>
+                  );
+                }}
+              />
+            </View>
+          </View>
           <View style={{alignSelf: 'center'}}>
             <Button
               label={'submit'}
               isLoading={isLoading}
               onPress={() => {
-                // API call
+                  console.log(data);
+                  // API call
                 setLoading(true);
                 let tempError = {};
                 tempError.public_booking_id = !!(
@@ -198,6 +300,59 @@ const RaiseRequest = (props) => {
           </View>
         </LinearGradient>
       </ScrollView>
+      <CustomModalAndroid
+        visible={imageSelect}
+        title={'Upload From'}
+        onPress={() => {
+          setImageSelect(false);
+        }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-evenly',
+            marginVertical: hp(3),
+            width: wp(100),
+          }}>
+          <View style={styles.common}>
+            <Ripple
+              rippleColor={Colors.white}
+              style={[STYLES.selectionView, STYLES.common]}
+              onPress={() => setImage('camera')}>
+              <Ionicons name={'camera'} color={Colors.darkBlue} size={hp(6)} />
+            </Ripple>
+            <Text
+              style={[
+                STYLES.selectionText,
+                {
+                  textAlign: 'center',
+                },
+              ]}>
+              Camera
+            </Text>
+          </View>
+          <View style={styles.common}>
+            <Ripple
+              rippleColor={Colors.white}
+              onPress={() => setImage('gallery')}
+              style={[STYLES.selectionView, STYLES.common]}>
+              <AntDesign
+                name={'picture'}
+                color={Colors.darkBlue}
+                size={hp(6)}
+              />
+            </Ripple>
+            <Text
+              style={[
+                STYLES.selectionText,
+                {
+                  textAlign: 'center',
+                },
+              ]}>
+              Gallery
+            </Text>
+          </View>
+        </View>
+      </CustomModalAndroid>
     </View>
   );
 };
@@ -213,5 +368,16 @@ const styles = StyleSheet.create({
     color: Colors.red,
     fontSize: hp(1.9),
     fontFamily: 'Roboto-Regular',
+  },
+  inputForm: {
+    marginHorizontal: wp(5),
+    width: wp(85),
+    paddingVertical: hp(2),
+    borderWidth: 1,
+    borderRadius: 15,
+    backgroundColor: Colors.white,
+    borderColor: '#DEE6ED',
+    marginVertical: hp(2),
+    alignSelf: 'center',
   },
 });

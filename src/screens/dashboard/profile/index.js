@@ -145,7 +145,7 @@ const Profile = (props) => {
           resizeMode={'cover'}>
           <View style={styles.profilePhoto}>
             <Image
-              source={{uri: userData?.vendor?.image}}
+              source={{uri: userData?.vendor?.image + '?' + new Date()}}
               style={{height: '100%', width: '100%'}}
               resizeMode={'contain'}
             />

@@ -64,15 +64,31 @@ export const LoadingScreen = () => {
   );
 };
 
-export const ImageSelection = (type) => {
+export const ArrayUnique = (array) => {
+  let a = array.concat();
+  for (let i = 0; i < a.length; ++i) {
+    for (let j = i + 1; j < a.length; ++j) {
+      if (a[i] === a[j]) {
+        a.splice(j--, 1);
+      }
+    }
+  }
+  return a;
+};
+
+export const ImageSelection = (type, multiple = false) => {
+  let obj = {
+    width: 400,
+    height: 400,
+    cropping: true,
+    includeBase64: true,
+    multiple: multiple,
+    cropperToolbarWidgetColor: Colors.btnBG,
+    cropperActiveWidgetColor: Colors.btnBG,
+  };
   return new Promise((resolve, reject) => {
     if (type === 'camera') {
-      ImagePicker.openCamera({
-        width: 400,
-        height: 400,
-        cropping: true,
-        includeBase64: true,
-      })
+      ImagePicker.openCamera(obj)
         .then((response) => {
           resolve('data:image/jpeg;base64,' + response.data);
           reject(false);
@@ -81,14 +97,17 @@ export const ImageSelection = (type) => {
           console.log(err);
         });
     } else {
-      ImagePicker.openPicker({
-        width: 400,
-        height: 400,
-        cropping: true,
-        includeBase64: true,
-      })
+      ImagePicker.openPicker(obj)
         .then((response) => {
-          resolve('data:image/jpeg;base64,' + response.data);
+          let temp = [];
+          if (multiple) {
+            response.forEach((item) => {
+              temp.push('data:image/jpeg;base64,' + item?.data);
+            });
+            resolve(temp);
+          } else {
+            resolve('data:image/jpeg;base64,' + response.data);
+          }
           reject(false);
         })
         .catch((err) => {

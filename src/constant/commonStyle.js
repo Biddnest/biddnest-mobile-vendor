@@ -274,4 +274,26 @@ export const STYLES = {
     marginLeft: hp(1.3),
     alignItems: 'center',
   },
+  textHeader: {
+    fontSize: wp(3.5),
+    color: Colors.inputTextColor,
+    textAlign: 'center',
+    textTransform: 'uppercase',
+    fontFamily: 'Gilroy-Bold',
+  },
+  imageWrapper: {
+    height: wp(16),
+    width: wp(16),
+    borderRadius: wp(3),
+    backgroundColor: Colors.btnBG,
+    marginRight: wp(3),
+    marginTop: hp(1),
+  },
+  crossView: {
+    position: 'absolute',
+    right: -4,
+    top: -4,
+    height: 18,
+    width: 18,
+  },
 };
