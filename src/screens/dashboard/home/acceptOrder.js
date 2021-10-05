@@ -54,7 +54,8 @@ const AcceptOrder = (props) => {
   const [stepData, setStepData] = useState({
     inventory: [],
     base_price: priceList?.base_price,
-    bid_amount: orderDetails?.organization_rec_quote,
+    bid_amount:
+      parseFloat(priceList?.total) + parseFloat(priceList?.base_price),
   });
   const [manPower, setManPower] = useState({
     min: 1,
@@ -174,8 +175,19 @@ const AcceptOrder = (props) => {
                 placeHolder={'0'}
                 keyboard={'decimal-pad'}
                 onChange={(text) => {
-                  setStepData({...stepData, base_price: text});
+                  setStepData({
+                    ...stepData,
+                    base_price: text,
+                  });
                 }}
+                onBlur={() =>
+                  setStepData({
+                    ...stepData,
+                    bid_amount:
+                      parseFloat(stepData.base_price) +
+                      parseFloat(priceList?.total),
+                  })
+                }
               />
             </View>
           </View>
@@ -286,7 +298,12 @@ const AcceptOrder = (props) => {
                             amount = amount + parseFloat(i?.amount || 0);
                           });
                           if (amount > 0) {
-                            setStepData({...stepData, bid_amount: amount});
+                            setStepData({
+                              ...stepData,
+                              bid_amount:
+                                parseFloat(amount) +
+                                parseFloat(stepData?.base_price),
+                            });
                           }
                         }}
                       />
@@ -338,6 +355,14 @@ const AcceptOrder = (props) => {
                     setStepData({...stepData, bid_amount: text});
                   }
                 }}
+                onBlur={() =>
+                  setStepData({
+                    ...stepData,
+                    bid_amount:
+                      parseFloat(stepData?.bid_amount) +
+                      parseFloat(stepData?.base_price),
+                  })
+                }
               />
             </View>
           </View>
@@ -385,7 +410,7 @@ const AcceptOrder = (props) => {
         onPress={() => {
           setStepData({
             ...stepData,
-            bid_amount: orderDetails?.organization_rec_quote,
+            bid_amount: priceList?.total,
           });
           setStep(0);
           setSuccess(false);
@@ -418,7 +443,7 @@ const AcceptOrder = (props) => {
           onPress={() => {
             setStepData({
               ...stepData,
-              bid_amount: orderDetails?.organization_rec_quote,
+              bid_amount: priceList?.total,
             });
             setStep(0);
             setSuccess(false);
@@ -453,7 +478,7 @@ const AcceptOrder = (props) => {
           onPress={() => {
             setStepData({
               ...stepData,
-              bid_amount: orderDetails?.organization_rec_quote,
+              bid_amount: priceList?.total,
             });
             setDisableFieldsModal('');
             setDisableFields('');
