@@ -260,12 +260,12 @@ const Orders = (props) => {
                     ₹{' '}
                     {item?.final_quote ||
                       item?.bid?.bid_amount ||
-                      item?.final_estimated_quote}
+                      item?.organization_rec_quote}
                   </Text>
                 </View>
                 <View style={STYLES.priceView}>
                   <CountDown
-                    until={DiffMin(item?.bid_result_at)}
+                    until={DiffMin(item?.bid_end_at)}
                     onFinish={() => {
                       // getOrdersList()
                     }}

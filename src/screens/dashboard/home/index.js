@@ -377,6 +377,8 @@ const Home = (props) => {
     let statusInd = Object.keys(statusData?.status)[ind];
     if (status === 'payment pending') {
       status = 'customer confirmation pending';
+    } else if (status === 'price review pending') {
+      status = 'awaiting final amount';
     }
     let temp = item?.bid?.moving_dates
       ? JSON.parse(item?.bid?.moving_dates?.toString())
@@ -521,12 +523,12 @@ const Home = (props) => {
               <View style={STYLES.flexBoxOrders}>
                 <View style={STYLES.priceView}>
                   <Text style={STYLES.participatedText}>
-                    ₹ {item?.bid?.bid_amount || item?.final_estimated_quote}
+                    ₹ {item?.bid?.bid_amount || item?.organization_rec_quote}
                   </Text>
                 </View>
                 <View style={STYLES.priceView}>
                   <CountDown
-                    until={DiffMin(item?.bid_result_at)}
+                    until={DiffMin(item?.bid_end_at)}
                     // onFinish={() => getOrdersList()}
                     digitStyle={{height: '100%'}}
                     digitTxtStyle={STYLES.participatedText}
@@ -608,12 +610,12 @@ const Home = (props) => {
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>bid price</Text>
               <Text style={STYLES.rightText}>
-                ₹ {item?.final_quote || item?.final_estimated_quote}
+                ₹ {item?.final_quote || item?.organization_rec_quote}
               </Text>
             </View>
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>Moving Date</Text>
-              {item?.status <= 4
+              {item?.status <= 4 || item?.status === 15
                 ? renderRightDate(item, dateDisplay)
                 : renderRightDate(item)}
             </View>

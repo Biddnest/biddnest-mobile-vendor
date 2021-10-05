@@ -41,6 +41,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import Ripple from 'react-native-material-ripple';
 import BookedConfirm from '../../../assets/svg/booked_confirm.svg';
 import {SocketURL} from '../../../constant/socketService';
+import OrderStatusAwaiting from './orderStatusAwaiting';
 
 const OrderDetails = (props) => {
   const dispatch = useDispatch();
@@ -274,7 +275,14 @@ const OrderDetails = (props) => {
           longitude: parseFloat(orderDetails?.destination_lng),
         };
   const renderOrderStatus = () => {
-    if (orderDetails?.bid?.status === 1) {
+    if (orderDetails?.status === 15) {
+      return (
+        <OrderStatusAwaiting
+          orderDetails={orderDetails}
+          fetchOrderData={fetchOrderData}
+        />
+      );
+    } else if (orderDetails?.bid?.status === 1) {
       return (
         <OrderStatusPending
           orderDetails={orderDetails}
@@ -300,7 +308,7 @@ const OrderDetails = (props) => {
     }
   };
   const renderRightDate = () => {
-    if (orderDetails?.bid?.status <= 4) {
+    if (orderDetails?.bid?.status <= 4 || orderDetails?.bid?.status === 15) {
       return (
         <View
           style={{
@@ -421,26 +429,30 @@ const OrderDetails = (props) => {
                   <Text style={STYLES.participatedText}>
                     ₹{' '}
                     {orderDetails?.bid?.bid_amount ||
-                      orderDetails?.final_estimated_quote}
+                      orderDetails?.organization_rec_quote}
                   </Text>
                 </View>
-                <View style={[STYLES.priceView, {width: '40%'}]}>
-                  <CountDown
-                    key={new Date()}
-                    until={DiffMin(orderDetails?.bid_result_at)}
-                    onFinish={() => fetchOrderData()}
-                    digitStyle={{height: '100%'}}
-                    digitTxtStyle={STYLES.participatedText}
-                    separatorStyle={{color: '#000'}}
-                    timeToShow={['H', 'M', 'S']}
-                    timeLabels={{h: null, m: null, s: null}}
-                    showSeparator
-                  />
-                </View>
+                {orderDetails?.status !== 15 && (
+                  <View style={[STYLES.priceView, {width: '40%'}]}>
+                    <CountDown
+                      key={new Date()}
+                      until={DiffMin(orderDetails?.bid_end_at)}
+                      onFinish={() => fetchOrderData()}
+                      digitStyle={{height: '100%'}}
+                      digitTxtStyle={STYLES.participatedText}
+                      separatorStyle={{color: '#000'}}
+                      timeToShow={['H', 'M', 'S']}
+                      timeLabels={{h: null, m: null, s: null}}
+                      showSeparator
+                    />
+                  </View>
+                )}
               </View>
               <View style={STYLES.flexBoxOrders}>
                 <Text style={STYLES.labelText}>Expected Price</Text>
-                <Text style={STYLES.labelText}>Time Left</Text>
+                {orderDetails?.status !== 15 && (
+                  <Text style={STYLES.labelText}>Time Left</Text>
+                )}
               </View>
             </View>
           )}

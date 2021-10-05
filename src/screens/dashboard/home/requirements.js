@@ -32,10 +32,6 @@ const Requirements = (props) => {
   const userData = useSelector((state) => state.Login?.loginData) || {};
   let meta =
     (orderDetails?.meta && JSON.parse(orderDetails?.meta?.toString())) || {};
-  const socketURL =
-    useSelector(
-      (state) => state.Login?.configData?.config?.api?.socket_server_url,
-    ) || '';
   const [priceList, setPriceList] = useState({});
 
   useEffect(() => {
@@ -99,7 +95,7 @@ const Requirements = (props) => {
                 return (
                   <View style={styles.textWrapper} key={index}>
                     <View style={{width: '75%'}}>
-                      <Text style={styles.headerText}>{item.name}</Text>
+                      <Text style={styles.headerText}>{item?.name}</Text>
                       <Text
                         style={[
                           styles.headerText,
@@ -135,34 +131,31 @@ const Requirements = (props) => {
               )}
             />
           </View>
-          {meta?.customer &&
-            JSON.parse(meta?.customer?.toString()).remarks !== null && (
-              <View style={STYLES.inputForm}>
-                <Text
-                  style={{
-                    fontFamily: 'Roboto-Regular',
-                    fontSize: hp(2.2),
-                    color: Colors.inputTextColor,
-                    textAlign: 'center',
-                    textTransform: 'uppercase',
-                  }}>
-                  Comments from customer
-                </Text>
-                <Text
-                  style={{
-                    fontFamily: 'Roboto-Italic',
-                    fontSize: hp(1.9),
-                    color: Colors.inputTextColor,
-                    marginTop: hp(2),
-                  }}>
-                  {meta?.customer
-                    ? entities.decode(
-                        JSON.parse(meta?.customer?.toString()).remarks,
-                      )
-                    : 'No Any comments'}
-                </Text>
-              </View>
-            )}
+          {meta?.customer?.remarks !== null && (
+            <View style={STYLES.inputForm}>
+              <Text
+                style={{
+                  fontFamily: 'Roboto-Regular',
+                  fontSize: hp(2.2),
+                  color: Colors.inputTextColor,
+                  textAlign: 'center',
+                  textTransform: 'uppercase',
+                }}>
+                Comments from customer
+              </Text>
+              <Text
+                style={{
+                  fontFamily: 'Roboto-Italic',
+                  fontSize: hp(1.9),
+                  color: Colors.inputTextColor,
+                  marginTop: hp(2),
+                }}>
+                {meta?.customer
+                  ? entities.decode(meta?.customer?.remarks)
+                  : 'No Any comments'}
+              </Text>
+            </View>
+          )}
           {meta?.images?.length > 0 && (
             <View style={STYLES.inputForm}>
               <Text

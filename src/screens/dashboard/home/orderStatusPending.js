@@ -51,7 +51,7 @@ const OrderStatusPending = (props) => {
             size={hp(21)}
             isPlaying
             duration={300}
-            initialRemainingTime={DiffMin(orderDetails?.bid_result_at)}
+            initialRemainingTime={DiffMin(orderDetails?.bid_end_at)}
             children={children}
             colors={[[Colors.darkBlue, 0.4]]}
           />

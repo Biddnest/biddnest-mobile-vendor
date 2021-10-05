@@ -53,7 +53,8 @@ const AcceptOrder = (props) => {
   });
   const [stepData, setStepData] = useState({
     inventory: [],
-    bid_amount: orderDetails?.final_estimated_quote,
+    base_price: priceList?.base_price,
+    bid_amount: orderDetails?.organization_rec_quote,
   });
   const [manPower, setManPower] = useState({
     min: 1,
@@ -120,11 +121,13 @@ const AcceptOrder = (props) => {
         temp.push({
           booking_inventory_id: item?.bid_inventory_id,
           amount: item?.price || 0,
+          is_custom: item?.is_custom,
         });
       });
       setStepData({
         inventory: temp,
-        bid_amount: priceList?.total,
+        bid_amount: priceList?.total + priceList?.base_price,
+        base_price: priceList?.base_price,
       });
     }
   }, [priceList]);
@@ -149,7 +152,33 @@ const AcceptOrder = (props) => {
         contentContainerStyle={{width: '100%', alignItems: 'center'}}
         bounces={false}
         showsVerticalScrollIndicator={false}>
-        <View style={{width: '90%', marginTop: hp(2), marginBottom: hp(15)}}>
+        <View style={{width: '90%', marginTop: hp(2), marginBottom: hp(5)}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              paddingHorizontal: hp(2),
+            }}>
+            <Text
+              style={{
+                flex: 1,
+                ...STYLES.leftText,
+              }}>
+              base price
+            </Text>
+            <View style={{width: '60%'}}>
+              <TextInput
+                inputStyle={{textAlign: 'center'}}
+                label={''}
+                value={stepData?.base_price?.toString()}
+                placeHolder={'0'}
+                keyboard={'decimal-pad'}
+                onChange={(text) => {
+                  setStepData({...stepData, base_price: text});
+                }}
+              />
+            </View>
+          </View>
           <View style={styles.tableView}>
             <View
               style={{
@@ -235,9 +264,12 @@ const AcceptOrder = (props) => {
                         label={''}
                         value={stepData?.inventory[index]?.amount?.toString()}
                         inputStyle={{textAlign: 'center'}}
-                        placeHolder={'4200'}
+                        placeHolder={'0'}
                         keyboard={'decimal-pad'}
-                        disable={disableFields === 'totalPrice'}
+                        disable={
+                          item?.is_custom === false ||
+                          disableFields === 'totalPrice'
+                        }
                         onChange={(text) => {
                           if (disableFields !== 'singlePrice') {
                             setDisableFieldsModal('singlePrice');
@@ -296,7 +328,7 @@ const AcceptOrder = (props) => {
                 inputStyle={{textAlign: 'center'}}
                 label={''}
                 value={stepData?.bid_amount?.toString()}
-                placeHolder={'4200'}
+                placeHolder={'0'}
                 disable={disableFields === 'singlePrice'}
                 keyboard={'decimal-pad'}
                 onChange={(text) => {
@@ -338,7 +370,7 @@ const AcceptOrder = (props) => {
                   fontSize: hp(2.2),
                   height: '98%',
                 }}>
-                {orderDetails?.final_estimated_quote}
+                {orderDetails?.organization_rec_quote}
               </Text>
             </View>
           </View>
@@ -353,7 +385,7 @@ const AcceptOrder = (props) => {
         onPress={() => {
           setStepData({
             ...stepData,
-            bid_amount: orderDetails?.final_estimated_quote,
+            bid_amount: orderDetails?.organization_rec_quote,
           });
           setStep(0);
           setSuccess(false);
@@ -386,7 +418,7 @@ const AcceptOrder = (props) => {
           onPress={() => {
             setStepData({
               ...stepData,
-              bid_amount: orderDetails?.final_estimated_quote,
+              bid_amount: orderDetails?.organization_rec_quote,
             });
             setStep(0);
             setSuccess(false);
@@ -421,7 +453,7 @@ const AcceptOrder = (props) => {
           onPress={() => {
             setStepData({
               ...stepData,
-              bid_amount: orderDetails?.final_estimated_quote,
+              bid_amount: orderDetails?.organization_rec_quote,
             });
             setDisableFieldsModal('');
             setDisableFields('');
@@ -847,12 +879,12 @@ const AcceptOrder = (props) => {
                   if (
                     parseFloat(stepData?.bid_amount) >=
                       parseFloat(
-                        orderDetails?.final_estimated_quote.replace(/,/g, ''),
+                        orderDetails?.organization_rec_quote.replace(/,/g, ''),
                       ) /
                         2 &&
                     parseFloat(stepData?.bid_amount) <=
                       parseFloat(
-                        orderDetails?.final_estimated_quote.replace(/,/g, ''),
+                        orderDetails?.organization_rec_quote.replace(/,/g, ''),
                       ) *
                         2
                   ) {
