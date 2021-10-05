@@ -275,7 +275,7 @@ const OrderDetails = (props) => {
           longitude: parseFloat(orderDetails?.destination_lng),
         };
   const renderOrderStatus = () => {
-    if (orderDetails?.status === 15) {
+    if (orderDetails?.status === 14 || orderDetails?.status === 15) {
       return (
         <OrderStatusAwaiting
           orderDetails={orderDetails}

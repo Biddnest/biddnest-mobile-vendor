@@ -1,11 +1,15 @@
 import React from 'react';
-import {Text, View, StyleSheet, Image} from 'react-native';
-import {Colors, hp, wp} from '../../../constant/colors';
+import {Text, View, StyleSheet} from 'react-native';
+import {Colors, hp} from '../../../constant/colors';
 
 const OrderStatusAwaiting = (props) => {
   return (
     <View style={{marginVertical: hp(3)}}>
-      <Text style={styles.rankText}>Awaiting final quote</Text>
+      <Text style={styles.rankText}>
+        {props?.orderDetails?.status === 14
+          ? 'Your result will be declared soon'
+          : 'Awaiting final quote'}
+      </Text>
     </View>
   );
 };
