@@ -354,7 +354,7 @@ const Orders = (props) => {
                       textAlign: 'right',
                     },
                   ]}>
-                  {meta?.distance} KM
+                  {parseFloat(meta?.distance)?.toFixed(2)} KM
                 </Text>
               </View>
             </View>
@@ -364,7 +364,7 @@ const Orders = (props) => {
         {selectedTab === 'past' && (
           <View>
             <View style={STYLES.flexBox}>
-              <Text style={STYLES.leftText}>bid price</Text>
+              <Text style={STYLES.leftText}>your bid</Text>
               <Text style={[STYLES.rightText, {width: '50%'}]}>
                 ₹ {item?.final_quote}
               </Text>

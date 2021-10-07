@@ -436,7 +436,11 @@ const OrderDetails = (props) => {
                   <View style={[STYLES.priceView, {width: '40%'}]}>
                     <CountDown
                       key={new Date()}
-                      until={DiffMin(orderDetails?.bid_end_at)}
+                      until={
+                        orderDetails?.status === 14
+                          ? DiffMin(orderDetails?.bid_result_at)
+                          : DiffMin(orderDetails?.bid_end_at)
+                      }
                       onFinish={() => fetchOrderData()}
                       digitStyle={{height: '100%'}}
                       digitTxtStyle={STYLES.participatedText}
@@ -743,7 +747,7 @@ const OrderDetails = (props) => {
                     marginTop: hp(2),
                   }}>
                   <View style={STYLES.flexBox}>
-                    <Text style={STYLES.leftText}>BID PRICE</Text>
+                    <Text style={STYLES.leftText}>YOUR BID</Text>
                     <Text style={STYLES.rightText}>
                       ₹ {orderDetails?.final_quote}
                     </Text>

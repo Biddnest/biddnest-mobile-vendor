@@ -359,8 +359,8 @@ const AcceptOrder = (props) => {
                   setStepData({
                     ...stepData,
                     bid_amount:
-                      parseFloat(stepData?.bid_amount) +
-                      parseFloat(stepData?.base_price),
+                      parseFloat(stepData?.bid_amount).toFixed(2) +
+                      parseFloat(stepData?.base_price).toFixed(2),
                   })
                 }
               />
