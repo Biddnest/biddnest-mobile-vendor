@@ -612,7 +612,7 @@ const Home = (props) => {
             <View style={STYLES.flexBox}>
               <Text style={STYLES.leftText}>your bid</Text>
               <Text style={STYLES.rightText}>
-                ₹ {item?.final_quote || item?.organization_rec_quote}
+                ₹ {item?.organization_rec_quote || item?.final_quote}
               </Text>
             </View>
             <View style={STYLES.flexBox}>
