@@ -355,14 +355,14 @@ const AcceptOrder = (props) => {
                     setStepData({...stepData, bid_amount: text});
                   }
                 }}
-                onBlur={() =>
-                  setStepData({
-                    ...stepData,
-                    bid_amount:
-                      parseFloat(stepData?.bid_amount).toFixed(2) +
-                      parseFloat(stepData?.base_price).toFixed(2),
-                  })
-                }
+                // onBlur={() =>
+                //   setStepData({
+                //     ...stepData,
+                //     bid_amount:
+                //       parseFloat(stepData?.bid_amount) +
+                //       parseFloat(stepData?.base_price),
+                //   })
+                // }
               />
             </View>
           </View>
