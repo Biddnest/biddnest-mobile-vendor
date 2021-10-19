@@ -248,12 +248,16 @@ const OrderDetails = (props) => {
   let temp = orderDetails?.bid?.moving_dates
     ? JSON.parse(orderDetails?.bid?.moving_dates?.toString())
     : [];
-  let yourArray = orderDetails?.bid?.moving_dates
-    ? [...temp]
-    : [...orderDetails?.movement_dates];
-  yourArray.sort(function (a, b) {
-    return new Date(a.date) - new Date(b.date);
-  });
+  let yourArray =
+    orderDetails?.bid?.moving_dates === undefined
+      ? []
+      : orderDetails?.bid?.moving_dates
+      ? [...temp] || []
+      : [...orderDetails?.movement_dates] || [];
+  yourArray &&
+    yourArray.sort(function (a, b) {
+      return new Date(a.date) - new Date(b.date);
+    });
   if (!orderDetails?.bid?.moving_dates) {
     yourArray?.forEach((i) => {
       dateArray.push(moment(i.date).format('Do MMM'));
@@ -365,6 +369,7 @@ const OrderDetails = (props) => {
       </View>
     );
   };
+
   return (
     <View style={{flex: 1, backgroundColor: Colors.white}}>
       <SimpleHeader
