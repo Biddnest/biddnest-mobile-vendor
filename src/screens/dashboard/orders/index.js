@@ -279,7 +279,7 @@ const Orders = (props) => {
                 </View>
               </View>
               <View style={STYLES.flexBoxOrders}>
-                <Text style={STYLES.labelText}>Expected Price</Text>
+                <Text style={STYLES.labelText}>Submitted Price</Text>
                 <Text style={STYLES.labelText}>Time Left</Text>
               </View>
             </View>

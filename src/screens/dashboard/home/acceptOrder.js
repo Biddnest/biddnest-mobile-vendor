@@ -54,8 +54,7 @@ const AcceptOrder = (props) => {
   const [stepData, setStepData] = useState({
     inventory: [],
     base_price: priceList?.base_price,
-    bid_amount:
-      parseFloat(priceList?.total) + parseFloat(priceList?.base_price),
+    bid_amount: parseFloat(priceList?.grand_total),
   });
   const [manPower, setManPower] = useState({
     min: 1,
@@ -163,12 +162,14 @@ const AcceptOrder = (props) => {
             <Text
               style={{
                 flex: 1,
+                marginBottom: hp(3),
                 ...STYLES.leftText,
               }}>
               base price
             </Text>
             <View style={{width: '60%'}}>
               <TextInput
+                style={{paddingHorizontal: 5}}
                 inputStyle={{textAlign: 'center'}}
                 label={''}
                 value={stepData?.base_price?.toString()}
@@ -274,6 +275,7 @@ const AcceptOrder = (props) => {
                     <View style={{width: '40%'}}>
                       <TextInput
                         label={''}
+                        style={{paddingHorizontal: 5}}
                         value={stepData?.inventory[index]?.amount?.toString()}
                         inputStyle={{textAlign: 'center'}}
                         placeHolder={'0'}
@@ -336,12 +338,14 @@ const AcceptOrder = (props) => {
             <Text
               style={{
                 flex: 1,
+                marginBottom: hp(3),
                 ...STYLES.leftText,
               }}>
               total price
             </Text>
             <View style={{width: '60%'}}>
               <TextInput
+                style={{paddingHorizontal: 5}}
                 inputStyle={{textAlign: 'center'}}
                 label={''}
                 value={stepData?.bid_amount?.toString()}
@@ -923,6 +927,7 @@ const AcceptOrder = (props) => {
               } else if (step === 1) {
                 if (
                   applyBidData?.moving_date &&
+                  applyBidData?.moving_date?.length !== 0 &&
                   applyBidData?.moving_date !== 'Invalid date'
                 ) {
                   setApplyBidData({
