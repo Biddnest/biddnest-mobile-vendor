@@ -284,6 +284,11 @@ const AcceptOrder = (props) => {
                           item?.is_custom === false ||
                           disableFields === 'totalPrice'
                         }
+                        onFocus={() => {
+                          if (disableFields !== 'singlePrice') {
+                            setDisableFieldsModal('singlePrice');
+                          }
+                        }}
                         onChange={(text) => {
                           if (disableFields !== 'singlePrice') {
                             setDisableFieldsModal('singlePrice');
@@ -352,6 +357,11 @@ const AcceptOrder = (props) => {
                 placeHolder={'0'}
                 disable={disableFields === 'singlePrice'}
                 keyboard={'decimal-pad'}
+                onFocus={() => {
+                  if (disableFields !== 'totalPrice') {
+                    setDisableFieldsModal('totalPrice');
+                  }
+                }}
                 onChange={(text) => {
                   if (disableFields !== 'totalPrice') {
                     setDisableFieldsModal('totalPrice');
