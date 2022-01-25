@@ -36,7 +36,7 @@ const RaiseRequest = (props) => {
   const configData =
     useSelector((state) => state.Login?.configData?.enums?.ticket?.type) || {};
   const [data, setData] = useState({
-    public_booking_id: '',
+    public_booking_id: null,
     category: '',
     heading: '',
     desc: '',
@@ -251,14 +251,14 @@ const RaiseRequest = (props) => {
               label={'submit'}
               isLoading={isLoading}
               onPress={() => {
-                  console.log(data);
-                  // API call
+                console.log(data);
+                // API call
                 setLoading(true);
                 let tempError = {};
-                tempError.public_booking_id = !!(
-                  data?.public_booking_id !== '' &&
-                  data?.public_booking_id != null
-                );
+                // tempError.public_booking_id = !!(
+                //   data?.public_booking_id !== '' &&
+                //   data?.public_booking_id != null
+                // );
                 tempError.category = !!(data?.category !== '');
                 tempError.heading = !(
                   !data?.heading || data?.heading.length < 6

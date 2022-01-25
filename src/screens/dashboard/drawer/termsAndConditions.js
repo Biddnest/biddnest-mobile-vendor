@@ -5,7 +5,8 @@ import SimpleHeader from '../../../components/simpleHeader';
 import LinearGradient from 'react-native-linear-gradient';
 import {APICall} from '../../../redux/actions/user';
 import {STORE} from '../../../redux';
-import {Html5Entities} from 'html-entities';
+import {decode} from 'html-entities';
+import RenderHtml from 'react-native-render-html';
 import {
   CustomAlert,
   CustomConsole,
@@ -27,9 +28,8 @@ const TermsAndConditions = (props) => {
       .then((res) => {
         setLoading(false);
         if (res?.data?.status === 'success') {
-          const entities = new Html5Entities();
-          let temp = entities.decode(res?.data?.data?.page?.content);
-          setTermsText(temp);
+          // let temp = decode(res?.data?.data?.page?.content, {level: 'html5'});
+          setTermsText(res?.data?.data?.page.content);
         } else {
           CustomAlert(res?.data?.message);
         }
@@ -39,6 +39,7 @@ const TermsAndConditions = (props) => {
         CustomConsole(err);
       });
   }, []);
+  console.log({termsText});
   return (
     <LinearGradient colors={[Colors.pageBG, Colors.white]} style={{flex: 1}}>
       <SimpleHeader
@@ -54,7 +55,8 @@ const TermsAndConditions = (props) => {
         showsVerticalScrollIndicator={false}
         bounces={false}>
         <View style={styles.inputForm}>
-          <Text style={styles.bottomText}>{termsText}</Text>
+          {/* <Text style={styles.bottomText}>{termsText}</Text> */}
+          <RenderHtml source={{html: termsText}} contentWidth={250} />
         </View>
       </ScrollView>
     </LinearGradient>
