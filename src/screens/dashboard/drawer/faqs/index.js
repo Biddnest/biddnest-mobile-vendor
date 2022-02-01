@@ -70,9 +70,12 @@ const FAQS = (props) => {
                     justifyContent: 'center',
                     alignItems: 'center',
                     height: wp(30),
-                  }}>
-                  <SvgCssUri width="60%" height="60%" uri={item?.image} />
-                </View>
+                  }}></View>
+                <SvgCssUri
+                  width="60%"
+                  height="60%"
+                  source={{uri: item?.image}}
+                />
                 <View style={styles.bottomView}>
                   <Text style={styles.bottomText}>{item.name}</Text>
                   <RightArrow width={hp(2.7)} height={hp(2.7)} />
